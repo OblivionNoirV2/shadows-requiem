@@ -1,0 +1,272 @@
+@font-face {
+  font-family: 'optimus princeps';
+  src: url('assets/fonts/OptimusPrinceps.ttf') format('truetype');
+}
+
+html {
+  font-family: 'optimus princeps';
+}
+
+body {
+  background-image: url("assets/images/bg-and-effects/introbg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+body.new-bg {
+  background-image: url("assets/images/bg-and-effects/battlebganime.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.glow-ani-border {
+
+  animation: glow-ani-border 8s ease-in-out infinite alternate;
+
+}
+
+.glow-ani-border-black {
+
+  animation: glow-ani-border-black 8s ease-in-out infinite alternate;
+
+}
+
+.glow-ani-text {
+
+  animation: glow-ani-text 8s ease-in-out infinite alternate;
+
+}
+
+.glow-ani-text-xl {
+
+  animation: glow-ani-text-xl 8s ease-in-out infinite alternate;
+
+}
+
+@keyframes glow-ani-border {
+
+  0%,
+  100% {
+    box-shadow: 0 1rem 1rem rgba(177, 1, 1, 0);
+  }
+
+  50% {
+    box-shadow: 0 1rem 1rem rgba(177, 1, 1, 0.9);
+  }
+}
+
+@keyframes glow-ani-border-black {
+
+  0%,
+  100% {
+    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0);
+  }
+
+  50% {
+    box-shadow: 0 1rem 1rem rgba(0, 0, 0, 0.9);
+  }
+}
+
+@keyframes glow-ani-text {
+
+  0%,
+  100% {
+    text-shadow: 0 1rem 1rem rgba(177, 1, 1, 0);
+  }
+
+  50% {
+    text-shadow: 0 1rem 1rem rgba(177, 1, 1, 0.9);
+  }
+}
+
+
+@keyframes glow-ani-text-xl {
+
+  0%,
+  100% {
+    text-shadow: 0 4rem 4rem rgba(177, 1, 1, 0);
+  }
+
+  50% {
+    text-shadow: 0 4rem 4rem rgba(177, 1, 1, 0.9);
+  }
+}
+
+html {
+  overflow: hidden;
+}
+
+/*size the portraits*/
+.party-col>ul>li>button {
+  width: 17rem;
+  height: auto;
+  border-radius: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+/*this doesn't apply to the characters or menus*/
+button:hover {
+  cursor: pointer;
+  border-color: darkblue;
+}
+
+/*hp/mp bars*/
+.party-col>ul>li>span>progress {
+  border-radius: 0.2rem;
+  width: 12rem;
+}
+
+.ultima-bar {
+  border-radius: 0.2rem;
+}
+
+.party-col>ul>li>span>div {
+  font-size: larger;
+}
+
+.party-col>ul>li>span {
+  display: inline-block;
+  justify-content: space-between;
+  margin-top: 8rem;
+  margin-left: 0.5rem;
+
+}
+
+/*text color*/
+.party-col>ul>li>span>div {
+  color: white;
+}
+
+.boss-prog::-moz-progress-bar {
+  background-color: rgb(136, 8, 8);
+  border: 0.1rem solid black;
+
+}
+
+.boss-prog-3::-moz-progress-bar {
+  background-color: rgb(136, 8, 8);
+  border: 0.2rem solid rgb(136, 8, 8);
+}
+
+.p-hp::-moz-progress-bar {
+  background-color: green;
+  opacity: 0.9;
+}
+
+.status-icon {
+  border-radius: 10%;
+  box-shadow: -.05rem -.05rem .05rem rgb(136, 8, 8);
+}
+
+/*background*/
+.ultima-bar {
+  background-color: lightgrey;
+  opacity: 0.9;
+}
+
+/*part that's filled*/
+.ultima-bar::-moz-progress-bar {
+  background-color: rgb(89, 3, 170);
+  opacity: 0.9;
+}
+
+.is-selected {
+  border: 0.5rem solid rgb(136, 8, 8);
+}
+
+.is-not-selected {
+  border: 0.5rem solid black;
+}
+
+html {
+  filter: brightness(80%);
+}
+
+.vol-icon {
+  filter: brightness(0) invert(1);
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+/*organize as a 2 x 2 grid going to the right*/
+.battle-menu {
+  color: white;
+  font-size: x-large;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 0.3rem 0.5rem 0.3rem 0.5rem;
+  border: 0.2rem solid black;
+  border-radius: 1rem;
+
+}
+
+.battle-menu>li,
+.atk-btn {
+  padding: 0 0.2rem 0 0.2rem;
+}
+
+/*They are seperate because if put into the same class 
+the padding from .battle-menu causes issues with pushing things down*/
+.battle-menu>li:hover,
+.atk-btn:hover {
+  background-color: rgb(89, 3, 170);
+  border-radius: 0.1rem;
+}
+
+.rainbowglow {
+  /* add this to  ultima when it's ready*/
+  animation: rainbow-bg 2.5s linear;
+  animation-iteration-count: infinite;
+}
+
+@keyframes rainbow-bg {
+
+  100%,
+  0% {
+    background-color: rgb(255, 0, 0);
+  }
+
+  8% {
+    background-color: rgb(255, 127, 0);
+  }
+
+  16% {
+    background-color: rgb(255, 255, 0);
+  }
+
+  25% {
+    background-color: rgb(127, 255, 0);
+  }
+
+  33% {
+    background-color: rgb(0, 255, 0);
+  }
+
+  41% {
+    background-color: rgb(0, 255, 127);
+  }
+
+  50% {
+    background-color: rgb(0, 255, 255);
+  }
+
+  58% {
+    background-color: rgb(0, 127, 255);
+  }
+
+  66% {
+    background-color: rgb(0, 0, 255);
+  }
+
+  75% {
+    background-color: rgb(127, 0, 255);
+  }
+
+  83% {
+    background-color: rgb(255, 0, 255);
+  }
+
+  91% {
+    background-color: rgb(255, 0, 127);
+  }
+}
