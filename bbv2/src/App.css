@@ -153,9 +153,21 @@ button:hover {
   opacity: 0.9;
 }
 
+/*icon stuff*/
 .status-icon {
   border-radius: 10%;
+}
+
+.status-icon-poison {
+  box-shadow: -.05rem -.05rem .05rem rgb(56, 173, 2);
+}
+
+.status-icon-curse {
   box-shadow: -.05rem -.05rem .05rem rgb(136, 8, 8);
+}
+
+.status-icon-freeze {
+  box-shadow: -.05rem -.05rem .05rem rgb(0, 255, 255);
 }
 
 /*background*/

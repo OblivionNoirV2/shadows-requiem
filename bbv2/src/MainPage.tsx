@@ -229,6 +229,32 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         "freeze.png"
 
     ];
+    //assign the correct class name to the status effect
+    function getClassName(status_effect: string): string {
+        switch (status_effect) {
+            case "poison.png":
+                return 'w-6 status-icon status-icon-poison';
+            case "curse.png":
+                return 'w-6 status-icon status-icon-curse';
+            case "freeze.png":
+                return 'w-6 status-icon status-icon-freeze';
+            default:
+                return '';
+        }
+    }
+    function GetStatusEffectDesc(status_effect: string): string {
+        switch (status_effect) {
+            case "poison.png":
+                return "Poisoned";
+            case "curse.png":
+                return "Cursed";
+            case "freeze.png":
+                return "Frozen";
+            default:
+                return '';
+        }
+    }
+
     /*Yes it repeats itself, but it's more efficient than making 
     new assignments*/
     function UpdateStatusEffects(player: string) {
@@ -236,38 +262,60 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             case "knight":
                 return (
                     knight_status_effects.map((status_effect, index) =>
-                        <li key={index}><img src={
-                            require(`./assets/images/icons/${status_effect}`)}
-                            alt={status_effect}
-                            className='w-6 status-icon' />
-                        </li>)
-                )
+                        <ul key={index}>
+                            <li>
+                                <img src={
+                                    require(`./assets/images/icons/${status_effect}`)}
+                                    alt={status_effect}
+                                    /*style differently depending on the effect*/
+                                    className={getClassName(status_effect)}
+                                    title={GetStatusEffectDesc(status_effect)}
+                                />
+                            </li>
+                        </ul>
+                    )
+                );
             case "dmage":
                 return (
                     dmage_status_effects.map((status_effect, index) =>
-                        <li key={index}><img src={
-                            require(`./assets/images/icons/${status_effect}`)}
-                            alt={status_effect}
-                            className='w-6 status-icon' />
-                        </li>)
-                )
+                        <ul className='flex flex-row' key={index}>
+                            <li>
+                                <img src={
+                                    require(`./assets/images/icons/${status_effect}`)}
+                                    alt={status_effect}
+                                    className={getClassName(status_effect)}
+                                />
+                            </li>
+                        </ul>
+                    )
+                );
             case "wmage":
                 return (
                     wmage_status_effects.map((status_effect, index) =>
-                        <li key={index}><img src={
-                            require(`./assets/images/icons/${status_effect}`)}
-                            alt={status_effect}
-                            className='w-6 status-icon' />
-                        </li>)
+                        <ul key={index}>
+                            <li key={index}>
+                                <img src={
+                                    require(`./assets/images/icons/${status_effect}`)}
+                                    alt={status_effect}
+                                    className={getClassName(status_effect)}
+                                />
+                            </li>
+                        </ul>
+                    )
                 )
             case "rmage":
                 return (
                     wmage_status_effects.map((status_effect, index) =>
-                        <li key={index}><img src={
-                            require(`./assets/images/icons/${status_effect}`)}
-                            alt={status_effect}
-                            className='w-6 status-icon' />
-                        </li>)
+                        <ul key={index}>
+                            <li key={index}>
+                                <img src={
+                                    require(`./assets/images/icons/${status_effect}`)}
+                                    alt={status_effect}
+                                    className={getClassName(status_effect)}
+                                />
+                            </li>
+                        </ul>
+                    )
                 )
         }
     }

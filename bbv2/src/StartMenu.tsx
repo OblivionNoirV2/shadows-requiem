@@ -8,7 +8,6 @@ interface StartMenuProps {
     on_start: () => void;
 
 }
-//todo: add click sfx to these
 const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
     const [isCreditsShown, setIsCreditsShown] = useState(false);
     const [isLoggedin, setIsLoggedin] = useState(false);
