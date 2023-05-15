@@ -1,5 +1,4 @@
-/*It is crucial that ALL stat and status changes take place in this file. 
-For my own sanity. */
+
 interface player_stats {
     hp: number;
     mp: number;
@@ -22,6 +21,8 @@ EX a boss attack with 125 phys attack against a character with 1.25
 p_def would do 100 damage.
 ev is a percentage, so 0.1 is 10% evasion.
 */
+
+//Need to add seperate max stats for these
 export const knight_stats: player_stats = {
     hp: 550,
     mp: 180,

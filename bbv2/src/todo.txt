@@ -1,1 +1,2 @@
 add on/off button for snow animation, since it's computationally heavy
+add "report issue" option 
