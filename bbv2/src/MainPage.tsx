@@ -32,10 +32,7 @@ const player_attacks: AttackList = {
 
 
 
-//doubles defense for one turn
-function HandleDefend(player: string): void {
-    UpdateStats(player, ["m_def", "p_def"], false);
-}
+
 
 const BossArea = () => {
     //manage boss stage based on hp value 
@@ -67,19 +64,27 @@ const BossArea = () => {
 
     return (
         <main className='boss-container w-full flex flex-col mt-44 mr-56 '>
-            <section className='flex flex-col w-[96rem]'>
+            <section className='flex flex-col w-[96rem] relative'>
                 <img
                     src={boss_images[bossStage - 1]}
-                    className='boss-sprite opacity-95 relative'
+                    className='boss-sprite opacity-95'
                     alt={`boss phase ${bossStage}`}
+                    style={{ position: 'relative' }}
                 />
+                {/*current attack will flash here for a sec*/}
+                {/*<img
+                    src={require('./assets/images/boss/sprites/phase3anime.png')} // replace with your actual overlay image
+                    className='atk-image'
+                    alt='attack image'
+                    style={{ position: 'absolute', top: 0, left: 0 }}
+                />*/}
                 <strong>
                     <div className='flex justify-center mt-8 text-4xl mx-auto text-white'>
                         {boss_labels[bossStage - 1]}
                     </div>
                 </strong>
                 {/*The point is it's borderline impossible to 
-                actually win, mostly just for show */}
+            actually win, mostly just for show */}
                 <progress className={
                     bossStage === 3 ? 'block h-8 glow-ani-border boss-prog-3' :
                         'block h-8 glow-ani-border-black boss-prog '
@@ -87,7 +92,7 @@ const BossArea = () => {
             </section>
         </main>
     );
-};
+}
 
 //fetch and return list of player attacks in ul format
 interface PlayerMenuProps {

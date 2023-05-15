@@ -1,4 +1,5 @@
-import React from 'react';
+/*It is crucial that ALL stat and status changes take place in this file. 
+For my own sanity. */
 interface player_stats {
     hp: number;
     mp: number;

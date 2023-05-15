@@ -1,19 +1,92 @@
-//knight attacks
+import * as sm from './StatManagement';
 
+/*It is crucial that ALL stat and status changes take place in this file. 
+For my own sanity. */
 
+/*All attacks are handled in the PlayerAttack function, so no need 
+to export these*/
 
-//dmage attacks 
+/*knight attacks*/
+function ShadowSelf() {
 
+};
 
+function WhimsOfFate() {
 
-//wmage attacks 
+};
 
+function Deathblow() {
 
+};
 
-//rmage attacks
+function Rebellion() {
 
+};
+//ult
+function ThousandMen() {
 
+};
+/*dmage attacks*/
+function MirageBlade() {
 
+};
+
+function Entrapment() {
+
+};
+
+function BlackFire() {
+
+};
+
+function ShatteredMirror() {
+
+};
+//ult
+function RadiantSupernova() {
+
+};
+
+/*wmage attacks*/
+function PierceEvil() {
+
+};
+
+function AngelsGrace() {
+
+};
+
+function Rebirth() {
+
+};
+
+function Moonlight() {
+
+};
+//ult
+function SupremeAltar() {
+
+};
+/*rmage attacks*/
+function BorderOfLife() {
+
+};
+
+function BloodyVengeance() {
+
+};
+
+function ChainLightning() {
+
+};
+
+function MyTurn() {
+
+};
+//ult
+function ScarletSubversion() {
+
+};
 
 export const knight_attacks = [
     "Shadow Self",
@@ -53,3 +126,4 @@ export function Shadow_Self() {
 export function PlayerAttack(attack: string, player: string) {
     console.log(attack);
 }
+
