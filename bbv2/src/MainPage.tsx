@@ -302,7 +302,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             </li>
                         </ul>
                     )
-                )
+                );
             case "rmage":
                 return (
                     wmage_status_effects.map((status_effect, index) =>
@@ -316,9 +316,9 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             </li>
                         </ul>
                     )
-                )
+                );
         }
-    }
+    };
     const [isUltimaReady, setIsUltimaReady] = useState(false);
     //gets checked whenever it's the player's turn
     function HandleUltima() {
