@@ -8,11 +8,11 @@ to export these*/
 //attack has a string key, and a function value
 const attacks_object: { [attack: string]: Function } = {
     /*knight attacks*/
-    'ShadowSelf': function ShadowSelf() {
+    'Shadow Self': function ShadowSelf() {
 
     },
 
-    'WhimsOfFate': function WhimsOfFate() {
+    'Whims Of Fate': function WhimsOfFate() {
 
     },
 
@@ -25,12 +25,12 @@ const attacks_object: { [attack: string]: Function } = {
     },
 
     //ult
-    'ThousandMen': function ThousandMen() {
+    'Thousand Men': function ThousandMen() {
 
     },
 
     /*mage attacks*/
-    'MirageBlade': function MirageBlade() {
+    'Mirage Blade': function MirageBlade() {
 
     },
 
@@ -38,24 +38,24 @@ const attacks_object: { [attack: string]: Function } = {
 
     },
 
-    'BlackFire': function BlackFire() {
+    'Black Fire': function BlackFire() {
 
     },
 
-    'ShatteredMirror': function ShatteredMirror() {
+    'Shattered Mirror': function ShatteredMirror() {
 
     },
 
-    'RadiantSupernova': function RadiantSupernova() {
+    'Radiant Supernova': function RadiantSupernova() {
 
     },
 
     /*wmage attacks*/
-    'PierceEvil': function PierceEvil() {
+    'Pierce Evil': function PierceEvil() {
 
     },
 
-    'RadiantSky': function RadiantSky() {
+    'Radiant Sky': function RadiantSky() {
 
     },
 
@@ -67,24 +67,24 @@ const attacks_object: { [attack: string]: Function } = {
 
     },
 
-    'SupremeAltar': function SupremeAltar() {
+    'Supreme Altar': function SupremeAltar() {
 
     },
 
     /*rmage attacks*/
-    'BorderOfLife': function BorderOfLife() {
+    'Border Of Life': function BorderOfLife() {
 
     },
 
-    'BloodyVengeance': function BloodyVengeance() {
+    'Bloody Vengeance': function BloodyVengeance() {
 
     },
 
-    'ChainLightning': function ChainLightning() {
+    'Chain Lightning': function ChainLightning() {
 
     },
 
-    'MyTurn': function MyTurn() {
+    'My Turn': function MyTurn() {
 
     },
 
@@ -96,31 +96,31 @@ const attacks_object: { [attack: string]: Function } = {
 
 //triggers for the image showing
 export const effect_dependencies = [
-    attacks_object['ShadowSelf'],
-    attacks_object['WhimsOfFate'],
+    attacks_object['Shadow Self'],
+    attacks_object['Whims Of Fate'],
     attacks_object['Deathblow'],
     attacks_object['Rebellion'],
-    attacks_object['ThousandMen'],
-    attacks_object['MirageBlade'],
+    attacks_object['Thousand Men'],
+    attacks_object['Mirage Blade'],
     attacks_object['Entrapment'],
-    attacks_object['BlackFire'],
-    attacks_object['ShatteredMirror'],
-    attacks_object['RadiantSupernova'],
-    attacks_object['PierceEvil'],
-    attacks_object['RadiantSky'],
+    attacks_object['Black Fire'],
+    attacks_object['Shattered Mirror'],
+    attacks_object['Radiant Supernova'],
+    attacks_object['Pierce Evil'],
+    attacks_object['Radiant Sky'],
     attacks_object['Rebirth'],
     attacks_object['Moonlight'],
-    attacks_object['SupremeAltar'],
-    attacks_object['BorderOfLife'],
-    attacks_object['BloodyVengeance'],
-    attacks_object['ChainLightning'],
-    attacks_object['MyTurn'],
-    attacks_object['ScarletSubversion']
+    attacks_object['Supreme Altar'],
+    attacks_object['Border Of Life'],
+    attacks_object['Bloody Vengeance'],
+    attacks_object['Chain Lightning'],
+    attacks_object['My Turn'],
+    attacks_object['Scarlet Subversion']
 ];
 
 export const knight_attacks = [
     "Shadow Self",
-    "Whims of Fate",
+    "Whims Of Fate",
     "Deathblow",
     "Rebellion"
 ]
@@ -141,7 +141,7 @@ export const wmage_attacks = [
 ]
 export const wmage_ultima = "Supreme Altar"
 export const rmage_attacks = [
-    "Border of Life",
+    "Border Of Life",
     "Bloody Vengeance",
     "Chain Lightning",
     "My Turn"
@@ -154,6 +154,7 @@ export function Shadow_Self() {
 }
 //This one does the actual damage
 export function PlayerAttack(attack: string) {
+    console.log(attack)
     attacks_object[attack]();
 }
 
