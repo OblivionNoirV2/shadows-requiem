@@ -67,9 +67,9 @@ const BossArea = () => {
             <section className='flex flex-col w-[96rem] relative'>
                 <img
                     src={boss_images[bossStage - 1]}
-                    className='boss-sprite opacity-95'
+                    className='boss-sprite opacity-95 relative'
                     alt={`boss phase ${bossStage}`}
-                    style={{ position: 'relative' }}
+
                 />
                 {/*current attack will flash here for a sec, do 
                 a useeffect that fires when atk is clicked, which 
@@ -79,12 +79,10 @@ const BossArea = () => {
                         {boss_labels[bossStage - 1]}
                     </div>
                 </strong>
-                {/*The point is it's borderline impossible to 
-            actually win, mostly just for show */}
                 <progress className={
                     bossStage === 3 ? 'block h-8 glow-ani-border boss-prog-3' :
                         'block h-8 glow-ani-border-black boss-prog '
-                } value={boss_stats.hp}></progress>
+                } value={boss_stats.hp} max={boss_stats.max_hp}></progress>
             </section>
         </main>
     );

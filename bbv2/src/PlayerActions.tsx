@@ -48,18 +48,19 @@ function RadiantSupernova() {
 };
 
 /*wmage attacks*/
+//moderate damage spell
 function PierceEvil() {
 
 };
-
-function AngelsGrace() {
+//less healing, targets all
+function RadiantSky() {
 
 };
-
+//revive, targets one
 function Rebirth() {
 
 };
-
+//more healing, targets one
 function Moonlight() {
 
 };
@@ -100,7 +101,7 @@ export const effect_dependencies = [
     ShatteredMirror,
     RadiantSupernova,
     PierceEvil,
-    AngelsGrace,
+    RadiantSky,
     Rebirth,
     Moonlight,
     SupremeAltar,
@@ -127,7 +128,7 @@ export const dmage_attacks = [
 export const dmage_ultima = "Radiant Supernova"
 export const wmage_attacks = [
     "Pierce Evil",
-    "Angel's Grace",
+    "Radiant Sky",
     "Rebirth",
     "Moonlight"
 ]
@@ -151,7 +152,8 @@ export function PlayerAttack(attack: string, player: string) {
 }
 
 //and this one shows the image 
-export function ShowAttack(attack: string, player: string) {
+//Ultimas also change the background
+export function ShowAttack(attack: string, player: string, is_ultima: boolean) {
     return (
         <img
             src={require(`./assets/images/player/attacks/${player}/${attack}.png`)} // replace with your actual overlay image
