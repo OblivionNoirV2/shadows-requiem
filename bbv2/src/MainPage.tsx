@@ -162,7 +162,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                     {current_attacks.map(
                         (attack, index) =>
                             <li key={index} className='atk-btn'>
-                                <button onClick={() => pa.PlayerAttack(attack, player)}>
+                                <button onClick={() => pa.PlayerAttack(attack)}>
                                     {attack}
                                 </button>
                             </li>

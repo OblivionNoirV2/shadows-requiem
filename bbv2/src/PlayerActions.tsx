@@ -5,112 +5,119 @@ For my own sanity. */
 
 /*All attacks are handled in the PlayerAttack function, so no need 
 to export these*/
+//attack has a string key, and a function value
+const attacks_object: { [attack: string]: Function } = {
+    /*knight attacks*/
+    'ShadowSelf': function ShadowSelf() {
 
-/*knight attacks*/
-function ShadowSelf() {
+    },
 
+    'WhimsOfFate': function WhimsOfFate() {
+
+    },
+
+    'Deathblow': function Deathblow() {
+
+    },
+
+    'Rebellion': function Rebellion() {
+
+    },
+
+    //ult
+    'ThousandMen': function ThousandMen() {
+
+    },
+
+    /*mage attacks*/
+    'MirageBlade': function MirageBlade() {
+
+    },
+
+    'Entrapment': function Entrapment() {
+
+    },
+
+    'BlackFire': function BlackFire() {
+
+    },
+
+    'ShatteredMirror': function ShatteredMirror() {
+
+    },
+
+    'RadiantSupernova': function RadiantSupernova() {
+
+    },
+
+    /*wmage attacks*/
+    'PierceEvil': function PierceEvil() {
+
+    },
+
+    'RadiantSky': function RadiantSky() {
+
+    },
+
+    'Rebirth': function Rebirth() {
+
+    },
+
+    'Moonlight': function Moonlight() {
+
+    },
+
+    'SupremeAltar': function SupremeAltar() {
+
+    },
+
+    /*rmage attacks*/
+    'BorderOfLife': function BorderOfLife() {
+
+    },
+
+    'BloodyVengeance': function BloodyVengeance() {
+
+    },
+
+    'ChainLightning': function ChainLightning() {
+
+    },
+
+    'MyTurn': function MyTurn() {
+
+    },
+
+    //ult
+    'ScarletSubversion': function ScarletSubversion() {
+
+    }
 };
 
-function WhimsOfFate() {
-
-};
-
-function Deathblow() {
-
-};
-
-function Rebellion() {
-
-};
-//ult
-function ThousandMen() {
-
-};
-/*dmage attacks*/
-function MirageBlade() {
-
-};
-
-function Entrapment() {
-
-};
-
-function BlackFire() {
-
-};
-
-function ShatteredMirror() {
-
-};
-//ult
-function RadiantSupernova() {
-
-};
-
-/*wmage attacks*/
-//moderate damage spell
-function PierceEvil() {
-
-};
-//less healing, targets all
-function RadiantSky() {
-
-};
-//revive, targets one
-function Rebirth() {
-
-};
-//more healing, targets one
-function Moonlight() {
-
-};
-//ult
-function SupremeAltar() {
-
-};
-/*rmage attacks*/
-function BorderOfLife() {
-
-};
-
-function BloodyVengeance() {
-
-};
-
-function ChainLightning() {
-
-};
-
-function MyTurn() {
-
-};
-//ult
-function ScarletSubversion() {
-
-};
 //triggers for the image showing
 export const effect_dependencies = [
-    ShadowSelf,
-    WhimsOfFate,
-    Deathblow,
-    Rebellion,
-    ThousandMen,
-    MirageBlade,
-    Entrapment,
-    BlackFire,
-    ShatteredMirror,
-    RadiantSupernova,
-    PierceEvil,
-    RadiantSky,
-    Rebirth,
-    Moonlight,
-    SupremeAltar,
-    BorderOfLife,
-    BloodyVengeance,
-    ChainLightning,
-    MyTurn,
-    ScarletSubversion
+    attacks_object['ShadowSelf'],
+    attacks_object['WhimsOfFate'],
+    attacks_object['Deathblow'],
+    attacks_object['Rebellion'],
+    attacks_object['ThousandMen'],
+    attacks_object['MirageBlade'],
+    attacks_object['Entrapment'],
+    attacks_object['BlackFire'],
+    attacks_object['ShatteredMirror'],
+    attacks_object['RadiantSupernova'],
+    attacks_object['PierceEvil'],
+    attacks_object['RadiantSky'],
+    attacks_object['Rebirth'],
+    attacks_object['Moonlight'],
+    attacks_object['SupremeAltar'],
+    attacks_object['BorderOfLife'],
+    attacks_object['BloodyVengeance'],
+    attacks_object['ChainLightning'],
+    attacks_object['MyTurn'],
+    attacks_object['ScarletSubversion']
 ];
+
 export const knight_attacks = [
     "Shadow Self",
     "Whims of Fate",
@@ -145,10 +152,9 @@ export const rmage_ultima = "Scarlet Subversion"
 export function Shadow_Self() {
     console.log("Shadow Self");
 }
-//Use both parameters to filter more effectively
 //This one does the actual damage
-export function PlayerAttack(attack: string, player: string) {
-    console.log(attack);
+export function PlayerAttack(attack: string) {
+    attacks_object[attack]();
 }
 
 //and this one shows the image 
