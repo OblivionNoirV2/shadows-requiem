@@ -6,7 +6,7 @@ For my own sanity. */
 /*All attacks are handled in the PlayerAttack function, so no need 
 to export these*/
 //attack has a string key, and a function value
-const attacks_object: { [attack: string]: Function } = {
+export const attacks_object: { [attack: string]: Function } = {
     /*knight attacks*/
     'Shadow Self': function ShadowSelf() {
 
@@ -153,14 +153,20 @@ export function Shadow_Self() {
     console.log("Shadow Self");
 }
 //This one does the actual damage
+//then set the image with the returned string
 export function PlayerAttack(attack: string) {
-    console.log(attack)
+    console.log(attack);
+    //setAttackImage(`./assets/images/player/attacks/${player}/${attack}.png`);
     attacks_object[attack]();
 }
 
-//and this one shows the image 
-//Ultimas also change the background
-export function ShowAttack(attack: string, player: string, is_ultima: boolean) {
+interface Attack {
+    attack: string;
+    player: string;
+    is_ultima: boolean;
+}
+
+export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
     return (
         <img
             src={require(`./assets/images/player/attacks/${player}/${attack}.png`)} // replace with your actual overlay image
@@ -171,11 +177,9 @@ export function ShowAttack(attack: string, player: string, is_ultima: boolean) {
     );
 }
 
+
 /*
-Click the attack button, which triggers a UseEffect 
-(passing in the player and attack), which calls 
-ShowAttack and renders the return. The image then disappears after 
-a couple seconds then PlayerAttack is called with the same parameters, 
-which does the damage.
+Flash the image, then call the attack function with the props already 
+passed over here
 
 */

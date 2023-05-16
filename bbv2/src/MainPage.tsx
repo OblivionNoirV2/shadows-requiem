@@ -71,9 +71,11 @@ const BossArea = () => {
                     alt={`boss phase ${bossStage}`}
 
                 />
-                {/*current attack will flash here for a sec, do 
-                a useeffect that fires when atk is clicked, which 
-    then calls the actual damaging function*/}
+                {/*<pa.ShowAttack />*/}
+                {/*current attack will flash here for a sec, which 
+    then calls the actual damaging function
+    To accomplish this, pass the values upwards as props
+    */}
                 <strong>
                     <div className='flex justify-center mt-8 text-4xl mx-auto text-white'>
                         {boss_labels[bossStage - 1]}
