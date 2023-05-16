@@ -71,13 +71,9 @@ const BossArea = () => {
                     alt={`boss phase ${bossStage}`}
                     style={{ position: 'relative' }}
                 />
-                {/*current attack will flash here for a sec*/}
-                {/*<img
-                    src={require('./assets/images/boss/sprites/phase3anime.png')} // replace with your actual overlay image
-                    className='atk-image'
-                    alt='attack image'
-                    style={{ position: 'absolute', top: 0, left: 0 }}
-                />*/}
+                {/*current attack will flash here for a sec, do 
+                a useeffect that fires when atk is clicked, which 
+    then calls the actual damaging function*/}
                 <strong>
                     <div className='flex justify-center mt-8 text-4xl mx-auto text-white'>
                         {boss_labels[bossStage - 1]}
@@ -260,8 +256,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         }
     }
 
-    /*Yes it repeats itself, but it's more efficient than making 
-    new assignments*/
+    //can probably clean this up
     function UpdateStatusEffects(player: string) {
         switch (player) {
             case "knight":

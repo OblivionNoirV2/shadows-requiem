@@ -87,7 +87,29 @@ function MyTurn() {
 function ScarletSubversion() {
 
 };
-
+//triggers for the image showing
+export const effect_dependencies = [
+    ShadowSelf,
+    WhimsOfFate,
+    Deathblow,
+    Rebellion,
+    ThousandMen,
+    MirageBlade,
+    Entrapment,
+    BlackFire,
+    ShatteredMirror,
+    RadiantSupernova,
+    PierceEvil,
+    AngelsGrace,
+    Rebirth,
+    Moonlight,
+    SupremeAltar,
+    BorderOfLife,
+    BloodyVengeance,
+    ChainLightning,
+    MyTurn,
+    ScarletSubversion
+];
 export const knight_attacks = [
     "Shadow Self",
     "Whims of Fate",
@@ -123,7 +145,28 @@ export function Shadow_Self() {
     console.log("Shadow Self");
 }
 //Use both parameters to filter more effectively
+//This one does the actual damage
 export function PlayerAttack(attack: string, player: string) {
     console.log(attack);
 }
 
+//and this one shows the image 
+export function ShowAttack(attack: string, player: string) {
+    return (
+        <img
+            src={require(`./assets/images/player/attacks/${player}/${attack}.png`)} // replace with your actual overlay image
+            className='atk-image'
+            alt='attack image'
+            style={{ position: 'absolute', top: 0, left: 0 }}
+        />
+    );
+}
+
+/*
+Click the attack button, which triggers a UseEffect 
+(passing in the player and attack), which calls 
+ShowAttack and renders the return. The image then disappears after 
+a couple seconds then PlayerAttack is called with the same parameters, 
+which does the damage.
+
+*/

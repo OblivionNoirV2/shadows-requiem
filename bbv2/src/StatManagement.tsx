@@ -1,7 +1,9 @@
 
 interface player_stats {
     hp: number;
+    max_hp: number;
     mp: number;
+    max_mp: number;
     p_def: number;
     m_def: number;
     ev: number;
@@ -9,6 +11,7 @@ interface player_stats {
 
 interface boss_stats {
     hp: number;
+    max_hp: number;
     p_def: number;
     m_def: number;
     atk: number;
@@ -22,10 +25,12 @@ p_def would do 100 damage.
 ev is a percentage, so 0.1 is 10% evasion.
 */
 
-//Need to add seperate max stats for these
+//Need to add seperate max stats for hp/mp
 export const knight_stats: player_stats = {
     hp: 550,
+    max_hp: 550,
     mp: 180,
+    max_mp: 180,
     p_def: 1.45,
     m_def: 1.00,
     ev: 0.05
@@ -33,7 +38,9 @@ export const knight_stats: player_stats = {
 
 export const dmage_stats: player_stats = {
     hp: 470,
+    max_hp: 470,
     mp: 390,
+    max_mp: 390,
     p_def: 1.30,
     m_def: 1.50,
     ev: 0.10
@@ -41,7 +48,9 @@ export const dmage_stats: player_stats = {
 
 export const wmage_stats: player_stats = {
     hp: 400,
+    max_hp: 400,
     mp: 420,
+    max_mp: 420,
     p_def: 1.00,
     m_def: 1.45,
     ev: 0.10
@@ -49,7 +58,9 @@ export const wmage_stats: player_stats = {
 
 export const rmage_stats: player_stats = {
     hp: 375,
+    max_hp: 375,
     mp: 540,
+    max_mp: 540,
     p_def: 0.90,
     m_def: 0.90,
     ev: 0.20
@@ -57,6 +68,7 @@ export const rmage_stats: player_stats = {
 
 export const boss_stats: boss_stats = {
     hp: 999999,
+    max_hp: 999999,
     p_def: 1.00,
     m_def: 1.00,
     atk: 1.00
