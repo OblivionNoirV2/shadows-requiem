@@ -163,20 +163,29 @@ export function PlayerAttack(attack: string) {
 }
 
 interface Attack {
-    attack: string;
-    player: string;
+    attack: string | null;
+    player: string | null;
     is_ultima: boolean;
 }
-
+//Need to add in checks to make sure it's the right character, 
+//and de select the attack when it's done 
+//Also need to lock the menus when an attack is happening
+//And needs to show when button is clicked, not the character
 export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
-    return (
-        <img
-            src={require(`./assets/images/player/attacks/${player}/${attack}.png`)} // replace with your actual overlay image
-            className='atk-image'
-            alt='attack image'
-            style={{ position: 'absolute', top: 0, left: 0 }}
-        />
-    );
+    console.log(player, attack, is_ultima)
+    if (player === null || attack === '') {
+        return null;
+    } else {
+        return (
+            <img
+                src={require(`./assets/images/player/attacks/${player}/${attack}.png`)} // replace with your actual overlay image
+                className='atk-image'
+                alt='attack image'
+                style={{ position: 'absolute', top: 0, left: 0 }}
+            />
+        );
+    }
+
 }
 
 

@@ -75,12 +75,11 @@ const BossArea: React.FC<BossAreaProps> = ({ player, is_ultima_ready }) => {
                     alt={`boss phase ${bossStage}`}
 
                 />
-                {/*<pa.ShowAttack />*/}
-                {/*current attack will flash here for a sec, which 
-    then calls the actual damaging function
-    To accomplish this, pass the values upwards as props
-    Needs attack, player, is_ultima
-    */}
+                <pa.ShowAttack
+                    attack={current_attack}
+                    player={player}
+                    is_ultima={is_ultima_ready}
+                />
                 <strong>
                     <div className='flex justify-center mt-8 text-4xl mx-auto text-white'>
                         {boss_labels[bossStage - 1]}
