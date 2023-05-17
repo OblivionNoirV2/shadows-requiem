@@ -109,7 +109,7 @@ interface PlayerMenuProps {
 const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
     //note that this re-renders whenever the player is selected
     //this section is also responsible for rendering the attack menu
-    console.log("rendered")
+    console.log("player menu rendered")
     const current_attacks = player_attacks[player];
     //if it's active, hide the other options
     const [isAttacksActive, setIsAttacksActive] = useState(false);
@@ -186,7 +186,8 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                                     <button onClick={() => {
                                         pa.PlayerAttack(attack);
                                         setIsAttackAreaShown(!isAttackAreaShown);
-                                        setCurrentAttack(attack)
+                                        setCurrentAttack(attack);
+                                        setBossHP(boss_stats.hp);
                                     }}>
                                         {attack}
                                     </button>
@@ -201,10 +202,11 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                             />
                         }
                     </section>
-
+                    {/*needs to be indepenent of the menu rendering. 
+                    Give it a state and attach it to the button? 
+                    Shouls update after the attack flashes*/}
                     <section className='absolute'>
-                        <BossHpBar bossHP={BossHP}
-                        />
+                        <BossHpBar bossHP={BossHP} />
                     </section>
                 </>
 
