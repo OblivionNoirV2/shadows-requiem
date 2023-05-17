@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, createContext, useContext, Dispatch, SetStateAction } from 'react';
 
 import * as sm from './StatManagement';
 import * as iv from './Inventory';
@@ -26,9 +26,30 @@ const player_attacks: AttackList = {
 };
 
 
+interface BossHPContextProps {
+    bossHP: number;
+    setBossHP: Dispatch<SetStateAction<number>>;
+}
 
+//create context for boss hp
+export const BossHPContext = createContext<BossHPContextProps>({
+    bossHP: sm.boss_stats.hp,
+    setBossHP: () => { },
+});
 
+interface BossHPProviderProps {
+    children: React.ReactNode;
+}
 
+export const BossHPProvider: React.FC<BossHPProviderProps> = ({ children }) => {
+    const [bossHP, setBossHP] = useState(sm.boss_stats.hp);
+
+    return (
+        <BossHPContext.Provider value={{ bossHP, setBossHP }}>
+            {children}
+        </BossHPContext.Provider>
+    );
+};
 //can use player to retrieve the attacks just like in the below components
 interface BossAreaProps {
     player: string | null;
@@ -232,6 +253,7 @@ const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player }) =
 //onBackToTitle is a void function that comes from the interface
 //in the render below it flips the state of the page to the title
 const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
+    //const { setBossHP } = useContext(BossHPContext);
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
@@ -541,11 +563,8 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 interface BossHpBarProps {
     bossHP: number;
 }
-// Function that reduces the boss' HP, triggering a re-render
-
-
-// Call this function whenever the boss takes damage
-
+//Will need to use global state/context api to retrieve the state 
+//from the mainpage component
 const BossHpBar: React.FC<BossHpBarProps> = ({ bossHP }) => {
     console.log("boss hp bar rendered")
     return (
