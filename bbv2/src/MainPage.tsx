@@ -67,7 +67,9 @@ const BossArea: React.FC<BossAreaProps> = ({ player }) => {
         "Corrupted Shade of the King",
         "True Form of the Fallen"
     ];
-
+    const [bossHP, setBossHP] = useState(boss_stats.hp);
+    //Set the new boss hp when the attack is run
+    //then pass the value up here to update the progress bar
     return (
         <main className='boss-container w-full flex flex-col mt-44 mr-56 z-[1]'>
             <section className='flex flex-col w-[96rem] relative'>
@@ -82,15 +84,23 @@ const BossArea: React.FC<BossAreaProps> = ({ player }) => {
                         {boss_labels[bossStage - 1]}
                     </div>
                 </strong>
-                <progress className={
-                    bossStage === 3 ? 'block h-8 glow-ani-border boss-prog-3' :
-                        'block h-8 glow-ani-border-black boss-prog '
-                } value={boss_stats.hp} max={boss_stats.max_hp}></progress>
             </section>
         </main>
     );
 }
+/*this must be seperate from the image, otherwise it 
+renders at the wrong time*/
 
+interface BossHpBarProps {
+    bossHP: number;
+}
+const BossHpBar: React.FC<BossHpBarProps> = ({ bossHP }) => {
+    return (
+        <progress className={
+            'block h-8 glow-ani-border-black boss-prog '
+        } value={bossHP} max={boss_stats.max_hp}></progress>
+    )
+}
 //fetch and return list of player attacks in ul format
 interface PlayerMenuProps {
     player: string;
@@ -106,6 +116,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
     const [isItemsActive, setIsItemsActive] = useState(false);
     const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
     const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
+    const [BossHP, setBossHP] = useState(boss_stats.hp);
     function HandleItemUse(item: string) {
         console.log("working");
     };
@@ -126,6 +137,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
         }
         return "";
     }
+    const [currentAttack, setCurrentAttack] = useState("");
     //clicking the top button will show attacks and remove the other two
     //if the attacks are shown, change "attacks" to "back"
     return (
@@ -166,27 +178,36 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                 </>
                 :
                 //map the list to a ul 
-                <div className=' grid grid-cols-2 grid-rows-2'>
-                    {current_attacks.map(
-                        (attack, index) =>
-                            <li key={index} className='atk-btn'>
-                                <button onClick={() => { pa.PlayerAttack(attack); setIsAttackAreaShown(!isAttackAreaShown); }}>
-                                    {attack}
+                <>
+                    <div className=' grid grid-cols-2 grid-rows-2'>
+                        {current_attacks.map(
+                            (attack, index) =>
+                                <li key={index} className='atk-btn'>
+                                    <button onClick={() => {
+                                        pa.PlayerAttack(attack);
+                                        setIsAttackAreaShown(!isAttackAreaShown);
+                                        setCurrentAttack(attack)
+                                    }}>
+                                        {attack}
+                                    </button>
+                                </li>
+                        )}
+                    </div>
+                    <section>
+                        {isAttackAreaShown &&
+                            <PlayerAttackArea
+                                attack={currentAttack}
+                                player={player}
+                            />
+                        }
+                    </section>
 
-                                    {isAttackAreaShown &&
-                                        <PlayerAttackArea
-                                            attack={attack}
-                                            player={player}
-                                        />
+                    <section className='absolute'>
+                        <BossHpBar bossHP={BossHP}
+                        />
+                    </section>
+                </>
 
-
-
-                                    }
-
-                                </button>
-                            </li>
-                    )}
-                </div>
             }
         </ul>
     )

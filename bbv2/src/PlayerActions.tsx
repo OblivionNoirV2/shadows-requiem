@@ -161,6 +161,7 @@ export function PlayerAttack(attack: string) {
     console.log("inside playerattack, attack:" + attack);
     is_attack_triggered = !is_attack_triggered;
     attacks_object[attack]();
+    sm.boss_stats.hp -= 20000;
 
 }
 
@@ -181,7 +182,7 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
         return (
             <img
                 src={require(`./assets/images/player/attacks/${player}/${attack}.png`)} // replace with your actual overlay image
-                className='w-1/4 ml-[48.5%] mt-[14%] z-[2] opacity-40 rounded-xl'
+                className='w-1/4 ml-[48.5%] mt-[14%] z-[2] opacity-[85%] rounded-xl'
                 alt='attack image'
                 style={{ position: 'absolute', top: 0, left: 0 }}
             />
