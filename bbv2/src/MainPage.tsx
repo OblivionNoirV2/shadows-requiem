@@ -33,9 +33,14 @@ const player_attacks: AttackList = {
 
 
 
-
-const BossArea = () => {
+//can use player to retrieve the attacks just like in the below components
+interface BossAreaProps {
+    player: string | null;
+    is_ultima_ready: boolean;
+}
+const BossArea: React.FC<BossAreaProps> = ({ player, is_ultima_ready }) => {
     //manage boss stage based on hp value 
+    let current_attack = pa.selected_attack;
     useEffect(() => {
         if (boss_stats.hp >= 666666) {
             setBossStage(1);
@@ -45,7 +50,6 @@ const BossArea = () => {
             setBossStage(3);
         }
     }, [boss_stats.hp]);
-
     function HandleBossStage(stage: number) {
         setBossStage(stage);
     }
@@ -75,6 +79,7 @@ const BossArea = () => {
                 {/*current attack will flash here for a sec, which 
     then calls the actual damaging function
     To accomplish this, pass the values upwards as props
+    Needs attack, player, is_ultima
     */}
                 <strong>
                     <div className='flex justify-center mt-8 text-4xl mx-auto text-white'>
@@ -93,6 +98,7 @@ const BossArea = () => {
 //fetch and return list of player attacks in ul format
 interface PlayerMenuProps {
     player: string;
+
 }
 const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
     const current_attacks = player_attacks[player];
@@ -179,8 +185,9 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
 const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
-    const [selectedCharacter, setSelectedCharacter] = useState<string | boolean | null>(null);
+    const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
     const [score, setScore] = useState(0);
+    const [isUltimaReady, setIsUltimaReady] = useState(false);
     //Manage the turn based system
     //Score will go up by 1 each player turn
     function HandleScore() {
@@ -319,7 +326,6 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 );
         }
     };
-    const [isUltimaReady, setIsUltimaReady] = useState(false);
     //gets checked whenever it's the player's turn
     function HandleUltima() {
 
@@ -362,7 +368,10 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             <span>
                                 {
                                     isPlayerTurn && selectedCharacter === 'knight' &&
-                                    <PlayerMenu player='knight' />
+                                    <PlayerMenu
+                                        player='knight'
+
+                                    />
 
                                 }
                                 <section className='flex flex-row text-white'>
@@ -394,7 +403,10 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             <span>
                                 {
                                     isPlayerTurn && selectedCharacter === 'dmage' &&
-                                    <PlayerMenu player='dmage' />
+                                    <PlayerMenu
+                                        player='dmage'
+
+                                    />
 
                                 }
                                 <section className='flex flex-row text-white'>
@@ -426,7 +438,10 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             <span>
                                 {
                                     isPlayerTurn && selectedCharacter === 'wmage' &&
-                                    <PlayerMenu player='wmage' />
+                                    <PlayerMenu
+                                        player='wmage'
+
+                                    />
 
                                 }
                                 <section className='flex flex-row text-white'>
@@ -454,7 +469,10 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             <span>
                                 {
                                     isPlayerTurn && selectedCharacter === 'rmage' &&
-                                    <PlayerMenu player='rmage' />
+                                    <PlayerMenu
+                                        player='rmage'
+
+                                    />
 
                                 }
                                 <section className='flex flex-row text-white'>
@@ -483,7 +501,9 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     </ul>
                 </section>
                 <section>
-                    <BossArea />
+                    <BossArea
+                        player={selectedCharacter}
+                        is_ultima_ready={isUltimaReady} />
                 </section>
             </main>
         </>

@@ -95,7 +95,7 @@ export const attacks_object: { [attack: string]: Function } = {
 };
 
 //triggers for the image showing
-export const effect_dependencies = [
+/*export const effect_dependencies = [
     attacks_object['Shadow Self'],
     attacks_object['Whims Of Fate'],
     attacks_object['Deathblow'],
@@ -116,7 +116,7 @@ export const effect_dependencies = [
     attacks_object['Chain Lightning'],
     attacks_object['My Turn'],
     attacks_object['Scarlet Subversion']
-];
+];*/
 
 export const knight_attacks = [
     "Shadow Self",
@@ -154,10 +154,12 @@ export function Shadow_Self() {
 }
 //This one does the actual damage
 //then set the image with the returned string
+export let selected_attack: string = '';
 export function PlayerAttack(attack: string) {
     console.log(attack);
     //setAttackImage(`./assets/images/player/attacks/${player}/${attack}.png`);
     attacks_object[attack]();
+    selected_attack = attack;
 }
 
 interface Attack {
