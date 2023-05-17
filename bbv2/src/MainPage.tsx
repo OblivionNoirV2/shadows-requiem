@@ -33,14 +33,34 @@ const player_attacks: AttackList = {
 
 
 
+
 //can use player to retrieve the attacks just like in the below components
 interface BossAreaProps {
     player: string | null;
-    is_ultima_ready: boolean;
+
 }
-const BossArea: React.FC<BossAreaProps> = ({ player, is_ultima_ready }) => {
-    //manage boss stage based on hp value 
+interface PlayerAttackAreaProps {
+    player: string | null;
+    attack: string;
+    is_ultima_ready: boolean;
+
+}
+//Need to keep this independent of the bossarea component
+const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ player, is_ultima_ready }) => {
     let current_attack = pa.selected_attack;
+    console.log("current_attack:" + current_attack);
+    return (
+        <pa.ShowAttack
+            attack={current_attack}
+            player={player}
+            is_ultima={is_ultima_ready}
+        />
+    )
+
+}
+const BossArea: React.FC<BossAreaProps> = ({ player }) => {
+    //manage boss stage based on hp value 
+    console.log("rendered bossarea")
     useEffect(() => {
         if (boss_stats.hp >= 666666) {
             setBossStage(1);
@@ -65,10 +85,7 @@ const BossArea: React.FC<BossAreaProps> = ({ player, is_ultima_ready }) => {
         "Corrupted Shade of the King",
         "True Form of the Fallen"
     ];
-    const [isAttackTriggered, setIsAttackTriggered] = useState(false);
-    useEffect(() => {
-        setIsAttackTriggered(true);
-    }, [current_attack])
+
     return (
         <main className='boss-container w-full flex flex-col mt-44 mr-56 '>
             <section className='flex flex-col w-[96rem] relative'>
@@ -78,15 +95,6 @@ const BossArea: React.FC<BossAreaProps> = ({ player, is_ultima_ready }) => {
                     alt={`boss phase ${bossStage}`}
 
                 />
-                {/*should only show when a player and an attack are selected*/}
-                {isAttackTriggered && player !== null && (
-                    <pa.ShowAttack
-                        attack={current_attack}
-                        player={player}
-                        is_ultima={is_ultima_ready}
-                    />
-                )}
-
                 <strong>
                     <div className='flex justify-center mt-8 text-4xl mx-auto text-white'>
                         {boss_labels[bossStage - 1]}
@@ -107,6 +115,9 @@ interface PlayerMenuProps {
 
 }
 const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
+    //note that this re-renders whenever the player is selected
+    //this section is also responsible for rendering the attack menu
+    console.log("rendered")
     const current_attacks = player_attacks[player];
     //if it's active, hide the other options
     const [isAttacksActive, setIsAttacksActive] = useState(false);
@@ -176,7 +187,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                     {current_attacks.map(
                         (attack, index) =>
                             <li key={index} className='atk-btn'>
-                                <button onClick={() => pa.PlayerAttack(attack)}>
+                                <button onClick={() => { pa.PlayerAttack(attack) }}>
                                     {attack}
                                 </button>
                             </li>
@@ -508,8 +519,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 </section>
                 <section>
                     <BossArea
-                        player={selectedCharacter}
-                        is_ultima_ready={isUltimaReady} />
+                        player={selectedCharacter} />
                 </section>
             </main>
         </>

@@ -152,14 +152,16 @@ export const rmage_ultima = "Scarlet Subversion"
 export function Shadow_Self() {
     console.log("Shadow Self");
 }
-//This one does the actual damage
-//then set the image with the returned string
+
 export let selected_attack: string | null = null;
+export let is_attack_triggered: boolean = false;
+//This one does the actual damage
 export function PlayerAttack(attack: string) {
-    console.log(attack);
-    //setAttackImage(`./assets/images/player/attacks/${player}/${attack}.png`);
-    attacks_object[attack]();
     selected_attack = attack;
+    console.log("inside playerattack, attack:" + attack);
+    is_attack_triggered = !is_attack_triggered;
+    attacks_object[attack]();
+
 }
 
 interface Attack {
@@ -172,7 +174,7 @@ interface Attack {
 //Also need to lock the menus when an attack is happening
 //And needs to show when button is clicked, not the character
 export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
-    console.log(player, attack, is_ultima)
+    console.log("inside show attack:" + player, attack, is_ultima)
 
     if (player === null || attack === null) {
         return null;
