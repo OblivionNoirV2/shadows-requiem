@@ -155,15 +155,16 @@ export function Shadow_Self() {
 
 export let selected_attack: string | null = null;
 export let is_attack_triggered: boolean = false;
-export let current_boss_hp = sm.boss_stats.hp;
+export let current_boss_hp: number = sm.boss_stats.hp;
 //This one does the actual damage
 export function PlayerAttack(attack: string): number {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
-    console.log("current boss hp:" + current_boss_hp)
+
     is_attack_triggered = !is_attack_triggered;
     attacks_object[attack]();
     current_boss_hp -= 20000;
+    console.log("current boss hp:" + current_boss_hp)
     return sm.boss_stats.hp;
 }
 

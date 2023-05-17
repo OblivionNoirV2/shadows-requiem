@@ -552,8 +552,9 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 <section>
                     <BossArea
                         player={selectedCharacter} />
-                    {/*need some way to force a re-render of this when it changes*/}
-                    <section className='absolute'>
+                    {/*need some way to force a re-render of 
+                    this when it changes*/}
+                    <section className='w-full'>
                         <BossHpBar bossHP={BossHP} />
                     </section>
                 </section>
@@ -564,16 +565,18 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 interface BossHpBarProps {
     bossHP: number;
 }
+// Function that reduces the boss' HP, triggering a re-render
+
+
+// Call this function whenever the boss takes damage
+
 const BossHpBar: React.FC<BossHpBarProps> = ({ bossHP }) => {
-    const [currentBossHp, setCurrentBossHp] = useState(pa.current_boss_hp);
-    useEffect(() => {
-        setCurrentBossHp(pa.current_boss_hp)
-    }, [pa.current_boss_hp])
     console.log("boss hp bar rendered")
     return (
         <progress className={
-            'block h-8 glow-ani-border-black boss-prog '
-        } value={currentBossHp} max={sm.boss_stats.max_hp}></progress>
+            'block h-8 glow-ani-border-black boss-prog w-10/12'
+        } value={bossHP} max={sm.boss_stats.max_hp}></progress>
     )
 }
+
 export default MainPage;
