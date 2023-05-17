@@ -178,6 +178,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                 </>
                 :
                 //map the list to a ul 
+                //Why isn't the phase changing?
                 <>
                     <div className=' grid grid-cols-2 grid-rows-2'>
                         {current_attacks.map(
@@ -202,9 +203,6 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                             />
                         }
                     </section>
-                    {/*needs to be indepenent of the menu rendering. 
-                    Give it a state and attach it to the button? 
-                    Shouls update after the attack flashes*/}
                     <section className='absolute'>
                         <BossHpBar bossHP={BossHP} />
                     </section>
