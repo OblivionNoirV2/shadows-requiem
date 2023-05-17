@@ -39,23 +39,7 @@ interface BossAreaProps {
     player: string | null;
 
 }
-interface PlayerAttackAreaProps {
-    attack: string;
-    player: string | null;
 
-}
-//Need to keep this independent of the bossarea component
-const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player }) => {
-    let current_attack = pa.selected_attack;
-    console.log("current_attack:" + current_attack);
-    return (
-        <pa.ShowAttack
-            attack={current_attack}
-            player={player}
-        />
-    )
-
-}
 const BossArea: React.FC<BossAreaProps> = ({ player }) => {
     //manage boss stage based on hp value 
     console.log("rendered bossarea")
@@ -85,11 +69,11 @@ const BossArea: React.FC<BossAreaProps> = ({ player }) => {
     ];
 
     return (
-        <main className='boss-container w-full flex flex-col mt-44 mr-56 '>
+        <main className='boss-container w-full flex flex-col mt-44 mr-56 z-[1]'>
             <section className='flex flex-col w-[96rem] relative'>
                 <img
                     src={boss_images[bossStage - 1]}
-                    className='boss-sprite opacity-95 relative'
+                    className='boss-sprite opacity-95'
                     alt={`boss phase ${bossStage}`}
 
                 />
@@ -188,11 +172,15 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                             <li key={index} className='atk-btn'>
                                 <button onClick={() => { pa.PlayerAttack(attack); setIsAttackAreaShown(!isAttackAreaShown); }}>
                                     {attack}
+
                                     {isAttackAreaShown &&
                                         <PlayerAttackArea
                                             attack={attack}
                                             player={player}
                                         />
+
+
+
                                     }
 
                                 </button>
@@ -202,6 +190,23 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
             }
         </ul>
     )
+}
+interface PlayerAttackAreaProps {
+    attack: string;
+    player: string | null;
+
+}
+//Need to keep this independent of the bossarea component
+const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player }) => {
+    let current_attack = pa.selected_attack;
+    console.log("current_attack:" + current_attack);
+    return (
+        <pa.ShowAttack
+            attack={current_attack}
+            player={player}
+        />
+    )
+
 }
 //onBackToTitle is a void function that comes from the interface
 //in the render below it flips the state of the page to the title
