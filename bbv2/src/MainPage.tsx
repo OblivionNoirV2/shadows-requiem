@@ -314,67 +314,43 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
     //can probably clean this up
     function UpdateStatusEffects(player: string) {
+        // Map the player to the corresponding status effects array
+        let status_effects: string[];
         switch (player) {
             case "knight":
-                return (
-                    knight_status_effects.map((status_effect, index) =>
-                        <ul key={index}>
-                            <li>
-                                <img src={
-                                    require(`./assets/images/icons/${status_effect}`)}
-                                    alt={status_effect}
-                                    /*style differently depending on the effect*/
-                                    className={getClassName(status_effect)}
-                                    title={GetStatusEffectDesc(status_effect)}
-                                />
-                            </li>
-                        </ul>
-                    )
-                );
+                status_effects = knight_status_effects;
+                break;
             case "dmage":
-                return (
-                    dmage_status_effects.map((status_effect, index) =>
-                        <ul className='flex flex-row' key={index}>
-                            <li>
-                                <img src={
-                                    require(`./assets/images/icons/${status_effect}`)}
-                                    alt={status_effect}
-                                    className={getClassName(status_effect)}
-                                />
-                            </li>
-                        </ul>
-                    )
-                );
+                status_effects = dmage_status_effects;
+                break;
             case "wmage":
-                return (
-                    wmage_status_effects.map((status_effect, index) =>
-                        <ul key={index}>
-                            <li key={index}>
-                                <img src={
-                                    require(`./assets/images/icons/${status_effect}`)}
-                                    alt={status_effect}
-                                    className={getClassName(status_effect)}
-                                />
-                            </li>
-                        </ul>
-                    )
-                );
+                status_effects = wmage_status_effects;
+                break;
             case "rmage":
-                return (
-                    wmage_status_effects.map((status_effect, index) =>
-                        <ul key={index}>
-                            <li key={index}>
-                                <img src={
-                                    require(`./assets/images/icons/${status_effect}`)}
-                                    alt={status_effect}
-                                    className={getClassName(status_effect)}
-                                />
-                            </li>
-                        </ul>
-                    )
-                );
+                status_effects = rmage_status_effects;
+                break;
+            default:
+                status_effects = [];
+                break;
         }
-    };
+
+        // Render the status effects
+        return (
+            status_effects.map((status_effect, index) => (
+                <ul key={index}>
+                    <li>
+                        <img
+                            src={require(`./assets/images/icons/${status_effect}`)}
+                            alt={status_effect}
+                            className={getClassName(status_effect)}
+                            title={GetStatusEffectDesc(status_effect)}
+                        />
+                    </li>
+                </ul>
+            ))
+        );
+    }
+
     //gets checked whenever it's the player's turn
     function HandleUltima() {
 
