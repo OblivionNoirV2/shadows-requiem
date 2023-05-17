@@ -65,7 +65,10 @@ const BossArea: React.FC<BossAreaProps> = ({ player, is_ultima_ready }) => {
         "Corrupted Shade of the King",
         "True Form of the Fallen"
     ];
-
+    const [isAttackTriggered, setIsAttackTriggered] = useState(false);
+    useEffect(() => {
+        setIsAttackTriggered(true);
+    }, [current_attack])
     return (
         <main className='boss-container w-full flex flex-col mt-44 mr-56 '>
             <section className='flex flex-col w-[96rem] relative'>
@@ -75,11 +78,15 @@ const BossArea: React.FC<BossAreaProps> = ({ player, is_ultima_ready }) => {
                     alt={`boss phase ${bossStage}`}
 
                 />
-                <pa.ShowAttack
-                    attack={current_attack}
-                    player={player}
-                    is_ultima={is_ultima_ready}
-                />
+                {/*should only show when a player and an attack are selected*/}
+                {isAttackTriggered && player !== null && (
+                    <pa.ShowAttack
+                        attack={current_attack}
+                        player={player}
+                        is_ultima={is_ultima_ready}
+                    />
+                )}
+
                 <strong>
                     <div className='flex justify-center mt-8 text-4xl mx-auto text-white'>
                         {boss_labels[bossStage - 1]}

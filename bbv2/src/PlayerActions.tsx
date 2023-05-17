@@ -154,7 +154,7 @@ export function Shadow_Self() {
 }
 //This one does the actual damage
 //then set the image with the returned string
-export let selected_attack: string = '';
+export let selected_attack: string | null = null;
 export function PlayerAttack(attack: string) {
     console.log(attack);
     //setAttackImage(`./assets/images/player/attacks/${player}/${attack}.png`);
@@ -173,7 +173,8 @@ interface Attack {
 //And needs to show when button is clicked, not the character
 export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
     console.log(player, attack, is_ultima)
-    if (player === null || attack === '') {
+
+    if (player === null || attack === null) {
         return null;
     } else {
         return (
@@ -184,6 +185,7 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
                 style={{ position: 'absolute', top: 0, left: 0 }}
             />
         );
+
     }
 
 }
