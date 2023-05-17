@@ -1,11 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import UpdateStats, {
-    knight_stats,
-    dmage_stats,
-    wmage_stats,
-    rmage_stats,
-    boss_stats
-} from './StatManagement';
+
+import * as sm from './StatManagement';
 import * as iv from './Inventory';
 import * as pa from './PlayerActions';
 import clicksfx from './assets/sound/sfx/selectclick.wav';
@@ -44,14 +39,14 @@ const BossArea: React.FC<BossAreaProps> = ({ player }) => {
     //manage boss stage based on hp value 
     console.log("rendered bossarea")
     useEffect(() => {
-        if (boss_stats.hp >= 666666) {
+        if (sm.boss_stats.hp >= 666666) {
             setBossStage(1);
-        } else if (boss_stats.hp >= 333333 && boss_stats.hp < 666666) {
+        } else if (sm.boss_stats.hp >= 333333 && sm.boss_stats.hp < 666666) {
             setBossStage(2);
         } else {
             setBossStage(3);
         }
-    }, [boss_stats.hp]);
+    }, [sm.boss_stats.hp]);
     function HandleBossStage(stage: number) {
         setBossStage(stage);
     }
@@ -67,7 +62,7 @@ const BossArea: React.FC<BossAreaProps> = ({ player }) => {
         "Corrupted Shade of the King",
         "True Form of the Fallen"
     ];
-    const [bossHP, setBossHP] = useState(boss_stats.hp);
+
     //Set the new boss hp when the attack is run
     //then pass the value up here to update the progress bar
     return (
@@ -91,16 +86,7 @@ const BossArea: React.FC<BossAreaProps> = ({ player }) => {
 /*this must be seperate from the image, otherwise it 
 renders at the wrong time*/
 
-interface BossHpBarProps {
-    bossHP: number;
-}
-const BossHpBar: React.FC<BossHpBarProps> = ({ bossHP }) => {
-    return (
-        <progress className={
-            'block h-8 glow-ani-border-black boss-prog '
-        } value={bossHP} max={boss_stats.max_hp}></progress>
-    )
-}
+
 //fetch and return list of player attacks in ul format
 interface PlayerMenuProps {
     player: string;
@@ -116,7 +102,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
     const [isItemsActive, setIsItemsActive] = useState(false);
     const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
     const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
-    const [BossHP, setBossHP] = useState(boss_stats.hp);
+
     function HandleItemUse(item: string) {
         console.log("working");
     };
@@ -137,98 +123,112 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
         }
         return "";
     }
+
+
     const [currentAttack, setCurrentAttack] = useState("");
     //clicking the top button will show attacks and remove the other two
     //if the attacks are shown, change "attacks" to "back"
+
+
     return (
-        <ul className='-mt-24 battle-menu'>
-            {isItemsActive ? null :
-                <li>
-                    <button onClick={HandleAttacksMenu}>
-                        {isAttacksActive ? "Back" : "Attacks"}
-                    </button>
-                </li>
-            }
-            {!isAttacksActive ?
-                <>
+        <>
+            <ul className='-mt-24 battle-menu'>
+                {isItemsActive ? null :
                     <li>
-                        <button onClick={HandleItemsMenu}>
-                            {isItemsActive ? "Back" : "Items"}
+                        <button onClick={HandleAttacksMenu}>
+                            {isAttacksActive ? "Back" : "Attacks"}
                         </button>
                     </li>
-                    <div className='flex flex-row space-x-4'>
-                        {isItemsActive &&
-                            Object.entries(iv.player_inventory).map(([item, quantity], index) => (
-                                <li key={index} className='atk-btn'>
-                                    <button onClick={() => HandleItemUse(item)}
-                                        title={GetItemDesc(item)}>
-                                        {item} ({quantity})
-                                    </button>
-                                </li>
-                            ))
-                        }
-                    </div>
-                    {isItemsActive ? null :
+                }
+                {!isAttacksActive ?
+                    <>
                         <li>
-                            <button>
-                                Defend
+                            <button onClick={HandleItemsMenu}>
+                                {isItemsActive ? "Back" : "Items"}
                             </button>
                         </li>
-                    }
-                </>
-                :
-                //map the list to a ul 
-                //Why isn't the phase changing?
-                <>
-                    <div className=' grid grid-cols-2 grid-rows-2'>
-                        {current_attacks.map(
-                            (attack, index) =>
-                                <li key={index} className='atk-btn'>
-                                    <button onClick={() => {
-                                        pa.PlayerAttack(attack);
-                                        setIsAttackAreaShown(!isAttackAreaShown);
-                                        setCurrentAttack(attack);
-                                        setBossHP(boss_stats.hp);
-                                    }}>
-                                        {attack}
-                                    </button>
-                                </li>
-                        )}
-                    </div>
-                    <section>
-                        {isAttackAreaShown &&
-                            <PlayerAttackArea
-                                attack={currentAttack}
-                                player={player}
-                            />
+                        <div className='flex flex-row space-x-4'>
+                            {isItemsActive &&
+                                Object.entries(iv.player_inventory).map(([item, quantity], index) => (
+                                    <li key={index} className='atk-btn'>
+                                        <button onClick={() => HandleItemUse(item)}
+                                            title={GetItemDesc(item)}>
+                                            {item} ({quantity})
+                                        </button>
+                                    </li>
+                                ))
+                            }
+                        </div>
+                        {isItemsActive ? null :
+                            <li>
+                                <button>
+                                    Defend
+                                </button>
+                            </li>
                         }
-                    </section>
-                    <section className='absolute'>
-                        <BossHpBar bossHP={BossHP} />
-                    </section>
-                </>
+                    </>
+                    :
+                    //map the list to a ul 
+                    //Why isn't the phase changing?
+                    <>
+                        <div className=' grid grid-cols-2 grid-rows-2'>
+                            {current_attacks.map(
+                                (attack, index) =>
+                                    <li key={index} className='atk-btn'>
+                                        <button onClick={() => {
+                                            pa.PlayerAttack(attack);
+                                            setIsAttackAreaShown(!isAttackAreaShown);
+                                            setCurrentAttack(attack);
 
-            }
-        </ul>
+
+                                        }}>
+                                            {attack}
+                                        </button>
+                                    </li>
+                            )}
+                        </div>
+                        <section>
+
+                            {isAttackAreaShown &&
+                                <PlayerAttackArea
+                                    attack={currentAttack}
+                                    player={player}
+
+                                />
+                            }
+
+                        </section>
+
+                    </>
+
+                }
+            </ul>
+        </>
     )
 }
 interface PlayerAttackAreaProps {
     attack: string;
     player: string | null;
 
+
 }
+
 //Need to keep this independent of the bossarea component
 const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player }) => {
+
     let current_attack = pa.selected_attack;
     console.log("current_attack:" + current_attack);
     return (
-        <pa.ShowAttack
-            attack={current_attack}
-            player={player}
-        />
+        <>
+            <pa.ShowAttack
+                attack={current_attack}
+                player={player}
+            />
+        </>
     )
 
 }
+
 //onBackToTitle is a void function that comes from the interface
 //in the render below it flips the state of the page to the title
 const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
@@ -243,7 +243,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         setScore(score + 1);
         console.log("Score: " + score);
     }
-
+    console.log("MainPage rendered");
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
     const click = new Audio(clicksfx);
     function HandleSelection(sel_character: string): void {
@@ -380,7 +380,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
 
     }
-
+    const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
     return (
         <>
             {/*score tracker*/}
@@ -431,11 +431,11 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         {UpdateStatusEffects('knight')}
                                     </ul>
                                 </section>
-                                <progress className='p-hp' max={knight_stats.hp}></progress>
+                                <progress className='p-hp' max={sm.knight_stats.hp}></progress>
                                 <div>MP</div>
                                 <progress className='mb-4 p-mb'
-                                    max={knight_stats.mp}
-                                    value={knight_stats.mp}>
+                                    max={sm.knight_stats.mp}
+                                    value={sm.knight_stats.mp}>
                                 </progress>
                             </span>
                         </li>
@@ -467,11 +467,11 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     </ul>
                                 </section>
                                 <progress className='p-hp'
-                                    max={dmage_stats.hp}
-                                    value={dmage_stats.hp}>
+                                    max={sm.dmage_stats.hp}
+                                    value={sm.dmage_stats.hp}>
                                 </progress>
                                 <div>MP</div>
-                                <progress className='mb-4 p-mb' max={dmage_stats.mp}></progress>
+                                <progress className='mb-4 p-mb' max={sm.dmage_stats.mp}></progress>
                             </span>
                         </li>
                         <li>
@@ -502,8 +502,8 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     </ul>
                                 </section>
                                 <progress className='p-hp'
-                                    max={wmage_stats.hp}
-                                    value={wmage_stats.hp}>
+                                    max={sm.wmage_stats.hp}
+                                    value={sm.wmage_stats.hp}>
                                 </progress>
                                 <div>MP</div>
                                 <progress className='mb-4 p-mb'></progress>
@@ -533,8 +533,8 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     </ul>
                                 </section>
                                 <progress className='p-hp'
-                                    max={rmage_stats.hp}
-                                    value={rmage_stats.mp}>
+                                    max={sm.rmage_stats.hp}
+                                    value={sm.rmage_stats.mp}>
                                 </progress>
                                 <div>MP</div>
                                 <progress className='mb-4 p-mb'></progress>
@@ -552,10 +552,28 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 <section>
                     <BossArea
                         player={selectedCharacter} />
+                    {/*need some way to force a re-render of this when it changes*/}
+                    <section className='absolute'>
+                        <BossHpBar bossHP={BossHP} />
+                    </section>
                 </section>
             </main>
         </>
     );
 }
-
+interface BossHpBarProps {
+    bossHP: number;
+}
+const BossHpBar: React.FC<BossHpBarProps> = ({ bossHP }) => {
+    const [currentBossHp, setCurrentBossHp] = useState(pa.current_boss_hp);
+    useEffect(() => {
+        setCurrentBossHp(pa.current_boss_hp)
+    }, [pa.current_boss_hp])
+    console.log("boss hp bar rendered")
+    return (
+        <progress className={
+            'block h-8 glow-ani-border-black boss-prog '
+        } value={currentBossHp} max={sm.boss_stats.max_hp}></progress>
+    )
+}
 export default MainPage;
