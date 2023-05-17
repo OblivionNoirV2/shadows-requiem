@@ -40,20 +40,18 @@ interface BossAreaProps {
 
 }
 interface PlayerAttackAreaProps {
-    player: string | null;
     attack: string;
-    is_ultima_ready: boolean;
+    player: string | null;
 
 }
 //Need to keep this independent of the bossarea component
-const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ player, is_ultima_ready }) => {
+const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player }) => {
     let current_attack = pa.selected_attack;
     console.log("current_attack:" + current_attack);
     return (
         <pa.ShowAttack
             attack={current_attack}
             player={player}
-            is_ultima={is_ultima_ready}
         />
     )
 
@@ -123,6 +121,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
     const [isAttacksActive, setIsAttacksActive] = useState(false);
     const [isItemsActive, setIsItemsActive] = useState(false);
     const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
+    const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
     function HandleItemUse(item: string) {
         console.log("working");
     };
@@ -187,8 +186,15 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                     {current_attacks.map(
                         (attack, index) =>
                             <li key={index} className='atk-btn'>
-                                <button onClick={() => { pa.PlayerAttack(attack) }}>
+                                <button onClick={() => { pa.PlayerAttack(attack); setIsAttackAreaShown(!isAttackAreaShown); }}>
                                     {attack}
+                                    {isAttackAreaShown &&
+                                        <PlayerAttackArea
+                                            attack={attack}
+                                            player={player}
+                                        />
+                                    }
+
                                 </button>
                             </li>
                     )}

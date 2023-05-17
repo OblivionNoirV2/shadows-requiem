@@ -167,14 +167,13 @@ export function PlayerAttack(attack: string) {
 interface Attack {
     attack: string | null;
     player: string | null;
-    is_ultima: boolean;
 }
 //Need to add in checks to make sure it's the right character, 
 //and de select the attack when it's done 
 //Also need to lock the menus when an attack is happening
 //And needs to show when button is clicked, not the character
-export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
-    console.log("inside show attack:" + player, attack, is_ultima)
+export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
+    console.log("inside show attack:" + player, attack)
 
     if (player === null || attack === null) {
         return null;
