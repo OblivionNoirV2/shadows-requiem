@@ -115,6 +115,7 @@ const App: React.FC = () => {
         <Route path='/Leaderboard' element={<Leaderboard />} />
         <Route path='/History' element={<History />} />
         <Route path='/AccountCreation' element={<CreateAccount />} />
+        <Route path='/StartMenu' element={<StartMenu on_start={startGame} />} />
       </Routes>
       <VolButton />
       <SnowAnimation />
