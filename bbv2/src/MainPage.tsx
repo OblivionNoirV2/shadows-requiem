@@ -25,7 +25,7 @@ const player_attacks: AttackList = {
     rmage: pa.rmage_attacks
 };
 
-
+export let turn_number = 0;
 
 //can use player to retrieve the attacks just like in the below components
 interface BossAreaProps {
@@ -91,6 +91,9 @@ interface PlayerMenuProps {
     isPlayerTurn: boolean;
 
 }
+function UpdateTurnNumber() {
+    turn_number++;
+}
 const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
     //note that this re-renders whenever the player is selected
     //this section is also responsible for rendering the attack menu
@@ -102,7 +105,12 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
     const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
     const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
 
-
+    useEffect(() => {
+        if (isPlayerTurn) {
+            turn_number++;
+            console.log("turn number: " + turn_number);
+        }
+    }, [isPlayerTurn]);
     function HandleItemUse(item: string) {
         console.log("working");
     };
@@ -178,12 +186,15 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
                                 (attack, index) =>
                                     <li key={index} className='atk-btn'>
                                         <button onClick={() => {
-                                            pa.PlayerAttack(attack, isPlayerTurn);
-                                            setIsAttackAreaShown(!isAttackAreaShown);
+                                            pa.PlayerAttack(attack);
+                                            setIsAttackAreaShown(true);
                                             setCurrentAttack(attack);
                                             sfx.playClickSfx();
-
-
+                                            {
+                                                setTimeout(() => {
+                                                    setIsAttackAreaShown(false);
+                                                }, 2500);
+                                            }
                                         }}>
                                             {attack}
                                         </button>
@@ -199,6 +210,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
                                     isPlayerTurn={isPlayerTurn}
 
                                 />
+
                             }
 
                         </section>
@@ -228,6 +240,7 @@ const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isP
             <pa.ShowAttack
                 attack={current_attack}
                 player={player}
+                isPlayerTurn={isPlayerTurn}
             />
         </>
     )
@@ -364,7 +377,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             <strong>
                 <section className='text-white text-4xl flex justify-end 
                 mr-24 mt-4 -mb-4'>
-                    Turn #: (turn number here)
+                    Turn #: (turn number)
                 </section>
             </strong>
             <main className='w-full h-screen flex dark-overlay'>

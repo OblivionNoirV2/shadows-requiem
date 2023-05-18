@@ -137,12 +137,7 @@ export let is_attack_triggered: boolean = false;
 let boss_hp = sm.boss_stats.hp;
 
 
-export function PlayerAttack(attack: string, isPlayerTurn: boolean): number {
-    //this will likely need to be global as well 
-    const [turnNumber, setTurnNumber] = useState(0);
-    if (isPlayerTurn) {
-        setTurnNumber(turnNumber + 1);
-    }
+export function PlayerAttack(attack: string): number {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
 
@@ -163,14 +158,16 @@ export function PlayerAttack(attack: string, isPlayerTurn: boolean): number {
 interface Attack {
     attack: string | null;
     player: string | null;
+    isPlayerTurn: boolean;
 }
 //Need to add in checks to make sure it's the right character, 
 //and de select the attack when it's done 
 //Also need to lock the menus when an attack is happening
 //And needs to show when button is clicked, not the character
-export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
+export const ShowAttack: React.FC<Attack> = ({ attack, player, isPlayerTurn }) => {
     console.log("inside show attack:" + player, attack)
 
+    //console.log("turn number:" + turn_number)
     if (player === null || attack === null) {
         return null;
     } else {
