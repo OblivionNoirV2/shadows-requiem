@@ -282,3 +282,11 @@ the padding from .battle-menu causes issues with pushing things down*/
     background-color: rgb(255, 0, 127);
   }
 }
+
+.signup-form>label {
+  margin-top: 1rem;
+}
+
+.signup-form>input {
+  border-radius: 0.1rem;
+}
