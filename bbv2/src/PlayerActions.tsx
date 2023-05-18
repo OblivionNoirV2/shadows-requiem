@@ -1,11 +1,13 @@
 import * as sm from './StatManagement';
-
+import React, { useEffect, useState } from 'react';
 /*It is crucial that ALL stat and status changes take place in this file. 
 For my own sanity. */
 
 /*All attacks are handled in the PlayerAttack function, so no need 
 to export these*/
 //attack has a string key, and a function value
+
+
 export const attacks_object: { [attack: string]: Function } = {
     /*knight attacks*/
     'Shadow Self': function ShadowSelf() {
@@ -94,30 +96,6 @@ export const attacks_object: { [attack: string]: Function } = {
     }
 };
 
-//triggers for the image showing
-/*export const effect_dependencies = [
-    attacks_object['Shadow Self'],
-    attacks_object['Whims Of Fate'],
-    attacks_object['Deathblow'],
-    attacks_object['Rebellion'],
-    attacks_object['Thousand Men'],
-    attacks_object['Mirage Blade'],
-    attacks_object['Entrapment'],
-    attacks_object['Black Fire'],
-    attacks_object['Shattered Mirror'],
-    attacks_object['Radiant Supernova'],
-    attacks_object['Pierce Evil'],
-    attacks_object['Radiant Sky'],
-    attacks_object['Rebirth'],
-    attacks_object['Moonlight'],
-    attacks_object['Supreme Altar'],
-    attacks_object['Border Of Life'],
-    attacks_object['Bloody Vengeance'],
-    attacks_object['Chain Lightning'],
-    attacks_object['My Turn'],
-    attacks_object['Scarlet Subversion']
-];*/
-
 export const knight_attacks = [
     "Shadow Self",
     "Whims Of Fate",
@@ -155,16 +133,30 @@ export function Shadow_Self() {
 
 export let selected_attack: string | null = null;
 export let is_attack_triggered: boolean = false;
-export let current_boss_hp: number = sm.boss_stats.hp;
-//This one does the actual damage
-export function PlayerAttack(attack: string): number {
+//temporary
+let boss_hp = sm.boss_stats.hp;
+
+
+export function PlayerAttack(attack: string, isPlayerTurn: boolean): number {
+    //this will likely need to be global as well 
+    const [turnNumber, setTurnNumber] = useState(0);
+    if (isPlayerTurn) {
+        setTurnNumber(turnNumber + 1);
+    }
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
 
     is_attack_triggered = !is_attack_triggered;
     attacks_object[attack]();
-    current_boss_hp -= 20000;
-    console.log("current boss hp:" + current_boss_hp)
+    /*
+    Step 1: Attack triggers, image flashes. Boss hp state is sent 
+    here using context provider.
+    Step 2: Each attack will return a damage value
+    Step 3: Remaining boss hp is calculated here 
+    Step 4: State is updated here with new boss hp
+    Step 5: Boss hp is sent back to BossHpBar component to update 
+    the visual appearance of the bar
+    */
     return sm.boss_stats.hp;
 }
 

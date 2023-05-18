@@ -88,9 +88,10 @@ renders at the wrong time*/
 //fetch and return list of player attacks in ul format
 interface PlayerMenuProps {
     player: string;
+    isPlayerTurn: boolean;
 
 }
-const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
+const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
     //note that this re-renders whenever the player is selected
     //this section is also responsible for rendering the attack menu
     console.log("player menu rendered")
@@ -100,6 +101,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
     const [isItemsActive, setIsItemsActive] = useState(false);
     const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
     const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
+
 
     function HandleItemUse(item: string) {
         console.log("working");
@@ -176,7 +178,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                                 (attack, index) =>
                                     <li key={index} className='atk-btn'>
                                         <button onClick={() => {
-                                            pa.PlayerAttack(attack);
+                                            pa.PlayerAttack(attack, isPlayerTurn);
                                             setIsAttackAreaShown(!isAttackAreaShown);
                                             setCurrentAttack(attack);
                                             sfx.playClickSfx();
@@ -194,6 +196,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                                 <PlayerAttackArea
                                     attack={currentAttack}
                                     player={player}
+                                    isPlayerTurn={isPlayerTurn}
 
                                 />
                             }
@@ -210,12 +213,13 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
 interface PlayerAttackAreaProps {
     attack: string;
     player: string | null;
+    isPlayerTurn: boolean;
 
 
 }
 
 //Need to keep this independent of the bossarea component
-const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player }) => {
+const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isPlayerTurn }) => {
 
     let current_attack = pa.selected_attack;
     console.log("current_attack:" + current_attack);
@@ -237,14 +241,11 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
-    const [score, setScore] = useState(0);
+
     const [isUltimaReady, setIsUltimaReady] = useState(false);
     //Manage the turn based system
     //Score will go up by 1 each player turn
-    function HandleScore() {
-        setScore(score + 1);
-        console.log("Score: " + score);
-    }
+
     console.log("MainPage rendered");
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
     function HandleSelection(sel_character: string): void {
@@ -363,7 +364,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             <strong>
                 <section className='text-white text-4xl flex justify-end 
                 mr-24 mt-4 -mb-4'>
-                    Score: {score}
+                    Turn #: (turn number here)
                 </section>
             </strong>
             <main className='w-full h-screen flex dark-overlay'>
@@ -395,7 +396,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     isPlayerTurn && selectedCharacter === 'knight' &&
                                     <PlayerMenu
                                         player='knight'
-
+                                        isPlayerTurn={isPlayerTurn}
                                     />
 
                                 }
@@ -430,6 +431,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     isPlayerTurn && selectedCharacter === 'dmage' &&
                                     <PlayerMenu
                                         player='dmage'
+                                        isPlayerTurn={isPlayerTurn}
 
                                     />
 
@@ -465,6 +467,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     isPlayerTurn && selectedCharacter === 'wmage' &&
                                     <PlayerMenu
                                         player='wmage'
+                                        isPlayerTurn={isPlayerTurn}
 
                                     />
 
@@ -496,6 +499,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     isPlayerTurn && selectedCharacter === 'rmage' &&
                                     <PlayerMenu
                                         player='rmage'
+                                        isPlayerTurn={isPlayerTurn}
 
                                     />
 
