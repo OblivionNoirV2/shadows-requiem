@@ -11,6 +11,7 @@ import StartMenu from './StartMenu';
 import MainPage from './MainPage';
 import Leaderboard from './Leaderboard';
 import History from './History';
+import CreateAccount from './AccountCreation';
 //Page will need to completely re-render, so use a hook to flip it
 
 //this prop just acts as a blank trigger
@@ -113,6 +114,7 @@ const App: React.FC = () => {
         <Route path='/Game' element={<MainPage onBackToTitle={HandleBackToTitle} />} />
         <Route path='/Leaderboard' element={<Leaderboard />} />
         <Route path='/History' element={<History />} />
+        <Route path='/AccountCreation' element={<CreateAccount />} />
       </Routes>
       <VolButton />
       <SnowAnimation />

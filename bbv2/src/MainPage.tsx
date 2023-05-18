@@ -26,30 +26,7 @@ const player_attacks: AttackList = {
 };
 
 
-interface BossHPContextProps {
-    bossHP: number;
-    setBossHP: Dispatch<SetStateAction<number>>;
-}
 
-//create context for boss hp
-export const BossHPContext = createContext<BossHPContextProps>({
-    bossHP: sm.boss_stats.hp,
-    setBossHP: () => { },
-});
-
-interface BossHPProviderProps {
-    children: React.ReactNode;
-}
-
-export const BossHPProvider: React.FC<BossHPProviderProps> = ({ children }) => {
-    const [bossHP, setBossHP] = useState(sm.boss_stats.hp);
-
-    return (
-        <BossHPContext.Provider value={{ bossHP, setBossHP }}>
-            {children}
-        </BossHPContext.Provider>
-    );
-};
 //can use player to retrieve the attacks just like in the below components
 interface BossAreaProps {
     player: string | null;

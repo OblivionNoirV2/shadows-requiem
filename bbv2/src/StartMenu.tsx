@@ -3,11 +3,13 @@ import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import History from './History';
 import Leaderboard from './Leaderboard';
+import './AccountCreation'
 import clicksfx from './assets/sound/sfx/selectclick.wav';
 interface StartMenuProps {
     on_start: () => void;
 
 }
+
 const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
     const [isCreditsShown, setIsCreditsShown] = useState(false);
     const [isLoggedin, setIsLoggedin] = useState(false);
@@ -37,10 +39,21 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
        glow-ani-border'>
                         Start Game
                     </button>
+
                     <button onClick={() => { handleLoginClick(); playClickSfx(); }} className='bg-[#363040]/60 
        py-6 px-4 rounded-2xl text-6xl text-slate-300 mt-10 glow-ani-border'>
                         {isLoggedin ? 'Log out' : 'Log in'}
                     </button>
+                    {!isLoggedin &&
+                        <Link to='/AccountCreation'>
+                            <button
+                                className='bg-[#363040]/60 
+       py-6 px-4 rounded-2xl text-6xl text-slate-300 
+       glow-ani-border'>
+                                Create Account
+                            </button>
+                        </Link>
+                    }
                     <button className='bg-[#363040]/60 
        py-6 px-4 rounded-2xl text-6xl text-slate-300 mt-10 
        glow-ani-border'>
