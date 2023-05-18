@@ -1,5 +1,6 @@
 import * as sm from './StatManagement';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import { BossContext } from './Context';
 /*It is crucial that ALL stat and status changes take place in this file. 
 For my own sanity. */
 
@@ -134,24 +135,25 @@ export function Shadow_Self() {
 export let selected_attack: string | null = null;
 export let is_attack_triggered: boolean = false;
 //temporary
-let boss_hp = sm.boss_stats.hp;
 
-
-export function PlayerAttack(attack: string): number {
+export function PlayerAttack(attack: string, bossHP: number): number {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
-
+    //temporary
+    sm.boss_stats.hp -= 10000;
     is_attack_triggered = !is_attack_triggered;
     attacks_object[attack]();
+
+    console.log("boss hp:" + sm.boss_stats.hp);
     /*
-    Step 1: Attack triggers, image flashes. Boss hp state is sent 
-    here using context provider.
-    Step 2: Each attack will return a damage value
-    Step 3: Remaining boss hp is calculated here 
-    Step 4: State is updated here with new boss hp
-    Step 5: Boss hp is sent back to BossHpBar component to update 
-    the visual appearance of the bar
-    */
+Step 1: Attack triggers, image flashes. Boss hp state is sent 
+here using context provider. done
+Step 2: Each attack will return a damage value
+Step 3: Remaining boss hp is calculated here 
+Step 4: State is updated here with new boss hp
+Step 5: Boss hp is sent back to BossHpBar component to update 
+the visual appearance of the bar
+*/
     return sm.boss_stats.hp;
 }
 
@@ -164,7 +166,7 @@ interface Attack {
 //and de select the attack when it's done 
 //Also need to lock the menus when an attack is happening
 //And needs to show when button is clicked, not the character
-export const ShowAttack: React.FC<Attack> = ({ attack, player, isPlayerTurn }) => {
+export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
     console.log("inside show attack:" + player, attack)
 
     //console.log("turn number:" + turn_number)
@@ -173,7 +175,7 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player, isPlayerTurn }) =
     } else {
         return (
             <img
-                src={require(`./assets/images/player/attacks/${player}/${attack}.png`)} // replace with your actual overlay image
+                src={require(`./assets/images/player/attacks/${player}/${attack}.png`)}
                 className='w-1/4 ml-[48.5%] mt-[14%] z-[2] opacity-[85%] rounded-xl'
                 alt='attack image'
                 style={{ position: 'absolute', top: 0, left: 0 }}

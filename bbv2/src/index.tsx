@@ -6,10 +6,15 @@ import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
 //import MainPage, { BossHPProvider } from './MainPage';
 import HandleBackToTitle from './App';
+import * as sm from './StatManagement';
+import { BossContext } from './Context';
+import { PlayerAttack } from './PlayerActions';
+import { BossHpBar } from './MainPage';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
+
   <React.StrictMode>
     <BrowserRouter>
 
@@ -17,6 +22,7 @@ root.render(
 
     </BrowserRouter>
   </React.StrictMode>
+
 );
 
 // If you want to start measuring performance in your app, pass a function

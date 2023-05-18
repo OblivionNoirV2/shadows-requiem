@@ -12,6 +12,8 @@ import MainPage from './MainPage';
 import Leaderboard from './Leaderboard';
 import History from './History';
 import CreateAccount from './AccountCreation';
+import * as sm from './StatManagement';
+import { BossContext } from './Context';
 //Page will need to completely re-render, so use a hook to flip it
 
 //this prop just acts as a blank trigger
@@ -93,12 +95,13 @@ const App: React.FC = () => {
     setCurrentTrack("title");
     navigate('/');
   }
-
+  const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
   /*At program start, the ternary returns false 
   and renders the start menu. Trigger the callback when clicked,
   which flips the state to true, and renders the main page*/
   return (
     <>
+
       <audio>
         <source src='./assets/sound/ost/Twilight Imperium.wav'
           type='audio/wav' />
