@@ -4,7 +4,7 @@ import { Routes, Route, Link } from 'react-router-dom';
 import History from './History';
 import Leaderboard from './Leaderboard';
 import './AccountCreation'
-import clicksfx from './assets/sound/sfx/selectclick.wav';
+import * as sfx from './sfxManagement';
 interface StartMenuProps {
     on_start: () => void;
 
@@ -20,12 +20,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
     function handleLoginClick() {
         setIsLoggedin(!isLoggedin);
     }
-    function playClickSfx() {
-        const click = new Audio(clicksfx);
-        click.play();
-        click.volume = 0.5;
 
-    }
     return (
         <main className='flex flex-col mx-auto w-2/3
    justify-center items-center space-y-4 mt-12 '>
@@ -34,13 +29,13 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
             <h1 className='text-6xl glow-ani-text text-slate-300'>Shadow's Requiem</h1>
             <section className='start-menu space-y-8 flex flex-row'>
                 <div className='flex flex-col space-y-8'>
-                    <button onClick={() => { on_start(); playClickSfx(); }} className='bg-[#363040]/60 
+                    <button onClick={() => { on_start(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
        py-6 px-4 rounded-2xl text-6xl text-slate-300 mt-10 
        glow-ani-border'>
                         Start Game
                     </button>
 
-                    <button onClick={() => { handleLoginClick(); playClickSfx(); }} className='bg-[#363040]/60 
+                    <button onClick={() => { handleLoginClick(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
        py-6 px-4 rounded-2xl text-6xl text-slate-300 mt-10 glow-ani-border'>
                         {isLoggedin ? 'Log out' : 'Log in'}
                     </button>
@@ -61,12 +56,12 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                     </button>
                     {isLoggedin &&
                         <Link to='/History'>
-                            <button onClick={playClickSfx} className='bg-[#363040]/60 
+                            <button onClick={sfx.playClickSfx} className='bg-[#363040]/60 
        py-6 px-4 rounded-2xl text-6xl text-slate-300 
        glow-ani-border w-full'>History</button>
                         </Link>
                     }
-                    <button onClick={() => { handleCreditsClick(); playClickSfx(); }} className='bg-[#363040]/60 
+                    <button onClick={() => { handleCreditsClick(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
        py-6 px-4 rounded-2xl text-6xl text-slate-300 glow-ani-border'>
                         Credits
                     </button>

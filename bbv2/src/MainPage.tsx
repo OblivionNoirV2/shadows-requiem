@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect, createContext, useContext, Dispatch
 import * as sm from './StatManagement';
 import * as iv from './Inventory';
 import * as pa from './PlayerActions';
-import clicksfx from './assets/sound/sfx/selectclick.wav';
+import * as sfx from './sfxManagement';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -121,7 +121,9 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
         }
         return "";
     }
+    function HandleDefend() {
 
+    }
 
     const [currentAttack, setCurrentAttack] = useState("");
     //clicking the top button will show attacks and remove the other two
@@ -133,7 +135,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
             <ul className='-mt-24 battle-menu'>
                 {isItemsActive ? null :
                     <li>
-                        <button onClick={HandleAttacksMenu}>
+                        <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}>
                             {isAttacksActive ? "Back" : "Attacks"}
                         </button>
                     </li>
@@ -141,7 +143,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                 {!isAttacksActive ?
                     <>
                         <li>
-                            <button onClick={HandleItemsMenu}>
+                            <button onClick={() => { sfx.playClickSfx(); HandleItemsMenu() }}>
                                 {isItemsActive ? "Back" : "Items"}
                             </button>
                         </li>
@@ -149,7 +151,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                             {isItemsActive &&
                                 Object.entries(iv.player_inventory).map(([item, quantity], index) => (
                                     <li key={index} className='atk-btn'>
-                                        <button onClick={() => HandleItemUse(item)}
+                                        <button onClick={() => { HandleItemUse(item); sfx.playClickSfx(); }}
                                             title={GetItemDesc(item)}>
                                             {item} ({quantity})
                                         </button>
@@ -159,7 +161,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                         </div>
                         {isItemsActive ? null :
                             <li>
-                                <button>
+                                <button onClick={() => { HandleDefend(); sfx.playClickSfx() }} >
                                     Defend
                                 </button>
                             </li>
@@ -177,6 +179,7 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player }) => {
                                             pa.PlayerAttack(attack);
                                             setIsAttackAreaShown(!isAttackAreaShown);
                                             setCurrentAttack(attack);
+                                            sfx.playClickSfx();
 
 
                                         }}>
@@ -244,7 +247,6 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     }
     console.log("MainPage rendered");
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
-    const click = new Audio(clicksfx);
     function HandleSelection(sel_character: string): void {
 
         if (selectedCharacter === sel_character) {
@@ -254,8 +256,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             //Otherwise, select the clicked character
             setSelectedCharacter(sel_character);
         }
-        click.play();
-        click.volume = 0.5;
+        sfx.playClickSfx();
     }
 
     //Status effects, these will be image sources
@@ -375,7 +376,7 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             <div>
                                 <button className='4 text-lg
                                  text-white '
-                                    onClick={onBackToTitle}>Back to title</button>
+                                    onClick={() => { onBackToTitle(); sfx.playClickSfx(); }}>Back to title</button>
                             </div>
                         </li>
                         <li>
