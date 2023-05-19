@@ -9,7 +9,7 @@ import HandleBackToTitle from './App';
 import * as sm from './StatManagement';
 
 import { PlayerAttack } from './PlayerActions';
-import { BossHpBar } from './MainPage';
+
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
