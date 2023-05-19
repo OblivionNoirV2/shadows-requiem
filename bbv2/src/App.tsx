@@ -95,7 +95,6 @@ const App: React.FC = () => {
     setCurrentTrack("title");
     navigate('/');
   }
-  const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
   /*At program start, the ternary returns false 
   and renders the start menu. Trigger the callback when clicked,
   which flips the state to true, and renders the main page*/

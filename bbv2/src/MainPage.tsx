@@ -120,7 +120,7 @@ interface PlayerMenuProps {
 function UpdateTurnNumber() {
     turn_number++;
 }
-const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
+export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
     //note that this re-renders whenever the player is selected
     //this section is also responsible for rendering the attack menu
     console.log("player menu rendered")
@@ -274,7 +274,9 @@ const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isP
 
 //onBackToTitle is a void function that comes from the interface
 //in the render below it flips the state of the page to the title
-const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
+
+//then pass the given global state to the playermenu
+export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     //const { setBossHP } = useContext(BossHPContext);
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
