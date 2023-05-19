@@ -290,3 +290,17 @@ the padding from .battle-menu causes issues with pushing things down*/
 .signup-form>input {
   border-radius: 0.1rem;
 }
+
+.fade-out {
+  animation: fade-out 3s linear;
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 100%;
+  }
+
+  100% {
+    opacity: 90%;
+  }
+}

@@ -79,9 +79,34 @@ const BossArea: React.FC<BossAreaProps> = ({ player }) => {
                     </div>
                 </strong>
             </section>
+            <section className='w-full'>
+                <BossHpBar />
+            </section>
         </main>
     );
 }
+
+interface BossHpBarProps {
+    bossHP: number;
+}
+//Will need to use global state/context api to retrieve the state 
+//from the mainpage component
+//Check the STATE as a dependency, not the stat itself. The stat is already 
+//updated and passed to the state by this point
+export const BossHpBar = () => {
+    //it will use the global state with context api, not this
+    const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
+    useEffect(() => {
+        setBossHP(sm.boss_stats.hp)
+    }, [sm.boss_stats.hp])
+    console.log("boss hp bar rendered")
+    return (
+        <progress className={
+            'block h-8 glow-ani-border-black boss-prog w-10/12'
+        } value={BossHP} max={sm.boss_stats.max_hp}></progress>
+    )
+}
+
 /*this must be seperate from the image, otherwise it 
 renders at the wrong time*/
 
@@ -187,15 +212,15 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
                                     (attack, index) =>
                                         <li key={index} className='atk-btn'>
                                             <button onClick={() => {
-                                                const newBossHP = pa.PlayerAttack(attack, BossHP);
+                                                const new_hp = pa.PlayerAttack(attack, BossHP);
                                                 setIsAttackAreaShown(true);
                                                 setCurrentAttack(attack);
-                                                setBossHP(newBossHP);
+                                                setBossHP(new_hp)
                                                 sfx.playClickSfx();
                                                 {
                                                     setTimeout(() => {
                                                         setIsAttackAreaShown(false);
-                                                    }, 2000);
+                                                    }, 3000);
                                                 }
                                             }}>
                                                 {attack}
@@ -206,17 +231,17 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
                             <section>
 
                                 {isAttackAreaShown &&
+
                                     <PlayerAttackArea
                                         attack={currentAttack}
                                         player={player}
                                         isPlayerTurn={isPlayerTurn}
 
+
                                     />
 
                                 }
-
                             </section>
-
                         </>
                     }
                 </ul>
@@ -229,7 +254,6 @@ interface PlayerAttackAreaProps {
     player: string | null;
     isPlayerTurn: boolean;
 
-
 }
 
 //Need to keep this independent of the bossarea component
@@ -238,13 +262,14 @@ const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isP
     let current_attack = pa.selected_attack;
     console.log("current_attack:" + current_attack);
     return (
-        <>
+
+        <div className='z-[4]'>
             <pa.ShowAttack
                 attack={current_attack}
                 player={player}
                 isPlayerTurn={isPlayerTurn}
             />
-        </>
+        </div>
     )
 
 }
@@ -547,32 +572,12 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 <section>
                     <BossArea
                         player={selectedCharacter} />
-                    {/*need some way to force a re-render of 
-                    this when it changes*/}
-                    <section className='w-full'>
-                        <BossHpBar />
-                    </section>
+
+
                 </section>
             </main>
         </>
     );
-}
-interface BossHpBarProps {
-    bossHP: number;
-}
-//Will need to use global state/context api to retrieve the state 
-//from the mainpage component
-export const BossHpBar = () => {
-    const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
-    useEffect(() => {
-        setBossHP(sm.boss_stats.hp)
-    }, [sm.boss_stats.hp])
-    console.log("boss hp bar rendered")
-    return (
-        <progress className={
-            'block h-8 glow-ani-border-black boss-prog w-10/12'
-        } value={BossHP} max={sm.boss_stats.max_hp}></progress>
-    )
 }
 
 export default MainPage;
