@@ -94,12 +94,9 @@ interface BossHpBarProps {
 //Check the STATE as a dependency, not the stat itself. The stat is already 
 //updated and passed to the state by this point
 export const BossHpBar = () => {
-    //it will use the global state with context api, not this
-    const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
-    useEffect(() => {
-        setBossHP(sm.boss_stats.hp)
-    }, [sm.boss_stats.hp])
-    console.log("boss hp bar rendered")
+    const { BossHP, setBossHP } = useContext(BossContext);
+
+    console.log("boss hp bar rendered" + BossHP)
     return (
         <BossContext.Provider value={{ BossHP, setBossHP }}>
             <progress className={
@@ -214,10 +211,13 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                     (attack, index) =>
                                         <li key={index} className='atk-btn'>
                                             <button onClick={() => {
-                                                const new_hp = pa.PlayerAttack(attack, BossHP);
+                                                pa.PlayerAttack(attack, BossHP, setBossHP);
+                                                //this is now working
+                                                console.log("button hp: " + BossHP)
                                                 setIsAttackAreaShown(true);
                                                 setCurrentAttack(attack);
-                                                setBossHP(new_hp)
+
+
                                                 sfx.playClickSfx();
                                                 {
                                                     setTimeout(() => {

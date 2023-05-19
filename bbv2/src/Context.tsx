@@ -10,7 +10,7 @@ interface BossContextValue {
 
 // Initialize the context with that type
 export const BossContext = createContext<BossContextValue>({
-    BossHP: 0,
+    BossHP: sm.boss_stats.hp,
     setBossHP: () => { }, // a no-op function as default
 });
 

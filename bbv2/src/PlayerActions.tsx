@@ -135,26 +135,17 @@ export function Shadow_Self() {
 export let selected_attack: string | null = null;
 export let is_attack_triggered: boolean = false;
 //state should start here...
-export function PlayerAttack(attack: string, bossHP: number): number {
+export function PlayerAttack(attack: string, bossHP: number, setBossHP: (hp: number) => void) {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
     //temporary
-    sm.boss_stats.hp -= 10000;
+    let newHp = bossHP - 10000;
+    setBossHP(newHp);
+    console.log("boss hp:" + newHp);
     is_attack_triggered = !is_attack_triggered;
     attacks_object[attack]();
-
-    console.log("boss hp:" + sm.boss_stats.hp);
-    /*
-Step 1: Attack triggers, image flashes. Boss hp state is sent 
-here using context provider. done
-Step 2: Each attack will return a damage value
-Step 3: Remaining boss hp is calculated here 
-Step 4: State is updated here with new boss hp
-Step 5: Boss hp is sent back to BossHpBar component to update 
-the visual appearance of the bar
-*/
-    return sm.boss_stats.hp;
 }
+
 
 interface Attack {
     attack: string | null;
