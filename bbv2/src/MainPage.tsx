@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, createContext, useContext, Dispatch, SetStateAction } from 'react';
-
+import { Link } from 'react-router-dom';
 import * as sm from './StatManagement';
 import * as iv from './Inventory';
 import * as pa from './PlayerActions';
@@ -236,8 +236,6 @@ const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
                                         attack={currentAttack}
                                         player={player}
                                         isPlayerTurn={isPlayerTurn}
-
-
                                     />
 
                                 }
@@ -415,9 +413,13 @@ const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     <ul className='w-full'>
                         <li>
                             <div>
-                                <button className='4 text-lg
+                                <Link to='/Startmenu' >
+                                    <button className='4 text-lg
                                  text-white '
-                                    onClick={() => { onBackToTitle(); sfx.playClickSfx(); }}>Back to title</button>
+                                        onClick={() => { sfx.playClickSfx(); onBackToTitle() }}>
+                                        Back to title
+                                    </button>
+                                </Link>
                             </div>
                         </li>
                         <li>
