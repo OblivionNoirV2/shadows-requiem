@@ -4,7 +4,7 @@ import * as sm from './StatManagement';
 import * as iv from './Inventory';
 import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
-import { BossContext } from './Context';
+
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -34,10 +34,12 @@ interface BossAreaProps {
 
 }
 
-const BossArea: React.FC<BossAreaProps> = ({ player }) => {
-    //manage boss stage based on hp value 
-    console.log("rendered bossarea")
+export const BossArea: React.FC<BossAreaProps> = ({ player }) => {
+
+    //not reaching
+    console.log("rendered bossarea" + sm.boss_stats.hp);
     useEffect(() => {
+
         if (sm.boss_stats.hp >= 666666) {
             setBossStage(1);
         } else if (sm.boss_stats.hp >= 333333 && sm.boss_stats.hp < 666666) {
@@ -46,6 +48,7 @@ const BossArea: React.FC<BossAreaProps> = ({ player }) => {
             setBossStage(3);
         }
     }, [sm.boss_stats.hp]);
+
     function HandleBossStage(stage: number) {
         setBossStage(stage);
     }
@@ -86,24 +89,15 @@ const BossArea: React.FC<BossAreaProps> = ({ player }) => {
     );
 }
 
-interface BossHpBarProps {
-    bossHP: number;
-}
-//Will need to use global state/context api to retrieve the state 
-//from the mainpage component
-//Check the STATE as a dependency, not the stat itself. The stat is already 
-//updated and passed to the state by this point
+
 export const BossHpBar = () => {
-    //it will use the global state with context api, not this
-    const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
-    useEffect(() => {
-        setBossHP(sm.boss_stats.hp)
-    }, [sm.boss_stats.hp])
-    console.log("boss hp bar rendered")
+    //This is not being reached
+
     return (
         <progress className={
             'block h-8 glow-ani-border-black boss-prog w-10/12'
-        } value={BossHP} max={sm.boss_stats.max_hp}></progress>
+        } value={999999} max={sm.boss_stats.max_hp}
+            id='boss-hp-bar'></progress>
     )
 }
 
@@ -163,87 +157,97 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [currentAttack, setCurrentAttack] = useState("");
     //clicking the top button will show attacks and remove the other two
     //if the attacks are shown, change "attacks" to "back"
+    //fucker is resetting it to default every time!!
+    //const { BossHP, setBossHP } = useContext(BossContext);
+    function handleButtonClick(attack: string) {
+        //console.log(BossHP, setBossHP)
+        //It is returning the correct value, this is screwed up
+        let new_hp = pa.PlayerAttack(attack);
+        //is working
+        console.log("new hp: " + new_hp);
+        if (document.getElementById("boss-hp-bar")) {
+            (document.getElementById("boss-hp-bar") as HTMLInputElement).value = new_hp;
+        }
+        setIsAttackAreaShown(true);
+        setCurrentAttack(attack);
+        sfx.playClickSfx();
+        {
+            setTimeout(() => {
+                setIsAttackAreaShown(false);
+            }, 3000);
+        }
+    }
 
-    const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
     return (
         <>
-            <BossContext.Provider value={{ BossHP, setBossHP }}>
-                <ul className='-mt-24 battle-menu'>
-                    {isItemsActive ? null :
+            <ul className='-mt-24 battle-menu'>
+                {isItemsActive ? null :
+                    <li>
+                        <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}>
+                            {isAttacksActive ? "Back" : "Attacks"}
+                        </button>
+                    </li>
+                }
+                {!isAttacksActive ?
+                    <>
                         <li>
-                            <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}>
-                                {isAttacksActive ? "Back" : "Attacks"}
+                            <button onClick={() => { sfx.playClickSfx(); HandleItemsMenu() }}>
+                                {isItemsActive ? "Back" : "Items"}
                             </button>
                         </li>
-                    }
-                    {!isAttacksActive ?
-                        <>
+                        <div className='flex flex-row space-x-4'>
+                            {isItemsActive &&
+                                Object.entries(iv.player_inventory).map(([item, quantity], index) => (
+                                    <li key={index} className='atk-btn'>
+                                        <button onClick={() => { HandleItemUse(item); sfx.playClickSfx(); }}
+                                            title={GetItemDesc(item)}>
+                                            {item} ({quantity})
+                                        </button>
+                                    </li>
+                                ))
+                            }
+                        </div>
+                        {isItemsActive ? null :
                             <li>
-                                <button onClick={() => { sfx.playClickSfx(); HandleItemsMenu() }}>
-                                    {isItemsActive ? "Back" : "Items"}
+                                <button onClick={() => { HandleDefend(); sfx.playClickSfx() }} >
+                                    Defend
                                 </button>
                             </li>
-                            <div className='flex flex-row space-x-4'>
-                                {isItemsActive &&
-                                    Object.entries(iv.player_inventory).map(([item, quantity], index) => (
-                                        <li key={index} className='atk-btn'>
-                                            <button onClick={() => { HandleItemUse(item); sfx.playClickSfx(); }}
-                                                title={GetItemDesc(item)}>
-                                                {item} ({quantity})
-                                            </button>
-                                        </li>
-                                    ))
-                                }
-                            </div>
-                            {isItemsActive ? null :
-                                <li>
-                                    <button onClick={() => { HandleDefend(); sfx.playClickSfx() }} >
-                                        Defend
-                                    </button>
-                                </li>
+                        }
+                    </>
+                    :
+                    //map the list to a ul 
+                    //Why isn't the phase changing?
+                    <>
+                        <div className=' grid grid-cols-2 grid-rows-2'>
+                            {current_attacks.map(
+                                (attack, index) =>
+                                    <li key={index} className='atk-btn'>
+                                        <button onClick={() => {
+                                            handleButtonClick(attack);
+
+                                        }}>
+                                            {attack}
+                                        </button>
+                                    </li>
+                            )}
+                        </div>
+                        <section>
+
+                            {isAttackAreaShown &&
+
+                                <PlayerAttackArea
+                                    attack={currentAttack}
+                                    player={player}
+                                    isPlayerTurn={isPlayerTurn}
+                                />
+
                             }
-                        </>
-                        :
-                        //map the list to a ul 
-                        //Why isn't the phase changing?
-                        <>
-                            <div className=' grid grid-cols-2 grid-rows-2'>
-                                {current_attacks.map(
-                                    (attack, index) =>
-                                        <li key={index} className='atk-btn'>
-                                            <button onClick={() => {
-                                                const new_hp = pa.PlayerAttack(attack, BossHP);
-                                                setIsAttackAreaShown(true);
-                                                setCurrentAttack(attack);
-                                                setBossHP(new_hp)
-                                                sfx.playClickSfx();
-                                                {
-                                                    setTimeout(() => {
-                                                        setIsAttackAreaShown(false);
-                                                    }, 3000);
-                                                }
-                                            }}>
-                                                {attack}
-                                            </button>
-                                        </li>
-                                )}
-                            </div>
-                            <section>
+                        </section>
+                    </>
+                }
+            </ul>
 
-                                {isAttackAreaShown &&
-
-                                    <PlayerAttackArea
-                                        attack={currentAttack}
-                                        player={player}
-                                        isPlayerTurn={isPlayerTurn}
-                                    />
-
-                                }
-                            </section>
-                        </>
-                    }
-                </ul>
-            </BossContext.Provider>
         </>
     )
 }

@@ -1,6 +1,6 @@
 import * as sm from './StatManagement';
 import React, { useContext, useEffect, useState } from 'react';
-import { BossContext } from './Context';
+
 /*It is crucial that ALL stat and status changes take place in this file. 
 For my own sanity. */
 
@@ -136,25 +136,16 @@ export let selected_attack: string | null = null;
 export let is_attack_triggered: boolean = false;
 //temporary
 
-export function PlayerAttack(attack: string, bossHP: number): number {
+export function PlayerAttack(attack: string): string {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
     //temporary
-    sm.boss_stats.hp -= 10000;
+    let boss_hp = sm.boss_stats.hp -= 10000;
+    console.log("sm hp:" + sm.boss_stats.hp);
+    console.log("boss hp inside playerattack:" + boss_hp)
     is_attack_triggered = !is_attack_triggered;
     attacks_object[attack]();
-
-    console.log("boss hp:" + sm.boss_stats.hp);
-    /*
-Step 1: Attack triggers, image flashes. Boss hp state is sent 
-here using context provider. done
-Step 2: Each attack will return a damage value
-Step 3: Remaining boss hp is calculated here 
-Step 4: State is updated here with new boss hp
-Step 5: Boss hp is sent back to BossHpBar component to update 
-the visual appearance of the bar
-*/
-    return sm.boss_stats.hp;
+    return boss_hp.toString();
 }
 
 interface Attack {

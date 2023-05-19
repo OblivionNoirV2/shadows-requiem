@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 //import MainPage, { BossHPProvider } from './MainPage';
 import HandleBackToTitle from './App';
 import * as sm from './StatManagement';
-import { BossContext } from './Context';
+
 import { PlayerAttack } from './PlayerActions';
 import { BossHpBar } from './MainPage';
 const root = ReactDOM.createRoot(

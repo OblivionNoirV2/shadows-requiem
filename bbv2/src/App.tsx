@@ -13,7 +13,7 @@ import Leaderboard from './Leaderboard';
 import History from './History';
 import CreateAccount from './AccountCreation';
 import * as sm from './StatManagement';
-import { BossContext } from './Context';
+
 //Page will need to completely re-render, so use a hook to flip it
 
 //this prop just acts as a blank trigger
