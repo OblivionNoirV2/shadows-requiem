@@ -163,7 +163,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     //clicking the top button will show attacks and remove the other two
     //if the attacks are shown, change "attacks" to "back"
 
-    const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
+    const { BossHP, setBossHP } = useContext(BossContext);
     return (
         <>
             <BossContext.Provider value={{ BossHP, setBossHP }}>
@@ -211,13 +211,13 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                     (attack, index) =>
                                         <li key={index} className='atk-btn'>
                                             <button onClick={() => {
-                                                pa.PlayerAttack(attack, BossHP, setBossHP);
+                                                const new_hp = pa.PlayerAttack(attack, BossHP, setBossHP);
                                                 //this is now working
-                                                console.log("button hp: " + BossHP)
+
                                                 setIsAttackAreaShown(true);
                                                 setCurrentAttack(attack);
-
-
+                                                setBossHP(new_hp);
+                                                console.log("new hp: " + BossHP);
                                                 sfx.playClickSfx();
                                                 {
                                                     setTimeout(() => {

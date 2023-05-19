@@ -8,15 +8,16 @@ interface BossContextValue {
     setBossHP: (value: number) => void;  // Function that takes a number
 }
 
-// Initialize the context with that type
+//The problem is this is not getting updated, 
+//the provider is just using whatever the default value is
 export const BossContext = createContext<BossContextValue>({
-    BossHP: sm.boss_stats.hp,
-    setBossHP: () => { }, // a no-op function as default
+    BossHP: 999999,
+    setBossHP: () => { },
 });
 
 
 function ContextManagement() {
-    const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
+    const [BossHP, setBossHP] = useState(999999);
 
     return (
         <BossContext.Provider value={{ BossHP, setBossHP }}>
