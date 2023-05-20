@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+/*import { createContext, useState, useEffect } from 'react';
 import * as sm from './StatManagement';
 import { PlayerMenu, BossHpBar, BossArea, MainPage } from './MainPage';
 //used for the boss hp bar
@@ -8,24 +8,29 @@ interface BossContextValue {
     setBossHP: (value: number) => void;  // Function that takes a number
 }
 
-//The problem is this is not getting updated, 
-//the provider is just using whatever the default value is
 export const BossContext = createContext<BossContextValue>({
-    BossHP: 999999,
+    BossHP: sm.boss_stats.hp,
     setBossHP: () => { },
 });
 
 
 function ContextManagement() {
-    const [BossHP, setBossHP] = useState(999999);
 
+    const [BossHP, setBossHP] = useState(sm.boss_stats.hp);
+    //never updates
+    useEffect(() => {
+        console.log('BossHP updated:', BossHP);
+    }, [BossHP]);
     return (
         <BossContext.Provider value={{ BossHP, setBossHP }}>
+
             <PlayerMenu player='' isPlayerTurn={false} />
-            <BossArea />
+
             <BossHpBar />
         </BossContext.Provider>
     )
 }
 
-export default ContextManagement;
+export default ContextManagement;*/
+
+export { };

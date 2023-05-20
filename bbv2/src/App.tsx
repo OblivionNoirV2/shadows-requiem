@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import './App.css';
 import SnowAnimation from './SnowAnimation';
@@ -95,10 +95,12 @@ const App: React.FC = () => {
     setCurrentTrack("title");
     navigate('/');
   }
+
   /*At program start, the ternary returns false 
   and renders the start menu. Trigger the callback when clicked,
   which flips the state to true, and renders the main page*/
   return (
+
     <>
 
       <audio>
@@ -132,6 +134,7 @@ const App: React.FC = () => {
         )}
       </main>
     </>
+
   );
 };
 
