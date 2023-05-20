@@ -15,17 +15,12 @@ export const BossContext = createContext<BossContextValue>({
     setBossHP: () => { },
 });
 
-
-function ContextManagement() {
+export function BossContextProvider({children}: { children: React.ReactElement }) {
     const [BossHP, setBossHP] = useState(999999);
 
     return (
         <BossContext.Provider value={{ BossHP, setBossHP }}>
-            <PlayerMenu player='' isPlayerTurn={false} />
-            <BossArea />
-            <BossHpBar />
+            {children}
         </BossContext.Provider>
     )
 }
-
-export default ContextManagement;

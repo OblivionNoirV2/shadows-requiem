@@ -94,15 +94,13 @@ interface BossHpBarProps {
 //Check the STATE as a dependency, not the stat itself. The stat is already 
 //updated and passed to the state by this point
 export const BossHpBar = () => {
-    const { BossHP, setBossHP } = useContext(BossContext);
+    const { BossHP } = useContext(BossContext);
 
     console.log("boss hp bar rendered" + BossHP)
     return (
-        <BossContext.Provider value={{ BossHP, setBossHP }}>
-            <progress className={
-                'block h-8 glow-ani-border-black boss-prog w-10/12'
-            } value={BossHP} max={sm.boss_stats.max_hp}></progress>
-        </BossContext.Provider>
+        <progress className={
+            'block h-8 glow-ani-border-black boss-prog w-10/12'
+        } value={BossHP} max={sm.boss_stats.max_hp}></progress>
     )
 }
 
@@ -164,9 +162,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     //if the attacks are shown, change "attacks" to "back"
 
     const { BossHP, setBossHP } = useContext(BossContext);
+    console.log({BossHP});
     return (
         <>
-            <BossContext.Provider value={{ BossHP, setBossHP }}>
                 <ul className='-mt-24 battle-menu'>
                     {isItemsActive ? null :
                         <li>
@@ -216,8 +214,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
                                                 setIsAttackAreaShown(true);
                                                 setCurrentAttack(attack);
-                                                setBossHP(new_hp);
-                                                console.log("new hp: " + BossHP);
+                                                // setBossHP(new_hp);
+                                                console.log("current hp: " + BossHP);
+                                                console.log("boss hp on next render: " + new_hp);
                                                 sfx.playClickSfx();
                                                 {
                                                     setTimeout(() => {
@@ -245,8 +244,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                         </>
                     }
                 </ul>
-            </BossContext.Provider>
-
         </>
     )
 }

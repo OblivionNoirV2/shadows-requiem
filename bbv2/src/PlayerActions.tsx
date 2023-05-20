@@ -141,7 +141,7 @@ export function PlayerAttack(attack: string, BossHP: number, setBossHP: (hp: num
     //temporary
     let newHp = BossHP - 10000;
     setBossHP(newHp);
-    console.log("boss hp:" + BossHP);
+    console.log("boss hp:" + newHp);
     is_attack_triggered = !is_attack_triggered;
     attacks_object[attack]();
     return BossHP;

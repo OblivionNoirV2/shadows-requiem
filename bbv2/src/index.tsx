@@ -10,7 +10,7 @@ import * as sm from './StatManagement';
 
 import { PlayerAttack } from './PlayerActions';
 import { BossArea } from './MainPage';
-import { BossContext } from './Context';
+import { BossContext, BossContextProvider } from './Context';
 import { PlayerMenu } from './MainPage';
 import { BossHpBar } from './MainPage';
 const root = ReactDOM.createRoot(
@@ -20,9 +20,9 @@ root.render(
 
   <React.StrictMode>
     <BrowserRouter>
-
-      <App />
-
+      <BossContextProvider>
+        <App />
+      </BossContextProvider>
     </BrowserRouter>
   </React.StrictMode>
 
