@@ -4,7 +4,7 @@ import * as sm from './StatManagement';
 import * as iv from './Inventory';
 import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
-
+import { BossContext } from './Context';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -94,12 +94,12 @@ interface BossHpBarProps {
 //Check the STATE as a dependency, not the stat itself. The stat is already 
 //updated and passed to the state by this point
 export const BossHpBar = () => {
-
+    const { BossHP } = useContext(BossContext);
 
     return (
         <progress className={
             'block h-8 glow-ani-border-black boss-prog w-10/12'
-        } value={9999} max={sm.boss_stats.max_hp}></progress>
+        } value={BossHP} max={sm.boss_stats.max_hp}></progress>
     )
 }
 
@@ -159,10 +159,11 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [currentAttack, setCurrentAttack] = useState("");
     //clicking the top button will show attacks and remove the other two
     //if the attacks are shown, change "attacks" to "back"
-    //const { setBossHP } = useContext(BossContext);
+
+    const { BossHP, setBossHP } = useContext(BossContext);
+    console.log({ BossHP });
     return (
         <>
-
             <ul className='-mt-24 battle-menu'>
                 {isItemsActive ? null :
                     <li>
@@ -207,13 +208,14 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                 (attack, index) =>
                                     <li key={index} className='atk-btn'>
                                         <button onClick={() => {
-                                            const new_hp = pa.PlayerAttack(attack);
+                                            const new_hp = pa.PlayerAttack(attack, BossHP, setBossHP);
+                                            //this is now working
 
                                             setIsAttackAreaShown(true);
                                             setCurrentAttack(attack);
-
-                                            //setBossHP(new_hp);
-
+                                            // setBossHP(new_hp);
+                                            console.log("current hp: " + BossHP);
+                                            console.log("boss hp on next render: " + new_hp);
                                             sfx.playClickSfx();
                                             {
                                                 setTimeout(() => {
@@ -241,7 +243,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                     </>
                 }
             </ul>
-
         </>
     )
 }

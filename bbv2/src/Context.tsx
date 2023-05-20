@@ -25,5 +25,3 @@ export function BossContextProvider({ children }: { children: React.ReactElement
         </BossContext.Provider>
     )
 }
-
-export { };

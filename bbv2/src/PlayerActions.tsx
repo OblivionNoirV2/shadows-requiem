@@ -1,6 +1,6 @@
 import * as sm from './StatManagement';
 import React, { useContext, useEffect, useState } from 'react';
-
+import { BossContext } from './Context';
 /*It is crucial that ALL stat and status changes take place in this file. 
 For my own sanity. */
 
@@ -135,17 +135,16 @@ export function Shadow_Self() {
 export let selected_attack: string | null = null;
 export let is_attack_triggered: boolean = false;
 
-export function PlayerAttack(attack: string) {
+export function PlayerAttack(attack: string, BossHP: number, setBossHP: (hp: number) => void) {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
     //temporary
     let newHp = BossHP - 10000;
     setBossHP(newHp);
     console.log("boss hp:" + newHp);
-
     is_attack_triggered = !is_attack_triggered;
     attacks_object[attack]();
-    return newHp;
+    return BossHP;
 }
 
 
