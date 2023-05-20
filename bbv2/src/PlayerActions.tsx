@@ -139,8 +139,10 @@ export function PlayerAttack(attack: string) {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
     //temporary
-    let newHp = sm.boss_stats.hp -= 10000;
-    //console.log("boss hp:" + BossHP);
+    let newHp = BossHP - 10000;
+    setBossHP(newHp);
+    console.log("boss hp:" + newHp);
+
     is_attack_triggered = !is_attack_triggered;
     attacks_object[attack]();
     return newHp;
