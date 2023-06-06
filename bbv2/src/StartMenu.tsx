@@ -1,9 +1,7 @@
 //add a cool flickering animation to the title
 import React, { useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
-import History from './History';
-import Leaderboard from './Leaderboard';
-import './AccountCreation'
+
 import * as sfx from './sfxManagement';
 interface StartMenuProps {
     on_start: () => void;
@@ -12,14 +10,11 @@ interface StartMenuProps {
 
 const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
     const [isCreditsShown, setIsCreditsShown] = useState(false);
-    const [isLoggedin, setIsLoggedin] = useState(false);
     //toggle showing credits on/off
     function handleCreditsClick() {
         setIsCreditsShown(!isCreditsShown);
     }
-    function handleLoginClick() {
-        setIsLoggedin(!isLoggedin);
-    }
+
 
     return (
         <main className='flex flex-col mx-auto w-2/3
@@ -30,39 +25,12 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
             <section className='start-menu space-y-8 flex flex-row'>
                 <div className='flex flex-col space-y-8'>
                     <button onClick={() => { on_start(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
-       py-6 px-4 rounded-2xl text-6xl text-slate-300 mt-10 
+       py-8 px-6 rounded-2xl text-7xl text-slate-300 mt-10 
        glow-ani-border'>
                         Start Game
                     </button>
-
-                    <button onClick={() => { handleLoginClick(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
-       py-6 px-4 rounded-2xl text-6xl text-slate-300 mt-10 glow-ani-border'>
-                        {isLoggedin ? 'Log out' : 'Log in'}
-                    </button>
-                    {!isLoggedin &&
-                        <Link to='/AccountCreation'>
-                            <button
-                                className='bg-[#363040]/60 
-       py-6 px-4 rounded-2xl text-6xl text-slate-300 
-       glow-ani-border'>
-                                Create Account
-                            </button>
-                        </Link>
-                    }
-                    <button className='bg-[#363040]/60 
-       py-6 px-4 rounded-2xl text-6xl text-slate-300 mt-10 
-       glow-ani-border'>
-                        Leaderboard
-                    </button>
-                    {isLoggedin &&
-                        <Link to='/History'>
-                            <button onClick={sfx.playClickSfx} className='bg-[#363040]/60 
-       py-6 px-4 rounded-2xl text-6xl text-slate-300 
-       glow-ani-border w-full'>History</button>
-                        </Link>
-                    }
                     <button onClick={() => { handleCreditsClick(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
-       py-6 px-4 rounded-2xl text-6xl text-slate-300 glow-ani-border'>
+       py-8 px-6 rounded-2xl text-7xl text-slate-300 glow-ani-border'>
                         Credits
                     </button>
                 </div>

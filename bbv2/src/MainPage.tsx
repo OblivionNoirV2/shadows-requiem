@@ -141,7 +141,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         console.log("AA: " + isAttacksActive);
     }
     //do the same for attacks
-    function GetItemDesc(item: any): string {
+    function GetItemDesc(item: string): string {
         switch (item) {
             case "HP Potion":
                 return "Restores 50% of one character's HP";
