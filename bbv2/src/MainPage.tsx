@@ -36,16 +36,17 @@ interface BossAreaProps {
 
 export const BossArea = () => {
     //manage boss stage based on hp value 
+    const { BossHP } = useContext(BossContext);
     console.log("rendered bossarea")
     useEffect(() => {
-        if (sm.boss_stats.hp >= 666666) {
+        if (BossHP >= 666666) {
             setBossStage(1);
         } else if (sm.boss_stats.hp >= 333333 && sm.boss_stats.hp < 666666) {
             setBossStage(2);
         } else {
             setBossStage(3);
         }
-    }, [sm.boss_stats.hp]);
+    }, [BossHP]);
     function HandleBossStage(stage: number) {
         setBossStage(stage);
     }

@@ -19,8 +19,24 @@ import * as sm from './StatManagement';
 //contains the boss image and the health bar 
 //will use ternaries to determine stage 
 
-//maybe lock the hp bar in
+/*fixes the issue of the background reverting to default 
+when refreshed during the battle*/
+function usePersistentState(initialValue: any, key: string) {
+  const [state, setState] = useState(() => {
+    const storage_value = localStorage.getItem(key);
+    if (storage_value) {
+      return JSON.parse(storage_value);
+    } else {
+      return initialValue;
+    }
+  });
 
+  useEffect(() => {
+    localStorage.setItem(key, JSON.stringify(state));
+  }, [state, key]);
+
+  return [state, setState];
+}
 
 const App: React.FC = () => {
   const [isMusicOn, setIsMusicOn] = useState(false);
@@ -68,7 +84,8 @@ const App: React.FC = () => {
     setIsMusicOn(!isMusicOn);
   }
   //start with false state, to render the start menu
-  const [isGameStarted, setIsGameStarted] = useState(false);
+  const [isGameStarted, setIsGameStarted] = usePersistentState(false, "isGameStarted");
+
   const is_mobile = window.innerWidth <= 768;
 
   useEffect(() => {
