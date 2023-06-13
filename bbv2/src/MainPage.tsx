@@ -5,6 +5,7 @@ import * as iv from './Inventory';
 import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
 import { BossContext } from './Context';
+import { TurnNumberContext } from './Context';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -26,7 +27,6 @@ const player_attacks: AttackList = {
     rmage: pa.rmage_attacks
 };
 
-export let turn_number = 0;
 
 //can use player to retrieve the attacks just like in the below components
 interface BossAreaProps {
@@ -41,7 +41,7 @@ export const BossArea = () => {
     useEffect(() => {
         if (BossHP >= 666666) {
             setBossStage(1);
-        } else if (sm.boss_stats.hp >= 333333 && sm.boss_stats.hp < 666666) {
+        } else if (BossHP >= 333333 && BossHP < 666666) {
             setBossStage(2);
         } else {
             setBossStage(3);
@@ -114,9 +114,7 @@ interface PlayerMenuProps {
     isPlayerTurn: boolean;
 
 }
-function UpdateTurnNumber() {
-    turn_number++;
-}
+
 export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
     //note that this re-renders whenever the player is selected
     //this section is also responsible for rendering the attack menu
@@ -129,8 +127,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
     useEffect(() => {
         if (isPlayerTurn) {
-            turn_number++;
-            console.log("turn number: " + turn_number);
+
+            console.log("turn number: ");
         }
     }, [isPlayerTurn]);
     function HandleItemUse(item: string) {
