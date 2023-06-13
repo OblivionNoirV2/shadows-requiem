@@ -160,88 +160,96 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     //if the attacks are shown, change "attacks" to "back"
 
     const { BossHP, setBossHP } = useContext(BossContext);
+    const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
     console.log({ BossHP });
     return (
         <>
-            <ul className='-mt-24 battle-menu'>
-                {isItemsActive ? null :
-                    <li>
-                        <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}>
-                            {isAttacksActive ? "Back" : "Attacks"}
-                        </button>
-                    </li>
-                }
-                {!isAttacksActive ?
-                    <>
+            {TurnNumber.slice(-1)[0] % 2 == 0 ?
+                <ul className='-mt-24 battle-menu'>
+                    {isItemsActive ? null :
                         <li>
-                            <button onClick={() => { sfx.playClickSfx(); HandleItemsMenu() }}>
-                                {isItemsActive ? "Back" : "Items"}
+                            <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}>
+                                {isAttacksActive ? "Back" : "Attacks"}
                             </button>
                         </li>
-                        <div className='flex flex-row space-x-4'>
-                            {isItemsActive &&
-                                Object.entries(iv.player_inventory).map(([item, quantity], index) => (
-                                    <li key={index} className='atk-btn'>
-                                        <button onClick={() => { HandleItemUse(item); sfx.playClickSfx(); }}
-                                            title={GetItemDesc(item)}>
-                                            {item} ({quantity})
-                                        </button>
-                                    </li>
-                                ))
-                            }
-                        </div>
-                        {isItemsActive ? null :
+                    }
+                    {!isAttacksActive ?
+                        <>
                             <li>
-                                <button onClick={() => { HandleDefend(); sfx.playClickSfx() }} >
-                                    Defend
+                                <button onClick={() => { sfx.playClickSfx(); HandleItemsMenu() }}>
+                                    {isItemsActive ? "Back" : "Items"}
                                 </button>
                             </li>
-                        }
-                    </>
-                    :
-                    //map the list to a ul 
-                    //Why isn't the phase changing?
-                    <>
-                        <div className=' grid grid-cols-2 grid-rows-2'>
-                            {current_attacks.map(
-                                (attack, index) =>
-                                    <li key={index} className='atk-btn'>
-                                        <button onClick={() => {
-                                            const new_hp = pa.PlayerAttack(attack, BossHP, setBossHP);
-                                            //this is now working
-
-                                            setIsAttackAreaShown(true);
-                                            setCurrentAttack(attack);
-                                            // setBossHP(new_hp);
-                                            console.log("current hp: " + BossHP);
-                                            console.log("boss hp on next render: " + new_hp);
-                                            sfx.playClickSfx();
-                                            {
-                                                setTimeout(() => {
-                                                    setIsAttackAreaShown(false);
-                                                }, 3000);
-                                            }
-                                        }}>
-                                            {attack}
-                                        </button>
-                                    </li>
-                            )}
-                        </div>
-                        <section>
-
-                            {isAttackAreaShown &&
-
-                                <PlayerAttackArea
-                                    attack={currentAttack}
-                                    player={player}
-                                    isPlayerTurn={isPlayerTurn}
-                                />
-
+                            <div className='flex flex-row space-x-4'>
+                                {isItemsActive &&
+                                    Object.entries(iv.player_inventory).map(([item, quantity], index) => (
+                                        <li key={index} className='atk-btn'>
+                                            <button onClick={() => { HandleItemUse(item); sfx.playClickSfx(); }}
+                                                title={GetItemDesc(item)}>
+                                                {item} ({quantity})
+                                            </button>
+                                        </li>
+                                    ))
+                                }
+                            </div>
+                            {isItemsActive ? null :
+                                <li>
+                                    <button onClick={() => { HandleDefend(); sfx.playClickSfx() }} >
+                                        Defend
+                                    </button>
+                                </li>
                             }
-                        </section>
-                    </>
-                }
-            </ul>
+                        </>
+                        :
+
+                        <>
+                            <div className=' grid grid-cols-2 grid-rows-2'>
+
+
+                                {current_attacks.map(
+                                    (attack, index) =>
+                                        <li key={index} className='atk-btn'>
+                                            <button onClick={() => {
+                                                pa.PlayerAttack(attack, BossHP, setBossHP);
+                                                //this is now working
+                                                //up the turn after the attack
+                                                TurnNumber.push(TurnNumber.slice(-1)[0] + 1);
+                                                setIsAttackAreaShown(true);
+                                                setCurrentAttack(attack);
+
+                                                sfx.playClickSfx();
+                                                {
+                                                    setTimeout(() => {
+                                                        setIsAttackAreaShown(false);
+                                                    }, 3000);
+                                                }
+                                            }}>
+                                                {attack}
+                                            </button>
+                                        </li>
+                                )
+
+                                }
+
+
+                            </div>
+
+                        </>
+                    }
+                </ul>
+                : <section>
+
+                    {isAttackAreaShown &&
+
+                        <PlayerAttackArea
+                            attack={currentAttack}
+                            player={player}
+                            isPlayerTurn={isPlayerTurn}
+                        />
+
+                    }
+                </section>
+            }
         </>
     )
 }
@@ -558,8 +566,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 <section>
                     <BossArea
                     />
-
-
                 </section>
             </main>
         </>
