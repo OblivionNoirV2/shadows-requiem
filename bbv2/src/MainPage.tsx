@@ -269,7 +269,15 @@ const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isP
     )
 
 }
-
+//Status effects, these will be image sources
+//poison - 5% of max hp per turn
+//curse - insta death in 10 turns
+//frozen - can't move for 3 turns
+const StatusEffectsHash: { [name: string]: string } = {
+    "Poison": "poison.png",
+    "Curse": "curse.png",
+    "Freeze": "freeze.png",
+}
 //onBackToTitle is a void function that comes from the interface
 //in the render below it flips the state of the page to the title
 
@@ -298,33 +306,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         sfx.playClickSfx();
     }
 
-    //Status effects, these will be image sources
-    //poison - 5% of max hp per turn
-    //curse - insta death in 10 turns
-    //frozen - can't move for 3 turns
-    const knight_status_effects: string[] = [
-        "poison.png",
-        "curse.png",
-        "freeze.png"
-    ];
-    const dmage_status_effects: string[] = [
-        "poison.png",
-        "curse.png",
-        "freeze.png"
 
-    ];
-    const wmage_status_effects: string[] = [
-        "poison.png",
-        "curse.png",
-        "freeze.png"
 
-    ];
-    const rmage_status_effects: string[] = [
-        "poison.png",
-        "curse.png",
-        "freeze.png"
-
-    ];
     //assign the correct class name to the status effect
     function getClassName(status_effect: string): string {
         switch (status_effect) {
@@ -351,22 +334,22 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         }
     }
 
-    //can probably clean this up
+    //these will all be state
     function UpdateStatusEffects(player: string) {
         // Map the player to the corresponding status effects array
         let status_effects: string[];
         switch (player) {
             case "knight":
-                status_effects = knight_status_effects;
+                status_effects = [];
                 break;
             case "dmage":
-                status_effects = dmage_status_effects;
+                status_effects = []
                 break;
             case "wmage":
-                status_effects = wmage_status_effects;
+                status_effects = []
                 break;
             case "rmage":
-                status_effects = rmage_status_effects;
+                status_effects = []
                 break;
             default:
                 status_effects = [];
@@ -389,6 +372,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             ))
         );
     }
+
 
     //gets checked whenever it's the player's turn
     function HandleUltima() {
