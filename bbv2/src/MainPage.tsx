@@ -378,7 +378,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 break;
         }
 
-        // Render the status effects
+        //Render the status effects
         return (
             status_effects.map((status_effect, index) => (
                 <ul key={index}>

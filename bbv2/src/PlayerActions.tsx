@@ -7,11 +7,34 @@ For my own sanity. */
 /*All attacks are handled in the PlayerAttack function, so no need 
 to export these*/
 //attack has a string key, and a function value
-
-
+interface RNGProps {
+    min: number;
+    crit_rate: number;
+}
+//default crit rate is 5%, so 0.05. 1.5x damage, ults cannot crit
+//if crit, play a specific sfx
+function RNG(props: RNGProps) {
+    //min is the "normal" damage, max is calculated from a 10% variance
+    const max = props.min * 1.1;
+    //bool to check for crit
+    const crit = Math.random() < props.crit_rate;
+    let calculated_damage = Math.floor(Math.random() * (max - props.min) + props.min);
+    if (crit) {
+        calculated_damage *= 1.5;
+    }
+    console.log("is crit: " + crit);
+    console.log("calculated damage: " + calculated_damage);
+    return calculated_damage;
+}
+//nothing can stack, so check if the status is already there
 export const attacks_object: { [attack: string]: Function } = {
     /*knight attacks*/
+
+    //Doubles EV, 1.5x def for 3 turns 
     'Shadow Self': function ShadowSelf() {
+        //calls update stats, this function will maintain 
+        //a list of status effects and their durations
+
 
     },
 
@@ -20,6 +43,7 @@ export const attacks_object: { [attack: string]: Function } = {
     },
 
     'Deathblow': function Deathblow() {
+        return (RNG({ min: 10000, crit_rate: 0.15 }));
 
     },
 
@@ -138,12 +162,12 @@ export let is_attack_triggered: boolean = false;
 export function PlayerAttack(attack: string, BossHP: number, setBossHP: (hp: number) => void) {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
-    //temporary
-    let newHp = BossHP - 10000;
+    //function returns a damage value
+    let newHp = BossHP - attacks_object[attack]();
     setBossHP(newHp);
     console.log("boss hp:" + newHp);
     is_attack_triggered = !is_attack_triggered;
-    attacks_object[attack]();
+
     return BossHP;
 }
 

@@ -14,7 +14,6 @@ interface boss_stats {
     max_hp: number;
     p_def: number;
     m_def: number;
-    atk: number;
 };
 /*
 for defenses, divide the attack power by the def value(between 1 and 2) 
@@ -71,7 +70,6 @@ export const boss_stats: boss_stats = {
     max_hp: 999999,
     p_def: 1.00,
     m_def: 1.00,
-    atk: 1.00
 };
 //link the hp/mp bars to the values here
 //doesn't need to return anything, just update the values
