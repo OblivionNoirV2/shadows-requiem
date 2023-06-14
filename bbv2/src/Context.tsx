@@ -49,3 +49,30 @@ export function TurnNumberContextProvider({ children }: { children: React.ReactE
         </TurnNumberContext.Provider>
     )
 }
+
+
+//states for MP 
+
+interface KnightMPContextValue {
+    KnightMP: number;
+    setKnightMP: (value: number) => void;
+}
+
+export const KnightMPContext = createContext<KnightMPContextValue>({
+    KnightMP: sm.knight_stats.max_hp,
+    setKnightMP: () => { },
+});
+
+export function KnightMPContextProvider({ children }: { children: React.ReactElement }) {
+    const [KnightMP, setKnightMP] = useState(sm.knight_stats.max_hp);
+
+    useEffect(() => {
+        console.log('KnightMP updated:', KnightMP);
+    }, [KnightMP]);
+
+    return (
+        <KnightMPContext.Provider value={{ KnightMP, setKnightMP }}>
+            {children}
+        </KnightMPContext.Provider>
+    )
+}

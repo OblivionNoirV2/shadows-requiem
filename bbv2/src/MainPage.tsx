@@ -48,16 +48,18 @@ export const BossArea = () => {
             setBossStage(3);
         }
     }, [BossHP]);
-    //update the stats
+    //update the boss stage based on the hp value
     useEffect(() => {
         if (bossStage === 2) {
             sm.boss_stats.m_def = 1.15;
             sm.boss_stats.p_def = 1.15;
-            console.log(sm.boss_stats.m_def);
         } else if (bossStage === 3) {
             sm.boss_stats.m_def = 1.3;
             sm.boss_stats.p_def = 1.3;
+
         }
+
+
     }, [bossStage]);
 
     //have to specify exact paths because of how webpack works
@@ -123,13 +125,10 @@ interface PlayerMenuProps {
 
 function bossAttackAlgo(TurnNumber: number, setTurnNumber: (value: number) => void) {
     //something's off with the turn number
-    console.log("turn number: " + TurnNumber);
+    console.log("turn number: ", TurnNumber);
 
     console.log("boss attack");
-    if (TurnNumber % 2 == 0) {
-        setTurnNumber(TurnNumber + 1);
 
-    }
 
 }
 
@@ -177,7 +176,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
     const { BossHP, setBossHP } = useContext(BossContext);
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
-    const [triggerBossAttack, setTriggerBossAttack] = useState(false);
+
 
     useEffect(() => {
 
@@ -185,17 +184,20 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
     }, [TurnNumber, setTurnNumber]);
 
+    const [isAttackMade, setIsAttackMade] = useState(false);
+
     function handleAtkClick(attack: string) {
         pa.PlayerAttack(attack, BossHP, setBossHP);
         setIsAttackAreaShown(true);
         setCurrentAttack(attack);
-        setTurnNumber(TurnNumber + 1)
-        setTriggerBossAttack(!triggerBossAttack);  // This will trigger the useEffect above
+        /*Using this instead of turns 
+        fixes weird bug where the attack area doesn't show up*/
+        setIsAttackMade(true);
     }
     console.log({ BossHP });
     return (
         <>
-            {TurnNumber % 2 !== 0 ?
+            {!isAttackMade ?
                 <ul className='-mt-24 battle-menu'>
                     {isItemsActive ? null :
                         <li>
@@ -242,11 +244,14 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                         <li key={index} className='atk-btn'>
                                             <button onClick={() => {
                                                 handleAtkClick(attack);
+                                                setIsAttackAreaShown(true);
 
                                                 sfx.playClickSfx();
                                                 {
                                                     setTimeout(() => {
+                                                        setTurnNumber(TurnNumber + 1)
                                                         setIsAttackAreaShown(false);
+                                                        setIsAttackMade(false);
                                                     }, 3000);
                                                 }
                                             }}>
