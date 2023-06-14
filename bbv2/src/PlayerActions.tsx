@@ -2,8 +2,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { BossContext } from './Context';
 import * as sm from './StatManagement';
-/*It is crucial that ALL stat and status changes take place in this file. 
-For my own sanity. */
+
 
 /*All attacks are handled in the PlayerAttack function, so no need 
 to export these*/
@@ -11,21 +10,35 @@ to export these*/
 interface RNGProps {
     min: number;
     crit_rate: number;
+    phys_or_mag: string;
+    is_ult: boolean;
 }
 //default crit rate is 5%, so 0.05. 1.5x damage, ults cannot crit
 //if crit, play a specific sfx
 function RNG(props: RNGProps) {
     //min is the "normal" damage, max is calculated from a 10% variance
     const max = props.min * 1.1;
-    //bool to check for crit
-    const crit = Math.random() < props.crit_rate;
+    let crit: boolean;
+    //bool to check for crit if it's not an ult
+    if (!props.is_ult) {
+        crit = Math.random() < props.crit_rate;
+    } else {
+        //always false if it's an ult
+        crit = false;
+    }
     let calculated_damage = Math.floor(Math.random() * (max - props.min) + props.min);
-    if (crit) {
+
+    if (crit == true) {
         calculated_damage *= 1.5;
     }
     console.log("is crit: " + crit);
     console.log("calculated damage: " + calculated_damage);
-    return calculated_damage;
+    //account for defense
+    if (props.phys_or_mag === "phys") {
+        return (calculated_damage / sm.boss_stats.p_def);
+    } else {
+        return (calculated_damage / sm.boss_stats.m_def);
+    }
 }
 //nothing can stack, so check if the status is already there
 export const attacks_object: { [attack: string]: Function } = {
@@ -44,7 +57,16 @@ export const attacks_object: { [attack: string]: Function } = {
     },
     //Heavy damage, high crit rate
     'Deathblow': function Deathblow() {
-        return (RNG({ min: 100000, crit_rate: 0.15 }));
+        return (
+            RNG(
+                {
+                    min: 100000,
+                    crit_rate: 0.20,
+                    phys_or_mag: "phys",
+                    is_ult: false
+                }
+            )
+        );
 
     },
 
