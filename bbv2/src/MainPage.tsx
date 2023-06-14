@@ -395,7 +395,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         );
     }
 
-
+    const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
     //gets checked whenever it's the player's turn
     function HandleUltima() {
 
@@ -408,7 +408,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             <strong>
                 <section className='text-white text-4xl flex justify-end 
                 mr-24 mt-4 -mb-4'>
-                    Turn #: (turn number)
+                    Turn # {TurnNumber}
                 </section>
             </strong>
             <main className='w-full h-screen flex dark-overlay'>
