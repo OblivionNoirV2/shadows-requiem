@@ -45,7 +45,10 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                             <cite>Images: Midjourney AI (At least until I can afford an artist)</cite>
                             <cite>Volume on symbol: Pixel Perfect</cite>
                             <cite>Volume off symbol: Google</cite>
-                            <cite>SFX: OpenGameArt.Org</cite>
+                            <cite>SFX: <a href='https://opengameart.org/'>
+                                OpenGameArt.Org
+                            </a>
+                            </cite>
                         </strong>
                     </section>
                 }

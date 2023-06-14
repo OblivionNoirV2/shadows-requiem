@@ -7,6 +7,13 @@ import * as sm from './StatManagement';
 /*All attacks are handled in the PlayerAttack function, so no need 
 to export these*/
 //attack has a string key, and a function value
+
+const attack_sfx: { [key: string]: string } = {
+
+}
+function playAttackSfx() {
+
+}
 interface RNGProps {
     min: number;
     crit_rate: number;
@@ -55,13 +62,13 @@ export const attacks_object: { [attack: string]: Function } = {
     'Whims Of Fate': function WhimsOfFate() {
 
     },
-    //Heavy damage, high crit rate
-    'Deathblow': function Deathblow() {
+    //Heavy damage, higher crit rate
+    'Deathblow': function Deathblow(): number {
         return (
             RNG(
                 {
-                    min: 100000,
-                    crit_rate: 0.20,
+                    min: 60000,
+                    crit_rate: 0.10,
                     phys_or_mag: "phys",
                     is_ult: false
                 }

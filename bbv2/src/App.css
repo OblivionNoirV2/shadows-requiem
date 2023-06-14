@@ -8,16 +8,11 @@ html {
 }
 
 body {
-  background-image: url("assets/images/bg-and-effects/introbg.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-}
-
-body.new-bg {
   background-image: url("assets/images/bg-and-effects/battlebganime.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
+
 
 .glow-ani-border {
 

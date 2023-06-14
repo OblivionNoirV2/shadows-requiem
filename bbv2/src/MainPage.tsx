@@ -123,9 +123,8 @@ interface PlayerMenuProps {
 
 }
 
-function bossAttackAlgo(TurnNumber: number, setTurnNumber: (value: number) => void) {
+function bossAttackAlgo() {
     //something's off with the turn number
-    console.log("turn number: ", TurnNumber);
 
     console.log("boss attack");
 
@@ -180,7 +179,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
     useEffect(() => {
 
-        bossAttackAlgo(TurnNumber, setTurnNumber);
+        bossAttackAlgo();
 
     }, [TurnNumber, setTurnNumber]);
 
@@ -251,6 +250,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                     setTimeout(() => {
                                                         setTurnNumber(TurnNumber + 1)
                                                         setIsAttackAreaShown(false);
+                                                        /*temp, this will actually be set to false 
+                                                        after the boss attacks*/
                                                         setIsAttackMade(false);
                                                     }, 3000);
                                                 }
