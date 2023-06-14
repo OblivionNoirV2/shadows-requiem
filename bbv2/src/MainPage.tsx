@@ -90,10 +90,7 @@ export const BossArea = () => {
 interface BossHpBarProps {
     bossHP: number;
 }
-//Will need to use global state/context api to retrieve the state 
-//from the mainpage component
-//Check the STATE as a dependency, not the stat itself. The stat is already 
-//updated and passed to the state by this point
+
 export const BossHpBar = () => {
     const { BossHP } = useContext(BossContext);
 
@@ -115,9 +112,23 @@ interface PlayerMenuProps {
 
 }
 
+function bossAttackAlgo(TurnNumber: number, setTurnNumber: (value: number) => void) {
+    //something's off with the turn number
+    console.log("turn number: " + TurnNumber);
+
+    console.log("boss attack");
+    if (TurnNumber % 2 == 0) {
+        setTurnNumber(TurnNumber + 1);
+
+    }
+
+}
+
+
 export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
     //note that this re-renders whenever the player is selected
     //this section is also responsible for rendering the attack menu
+
     console.log("player menu rendered")
     const current_attacks = player_attacks[player];
     //if it's active, hide the other options
@@ -125,12 +136,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [isItemsActive, setIsItemsActive] = useState(false);
     const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
     const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
-    useEffect(() => {
-        if (isPlayerTurn) {
 
-            console.log("turn number: ");
-        }
-    }, [isPlayerTurn]);
     function HandleItemUse(item: string) {
         console.log("working");
     };
@@ -155,16 +161,32 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
     }
 
+
     const [currentAttack, setCurrentAttack] = useState("");
     //clicking the top button will show attacks and remove the other two
     //if the attacks are shown, change "attacks" to "back"
 
     const { BossHP, setBossHP } = useContext(BossContext);
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
+    const [triggerBossAttack, setTriggerBossAttack] = useState(false);
+
+    useEffect(() => {
+
+        bossAttackAlgo(TurnNumber, setTurnNumber);
+
+    }, [TurnNumber, setTurnNumber]);
+
+    function handleAtkClick(attack: string) {
+        pa.PlayerAttack(attack, BossHP, setBossHP);
+        setIsAttackAreaShown(true);
+        setCurrentAttack(attack);
+        setTurnNumber(TurnNumber + 1)
+        setTriggerBossAttack(!triggerBossAttack);  // This will trigger the useEffect above
+    }
     console.log({ BossHP });
     return (
         <>
-            {TurnNumber.slice(-1)[0] % 2 == 0 ?
+            {TurnNumber % 2 !== 0 ?
                 <ul className='-mt-24 battle-menu'>
                     {isItemsActive ? null :
                         <li>
@@ -210,12 +232,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                     (attack, index) =>
                                         <li key={index} className='atk-btn'>
                                             <button onClick={() => {
-                                                pa.PlayerAttack(attack, BossHP, setBossHP);
-                                                //this is now working
-                                                //up the turn after the attack
-                                                TurnNumber.push(TurnNumber.slice(-1)[0] + 1);
-                                                setIsAttackAreaShown(true);
-                                                setCurrentAttack(attack);
+                                                handleAtkClick(attack);
 
                                                 sfx.playClickSfx();
                                                 {
@@ -228,10 +245,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                             </button>
                                         </li>
                                 )
-
                                 }
-
-
                             </div>
 
                         </>

@@ -27,17 +27,17 @@ export function BossContextProvider({ children }: { children: React.ReactElement
 }
 /*turn number management*/
 interface TurnNumberContextValue {
-    TurnNumber: number[];
-    setTurnNumber: (value: number[]) => void;
+    TurnNumber: number;
+    setTurnNumber: (value: number) => void;
 }
 
 export const TurnNumberContext = createContext<TurnNumberContextValue>({
-    TurnNumber: [0],
+    TurnNumber: 1,
     setTurnNumber: () => { },
 })
 
 export function TurnNumberContextProvider({ children }: { children: React.ReactElement }) {
-    const [TurnNumber, setTurnNumber] = useState([0]);
+    const [TurnNumber, setTurnNumber] = useState(1);
 
     useEffect(() => {
         console.log('TurnNumber updated:', TurnNumber);
