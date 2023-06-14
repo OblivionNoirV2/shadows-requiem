@@ -1,6 +1,7 @@
-import * as sm from './StatManagement';
+
 import React, { useContext, useEffect, useState } from 'react';
 import { BossContext } from './Context';
+import * as sm from './StatManagement';
 /*It is crucial that ALL stat and status changes take place in this file. 
 For my own sanity. */
 
@@ -41,9 +42,9 @@ export const attacks_object: { [attack: string]: Function } = {
     'Whims Of Fate': function WhimsOfFate() {
 
     },
-
+    //Heavy damage, high crit rate
     'Deathblow': function Deathblow() {
-        return (RNG({ min: 10000, crit_rate: 0.15 }));
+        return (RNG({ min: 100000, crit_rate: 0.15 }));
 
     },
 

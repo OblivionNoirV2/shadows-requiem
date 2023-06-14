@@ -35,6 +35,7 @@ interface BossAreaProps {
 }
 
 export const BossArea = () => {
+    const [bossStage, setBossStage] = useState(1);
     //manage boss stage based on hp value 
     const { BossHP } = useContext(BossContext);
     console.log("rendered bossarea")
@@ -47,10 +48,18 @@ export const BossArea = () => {
             setBossStage(3);
         }
     }, [BossHP]);
-    function HandleBossStage(stage: number) {
-        setBossStage(stage);
-    }
-    const [bossStage, setBossStage] = useState(1);
+    //update the stats
+    useEffect(() => {
+        if (bossStage === 2) {
+            sm.boss_stats.m_def = 1.15;
+            sm.boss_stats.p_def = 1.15;
+            console.log(sm.boss_stats.m_def);
+        } else if (bossStage === 3) {
+            sm.boss_stats.m_def = 1.3;
+            sm.boss_stats.p_def = 1.3;
+        }
+    }, [bossStage]);
+
     //have to specify exact paths because of how webpack works
     const boss_images = [
         require('./assets/images/boss/sprites/phase1anime.png'),
