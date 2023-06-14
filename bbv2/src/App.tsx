@@ -26,6 +26,8 @@ const App: React.FC = () => {
   const [battleOst, setBattleOst] = useState(new Audio(ti));
   const [titleOst, setTitleOst] = useState(new Audio(tt));
   const [currentTrack, setCurrentTrack] = useState("title");
+  const [isSnowOn, setIsSnowOn] = useState(true);
+
 
   const VolButton: React.FC = () => {
     return (
@@ -43,6 +45,25 @@ const App: React.FC = () => {
       </>
     )
   }
+
+  const SnowOnOff: React.FC = () => {
+
+    return (
+      <section className='snow-switch-container'>
+        <h4 className='text-white mb-8'>Snow</h4>
+
+        <label className="snow-switch">
+
+
+          <input type="checkbox" id="snow-switch" checked={isSnowOn}
+            onChange={() => { setIsSnowOn(!isSnowOn) }
+            } />
+          <span className="slider round"></span>
+        </label>
+      </section>
+    );
+  };
+
   function TrackControls(current_track: HTMLAudioElement, prev_track: HTMLAudioElement) {
     prev_track.pause();
     prev_track.currentTime = 0;
@@ -91,20 +112,13 @@ const App: React.FC = () => {
   return (
 
     <>
-
       <audio>
         <source src={ti}
           type='audio/wav' />
-      </audio>
-      =
-      <audio>
         <source src={tt}
           type='audio/wav' />
         <source src='./assets/sound/sfx/selectclick.wav' />
         <source src='./assets/sound/sfx/swordslash.mp3' />
-      </audio>
-      <audio>
-
       </audio>
       <Routes>
         <Route path='/' element={<StartMenu on_start={startGame} />} />
@@ -112,7 +126,11 @@ const App: React.FC = () => {
         <Route path='/StartMenu' element={<StartMenu on_start={startGame} />} />
       </Routes>
       <VolButton />
-      <SnowAnimation />
+      {
+        isSnowOn && <SnowAnimation />
+      }
+      <SnowOnOff />
+
       <main>
         {is_mobile && (
           <>
