@@ -64,8 +64,8 @@ export const BossArea = () => {
 
     //have to specify exact paths because of how webpack works
     const boss_images = [
-        require('./assets/images/boss/sprites/phase1anime.png'),
-        require('./assets/images/boss/sprites/phase2anime.png'),
+        require('./assets/images/boss/sprites/phase1v4.png'),
+        require('./assets/images/boss/sprites/phase2v2.png'),
         require('./assets/images/boss/sprites/phase3anime.png')
     ];
     const boss_labels = [
@@ -76,27 +76,32 @@ export const BossArea = () => {
 
     //Set the new boss hp when the attack is run
     //then pass the value up here to update the progress bar
+
+    //todo: same images, but wider AR
     return (
-        <main className='boss-container w-full flex flex-col mt-44 mr-56 z-[1]'>
-            <section className='flex flex-col w-[96rem] relative'>
+        <main className='boss-container w-full flex flex-col mt-8  
+        mr-[60rem] 
+        '>
+            <section className='flex flex-col items-center w-[42rem] relative'>
                 <img
                     src={boss_images[bossStage - 1]}
                     className='boss-sprite opacity-95'
                     alt={`boss phase ${bossStage}`}
-
                 />
                 <strong>
-                    <div className='flex justify-center mt-8 text-4xl mx-auto text-white'>
+                    <div className='flex justify-center relative -mt-16 z-10 
+                    text-4xl
+                       text-black stage-label'>
                         {boss_labels[bossStage - 1]}
                     </div>
                 </strong>
-            </section>
-            <section className='w-full'>
                 <BossHpBar />
             </section>
         </main>
     );
 }
+
+
 
 interface BossHpBarProps {
     bossHP: number;
@@ -107,7 +112,7 @@ export const BossHpBar = () => {
 
     return (
         <progress className={
-            'block h-8 glow-ani-border-black boss-prog w-10/12'
+            'block h-8 glow-ani-border-black boss-prog w-full'
         } value={BossHP} max={sm.boss_stats.max_hp}></progress>
     )
 }
@@ -586,7 +591,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                         <li className=''>
                             {/*Goes up each player turn,by 2, to 20*/}
                             <progress
-                                className='ultima-bar flex justify-start w-4/5 mt-4 h-6'
+                                className='ultima-bar flex 
+                                justify-start w-2/5 mt-4 h-6'
                                 value={10} max={20}>
                             </progress>
                         </li>
