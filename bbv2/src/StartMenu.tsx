@@ -19,18 +19,18 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
     return (
         <main className='flex flex-col mx-auto w-2/3
    justify-center items-center space-y-4 mt-12 '>
-            <h1 className='text-8xl text-slate-300 glow-ani-text'>影の鎮魂歌</h1>
-            <hr className='bg-slate-300 glow-ani-text h-2 w-full border-none'></hr>
-            <h1 className='text-6xl glow-ani-text text-slate-300'>Shadow's Requiem</h1>
+            <h1 className='text-8xl text-black glow-ani-text'>影の鎮魂歌</h1>
+            <hr className='bg-black glow-ani-text h-2 w-full border-none'></hr>
+            <h1 className='text-6xl glow-ani-text text-black'>Shadow's Requiem</h1>
             <section className='start-menu space-y-8 flex flex-row'>
                 <div className='flex flex-col space-y-8'>
                     <button onClick={() => { on_start(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
-       py-8 px-6 rounded-2xl text-7xl text-slate-300 mt-10 
+       py-8 px-6 rounded-2xl text-7xl text-slate-400 mt-10 
        glow-ani-border'>
                         Start Game
                     </button>
                     <button onClick={() => { handleCreditsClick(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
-       py-8 px-6 rounded-2xl text-7xl text-slate-300 glow-ani-border'>
+       py-8 px-6 rounded-2xl text-7xl text-slate-400 glow-ani-border'>
                         Credits
                     </button>
                 </div>

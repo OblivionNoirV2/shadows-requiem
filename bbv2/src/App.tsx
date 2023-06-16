@@ -50,7 +50,9 @@ const App: React.FC = () => {
 
     return (
       <section className='snow-switch-container'>
-        <h4 className='text-white mb-8'>Snow</h4>
+
+        <h4 className='text-slate-300 font-bold mb-8'>Snow</h4>
+
 
         <label className="snow-switch">
 

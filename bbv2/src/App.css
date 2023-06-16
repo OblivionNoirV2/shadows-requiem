@@ -8,7 +8,7 @@ html {
 }
 
 body {
-  background-image: url("assets/images/bg-and-effects/battlebganime.png");
+  background-image: url("assets/images/bg-and-effects/battlebgupscaled.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -302,7 +302,7 @@ the padding from .battle-menu causes issues with pushing things down*/
 
 .snow-switch-container {
   position: absolute;
-  top: 6rem;
+  top: 7rem;
   right: 1rem;
   width: 3.5rem;
   height: 2rem;
