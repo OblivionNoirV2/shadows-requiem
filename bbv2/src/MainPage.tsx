@@ -65,8 +65,8 @@ export const BossArea = () => {
     //have to specify exact paths because of how webpack works
     const boss_images = [
         require('./assets/images/boss/sprites/phase1v4.png'),
-        require('./assets/images/boss/sprites/phase2v2.png'),
-        require('./assets/images/boss/sprites/phase3anime.png')
+        require('./assets/images/boss/sprites/phase2v3.png'),
+        require('./assets/images/boss/sprites/phase3v2.png')
     ];
     const boss_labels = [
         "The Fallen King",
@@ -79,17 +79,19 @@ export const BossArea = () => {
 
     //todo: same images, but wider AR
     return (
-        <main className='boss-container w-full flex flex-col mt-8  
-        mr-[60rem] 
+        <main className='boss-container w-full flex flex-col mt-24 
+        mr-[42rem]
         '>
-            <section className='flex flex-col items-center w-[42rem] relative'>
+            <section className='flex flex-col items-center w-[64rem]
+             relative'>
                 <img
                     src={boss_images[bossStage - 1]}
                     className='boss-sprite opacity-95'
                     alt={`boss phase ${bossStage}`}
                 />
                 <strong>
-                    <div className='flex justify-center relative -mt-16 z-10 
+                    <div className='flex justify-center relative mt-8
+                     z-10 
                     text-4xl
                        text-black stage-label'>
                         {boss_labels[bossStage - 1]}
@@ -431,7 +433,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     Turn # {TurnNumber}
                 </section>
             </strong>
-            <main className='w-full h-screen flex dark-overlay'>
+            <main className='w-full flex dark-overlay'>
 
                 {/*party members*/}
                 <section className='party-col w-full h-full flex 
@@ -598,7 +600,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                         </li>
                     </ul>
                 </section>
-                <section>
+                <section className='1/2'>
                     <BossArea
                     />
                 </section>

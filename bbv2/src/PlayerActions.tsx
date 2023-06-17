@@ -221,7 +221,7 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
         return (
             <img
                 src={require(`./assets/images/player/attacks/${player}/${attack}.png`)}
-                className='w-1/4 ml-[48.5%] mt-[14%] z-[4] rounded-xl '
+                className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl '
                 alt='attack image'
                 style={{ position: 'absolute', top: 0, left: 0 }}
             />
