@@ -1,6 +1,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { BossContext } from './Context';
+import { TurnNumberContext } from './Context';
 import * as sm from './StatManagement';
 import { type } from 'os';
 
@@ -75,6 +76,8 @@ function RNG(props: RNGProps) {
         crit: crit,
     };
 }
+//Fixes bouncing bug
+let is_skull_crusher_active = false;
 //nothing can stack, so check if the status is already there
 export const attacks_object: { [attack: string]: Function } = {
     /*knight attacks*/
@@ -89,21 +92,53 @@ export const attacks_object: { [attack: string]: Function } = {
     'Whims Of Fate': function WhimsOfFate() {
 
     },
-    //Heavy damage, higher crit rate
+    //med-heavy damage
     'Deathblow': function Deathblow(): RNGResult {
         return (
             RNG(
                 {
-                    min: 10600,
-                    crit_rate: 0.12,
+                    min: 7600,
+                    crit_rate: 0.08,
                     phys_or_mag: "phys",
-                    variance: 1.10,
+                    variance: 1.20,
                     is_ult: false,
                     miss_rate: 0.08
                 }
             )
         );
     },
+    //also lowers defense for 60 seconds
+
+    //use icons to indicate stat debuffs for boss
+    'Skull Crusher': function SkullCrusher(): RNGResult {
+        if (!is_skull_crusher_active) {
+            is_skull_crusher_active = true;
+
+            console.log("original", sm.boss_stats.p_def);
+            sm.boss_stats.p_def -= parseFloat(0.20.toFixed(2));
+            console.log("defense lowered", sm.boss_stats.p_def);
+
+            setTimeout(() => {
+                sm.boss_stats.p_def += 0.2;
+                console.log("defense restored", sm.boss_stats.p_def);
+                is_skull_crusher_active = false;
+            }, 60000);
+        }
+
+        return (
+            RNG(
+                {
+                    min: 10900,
+                    crit_rate: 0.10,
+                    phys_or_mag: "phys",
+                    variance: 1.10,
+                    is_ult: false,
+                    miss_rate: 0.10
+                }
+            )
+        );
+    },
+
     //Raises entire parties def and mdef by 1.5x for 3 turns
     'Rebellion': function Rebellion() {
 
@@ -125,6 +160,10 @@ export const attacks_object: { [attack: string]: Function } = {
     },
     //moderate mag attack
     'Black Fire': function BlackFire() {
+
+    },
+    //heavy mag attack
+    "Eclipse": function Eclipse() {
 
     },
     //cut boss def and mdef by 30% for 3 turns
@@ -157,7 +196,7 @@ export const attacks_object: { [attack: string]: Function } = {
     'Purification': function Purification() {
 
     },
-    //Fully restores part and removes any ailments
+    //Fully restores party hp/mp and removes any ailments
     'Supreme Altar': function SupremeAltar() {
 
     },

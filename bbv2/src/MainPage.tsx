@@ -7,6 +7,7 @@ import * as sfx from './sfxManagement';
 import { BossContext } from './Context';
 import { TurnNumberContext } from './Context';
 import { RNGResult } from './PlayerActions';
+import { KnightMPContext } from './Context';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -138,9 +139,7 @@ function bossAttackAlgo() {
 
 
 }
-interface MessageAreaProps {
-    message: RNGResult | string;
-}
+
 /*if it's a number, that's the damage dealt. If it's a string,
  it's a miss/critical message. Crits include the message and the damage
 all as one string*/
@@ -156,6 +155,10 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [isItemsActive, setIsItemsActive] = useState(false);
     const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
     const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
+
+    //mp contexts
+    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
+
 
     function HandleItemUse(item: string) {
         console.log("working");
@@ -177,6 +180,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         }
         return "";
     }
+
     function HandleDefend() {
 
     }
@@ -188,7 +192,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
     const { BossHP, setBossHP } = useContext(BossContext);
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
-
 
     useEffect(() => {
 
@@ -251,10 +254,11 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                             }
                         </>
                         :
-
+                        //if there's not enough mp, disable the button and grey it out
+                        //Use the encyclopaedia to get the mp cost
+                        //Mp subtraction is done HERE, then the bar updates through context
                         <>
-                            <div className='w-full gap-x-2  grid grid-cols-3 grid-rows-auto'>
-
+                            <div className='w-full gap-x-2 grid grid-cols-3 grid-rows-auto'>
 
                                 {current_attacks.map(
                                     (attack, index) =>
@@ -308,6 +312,9 @@ interface PlayerAttackAreaProps {
     isPlayerTurn: boolean;
     message: RNGResult | string;
 
+}
+interface MessageAreaProps {
+    message: RNGResult | string;
 }
 const MessageArea: React.FC<MessageAreaProps> = ({ message }) => {
 
@@ -365,6 +372,11 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
+    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
+
+    useEffect(() => {
+        setKnightMP(sm.knight_stats.mp);
+    }, [sm.knight_stats.mp]);
 
     const [isUltimaReady, setIsUltimaReady] = useState(false);
     //Manage the turn based system
@@ -516,7 +528,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 <div>MP</div>
                                 <progress className='mb-4 p-mb'
                                     max={sm.knight_stats.mp}
-                                    value={sm.knight_stats.mp}>
+                                    value={KnightMP}>
                                 </progress>
                             </span>
                         </li>
