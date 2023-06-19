@@ -6,6 +6,7 @@ import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
 import { BossContext } from './Context';
 import { TurnNumberContext } from './Context';
+import { MessageContext } from './Context';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -26,11 +27,12 @@ const player_attacks: AttackList = {
     wmage: pa.wmage_attacks,
     rmage: pa.rmage_attacks
 };
-
+//for displaying criticals, misses, etc
 const MessageArea = () => {
+    const { Message } = useContext(MessageContext);
     return (
         <h1 className='text-8xl absolute z-20 text-red-700 '>
-            test
+            {Message}
         </h1>
     )
 }
@@ -64,8 +66,6 @@ export const BossArea = () => {
             sm.boss_stats.p_def = 1.3;
 
         }
-
-
     }, [bossStage]);
 
     //have to specify exact paths because of how webpack works

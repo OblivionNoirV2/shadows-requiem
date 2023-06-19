@@ -10,7 +10,13 @@ import * as sm from './StatManagement';
 
 import { PlayerAttack } from './PlayerActions';
 import { BossArea } from './MainPage';
-import { BossContext, BossContextProvider, TurnNumberContextProvider } from './Context';
+import {
+  BossContext,
+  BossContextProvider,
+  TurnNumberContextProvider,
+  MessageContextProvider
+}
+  from './Context';
 import { PlayerMenu } from './MainPage';
 import { BossHpBar } from './MainPage';
 
@@ -23,7 +29,9 @@ root.render(
     <BrowserRouter>
       <BossContextProvider>
         <TurnNumberContextProvider>
-          <App />
+          <MessageContextProvider>
+            <App />
+          </MessageContextProvider>
         </TurnNumberContextProvider>
       </BossContextProvider>
     </BrowserRouter>

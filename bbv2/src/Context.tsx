@@ -76,3 +76,30 @@ export function KnightMPContextProvider({ children }: { children: React.ReactEle
         </KnightMPContext.Provider>
     )
 }
+
+
+//Message context
+//wil most of the time just be ""
+interface MessageContextValue {
+    Message: string;
+    setMessage: (value: string) => void;
+}
+
+export const MessageContext = createContext<MessageContextValue>({
+    Message: "",
+    setMessage: () => { },
+})
+
+export function MessageContextProvider({ children }: { children: React.ReactElement }) {
+    const [Message, setMessage] = useState("");
+
+    useEffect(() => {
+        console.log('Message updated:', Message);
+    }, [Message]);
+
+    return (
+        <MessageContext.Provider value={{ Message, setMessage }}>
+            {children}
+        </MessageContext.Provider>
+    )
+}
