@@ -4,10 +4,6 @@ import { BossContext } from './Context';
 import * as sm from './StatManagement';
 
 
-/*All attacks are handled in the PlayerAttack function, so no need 
-to export these*/
-//attack has a string key, and a function value
-
 const attack_sfx: { [key: string]: string } = {
 
 }
@@ -18,13 +14,14 @@ interface RNGProps {
     min: number;
     crit_rate: number;
     phys_or_mag: string;
+    variance: number; //float to 2 dec points
     is_ult: boolean;
 }
 //default crit rate is 5%, so 0.05. 1.5x damage, ults cannot crit
 //if crit, play a specific sfx
 function RNG(props: RNGProps) {
-    //min is the "normal" damage, max is calculated from a 10% variance
-    const max = props.min * 1.1;
+    //min is the "normal" damage, max is calculated from the variance
+    const max = props.min * props.variance;
     let crit: boolean;
     //bool to check for crit if it's not an ult
     if (!props.is_ult) {
@@ -40,12 +37,16 @@ function RNG(props: RNGProps) {
     }
     console.log("is crit: " + crit);
     console.log("calculated damage: " + calculated_damage);
+    //tofixed makes it a string, then we convert back to an int
+    let result: number | string;
     //account for defense
     if (props.phys_or_mag === "phys") {
-        return (calculated_damage / sm.boss_stats.p_def);
+        result = (calculated_damage / sm.boss_stats.p_def).toFixed(2);
     } else {
-        return (calculated_damage / sm.boss_stats.m_def);
+        result = (calculated_damage / sm.boss_stats.m_def).toFixed(2);
     }
+    console.log("attack result: ", parseInt(result));
+    return parseInt(result);
 }
 //nothing can stack, so check if the status is already there
 export const attacks_object: { [attack: string]: Function } = {
@@ -70,6 +71,7 @@ export const attacks_object: { [attack: string]: Function } = {
                     min: 60000,
                     crit_rate: 0.10,
                     phys_or_mag: "phys",
+                    variance: 1.10,
                     is_ult: false
                 }
             )
