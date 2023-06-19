@@ -257,9 +257,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                     setTimeout(() => {
                                                         setTurnNumber(TurnNumber + 1)
                                                         setIsAttackAreaShown(false);
-                                                        /*temp, this will actually be set to false 
-                                                        after the boss attacks*/
                                                         setIsAttackMade(false);
+
                                                     }, 3000);
                                                 }
                                             }}>

@@ -10,16 +10,37 @@ const attack_sfx: { [key: string]: string } = {
 function playAttackSfx() {
 
 }
+export function MissCheck(missed: boolean) {
+    if (missed) {
+        return (
+            <h1>Missed!</h1>
+        )
+    }
+    return null;
+}
 interface RNGProps {
     min: number;
     crit_rate: number;
     phys_or_mag: string;
     variance: number; //float to 2 dec points
     is_ult: boolean;
+    miss_rate?: number;
+}
+const convertToStat: { [key: string]: number } = {
+    "phys": sm.boss_stats.p_def,
+    "mag": sm.boss_stats.m_def
 }
 //default crit rate is 5%, so 0.05. 1.5x damage, ults cannot crit
 //if crit, play a specific sfx
 function RNG(props: RNGProps) {
+    let miss: boolean;
+    //calc a miss if miss rate is defined
+    if (props.miss_rate) {
+        miss = Math.random() < props.miss_rate;
+        if (miss) {
+            return "miss";
+        }
+    }
     //min is the "normal" damage, max is calculated from the variance
     const max = props.min * props.variance;
     let crit: boolean;
@@ -37,14 +58,12 @@ function RNG(props: RNGProps) {
     }
     console.log("is crit: " + crit);
     console.log("calculated damage: " + calculated_damage);
-    //tofixed makes it a string, then we convert back to an int
-    let result: number | string;
+
     //account for defense
-    if (props.phys_or_mag === "phys") {
-        result = (calculated_damage / sm.boss_stats.p_def).toFixed(2);
-    } else {
-        result = (calculated_damage / sm.boss_stats.m_def).toFixed(2);
-    }
+    const result = (
+        calculated_damage / convertToStat[props.phys_or_mag]
+    ).toFixed(2);
+
     console.log("attack result: ", parseInt(result));
     return parseInt(result);
 }
@@ -59,12 +78,12 @@ export const attacks_object: { [attack: string]: Function } = {
 
 
     },
-
+    //High risk high reward
     'Whims Of Fate': function WhimsOfFate() {
 
     },
     //Heavy damage, higher crit rate
-    'Deathblow': function Deathblow(): number {
+    'Deathblow': function Deathblow(): number | string {
         return (
             RNG(
                 {
@@ -72,7 +91,8 @@ export const attacks_object: { [attack: string]: Function } = {
                     crit_rate: 0.10,
                     phys_or_mag: "phys",
                     variance: 1.10,
-                    is_ult: false
+                    is_ult: false,
+                    miss_rate: 0.90
                 }
             )
         );
@@ -195,6 +215,12 @@ export function PlayerAttack(attack: string, BossHP: number, setBossHP: (hp: num
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
     //function returns a damage value
+    //temp, will use a global message to display the result
+    if (attacks_object[attack]() == "miss") {
+        return (
+            <h1>Miss!</h1>
+        )
+    }
     let newHp = BossHP - attacks_object[attack]();
     setBossHP(newHp);
     console.log("boss hp:" + newHp);
