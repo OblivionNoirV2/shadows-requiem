@@ -1,6 +1,7 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { BossContext } from './Context';
+import { MessageContext } from './Context';
 import * as sm from './StatManagement';
 
 
@@ -30,15 +31,19 @@ const convertToStat: { [key: string]: number } = {
     "phys": sm.boss_stats.p_def,
     "mag": sm.boss_stats.m_def
 }
+
+export let message: string = "";
 //default crit rate is 5%, so 0.05. 1.5x damage, ults cannot crit
 //if crit, play a specific sfx
 function RNG(props: RNGProps) {
+
     let miss: boolean;
     //calc a miss if miss rate is defined
     if (props.miss_rate) {
         miss = Math.random() < props.miss_rate;
         if (miss) {
-            return "miss";
+            message = "miss";
+            return 0;
         }
     }
     //min is the "normal" damage, max is calculated from the variance
@@ -83,7 +88,7 @@ export const attacks_object: { [attack: string]: Function } = {
 
     },
     //Heavy damage, higher crit rate
-    'Deathblow': function Deathblow(): number | string {
+    'Deathblow': function Deathblow(): number {
         return (
             RNG(
                 {
@@ -216,16 +221,11 @@ export function PlayerAttack(attack: string, BossHP: number, setBossHP: (hp: num
     console.log("inside playerattack, attack:" + attack);
     //function returns a damage value
     //temp, will use a global message to display the result
-    if (attacks_object[attack]() == "miss") {
-        return (
-            <h1>Miss!</h1>
-        )
-    }
     let newHp = BossHP - attacks_object[attack]();
     setBossHP(newHp);
     console.log("boss hp:" + newHp);
     is_attack_triggered = !is_attack_triggered;
-
+    //this isn't actually needed, but it's here for now
     return BossHP;
 }
 

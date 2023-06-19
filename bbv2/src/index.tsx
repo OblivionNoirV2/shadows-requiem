@@ -14,7 +14,6 @@ import {
   BossContext,
   BossContextProvider,
   TurnNumberContextProvider,
-  MessageContextProvider
 }
   from './Context';
 import { PlayerMenu } from './MainPage';
@@ -29,9 +28,7 @@ root.render(
     <BrowserRouter>
       <BossContextProvider>
         <TurnNumberContextProvider>
-          <MessageContextProvider>
-            <App />
-          </MessageContextProvider>
+          <App />
         </TurnNumberContextProvider>
       </BossContextProvider>
     </BrowserRouter>

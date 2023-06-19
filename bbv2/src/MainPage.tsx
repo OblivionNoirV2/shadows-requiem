@@ -6,7 +6,7 @@ import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
 import { BossContext } from './Context';
 import { TurnNumberContext } from './Context';
-import { MessageContext } from './Context';
+import { message } from './PlayerActions';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -29,7 +29,16 @@ const player_attacks: AttackList = {
 };
 //for displaying criticals, misses, etc
 const MessageArea = () => {
-    const { Message } = useContext(MessageContext);
+    //cannot use context because the calculations for the message 
+    //do not return react components
+    const [Message, setMessage] = useState(message);
+    useEffect(() => {
+        setMessage(message);
+        setInterval(() => {
+            setMessage("");
+        }, 2000);
+    }, [message]);
+
     return (
         <h1 className='text-8xl absolute z-20 text-red-700 '>
             {Message}
