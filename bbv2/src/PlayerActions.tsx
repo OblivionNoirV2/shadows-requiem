@@ -66,7 +66,7 @@ function RNG(props: RNGProps) {
 
     //account for defense
     const result = (
-        calculated_damage / convertToStat[props.phys_or_mag]
+        (calculated_damage / convertToStat[props.phys_or_mag])
     ).toFixed(2);
 
     console.log("attack result: ", parseInt(result));
@@ -79,10 +79,9 @@ function RNG(props: RNGProps) {
 export const attacks_object: { [attack: string]: Function } = {
     /*knight attacks*/
 
-    //Doubles EV, 1.5x def for 3 turns 
-    'Shadow Self': function ShadowSelf() {
-        //calls update stats, this function will maintain 
-        //a list of status effects and their durations
+    //Standard attack
+    'Sword Slash': function SwordSlash() {
+
 
 
     },
@@ -95,8 +94,8 @@ export const attacks_object: { [attack: string]: Function } = {
         return (
             RNG(
                 {
-                    min: 60000,
-                    crit_rate: 0.90,
+                    min: 10600,
+                    crit_rate: 0.12,
                     phys_or_mag: "phys",
                     variance: 1.10,
                     is_ult: false,
@@ -105,7 +104,7 @@ export const attacks_object: { [attack: string]: Function } = {
             )
         );
     },
-
+    //Raises entire parties def and mdef by 1.5x for 3 turns
     'Rebellion': function Rebellion() {
 
     },
@@ -116,18 +115,19 @@ export const attacks_object: { [attack: string]: Function } = {
     },
 
     /*mage attacks*/
+    //moderate phys attack, cannot miss
     'Mirage Blade': function MirageBlade() {
 
     },
-
+    //freezes boss for 2 turns
     'Entrapment': function Entrapment() {
 
     },
-
+    //moderate mag attack
     'Black Fire': function BlackFire() {
 
     },
-
+    //cut boss def and mdef by 30% for 3 turns
     'Shattered Mirror': function ShatteredMirror() {
 
     },
@@ -137,27 +137,34 @@ export const attacks_object: { [attack: string]: Function } = {
     },
 
     /*wmage attacks*/
+    //light magic atk
     'Pierce Evil': function PierceEvil() {
 
     },
-
+    //heals all by 40% of their max hp
     'Radiant Sky': function RadiantSky() {
 
     },
-
+    //revives one with 1/2 hp
     'Rebirth': function Rebirth() {
 
     },
-
+    //heals one by 80% of their max hp
     'Moonlight': function Moonlight() {
 
     },
+    //Removes status effects from one
+    'Purification': function Purification() {
 
+    },
+    //Fully restores part and removes any ailments
     'Supreme Altar': function SupremeAltar() {
 
     },
 
     /*rmage attacks*/
+    //Cuts own hp in exchange for huge damage on next turn
+    //SS already scales with hp and isn't affected by this
     'Border Of Life': function BorderOfLife() {
 
     },
@@ -181,7 +188,7 @@ export const attacks_object: { [attack: string]: Function } = {
 };
 
 export const knight_attacks = [
-    "Shadow Self",
+    "Sword Slash",
     "Whims Of Fate",
     "Deathblow",
     "Rebellion"
@@ -199,7 +206,8 @@ export const wmage_attacks = [
     "Pierce Evil",
     "Radiant Sky",
     "Rebirth",
-    "Moonlight"
+    "Moonlight",
+    "Purification",
 ]
 export const wmage_ultima = "Supreme Altar"
 export const rmage_attacks = [

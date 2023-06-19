@@ -198,10 +198,10 @@ html {
 
 /*organize as a 2 x 2 grid going to the right*/
 .battle-menu {
-  color: white;
   font-size: x-large;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding: 0.3rem 0.5rem 0.3rem 0.5rem;
+  color: white;
+
+  padding: 0.3rem 0.2rem 0.3rem 0.2rem;
   border: 0.2rem solid black;
   border-radius: 1rem;
 
@@ -209,7 +209,11 @@ html {
 
 .battle-menu>li,
 .atk-btn {
-  padding: 0 0.2rem 0 0.2rem;
+  width: 100%;
+  /* adjust as needed */
+  height: 100%;
+  /* adjust as needed */
+  padding: 0 0.1rem 0 0.1rem;
 }
 
 /*They are seperate because if put into the same class 

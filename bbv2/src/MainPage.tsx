@@ -52,11 +52,11 @@ export const BossArea = () => {
     //update the boss stage based on the hp value
     useEffect(() => {
         if (bossStage === 2) {
-            sm.boss_stats.m_def = 1.15;
-            sm.boss_stats.p_def = 1.15;
+            sm.boss_stats.m_def = 1.25;
+            sm.boss_stats.p_def = 1.25;
         } else if (bossStage === 3) {
-            sm.boss_stats.m_def = 1.3;
-            sm.boss_stats.p_def = 1.3;
+            sm.boss_stats.m_def = 1.50;
+            sm.boss_stats.p_def = 1.50;
 
         }
 
@@ -80,11 +80,10 @@ export const BossArea = () => {
 
     //todo: same images, but wider AR
     return (
-        <main className='boss-container w-full flex flex-col mt-24 
+        <main className='boss-container w-full flex flex-col mt-48
         mr-[42rem]
         '>
-
-            <section className='flex flex-col items-center w-[64rem]
+            <section className='flex flex-col items-center w-[56rem]
              relative'>
                 <img
                     src={boss_images[bossStage - 1]}
@@ -218,7 +217,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 <ul className='-mt-24 battle-menu'>
                     {isItemsActive ? null :
                         <li>
-                            <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}>
+                            <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}
+                            >
                                 {isAttacksActive ? "Back" : "Attacks"}
                             </button>
                         </li>
@@ -253,7 +253,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                         :
 
                         <>
-                            <div className=' grid grid-cols-2 grid-rows-2'>
+                            <div className='w-full gap-x-2  grid grid-cols-3 grid-rows-auto'>
 
 
                                 {current_attacks.map(
@@ -272,7 +272,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
                                                     }, 3000);
                                                 }
-                                            }}>
+                                            }}
+                                            >
                                                 {attack}
                                             </button>
                                         </li>
