@@ -6,7 +6,7 @@ import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
 import { BossContext } from './Context';
 import { TurnNumberContext } from './Context';
-import { message } from './PlayerActions';
+import { RNGResult } from './PlayerActions';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -27,24 +27,8 @@ const player_attacks: AttackList = {
     wmage: pa.wmage_attacks,
     rmage: pa.rmage_attacks
 };
-//for displaying criticals, misses, etc
-const MessageArea = () => {
-    //cannot use context because the calculations for the message 
-    //do not return react components
-    const [Message, setMessage] = useState(message);
-    useEffect(() => {
-        setMessage(message);
-        setInterval(() => {
-            setMessage("");
-        }, 2000);
-    }, [message]);
 
-    return (
-        <h1 className='text-8xl absolute z-20 text-red-700 '>
-            {Message}
-        </h1>
-    )
-}
+
 //can use player to retrieve the attacks just like in the below components
 interface BossAreaProps {
     player: string | null;
@@ -75,6 +59,8 @@ export const BossArea = () => {
             sm.boss_stats.p_def = 1.3;
 
         }
+
+
     }, [bossStage]);
 
     //have to specify exact paths because of how webpack works
@@ -100,7 +86,6 @@ export const BossArea = () => {
 
             <section className='flex flex-col items-center w-[64rem]
              relative'>
-                <MessageArea />
                 <img
                     src={boss_images[bossStage - 1]}
                     className='boss-sprite opacity-95'
@@ -154,8 +139,30 @@ function bossAttackAlgo() {
 
 
 }
+interface MessageAreaProps {
+    message: RNGResult | string;
+}
+/*if it's a number, that's the damage dealt. If it's a string,
+ it's a miss/critical message. Crits include the message and the damage
+all as one string*/
+const MessageArea: React.FC<MessageAreaProps> = ({ message }) => {
 
+    useEffect(() => {
+        console.log("inside msg area", message)
+    }, [message]);
 
+    //convert to proper string if necessary
+    const message_string = typeof message === "object"
+        ? `${message.crit === true ?
+            "Critical hit! " : ""} Damage dealt: ${message.result}`
+        : message;
+
+    return (
+        <h1 className='text-8xl absolute z-20 text-red-600 '>
+            {message_string}
+        </h1>
+    )
+}
 export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
     //note that this re-renders whenever the player is selected
     //this section is also responsible for rendering the attack menu
@@ -208,9 +215,12 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     }, [TurnNumber, setTurnNumber]);
 
     const [isAttackMade, setIsAttackMade] = useState(false);
-
+    const [message, setMessage] = useState("");
     function handleAtkClick(attack: string) {
-        pa.PlayerAttack(attack, BossHP, setBossHP);
+        //this IS correct
+        let atk_result = pa.PlayerAttack(attack, BossHP, setBossHP);
+        setMessage(atk_result);
+
         setIsAttackAreaShown(true);
         setCurrentAttack(attack);
         /*Using this instead of turns 
@@ -220,6 +230,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     console.log({ BossHP });
     return (
         <>
+            <MessageArea message={message} />
             {!isAttackMade ?
                 <ul className='-mt-24 battle-menu'>
                     {isItemsActive ? null :

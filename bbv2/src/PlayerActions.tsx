@@ -1,8 +1,8 @@
 
 import React, { useContext, useEffect, useState } from 'react';
 import { BossContext } from './Context';
-import { MessageContext } from './Context';
 import * as sm from './StatManagement';
+import { type } from 'os';
 
 
 const attack_sfx: { [key: string]: string } = {
@@ -32,9 +32,10 @@ const convertToStat: { [key: string]: number } = {
     "mag": sm.boss_stats.m_def
 }
 
-export let message: string = "";
 //default crit rate is 5%, so 0.05. 1.5x damage, ults cannot crit
 //if crit, play a specific sfx
+
+export type RNGResult = "Missed!" | { result: number, crit: boolean };
 function RNG(props: RNGProps) {
 
     let miss: boolean;
@@ -42,8 +43,7 @@ function RNG(props: RNGProps) {
     if (props.miss_rate) {
         miss = Math.random() < props.miss_rate;
         if (miss) {
-            message = "miss";
-            return 0;
+            return "Missed!";
         }
     }
     //min is the "normal" damage, max is calculated from the variance
@@ -58,7 +58,7 @@ function RNG(props: RNGProps) {
     }
     let calculated_damage = Math.floor(Math.random() * (max - props.min) + props.min);
 
-    if (crit == true) {
+    if (crit === true) {
         calculated_damage *= 1.5;
     }
     console.log("is crit: " + crit);
@@ -70,7 +70,10 @@ function RNG(props: RNGProps) {
     ).toFixed(2);
 
     console.log("attack result: ", parseInt(result));
-    return parseInt(result);
+    return {
+        result: parseInt(result),
+        crit: crit,
+    };
 }
 //nothing can stack, so check if the status is already there
 export const attacks_object: { [attack: string]: Function } = {
@@ -88,12 +91,12 @@ export const attacks_object: { [attack: string]: Function } = {
 
     },
     //Heavy damage, higher crit rate
-    'Deathblow': function Deathblow(): number {
+    'Deathblow': function Deathblow(): RNGResult {
         return (
             RNG(
                 {
                     min: 60000,
-                    crit_rate: 0.10,
+                    crit_rate: 0.90,
                     phys_or_mag: "phys",
                     variance: 1.10,
                     is_ult: false,
@@ -101,7 +104,6 @@ export const attacks_object: { [attack: string]: Function } = {
                 }
             )
         );
-
     },
 
     'Rebellion': function Rebellion() {
@@ -225,8 +227,9 @@ export function PlayerAttack(attack: string, BossHP: number, setBossHP: (hp: num
     setBossHP(newHp);
     console.log("boss hp:" + newHp);
     is_attack_triggered = !is_attack_triggered;
-    //this isn't actually needed, but it's here for now
-    return BossHP;
+    //use this outcome to display a message
+    //returns either a miss message or an object with the damage and crit message
+    return attacks_object[attack]();
 }
 
 
