@@ -145,24 +145,7 @@ interface MessageAreaProps {
 /*if it's a number, that's the damage dealt. If it's a string,
  it's a miss/critical message. Crits include the message and the damage
 all as one string*/
-const MessageArea: React.FC<MessageAreaProps> = ({ message }) => {
 
-    useEffect(() => {
-        console.log("inside msg area", message)
-    }, [message]);
-
-    //convert to proper string if necessary
-    const message_string = typeof message === "object"
-        ? `${message.crit === true ?
-            "Critical hit! " : ""} Damage dealt: ${message.result}`
-        : message;
-
-    return (
-        <h1 className='text-8xl absolute z-20 text-red-600 '>
-            {message_string}
-        </h1>
-    )
-}
 export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
     //note that this re-renders whenever the player is selected
     //this section is also responsible for rendering the attack menu
@@ -229,8 +212,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     }
     console.log({ BossHP });
     return (
-        <>
-            <MessageArea message={message} />
+        <main className='w-full'>
+
             {!isAttackMade ?
                 <ul className='-mt-24 battle-menu'>
                     {isItemsActive ? null :
@@ -308,29 +291,51 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                             attack={currentAttack}
                             player={player}
                             isPlayerTurn={isPlayerTurn}
+                            message={message}
                         />
 
                     }
                 </section>
+
             }
-        </>
+        </main>
     )
 }
 interface PlayerAttackAreaProps {
     attack: string;
     player: string | null;
     isPlayerTurn: boolean;
+    message: RNGResult | string;
 
 }
+const MessageArea: React.FC<MessageAreaProps> = ({ message }) => {
 
+    useEffect(() => {
+        console.log("inside msg area", message)
+    }, [message]);
+
+    //convert to proper string if necessary
+    const message_string = typeof message === "object"
+        ? `${message.crit === true ?
+            "Critical hit! " : ""} Damage dealt: ${message.result}`
+        : message;
+
+    return (
+        <h1 className='text-7xl absolute z-20  text-red-600  '>
+            {message_string}
+        </h1>
+    )
+}
 //Need to keep this independent of the bossarea component
-const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isPlayerTurn }) => {
-
+const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isPlayerTurn, message }) => {
     let current_attack = pa.selected_attack;
     console.log("current_attack:" + current_attack);
     return (
-
-        <div className='z-[4]'>
+        <div>
+            <span className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl 
+            absolute top-0 right-0'>
+                <MessageArea message={message} />
+            </span>
             <pa.ShowAttack
                 attack={current_attack}
                 player={player}
@@ -338,8 +343,9 @@ const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isP
             />
         </div>
     )
-
 }
+
+
 //Status effects, these will be image sources
 //poison - 5% of max hp per turn
 //curse - insta death in 10 turns
@@ -627,7 +633,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                         </li>
                     </ul>
                 </section>
-                <section className='1/2'>
+                <section className=''>
                     <BossArea
                     />
                 </section>

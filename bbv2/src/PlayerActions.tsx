@@ -100,7 +100,7 @@ export const attacks_object: { [attack: string]: Function } = {
                     phys_or_mag: "phys",
                     variance: 1.10,
                     is_ult: false,
-                    miss_rate: 0.90
+                    miss_rate: 0.08
                 }
             )
         );
@@ -221,11 +221,20 @@ export let is_attack_triggered: boolean = false;
 export function PlayerAttack(attack: string, BossHP: number, setBossHP: (hp: number) => void) {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
+    console.log(typeof attacks_object[attack]())
+    let x = attacks_object[attack]();
+    console.log("x type: ", typeof x);
     //function returns a damage value
     //temp, will use a global message to display the result
-    let newHp = BossHP - attacks_object[attack]();
-    setBossHP(newHp);
-    console.log("boss hp:" + newHp);
+    let result = attacks_object[attack]();
+
+    if (typeof result === "object") {
+        let hp_subtracted = BossHP - result.result;
+        console.log("hp_subtracted: ", hp_subtracted)
+        setBossHP(hp_subtracted);
+    }
+
+
     is_attack_triggered = !is_attack_triggered;
     //use this outcome to display a message
     //returns either a miss message or an object with the damage and crit message
