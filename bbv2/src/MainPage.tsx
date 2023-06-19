@@ -27,7 +27,13 @@ const player_attacks: AttackList = {
     rmage: pa.rmage_attacks
 };
 
-
+const MessageArea = () => {
+    return (
+        <h1 className='text-8xl absolute z-20 text-red-700 '>
+            test
+        </h1>
+    )
+}
 //can use player to retrieve the attacks just like in the below components
 interface BossAreaProps {
     player: string | null;
@@ -82,8 +88,10 @@ export const BossArea = () => {
         <main className='boss-container w-full flex flex-col mt-24 
         mr-[42rem]
         '>
+
             <section className='flex flex-col items-center w-[64rem]
              relative'>
+                <MessageArea />
                 <img
                     src={boss_images[bossStage - 1]}
                     className='boss-sprite opacity-95'
