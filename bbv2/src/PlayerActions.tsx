@@ -186,20 +186,26 @@ export const attacks_object: { [attack: string]: Function } = {
 
     }
 };
+//holds descriptions and mp costs 
+export const AttackEncyclopedia: { [key: string]: [string, number] } = {
 
+}
 export const knight_attacks = [
-    "Sword Slash",
+    "Sword Slash", //light
     "Whims Of Fate",
-    "Deathblow",
-    "Rebellion"
+    "Deathblow", //med-heavy
+    "Rebellion",
+    "Skull Crusher" //very heavy, lowers boss def
 ]
-//ultima should appear to the right once the bar is full
+//ultima should appear as the 6th attack once the bar is full
 export const knight_ultima = "Thousand Men";
+//Buttons are formed from these 
 export const dmage_attacks = [
     "Mirage Blade",
     "Entrapment",
     "Black Fire",
-    "Shattered Mirror"
+    "Shattered Mirror", //heavily lowers boss m def
+    "Eclipse"
 ]
 export const dmage_ultima = "Radiant Supernova"
 export const wmage_attacks = [
@@ -214,7 +220,8 @@ export const rmage_attacks = [
     "Border Of Life",
     "Bloody Vengeance",
     "Chain Lightning",
-    "My Turn"
+    "My Turn",
+    "Hypervelocity"
 ]
 export const rmage_ultima = "Scarlet Subversion"
 
