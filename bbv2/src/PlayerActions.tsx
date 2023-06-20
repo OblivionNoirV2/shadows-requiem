@@ -83,10 +83,6 @@ function Randomizer(min: number, max: number) {
 }
 
 
-function saveInput() {
-    console.log('Saving data');
-}
-
 
 //can stack, to a max of +50%
 export const attacks_object: { [attack: string]: Function } = {
@@ -148,9 +144,6 @@ export const attacks_object: { [attack: string]: Function } = {
     'Skull Crusher': function SkullCrusher(): RNGResult {
         //there's a cap on how much you can lower it
         if (sm.boss_stats.p_def > 0.60) {
-            //this is updating multiple times. Bouncing?
-            //Race condition maybe?
-            //sometimes once, sometimes twice, 3 times...
             if (Randomizer(0, 100) < 50) {
                 sm.boss_stats.p_def -= parseFloat(0.10.toFixed(2));
                 console.log("defense lowered", sm.boss_stats.p_def);

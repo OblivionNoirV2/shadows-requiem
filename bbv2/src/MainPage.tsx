@@ -275,7 +275,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                         setIsAttackAreaShown(false);
                                                         setIsAttackMade(false);
 
-                                                    }, 3000);
+                                                    }, 2000);
                                                 }
                                             }}
                                             >
