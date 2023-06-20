@@ -10,7 +10,7 @@ import UpdateStats from './StatManagement';
 import StartMenu from './StartMenu';
 import MainPage from './MainPage';
 import * as sm from './StatManagement';
-import { Story } from './Story';
+import Story from './Story';
 
 //Page will need to completely re-render, so use a hook to flip it
 

@@ -378,11 +378,44 @@ input:checked+.slider:before {
   text-shadow: .1rem .1rem 1rem rgb(139, 139, 139);
 }
 
-a:not(.story-link) {
+a:not(.story-link, .story-back) {
   color: rgb(132, 0, 255);
 }
 
-.start-menu>div>button:hover {
+.start-menu>div>button:hover,
+.s-back-btn:hover {
   color: rgb(136, 8, 8);
+
+}
+
+
+@keyframes crawl {
+  0% {
+    top: 100%;
+    transform: rotateX(20deg) translateZ(20rem);
+  }
+
+  100% {
+    top: -170%;
+    transform: rotateX(27deg) translateZ(-20rem);
+  }
+}
+
+.text-container {
+  position: relative;
+  box-shadow: 1rem 1rem 1rem 1rem rgba(0, 0, 0, 0.9);
+  background-image: url('./assets/images/bg-and-effects/stonetexture.png');
+}
+
+.text-container:before {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
 
 }
