@@ -71,8 +71,28 @@ export const boss_stats: boss_stats = {
     p_def: 1.00,
     m_def: 1.00,
 };
+/*These are so we can efficiently loop through and update multiple 
+characters at a time*/
+export const player_mdef_list = [
+    knight_stats.m_def,
+    dmage_stats.m_def,
+    wmage_stats.m_def,
+    rmage_stats.m_def
+]
+
+export const player_pdef_list = [
+    knight_stats.p_def,
+    dmage_stats.p_def,
+    wmage_stats.p_def,
+    rmage_stats.p_def
+]
+
+export const all_player_defs = player_mdef_list.concat(player_pdef_list);
+
 //link the hp/mp bars to the values here
 //doesn't need to return anything, just update the values
+
+//probably don't need this
 function UpdateStats(player_name: string, stats_to_update: string[], is_boss: boolean): void {
     const updated_stats = new Map<string, player_stats>();
 

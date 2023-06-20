@@ -4,6 +4,7 @@ import { BossContext } from './Context';
 import { TurnNumberContext } from './Context';
 import * as sm from './StatManagement';
 import { type } from 'os';
+import { all_player_defs } from './StatManagement';
 
 
 const attack_sfx: { [key: string]: string } = {
@@ -76,20 +77,43 @@ function RNG(props: RNGProps) {
         crit: crit,
     };
 }
-//Fixes bouncing bug
-let is_skull_crusher_active = false;
+
 //nothing can stack, so check if the status is already there
 export const attacks_object: { [attack: string]: Function } = {
     /*knight attacks*/
 
     //Standard attack
     'Sword Slash': function SwordSlash() {
-
-
+        return (
+            RNG(
+                {
+                    min: 4000,
+                    crit_rate: 0.08,
+                    phys_or_mag: "phys",
+                    variance: 1.2,
+                    is_ult: false,
+                    miss_rate: 0.08
+                }
+            )
+        );
 
     },
     //High risk high reward
-    'Whims Of Fate': function WhimsOfFate() {
+    //Can range from 3181 to 23100(max damage with crit)
+    'Whims Of Fate': function WhimsOfFate(): RNGResult {
+        console.log("whims of fate")
+        return (
+            RNG(
+                {
+                    min: 7000,
+                    crit_rate: 0.35,
+                    phys_or_mag: "phys",
+                    variance: 2.2,
+                    is_ult: false,
+                    miss_rate: 0.35
+                }
+            )
+        )
 
     },
     //med-heavy damage, slightly higher crit rate
@@ -111,19 +135,17 @@ export const attacks_object: { [attack: string]: Function } = {
 
     //use icons to indicate stat debuffs for boss
     'Skull Crusher': function SkullCrusher(): RNGResult {
-        if (!is_skull_crusher_active) {
-            is_skull_crusher_active = true;
 
-            console.log("original", sm.boss_stats.p_def);
-            sm.boss_stats.p_def -= parseFloat(0.20.toFixed(2));
-            console.log("defense lowered", sm.boss_stats.p_def);
 
-            setTimeout(() => {
-                sm.boss_stats.p_def += 0.20;
-                console.log("defense restored", sm.boss_stats.p_def);
-                is_skull_crusher_active = false;
-            }, 60000);
-        }
+        console.log("original", sm.boss_stats.p_def);
+        sm.boss_stats.p_def -= parseFloat(0.20.toFixed(2));
+        console.log("defense lowered", sm.boss_stats.p_def);
+
+        setTimeout(() => {
+            sm.boss_stats.p_def += 0.20;
+            console.log("defense restored", sm.boss_stats.p_def);
+
+        }, 60000);
 
         return (
             RNG(
@@ -139,8 +161,12 @@ export const attacks_object: { [attack: string]: Function } = {
         );
     },
 
-    //Raises entire parties def and mdef by 1.5x for 3 turns
+    //Raises entire parties def and mdef by 1.5x for 90 seconds
+    //won't return anything
     'Rebellion': function Rebellion() {
+        console.log(all_player_defs)
+
+
 
     },
 
@@ -221,7 +247,7 @@ export const attacks_object: { [attack: string]: Function } = {
     },
 
     //ult
-    'ScarletSubversion': function ScarletSubversion() {
+    'Scarlet Subversion': function ScarletSubversion() {
 
     }
 };
@@ -271,21 +297,18 @@ export function Shadow_Self() {
 
 export let selected_attack: string | null = null;
 export let is_attack_triggered: boolean = false;
-
+export let new_set_hp: number = 999999;
 export function PlayerAttack(attack: string, BossHP: number, setBossHP: (hp: number) => void) {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
-    console.log(typeof attacks_object[attack]())
-    let x = attacks_object[attack]();
-    console.log("x type: ", typeof x);
     //function returns a damage value
     //temp, will use a global message to display the result
     let result = attacks_object[attack]();
 
     if (typeof result === "object") {
-        let hp_subtracted = BossHP - result.result;
-        console.log("hp_subtracted: ", hp_subtracted)
-        setBossHP(hp_subtracted);
+        new_set_hp -= result.result;
+        console.log("hp_subtracted: ", new_set_hp)
+
     }
 
 

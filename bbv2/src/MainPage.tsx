@@ -8,6 +8,7 @@ import { BossContext } from './Context';
 import { TurnNumberContext } from './Context';
 import { RNGResult } from './PlayerActions';
 import { KnightMPContext } from './Context';
+import { new_set_hp } from './PlayerActions';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -39,17 +40,17 @@ interface BossAreaProps {
 export const BossArea = () => {
     const [bossStage, setBossStage] = useState(1);
     //manage boss stage based on hp value 
-    const { BossHP } = useContext(BossContext);
+
     console.log("rendered bossarea")
     useEffect(() => {
-        if (BossHP >= 666666) {
+        if (new_set_hp >= 666666) {
             setBossStage(1);
-        } else if (BossHP >= 333333 && BossHP < 666666) {
+        } else if (new_set_hp >= 333333 && new_set_hp < 666666) {
             setBossStage(2);
         } else {
             setBossStage(3);
         }
-    }, [BossHP]);
+    }, [new_set_hp]);
     //update the boss stage based on the hp value
     useEffect(() => {
         if (bossStage === 2) {
@@ -113,11 +114,12 @@ interface BossHpBarProps {
 
 export const BossHpBar = () => {
     const { BossHP } = useContext(BossContext);
+    const [hpBarValue, setHpBarValue] = useState(new_set_hp);
 
     return (
         <progress className={
             'block h-8 glow-ani-border-black boss-prog w-full'
-        } value={BossHP} max={sm.boss_stats.max_hp}></progress>
+        } value={new_set_hp} max={sm.boss_stats.max_hp}></progress>
     )
 }
 
@@ -202,8 +204,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [isAttackMade, setIsAttackMade] = useState(false);
     const [message, setMessage] = useState("");
     function handleAtkClick(attack: string) {
-        //this IS correct
         let atk_result = pa.PlayerAttack(attack, BossHP, setBossHP);
+
         setMessage(atk_result);
 
         setIsAttackAreaShown(true);
@@ -212,7 +214,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         fixes weird bug where the attack area doesn't show up*/
         setIsAttackMade(true);
     }
-    console.log({ BossHP });
     return (
         <main className='w-full'>
 
