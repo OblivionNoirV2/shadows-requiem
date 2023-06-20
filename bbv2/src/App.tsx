@@ -10,6 +10,7 @@ import UpdateStats from './StatManagement';
 import StartMenu from './StartMenu';
 import MainPage from './MainPage';
 import * as sm from './StatManagement';
+import { Story } from './Story';
 
 //Page will need to completely re-render, so use a hook to flip it
 
@@ -121,11 +122,13 @@ const App: React.FC = () => {
           type='audio/wav' />
         <source src='./assets/sound/sfx/selectclick.wav' />
         <source src='./assets/sound/sfx/swordslash.mp3' />
+
       </audio>
       <Routes>
         <Route path='/' element={<StartMenu on_start={startGame} />} />
         <Route path='/Game' element={<MainPage onBackToTitle={HandleBackToTitle} />} />
         <Route path='/StartMenu' element={<StartMenu on_start={startGame} />} />
+        <Route path='/Story' element={<Story />} />
       </Routes>
       <VolButton />
       {

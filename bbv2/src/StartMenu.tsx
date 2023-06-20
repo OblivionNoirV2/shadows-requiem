@@ -29,6 +29,14 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
        glow-ani-border'>
                         Start Game
                     </button>
+                    <button className=' bg-[#363040]/60 
+       py-8 px-6 rounded-2xl text-7xl text-slate-400 glow-ani-border'>
+                        <Link to='/Story'
+                            onClick={() => { sfx.playClickSfx() }}
+                            className='story-link'>
+                            Story
+                        </Link>
+                    </button>
                     <button onClick={() => { handleCreditsClick(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
        py-8 px-6 rounded-2xl text-7xl text-slate-400 glow-ani-border'>
                         Credits

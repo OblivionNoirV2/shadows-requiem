@@ -92,13 +92,13 @@ export const attacks_object: { [attack: string]: Function } = {
     'Whims Of Fate': function WhimsOfFate() {
 
     },
-    //med-heavy damage
+    //med-heavy damage, slightly higher crit rate
     'Deathblow': function Deathblow(): RNGResult {
         return (
             RNG(
                 {
-                    min: 7600,
-                    crit_rate: 0.08,
+                    min: 7800,
+                    crit_rate: 0.12,
                     phys_or_mag: "phys",
                     variance: 1.20,
                     is_ult: false,
@@ -119,7 +119,7 @@ export const attacks_object: { [attack: string]: Function } = {
             console.log("defense lowered", sm.boss_stats.p_def);
 
             setTimeout(() => {
-                sm.boss_stats.p_def += 0.2;
+                sm.boss_stats.p_def += 0.20;
                 console.log("defense restored", sm.boss_stats.p_def);
                 is_skull_crusher_active = false;
             }, 60000);
@@ -129,7 +129,7 @@ export const attacks_object: { [attack: string]: Function } = {
             RNG(
                 {
                     min: 10900,
-                    crit_rate: 0.10,
+                    crit_rate: 0.08,
                     phys_or_mag: "phys",
                     variance: 1.10,
                     is_ult: false,

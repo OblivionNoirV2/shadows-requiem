@@ -377,3 +377,12 @@ input:checked+.slider:before {
 .stage-label {
   text-shadow: .1rem .1rem 1rem rgb(139, 139, 139);
 }
+
+a:not(.story-link) {
+  color: rgb(132, 0, 255);
+}
+
+.start-menu>div>button:hover {
+  color: rgb(136, 8, 8);
+
+}
