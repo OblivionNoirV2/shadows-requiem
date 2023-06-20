@@ -204,7 +204,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [isAttackMade, setIsAttackMade] = useState(false);
     const [message, setMessage] = useState("");
     function handleAtkClick(attack: string) {
-        let atk_result = pa.PlayerAttack(attack, BossHP, setBossHP);
+        let atk_result = pa.PlayerAttack(attack);
 
         setMessage(atk_result);
 

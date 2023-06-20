@@ -78,7 +78,17 @@ function RNG(props: RNGProps) {
     };
 }
 
-//nothing can stack, so check if the status is already there
+function Randomizer(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+
+function saveInput() {
+    console.log('Saving data');
+}
+
+
+//can stack, to a max of +50%
 export const attacks_object: { [attack: string]: Function } = {
     /*knight attacks*/
 
@@ -134,24 +144,30 @@ export const attacks_object: { [attack: string]: Function } = {
     //also lowers defense for 60 seconds
 
     //use icons to indicate stat debuffs for boss
+
     'Skull Crusher': function SkullCrusher(): RNGResult {
+        //there's a cap on how much you can lower it
+        if (sm.boss_stats.p_def > 0.60) {
+            //this is updating multiple times. Bouncing?
+            //Race condition maybe?
+            //sometimes once, sometimes twice, 3 times...
+            if (Randomizer(0, 100) < 50) {
+                sm.boss_stats.p_def -= parseFloat(0.10.toFixed(2));
+                console.log("defense lowered", sm.boss_stats.p_def);
+                setTimeout(() => {
+                    sm.boss_stats.p_def += 0.10;
+                    console.log("defense restored", sm.boss_stats.p_def);
 
+                }, 60000);
 
-        console.log("original", sm.boss_stats.p_def);
-        sm.boss_stats.p_def -= parseFloat(0.20.toFixed(2));
-        console.log("defense lowered", sm.boss_stats.p_def);
-
-        setTimeout(() => {
-            sm.boss_stats.p_def += 0.20;
-            console.log("defense restored", sm.boss_stats.p_def);
-
-        }, 60000);
+            }
+        }
 
         return (
             RNG(
                 {
                     min: 10900,
-                    crit_rate: 0.08,
+                    crit_rate: 0.10,
                     phys_or_mag: "phys",
                     variance: 1.10,
                     is_ult: false,
@@ -161,14 +177,29 @@ export const attacks_object: { [attack: string]: Function } = {
         );
     },
 
-    //Raises entire parties def and mdef by 1.5x for 90 seconds
+    //Raises entire parties def for 90 seconds
     //won't return anything
     'Rebellion': function Rebellion() {
         console.log(all_player_defs)
+        sm.player_pdef_list.forEach((player_def_ref) => {
+            //2.5 cap
+            if (player_def_ref.key in player_def_ref.stat &&
+                player_def_ref.stat[player_def_ref.key] < 2.50) {
 
+                player_def_ref.stat[player_def_ref.key] += 0.25;
 
+                console.log(player_def_ref.stat[player_def_ref.key]);
 
+                setTimeout(() => {
+                    if (player_def_ref.key in player_def_ref.stat) {
+                        player_def_ref.stat[player_def_ref.key] -= 0.25;
+                    }
+                }, 90000);
+            }
+        });
     },
+
+
 
     //ult
     'Thousand Men': function ThousandMen() {
@@ -178,21 +209,56 @@ export const attacks_object: { [attack: string]: Function } = {
     /*mage attacks*/
     //moderate phys attack, cannot miss
     'Mirage Blade': function MirageBlade() {
-
+        return (
+            RNG(
+                {
+                    min: 5700,
+                    crit_rate: 0.08,
+                    phys_or_mag: "phys",
+                    variance: 1.2,
+                    is_ult: false,
+                    miss_rate: 0.00
+                }
+            )
+        )
     },
-    //freezes boss for 2 turns
+    //Rebellion but for mag def
     'Entrapment': function Entrapment() {
 
     },
     //moderate mag attack
     'Black Fire': function BlackFire() {
+        return (
+            RNG(
+                {
+                    min: 8200,
+                    crit_rate: 0.08,
+                    phys_or_mag: "mag",
+                    variance: 1.2,
+                    is_ult: false,
+                    miss_rate: 0.08
+                }
+            )
+        )
 
     },
     //heavy mag attack
     "Eclipse": function Eclipse() {
+        return (
+            RNG(
+                {
+                    min: 13000,
+                    crit_rate: 0.08,
+                    phys_or_mag: "mag",
+                    variance: 1.2,
+                    is_ult: false,
+                    miss_rate: 0.08
+                }
+            )
+        )
 
     },
-    //cut boss def and mdef by 30% for 3 turns
+    //cut boss mdef by 0.3 for 30 sec
     'Shattered Mirror': function ShatteredMirror() {
 
     },
@@ -297,21 +363,24 @@ export function Shadow_Self() {
 
 export let selected_attack: string | null = null;
 export let is_attack_triggered: boolean = false;
+
+//cannot use state here, so we're doing it this way
 export let new_set_hp: number = 999999;
-export function PlayerAttack(attack: string, BossHP: number, setBossHP: (hp: number) => void) {
+export function PlayerAttack(attack: string) {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);
     //function returns a damage value
     //temp, will use a global message to display the result
     let result = attacks_object[attack]();
 
+    console.log(typeof result)
     if (typeof result === "object") {
+        //this determines boss hp
+        //occasionally lags a turn behind when updating???
         new_set_hp -= result.result;
         console.log("hp_subtracted: ", new_set_hp)
 
     }
-
-
     is_attack_triggered = !is_attack_triggered;
     //use this outcome to display a message
     //returns either a miss message or an object with the damage and crit message
