@@ -13,14 +13,7 @@ const attack_sfx: { [key: string]: string } = {
 function playAttackSfx() {
 
 }
-export function MissCheck(missed: boolean) {
-    if (missed) {
-        return (
-            <h1>Missed!</h1>
-        )
-    }
-    return null;
-}
+
 interface RNGProps {
     min: number;
     crit_rate: number;
@@ -33,17 +26,16 @@ const convertToStat: { [key: string]: number } = {
     "phys": sm.boss_stats.p_def,
     "mag": sm.boss_stats.m_def
 }
-
+//try changin it so whatever the miss/crit indicator is, it happens *here*
 //default crit rate is 5%, so 0.05. 1.5x damage, ults cannot crit
 //if crit, play a specific sfx
 
-export type RNGResult = "Missed!" | { result: number, crit: boolean };
+export type RNGResult = string | { result: number, crit: boolean };
 function RNG(props: RNGProps) {
 
-    let miss: boolean;
     //calc a miss if miss rate is defined
     if (props.miss_rate) {
-        miss = Math.random() < props.miss_rate;
+        let miss = Math.random() < props.miss_rate;
         if (miss) {
             return "Missed!";
         }
@@ -191,8 +183,6 @@ export const attacks_object: { [attack: string]: Function } = {
             }
         });
     },
-
-
 
     //ult
     'Thousand Men': function ThousandMen() {
@@ -365,11 +355,8 @@ export function PlayerAttack(attack: string) {
     //function returns a damage value
     //temp, will use a global message to display the result
     let result = attacks_object[attack]();
-
     console.log(typeof result)
     if (typeof result === "object") {
-        //this determines boss hp
-        //occasionally lags a turn behind when updating???
         new_set_hp -= result.result;
         console.log("hp_subtracted: ", new_set_hp)
 
@@ -377,7 +364,7 @@ export function PlayerAttack(attack: string) {
     is_attack_triggered = !is_attack_triggered;
     //use this outcome to display a message
     //returns either a miss message or an object with the damage and crit message
-    return attacks_object[attack]();
+    return result;
 }
 
 

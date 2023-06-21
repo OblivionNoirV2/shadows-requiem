@@ -113,9 +113,6 @@ interface BossHpBarProps {
 }
 
 export const BossHpBar = () => {
-    const { BossHP } = useContext(BossContext);
-    const [hpBarValue, setHpBarValue] = useState(new_set_hp);
-
     return (
         <progress className={
             'block h-8 glow-ani-border-black boss-prog w-full'
@@ -205,7 +202,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [message, setMessage] = useState("");
     function handleAtkClick(attack: string) {
         let atk_result = pa.PlayerAttack(attack);
-
+        console.log("handleclick atkresult:", atk_result);
         setMessage(atk_result);
 
         setIsAttackAreaShown(true);
@@ -215,6 +212,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         setIsAttackMade(true);
     }
     return (
+
         <main className='w-full'>
 
             {!isAttackMade ?
@@ -275,7 +273,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                         setIsAttackAreaShown(false);
                                                         setIsAttackMade(false);
 
-                                                    }, 2000);
+                                                    }, 1000);
                                                 }
                                             }}
                                             >
@@ -289,29 +287,33 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                         </>
                     }
                 </ul>
-                : <section>
+                :
+                <>
+                    <section>
 
-                    {isAttackAreaShown &&
+                        {isAttackAreaShown &&
 
-                        <PlayerAttackArea
-                            attack={currentAttack}
-                            player={player}
-                            isPlayerTurn={isPlayerTurn}
-                            message={message}
-                        />
+                            <PlayerAttackArea
+                                attack={currentAttack}
+                                player={player}
+                                isPlayerTurn={isPlayerTurn}
 
-                    }
-                </section>
+                            />
+
+                        }
+                    </section>
+                    <MessageArea message={message} />
+                </>
 
             }
         </main>
+
     )
 }
 interface PlayerAttackAreaProps {
     attack: string;
     player: string | null;
     isPlayerTurn: boolean;
-    message: RNGResult | string;
 
 }
 interface MessageAreaProps {
@@ -327,23 +329,22 @@ const MessageArea: React.FC<MessageAreaProps> = ({ message }) => {
     const message_string = typeof message === "object"
         ? `${message.crit === true ?
             "Critical hit! " : ""} Damage dealt: ${message.result}`
-        : message;
-
+        : "Missed!";
     return (
-        <h1 className='text-7xl absolute z-20  text-red-600  '>
+        <h1 className='text-7xl absolute z-20  text-red-600 ml-[90rem]  '>
             {message_string}
         </h1>
     )
 }
 //Need to keep this independent of the bossarea component
-const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isPlayerTurn, message }) => {
+const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isPlayerTurn }) => {
     let current_attack = pa.selected_attack;
     console.log("current_attack:" + current_attack);
     return (
         <div>
             <span className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl 
             absolute top-0 right-0'>
-                <MessageArea message={message} />
+
             </span>
             <pa.ShowAttack
                 attack={current_attack}
