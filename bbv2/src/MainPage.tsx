@@ -314,7 +314,6 @@ interface PlayerAttackAreaProps {
     attack: string;
     player: string | null;
     isPlayerTurn: boolean;
-
 }
 interface MessageAreaProps {
     message: RNGResult | string;
@@ -329,7 +328,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({ message }) => {
     const message_string = typeof message === "object"
         ? `${message.crit === true ?
             "Critical hit! " : ""} Damage dealt: ${message.result}`
-        : "Missed!";
+        : message;
     return (
         <h1 className='text-7xl absolute z-20  text-red-600 ml-[90rem]  '>
             {message_string}

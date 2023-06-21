@@ -361,7 +361,6 @@ export function PlayerAttack(attack: string) {
         console.log("hp_subtracted: ", new_set_hp)
 
     }
-    is_attack_triggered = !is_attack_triggered;
     //use this outcome to display a message
     //returns either a miss message or an object with the damage and crit message
     return result;
