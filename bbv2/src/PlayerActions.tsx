@@ -5,14 +5,10 @@ import { TurnNumberContext } from './Context';
 import * as sm from './StatManagement';
 import { type } from 'os';
 import { all_player_defs } from './StatManagement';
+import { AttackSfxLookup, playClickSfx } from './sfxManagement';
+import { stat } from 'fs';
 
 
-const attack_sfx: { [key: string]: string } = {
-
-}
-function playAttackSfx() {
-
-}
 
 interface RNGProps {
     min: number;
@@ -21,22 +17,39 @@ interface RNGProps {
     variance: number; //float to 2 dec points
     is_ult: boolean;
     miss_rate?: number;
+    sfx_type: string;
 }
 const convertToStat: { [key: string]: number } = {
     "phys": sm.boss_stats.p_def,
     "mag": sm.boss_stats.m_def
 }
-//try changin it so whatever the miss/crit indicator is, it happens *here*
-//default crit rate is 5%, so 0.05. 1.5x damage, ults cannot crit
-//if crit, play a specific sfx
 
+//if crit or miss, play a specific sfx
+//for moves that don't use rng just look it up in the function itself
+let miss_sfx = new Audio(AttackSfxLookup['miss']);
+let crit_sfx = new Audio(AttackSfxLookup['crit']);
+let healsfx = new Audio(AttackSfxLookup["heal"]);
+let statup_sfx = new Audio(AttackSfxLookup["statup"]);
 export type RNGResult = string | { result: number, crit: boolean };
 function RNG(props: RNGProps) {
+
+    const sfx = new Audio(AttackSfxLookup[props.sfx_type]);
+    sfx.volume = 0.2;
+    console.log("sfx: ", sfx);
+    setTimeout(() => {
+        sfx.play();
+
+    }, 500);
 
     //calc a miss if miss rate is defined
     if (props.miss_rate) {
         let miss = Math.random() < props.miss_rate;
         if (miss) {
+            setTimeout(() => {
+                miss_sfx.play();
+
+            }, 600);
+
             return "Missed!";
         }
     }
@@ -54,6 +67,7 @@ function RNG(props: RNGProps) {
 
     if (crit === true) {
         calculated_damage *= 1.5;
+        crit_sfx.play();
     }
     console.log("is crit: " + crit);
     console.log("calculated damage: " + calculated_damage);
@@ -86,11 +100,12 @@ export const attacks_object: { [attack: string]: Function } = {
             RNG(
                 {
                     min: 4000,
-                    crit_rate: 0.08,
+                    crit_rate: 0.90,
                     phys_or_mag: "phys",
                     variance: 1.2,
                     is_ult: false,
-                    miss_rate: 0.08
+                    miss_rate: 0.08,
+                    sfx_type: "sword"
                 }
             )
         );
@@ -108,7 +123,8 @@ export const attacks_object: { [attack: string]: Function } = {
                     phys_or_mag: "phys",
                     variance: 2.2,
                     is_ult: false,
-                    miss_rate: 0.35
+                    miss_rate: 0.35,
+                    sfx_type: "dice"
                 }
             )
         )
@@ -124,7 +140,8 @@ export const attacks_object: { [attack: string]: Function } = {
                     phys_or_mag: "phys",
                     variance: 1.20,
                     is_ult: false,
-                    miss_rate: 0.08
+                    miss_rate: 0.08,
+                    sfx_type: "sword"
                 }
             )
         );
@@ -156,7 +173,8 @@ export const attacks_object: { [attack: string]: Function } = {
                     phys_or_mag: "phys",
                     variance: 1.10,
                     is_ult: false,
-                    miss_rate: 0.10
+                    miss_rate: 0.10,
+                    sfx_type: "sword"
                 }
             )
         );
@@ -165,6 +183,7 @@ export const attacks_object: { [attack: string]: Function } = {
     //Raises entire parties def for 90 seconds
     //won't return anything
     'Rebellion': function Rebellion() {
+        statup_sfx.play();
         console.log(all_player_defs)
         sm.player_pdef_list.forEach((player_def_ref) => {
             //2.5 cap
@@ -200,12 +219,13 @@ export const attacks_object: { [attack: string]: Function } = {
                     phys_or_mag: "phys",
                     variance: 1.2,
                     is_ult: false,
-                    miss_rate: 0.00
+                    miss_rate: 0.00,
+                    sfx_type: "darkmag"
                 }
             )
         )
     },
-    //Rebellion but for mag def
+    //Rebellion but for mag def, change 
     'Entrapment': function Entrapment() {
 
     },
@@ -219,7 +239,8 @@ export const attacks_object: { [attack: string]: Function } = {
                     phys_or_mag: "mag",
                     variance: 1.2,
                     is_ult: false,
-                    miss_rate: 0.08
+                    miss_rate: 0.08,
+                    sfx_type: "darkmag"
                 }
             )
         )
@@ -235,7 +256,8 @@ export const attacks_object: { [attack: string]: Function } = {
                     phys_or_mag: "mag",
                     variance: 1.2,
                     is_ult: false,
-                    miss_rate: 0.08
+                    miss_rate: 0.08,
+                    sfx_type: "darkmag"
                 }
             )
         )
@@ -254,25 +276,32 @@ export const attacks_object: { [attack: string]: Function } = {
     //light magic atk
     'Pierce Evil': function PierceEvil() {
 
+        healsfx.play();
+
     },
     //heals all by 40% of their max hp
     'Radiant Sky': function RadiantSky() {
+        healsfx.play();
 
     },
     //revives one with 1/2 hp
     'Rebirth': function Rebirth() {
+        healsfx.play();
 
     },
     //heals one by 80% of their max hp
     'Moonlight': function Moonlight() {
+        healsfx.play();
 
     },
     //Removes status effects from one
     'Purification': function Purification() {
+        healsfx.play();
 
     },
     //Fully restores party hp/mp and removes any ailments
     'Supreme Altar': function SupremeAltar() {
+
 
     },
 

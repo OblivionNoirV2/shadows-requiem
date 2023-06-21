@@ -273,7 +273,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                         setIsAttackAreaShown(false);
                                                         setIsAttackMade(false);
 
-                                                    }, 1000);
+                                                    }, 2000);
                                                 }
                                             }}
                                             >
@@ -654,6 +654,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             </main>
         </>
     );
-}
+};
 
 export default MainPage;
