@@ -14,6 +14,7 @@ import {
   BossContext,
   BossContextProvider,
   TurnNumberContextProvider,
+  KnightMPContextProvider
 
 }
   from './Context';
@@ -29,7 +30,9 @@ root.render(
     <BrowserRouter>
       <BossContextProvider>
         <TurnNumberContextProvider>
-          <App />
+          <KnightMPContextProvider>
+            <App />
+          </KnightMPContextProvider>
         </TurnNumberContextProvider>
       </BossContextProvider>
     </BrowserRouter>

@@ -9,6 +9,7 @@ import { TurnNumberContext } from './Context';
 import { RNGResult } from './PlayerActions';
 import { KnightMPContext } from './Context';
 import { new_set_hp } from './PlayerActions';
+import { new_knight_mp } from './PlayerActions';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -263,6 +264,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                     (attack, index) =>
                                         <li key={index} className='atk-btn'>
                                             <button onClick={() => {
+                                                //check for mp here and subtract it
                                                 handleAtkClick(attack);
                                                 setIsAttackAreaShown(true);
 
@@ -376,8 +378,13 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     const { KnightMP, setKnightMP } = useContext(KnightMPContext);
 
     useEffect(() => {
-        setKnightMP(sm.knight_stats.mp);
-    }, [sm.knight_stats.mp]);
+        setKnightMP(new_knight_mp);
+    }, [new_knight_mp]);
+    useEffect(() => {
+        //correct
+        console.log("KnightMP changed to: " + KnightMP);
+    }, [KnightMP]);
+
 
     const [isUltimaReady, setIsUltimaReady] = useState(false);
     //Manage the turn based system
@@ -527,7 +534,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 </section>
                                 <progress className='p-hp' max={sm.knight_stats.hp}></progress>
                                 <div>MP</div>
-                                <progress className='mb-4 p-mb'
+                                <progress className='mb-4 p-mb p-mp'
                                     max={sm.knight_stats.mp}
                                     value={KnightMP}>
                                 </progress>
@@ -566,7 +573,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     value={sm.dmage_stats.hp}>
                                 </progress>
                                 <div>MP</div>
-                                <progress className='mb-4 p-mb' max={sm.dmage_stats.mp}></progress>
+                                <progress className='mb-4 p-mb p-mp'
+                                    max={sm.dmage_stats.mp}>
+
+                                </progress>
                             </span>
                         </li>
                         <li>
@@ -602,7 +612,9 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     value={sm.wmage_stats.hp}>
                                 </progress>
                                 <div>MP</div>
-                                <progress className='mb-4 p-mb'></progress>
+                                <progress className='mb-4 p-mb p-mp'>
+
+                                </progress>
                             </span>
                         </li>
                         <li>
@@ -634,7 +646,9 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     value={sm.rmage_stats.mp}>
                                 </progress>
                                 <div>MP</div>
-                                <progress className='mb-4 p-mb'></progress>
+                                <progress className='mb-4 p-mb p-mp'>
+
+                                </progress>
                             </span>
                         </li>
                         <li className=''>

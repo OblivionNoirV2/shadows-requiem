@@ -59,12 +59,12 @@ interface KnightMPContextValue {
 }
 
 export const KnightMPContext = createContext<KnightMPContextValue>({
-    KnightMP: sm.knight_stats.max_hp,
+    KnightMP: sm.knight_stats.mp,
     setKnightMP: () => { },
 });
 
 export function KnightMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [KnightMP, setKnightMP] = useState(sm.knight_stats.max_hp);
+    const [KnightMP, setKnightMP] = useState(180);
 
     useEffect(() => {
         console.log('KnightMP updated:', KnightMP);

@@ -49,9 +49,7 @@ function RNG(props: RNGProps) {
                 playCount++;
                 setTimeout(playNext, 500);  // Play the next one after 500 ms
             }
-
         }
-
     }
 
     if (props.sfx_count) {
@@ -59,7 +57,6 @@ function RNG(props: RNGProps) {
     } else {
         sfx.play();
     }
-
 
     //calc a miss if miss rate is defined
     if (props.miss_rate) {
@@ -117,12 +114,15 @@ function Randomizer(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
+
+export let new_knight_mp: number = 180;
 //can stack, to a max of +50%
 export const attacks_object: { [attack: string]: Function } = {
     /*knight attacks*/
 
     //Standard attack
     'Sword Slash': function SwordSlash() {
+        new_knight_mp -= 10;
         return (
             RNG(
                 {
@@ -441,6 +441,7 @@ export let is_attack_triggered: boolean = false;
 
 //cannot use state here, so we're doing it this way
 export let new_set_hp: number = 999999;
+
 export function PlayerAttack(attack: string) {
     selected_attack = attack;
     console.log("inside playerattack, attack:" + attack);

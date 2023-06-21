@@ -132,6 +132,11 @@ button:hover {
   color: white;
 }
 
+.p-mp::-moz-progress-bar {
+  background-color: blue;
+  opacity: 0.9;
+}
+
 .boss-prog::-moz-progress-bar {
   background-color: rgb(136, 8, 8);
   border: 0.1rem solid black;

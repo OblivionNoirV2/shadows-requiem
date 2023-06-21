@@ -27,6 +27,8 @@ ev is a percentage, so 0.1 is 10% evasion.
 */
 
 //Need to add seperate max stats for hp/mp
+
+export let new_knight_mp: number = 180;
 export const knight_stats: player_stats = {
     hp: 550,
     max_hp: 550,
