@@ -404,7 +404,6 @@ a:not(.story-link, .story-back) {
 .text-container {
   position: relative;
   box-shadow: 1rem 1rem 1rem 1rem rgba(0, 0, 0, 0.9);
-  background-image: url('./assets/images/bg-and-effects/stonetexture.png');
 }
 
 .text-container:before {

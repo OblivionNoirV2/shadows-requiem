@@ -17,7 +17,9 @@ interface RNGProps {
     variance: number; //float to 2 dec points
     is_ult: boolean;
     miss_rate?: number;
-    sfx_type: string;
+    sfx_type: string;//run multiple times if lightning
+    sfx_count?: number;
+    is_cl?: boolean;
 }
 const convertToStat: { [key: string]: number } = {
     "phys": sm.boss_stats.p_def,
@@ -31,15 +33,33 @@ let crit_sfx = new Audio(AttackSfxLookup['crit']);
 let healsfx = new Audio(AttackSfxLookup["heal"]);
 let statup_sfx = new Audio(AttackSfxLookup["statup"]);
 export type RNGResult = string | { result: number, crit: boolean };
+
 function RNG(props: RNGProps) {
 
     const sfx = new Audio(AttackSfxLookup[props.sfx_type]);
     sfx.volume = 0.2;
     console.log("sfx: ", sfx);
-    setTimeout(() => {
-        sfx.play();
+    let playCount = 0;
+    function playNext() {
+        if (props.sfx_count) {
+            if (playCount < props.sfx_count) {
+                const clone = new Audio(sfx.src);
+                clone.volume = sfx.volume;
+                clone.play();
+                playCount++;
+                setTimeout(playNext, 500);  // Play the next one after 500 ms
+            }
 
-    }, 500);
+        }
+
+    }
+
+    if (props.sfx_count) {
+        playNext();
+    } else {
+        sfx.play();
+    }
+
 
     //calc a miss if miss rate is defined
     if (props.miss_rate) {
@@ -49,8 +69,10 @@ function RNG(props: RNGProps) {
                 miss_sfx.play();
 
             }, 600);
-
-            return "Missed!";
+            //cl only displays the total damage, but keep the sfx
+            if (!props.is_cl) {
+                return "Missed!";
+            }
         }
     }
     //min is the "normal" damage, max is calculated from the variance
@@ -76,19 +98,24 @@ function RNG(props: RNGProps) {
     const result = (
         (calculated_damage / convertToStat[props.phys_or_mag])
     ).toFixed(2);
-
+    let crit_msg: boolean;
+    //don't show the crit message if it's cl, it would be misleading
+    //since it's multiple attacks
+    if (!props.is_cl) {
+        crit_msg = crit;
+    } else {
+        crit_msg = false;
+    }
     console.log("attack result: ", parseInt(result));
     return {
         result: parseInt(result),
-        crit: crit,
+        crit: crit_msg,
     };
 }
 
 function Randomizer(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
 }
-
-
 
 //can stack, to a max of +50%
 export const attacks_object: { [attack: string]: Function } = {
@@ -113,7 +140,7 @@ export const attacks_object: { [attack: string]: Function } = {
     },
     //High risk high reward
     //Can range from 3181 to 23100(max damage with crit)
-    'Whims Of Fate': function WhimsOfFate(): RNGResult {
+    'Whims Of Fate': function WhimsOfFate() {
         console.log("whims of fate")
         return (
             RNG(
@@ -131,7 +158,7 @@ export const attacks_object: { [attack: string]: Function } = {
 
     },
     //med-heavy damage, slightly higher crit rate
-    'Deathblow': function Deathblow(): RNGResult {
+    'Deathblow': function Deathblow() {
         return (
             RNG(
                 {
@@ -150,7 +177,7 @@ export const attacks_object: { [attack: string]: Function } = {
 
     //use icons to indicate stat debuffs for boss
 
-    'Skull Crusher': function SkullCrusher(): RNGResult {
+    'Skull Crusher': function SkullCrusher() {
         //there's a cap on how much you can lower it
         if (sm.boss_stats.p_def > 0.60) {
             if (Randomizer(0, 100) < 50) {
@@ -184,7 +211,6 @@ export const attacks_object: { [attack: string]: Function } = {
     //won't return anything
     'Rebellion': function Rebellion() {
         statup_sfx.play();
-        console.log(all_player_defs)
         sm.player_pdef_list.forEach((player_def_ref) => {
             //2.5 cap
             if (player_def_ref.key in player_def_ref.stat &&
@@ -217,7 +243,7 @@ export const attacks_object: { [attack: string]: Function } = {
                     min: 5700,
                     crit_rate: 0.08,
                     phys_or_mag: "phys",
-                    variance: 1.2,
+                    variance: 1.10,
                     is_ult: false,
                     miss_rate: 0.00,
                     sfx_type: "darkmag"
@@ -226,7 +252,25 @@ export const attacks_object: { [attack: string]: Function } = {
         )
     },
     //Rebellion but for mag def, change 
-    'Entrapment': function Entrapment() {
+    'Crystallize': function Crystallize() {
+        statup_sfx.play();
+        sm.player_mdef_list.forEach((player_def_ref) => {
+            //2.5 cap
+            if (player_def_ref.key in player_def_ref.stat &&
+                player_def_ref.stat[player_def_ref.key] < 2.50) {
+
+                player_def_ref.stat[player_def_ref.key] += 0.25;
+
+                console.log(player_def_ref.stat[player_def_ref.key]);
+
+                setTimeout(() => {
+                    if (player_def_ref.key in player_def_ref.stat) {
+                        player_def_ref.stat[player_def_ref.key] -= 0.25;
+                    }
+                }, 90000);
+            }
+        });
+
 
     },
     //moderate mag attack
@@ -237,14 +281,13 @@ export const attacks_object: { [attack: string]: Function } = {
                     min: 8200,
                     crit_rate: 0.08,
                     phys_or_mag: "mag",
-                    variance: 1.2,
+                    variance: 1.10,
                     is_ult: false,
                     miss_rate: 0.08,
                     sfx_type: "darkmag"
                 }
             )
         )
-
     },
     //heavy mag attack
     "Eclipse": function Eclipse() {
@@ -254,7 +297,7 @@ export const attacks_object: { [attack: string]: Function } = {
                     min: 13000,
                     crit_rate: 0.08,
                     phys_or_mag: "mag",
-                    variance: 1.2,
+                    variance: 1.1,
                     is_ult: false,
                     miss_rate: 0.08,
                     sfx_type: "darkmag"
@@ -308,6 +351,7 @@ export const attacks_object: { [attack: string]: Function } = {
     /*rmage attacks*/
     //Cuts own hp in exchange for huge damage on next turn
     //SS already scales with hp and isn't affected by this
+    //Her gimmick is she does the most damage, but is fragile
     'Border Of Life': function BorderOfLife() {
 
     },
@@ -317,6 +361,25 @@ export const attacks_object: { [attack: string]: Function } = {
     },
 
     'Chain Lightning': function ChainLightning() {
+        //This one is unique in that it runs 2-5 times
+
+        const lightning_results: RNGResult[] = [];
+        const num_of_hits = Randomizer(2, 6);
+
+        return (
+            RNG({
+                min: (4800 * num_of_hits),
+                crit_rate: 0.08,
+                phys_or_mag: "mag",
+                variance: 1.10,
+                is_ult: false,
+                miss_rate: 0.08,
+                sfx_type: "lightning",
+                sfx_count: num_of_hits,
+                is_cl: true
+            })
+
+        )
 
     },
 
@@ -345,7 +408,7 @@ export const knight_ultima = "Thousand Men";
 //Buttons are formed from these 
 export const dmage_attacks = [
     "Mirage Blade",
-    "Entrapment",
+    "Crystallize",
     "Black Fire",
     "Shattered Mirror", //heavily lowers boss m def
     "Eclipse"
@@ -384,16 +447,22 @@ export function PlayerAttack(attack: string) {
     //function returns a damage value
     //temp, will use a global message to display the result
     let result = attacks_object[attack]();
-    console.log(typeof result)
+    console.log("result type:", typeof result)
+
     if (typeof result === "object") {
         new_set_hp -= result.result;
+        //getting NaN here
         console.log("hp_subtracted: ", new_set_hp)
 
     }
-    //use this outcome to display a message
-    //returns either a miss message or an object with the damage and crit message
     return result;
+
 }
+
+//use this outcome to display a message
+//returns either a miss message or an object with the damage and crit message
+
+
 
 
 interface Attack {
