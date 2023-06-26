@@ -51,8 +51,10 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                     <select className=' bg-[#363040]/60 
        py-8 px-6 rounded-2xl text-7xl text-center text-slate-400 glow-ani-border
        diff-select'
-                        onChange={handleDiffChange}>
-                        <option disabled>Select difficulty: </option>
+                        onChange={handleDiffChange} onClick={sfx.playClickSfx}>
+                        <option disabled selected>
+                            Select difficulty
+                        </option>
                         <option
                             title='Reduces boss attack and defense by 50%'
                             value='very_easy'>
@@ -65,8 +67,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                         </option>
                         <option
                             title='Standard, no changes'
-                            value='normal'
-                            selected>Normal
+                            value='normal'>Normal
                         </option>
                         <option
                             title='Raises boss attack and defense by 25%'
@@ -96,10 +97,13 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                             <cite>Volume on symbol: Pixel Perfect</cite>
                             <cite>Volume off symbol: Google</cite>
                             <cite>SFX:
-                                <a href='https://opengameart.org/'>
+                                <a href='https://opengameart.org/'
+                                    target='_blank'>
                                     OpenGameArt.Org,
                                 </a>
-                                <a href='https://www.youtube.com/@SoundEffectsFactory'>
+                                <br></br>
+                                <a href='https://www.youtube.com/@SoundEffectsFactory'
+                                    target='_blank'>
                                     SoundEffectsFactory
 
                                 </a>

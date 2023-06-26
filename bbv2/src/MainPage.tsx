@@ -64,7 +64,6 @@ export const BossArea = () => {
 
         }
 
-
     }, [bossStage]);
 
     //have to specify exact paths because of how webpack works
@@ -372,7 +371,6 @@ const StatusEffectsHash: { [name: string]: string } = {
 
 //then pass the given global state to the playermenu
 export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
-    //const { setBossHP } = useContext(BossHPContext);
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);

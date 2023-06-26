@@ -9,6 +9,7 @@ import firesfx from './assets/sound/sfx/firespell.wav';
 import statup from './assets/sound/sfx/statup.mp3';
 import dicesfx from './assets/sound/sfx/dice.wav';
 import lightningsfx from './assets/sound/sfx/lightning.mp3';
+import glasssfx from './assets/sound/sfx/glassshatter.wav';
 export function playClickSfx() {
     const click = new Audio(clicksfx);
     click.play();
@@ -25,7 +26,8 @@ export const AttackSfxLookup: { [name: string]: string } = {
     'fire': firesfx,
     'statup': statup,
     'dice': dicesfx,
-    'lightning': lightningsfx
+    'lightning': lightningsfx,
+    'glass': glasssfx
 
 
 }

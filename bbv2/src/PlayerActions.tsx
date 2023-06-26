@@ -24,9 +24,13 @@ interface RNGProps {
     sfx_count?: number;
     is_cl?: boolean;
 }
+let phys = sm.boss_stats.p_def;
+let mag = sm.boss_stats.m_def;
 export const getConvertToStat = () => ({
-    "phys": (sm.boss_stats.p_def = boss_stat_changes[selected_difficulty].def),
-    "mag": (sm.boss_stats.m_def = boss_stat_changes[selected_difficulty].def),
+    //currently not updating properly
+    //need seperate variable
+    "phys": (phys * boss_stat_changes[selected_difficulty].def),
+    "mag": (mag * boss_stat_changes[selected_difficulty].def),
 });
 
 
@@ -36,6 +40,7 @@ let miss_sfx = new Audio(AttackSfxLookup['miss']);
 let crit_sfx = new Audio(AttackSfxLookup['crit']);
 let healsfx = new Audio(AttackSfxLookup["heal"]);
 let statup_sfx = new Audio(AttackSfxLookup["statup"]);
+let glass_shatter = new Audio(AttackSfxLookup["glass"]);
 export type RNGResult = string | { result: number, crit: boolean };
 
 function RNG(props: RNGProps) {
@@ -118,7 +123,7 @@ function RNG(props: RNGProps) {
         result: parseInt(result),
         crit: crit_msg,
     };
-}
+};
 
 function Randomizer(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
@@ -137,7 +142,7 @@ export const attacks_object: { [attack: string]: Function } = {
             RNG(
                 {
                     min: 4000,
-                    crit_rate: 0.90,
+                    crit_rate: 0.08,
                     phys_or_mag: "phys",
                     variance: 1.2,
                     is_ult: false,
@@ -146,10 +151,9 @@ export const attacks_object: { [attack: string]: Function } = {
                 }
             )
         );
-
     },
     //High risk high reward
-    //Can range from 3181 to 23100(max damage with crit)
+    //Can range from 3181 to 23100 on normal mode(max damage with crit)
     'Whims Of Fate': function WhimsOfFate() {
         console.log("whims of fate")
         return (
@@ -164,8 +168,7 @@ export const attacks_object: { [attack: string]: Function } = {
                     sfx_type: "dice"
                 }
             )
-        )
-
+        );
     },
     //med-heavy damage, slightly higher crit rate
     'Deathblow': function Deathblow() {
@@ -280,8 +283,6 @@ export const attacks_object: { [attack: string]: Function } = {
                 }, 90000);
             }
         });
-
-
     },
     //moderate mag attack
     'Black Fire': function BlackFire() {
@@ -307,7 +308,7 @@ export const attacks_object: { [attack: string]: Function } = {
                     min: 13000,
                     crit_rate: 0.08,
                     phys_or_mag: "mag",
-                    variance: 1.1,
+                    variance: 1.10,
                     is_ult: false,
                     miss_rate: 0.08,
                     sfx_type: "darkmag"
@@ -316,8 +317,18 @@ export const attacks_object: { [attack: string]: Function } = {
         )
 
     },
-    //cut boss mdef by 0.3 for 30 sec
+    //cut boss mdef by 0.4 for 30 sec
     'Shattered Mirror': function ShatteredMirror() {
+        glass_shatter.play();
+        if (mag > .60) {
+            mag -= .40;
+            console.log("mdef lowered", mag);
+            setTimeout(() => {
+                mag += 0.30;
+                console.log("mdef restored", mag);
+
+            }, 30000);
+        }
 
     },
 
@@ -328,9 +339,20 @@ export const attacks_object: { [attack: string]: Function } = {
     /*wmage attacks*/
     //light magic atk
     'Pierce Evil': function PierceEvil() {
-
         healsfx.play();
-
+        return (
+            RNG(
+                {
+                    min: 3500,
+                    crit_rate: 0.08,
+                    phys_or_mag: "mag",
+                    variance: 1.10,
+                    is_ult: false,
+                    miss_rate: 0.08,
+                    sfx_type: "lightmag"
+                }
+            )
+        )
     },
     //heals all by 40% of their max hp
     'Radiant Sky': function RadiantSky() {
@@ -365,15 +387,26 @@ export const attacks_object: { [attack: string]: Function } = {
     'Border Of Life': function BorderOfLife() {
 
     },
-
+    //high crit rate, high damage
     'Bloody Vengeance': function BloodyVengeance() {
+        return (
+            RNG(
+                {
+                    min: 13000,
+                    crit_rate: 0.20,
+                    phys_or_mag: "phys",
+                    variance: 1.10,
+                    is_ult: false,
+                    miss_rate: 0.08,
+                    sfx_type: "sword"
+                }
+            )
+        )
 
     },
 
     'Chain Lightning': function ChainLightning() {
         //This one is unique in that it runs 2-5 times
-
-        const lightning_results: RNGResult[] = [];
         const num_of_hits = Randomizer(2, 6);
 
         return (
@@ -390,9 +423,8 @@ export const attacks_object: { [attack: string]: Function } = {
             })
 
         )
-
     },
-
+    //Negates boss's next turn (ie he does nothing and it switches back to player)
     'My Turn': function MyTurn() {
 
     },

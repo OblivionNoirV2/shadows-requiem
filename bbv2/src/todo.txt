@@ -1,5 +1,0 @@
-add on/off button for snow animation, since it's computationally heavy
-add "report issue" option 
-
-Next step: add a short fade for the attacks, rather than a click on/off
-
