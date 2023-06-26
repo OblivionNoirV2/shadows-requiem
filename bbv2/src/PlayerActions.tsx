@@ -24,8 +24,10 @@ interface RNGProps {
     sfx_count?: number;
     is_cl?: boolean;
 }
-let phys = sm.boss_stats.p_def;
-let mag = sm.boss_stats.m_def;
+//export so we can use them to display status icons for the boss 
+export let phys = sm.boss_stats.p_def;
+export let mag = sm.boss_stats.m_def;
+
 export const getConvertToStat = () => ({
     //currently not updating properly
     //need seperate variable
@@ -40,6 +42,7 @@ let miss_sfx = new Audio(AttackSfxLookup['miss']);
 let crit_sfx = new Audio(AttackSfxLookup['crit']);
 let healsfx = new Audio(AttackSfxLookup["heal"]);
 let statup_sfx = new Audio(AttackSfxLookup["statup"]);
+let statdown_sfx = new Audio(AttackSfxLookup["statdown"]);
 let glass_shatter = new Audio(AttackSfxLookup["glass"]);
 export type RNGResult = string | { result: number, crit: boolean };
 
@@ -137,6 +140,7 @@ export const attacks_object: { [attack: string]: Function } = {
 
     //Standard attack
     'Sword Slash': function SwordSlash() {
+        //temp, use the lookup in the future
         new_knight_mp -= 10;
         return (
             RNG(
@@ -321,6 +325,10 @@ export const attacks_object: { [attack: string]: Function } = {
     'Shattered Mirror': function ShatteredMirror() {
         glass_shatter.play();
         if (mag > .60) {
+            setTimeout(() => {
+                statdown_sfx.play();
+
+            }, 500)
             mag -= .40;
             console.log("mdef lowered", mag);
             setTimeout(() => {
@@ -329,7 +337,6 @@ export const attacks_object: { [attack: string]: Function } = {
 
             }, 30000);
         }
-
     },
 
     'Radiant Supernova': function RadiantSupernova() {
