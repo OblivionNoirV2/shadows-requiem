@@ -11,10 +11,9 @@ import * as sm from './StatManagement';
 import { PlayerAttack } from './PlayerActions';
 import { BossArea } from './MainPage';
 import {
-  BossContext,
   BossContextProvider,
   TurnNumberContextProvider,
-  KnightMPContextProvider
+  KnightMPContextProvider,
 
 }
   from './Context';

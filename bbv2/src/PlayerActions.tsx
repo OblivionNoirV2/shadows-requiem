@@ -7,6 +7,8 @@ import { type } from 'os';
 import { all_player_defs } from './StatManagement';
 import { AttackSfxLookup, playClickSfx } from './sfxManagement';
 import { stat } from 'fs';
+import { boss_stat_changes } from './StatManagement';
+import { selected_difficulty } from './StartMenu';
 
 
 
@@ -22,8 +24,9 @@ interface RNGProps {
     is_cl?: boolean;
 }
 const convertToStat: { [key: string]: number } = {
-    "phys": sm.boss_stats.p_def,
-    "mag": sm.boss_stats.m_def
+
+    "phys": (sm.boss_stats.p_def * boss_stat_changes[selected_difficulty].def),
+    "mag": (sm.boss_stats.m_def * boss_stat_changes[selected_difficulty].def),
 }
 
 //if crit or miss, play a specific sfx
@@ -36,6 +39,7 @@ export type RNGResult = string | { result: number, crit: boolean };
 
 function RNG(props: RNGProps) {
 
+
     const sfx = new Audio(AttackSfxLookup[props.sfx_type]);
     sfx.volume = 0.2;
     console.log("sfx: ", sfx);
@@ -47,7 +51,7 @@ function RNG(props: RNGProps) {
                 clone.volume = sfx.volume;
                 clone.play();
                 playCount++;
-                setTimeout(playNext, 500);  // Play the next one after 500 ms
+                setTimeout(playNext, 500);
             }
         }
     }
@@ -251,7 +255,7 @@ export const attacks_object: { [attack: string]: Function } = {
             )
         )
     },
-    //Rebellion but for mag def, change 
+    //Rebellion but for mag def
     'Crystallize': function Crystallize() {
         statup_sfx.play();
         sm.player_mdef_list.forEach((player_def_ref) => {
@@ -393,7 +397,11 @@ export const attacks_object: { [attack: string]: Function } = {
     }
 };
 //holds descriptions and mp costs 
-export const AttackEncyclopedia: { [key: string]: [string, number] } = {
+export const AttackEncyclopedia: { [key: string]: { description: string, mp_cost: number } } = {
+    'Sword Slash': {
+        description: "A basic sword slash.",
+        mp_cost: 0
+    }
 
 }
 export const knight_attacks = [

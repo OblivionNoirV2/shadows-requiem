@@ -28,7 +28,7 @@ ev is a percentage, so 0.1 is 10% evasion.
 
 //Need to add seperate max stats for hp/mp
 
-export let new_knight_mp: number = 180;
+
 export const knight_stats: player_stats = {
     hp: 550,
     max_hp: 550,
@@ -75,6 +75,28 @@ export const boss_stats: boss_stats = {
     p_def: 1.00,
     m_def: 1.00,
 };
+//changes that get taken into account when player or boss attacks
+//both def types go up the same
+export const boss_stat_changes: { [difficulty: string]: { atk: number, def: number } } = {
+    easy: {
+        atk: 0.7,
+        def: 0.7
+    },
+    //default, no changes
+    normal: {
+        atk: 1.0,
+        def: 1.0
+    },
+    hard: {
+        atk: 1.3,
+        def: 1.3
+    },
+    nightmare: {
+        atk: 1.6,
+        def: 1.6
+    }
+}
+
 /*These are so we can efficiently loop through and update multiple 
 characters at a time*/
 export const player_mdef_list = [

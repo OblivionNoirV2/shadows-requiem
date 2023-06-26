@@ -1,5 +1,5 @@
 //add a cool flickering animation to the title
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 
 import * as sfx from './sfxManagement';
@@ -7,12 +7,23 @@ interface StartMenuProps {
     on_start: () => void;
 
 }
-
+//use this instead of context because the places it's needed can't use hooks
+export let selected_difficulty = 'normal';
 const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
     const [isCreditsShown, setIsCreditsShown] = useState(false);
+    const [selectedDifficulty, setSelectedDifficulty] = useState('normal');
+    useEffect(() => {
+        selected_difficulty = selectedDifficulty;
+        console.log('selected difficulty:', selected_difficulty);
+    }, [selectedDifficulty]);
     //toggle showing credits on/off
     function handleCreditsClick() {
         setIsCreditsShown(!isCreditsShown);
+    }
+
+    const handleDiffChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setSelectedDifficulty(e.target.value);
+
     }
 
 
@@ -37,6 +48,17 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                             Story
                         </Link>
                     </button>
+                    <select className=' bg-[#363040]/60 
+       py-8 px-6 rounded-2xl text-7xl text-center text-slate-400 glow-ani-border
+       diff-select'
+                        onChange={handleDiffChange}>
+                        <option disabled>Select difficulty: </option>
+                        <option value='easy'>Easy</option>
+                        <option value='normal'>Normal</option>
+                        <option value='hard'>Hard</option>
+                        <option value='nightmare'>Nightmare</option>
+
+                    </select>
                     <button onClick={() => { handleCreditsClick(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
        py-8 px-6 rounded-2xl text-7xl text-slate-400 glow-ani-border'>
                         Credits

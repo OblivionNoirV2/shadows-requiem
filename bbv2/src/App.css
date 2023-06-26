@@ -393,6 +393,10 @@ a:not(.story-link, .story-back) {
 
 }
 
+.diff-select:hover {
+  color: rgb(136, 8, 8);
+  cursor: pointer;
+}
 
 @keyframes crawl {
   0% {
@@ -422,4 +426,9 @@ a:not(.story-link, .story-back) {
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
 
+}
+
+.diff-select>option {
+  font-size: 2rem;
+  color: rgb(136, 8, 8);
 }

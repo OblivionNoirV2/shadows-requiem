@@ -5,7 +5,7 @@ import * as iv from './Inventory';
 import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
 import { BossContext } from './Context';
-import { TurnNumberContext } from './Context';
+import { TurnNumberContext, } from './Context';
 import { RNGResult } from './PlayerActions';
 import { KnightMPContext } from './Context';
 import { new_set_hp } from './PlayerActions';
@@ -40,7 +40,6 @@ interface BossAreaProps {
 
 export const BossArea = () => {
     const [bossStage, setBossStage] = useState(1);
-    //manage boss stage based on hp value 
 
     console.log("rendered bossarea")
     useEffect(() => {
@@ -55,6 +54,8 @@ export const BossArea = () => {
     //update the boss stage based on the hp value
     useEffect(() => {
         if (bossStage === 2) {
+            //Boss gets further buffed or debuffed based on difficulty
+            //when attacking
             sm.boss_stats.m_def = 1.25;
             sm.boss_stats.p_def = 1.25;
         } else if (bossStage === 3) {
@@ -375,6 +376,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
+    //yes this is needed
     const { KnightMP, setKnightMP } = useContext(KnightMPContext);
 
     useEffect(() => {

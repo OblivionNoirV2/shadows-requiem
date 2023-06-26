@@ -78,5 +78,4 @@ export function KnightMPContextProvider({ children }: { children: React.ReactEle
 }
 
 
-//Message context
-//wil most of the time just be ""
+
