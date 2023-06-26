@@ -8,7 +8,7 @@ interface StartMenuProps {
 
 }
 //use this instead of context because the places it's needed can't use hooks
-export let selected_difficulty = 'normal';
+export let selected_difficulty: string = 'normal';
 const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
     const [isCreditsShown, setIsCreditsShown] = useState(false);
     const [selectedDifficulty, setSelectedDifficulty] = useState('normal');

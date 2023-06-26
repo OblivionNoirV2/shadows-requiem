@@ -11,11 +11,12 @@ import { boss_stat_changes } from './StatManagement';
 import { selected_difficulty } from './StartMenu';
 
 
+type phys_or_mag = 'phys' | 'mag';
 
 interface RNGProps {
     min: number;
     crit_rate: number;
-    phys_or_mag: string;
+    phys_or_mag: phys_or_mag;
     variance: number; //float to 2 dec points
     is_ult: boolean;
     miss_rate?: number;
@@ -23,11 +24,11 @@ interface RNGProps {
     sfx_count?: number;
     is_cl?: boolean;
 }
-const convertToStat: { [key: string]: number } = {
+export const getConvertToStat = () => ({
+    "phys": (sm.boss_stats.p_def = boss_stat_changes[selected_difficulty].def),
+    "mag": (sm.boss_stats.m_def = boss_stat_changes[selected_difficulty].def),
+});
 
-    "phys": (sm.boss_stats.p_def * boss_stat_changes[selected_difficulty].def),
-    "mag": (sm.boss_stats.m_def * boss_stat_changes[selected_difficulty].def),
-}
 
 //if crit or miss, play a specific sfx
 //for moves that don't use rng just look it up in the function itself
@@ -38,6 +39,7 @@ let statup_sfx = new Audio(AttackSfxLookup["statup"]);
 export type RNGResult = string | { result: number, crit: boolean };
 
 function RNG(props: RNGProps) {
+    console.log("in rng", selected_difficulty)
 
 
     const sfx = new Audio(AttackSfxLookup[props.sfx_type]);
@@ -93,12 +95,16 @@ function RNG(props: RNGProps) {
         crit_sfx.play();
     }
     console.log("is crit: " + crit);
-    console.log("calculated damage: " + calculated_damage);
 
+    console.log("calculated damage: " + calculated_damage);
+    //won't update properly if I don't do this first?
+    const converted = getConvertToStat();
     //account for defense
     const result = (
-        (calculated_damage / convertToStat[props.phys_or_mag])
+        (calculated_damage / converted[props.phys_or_mag])
     ).toFixed(2);
+    console.log(selected_difficulty)
+    console.log("def value", converted[props.phys_or_mag])
     let crit_msg: boolean;
     //don't show the crit message if it's cl, it would be misleading
     //since it's multiple attacks
