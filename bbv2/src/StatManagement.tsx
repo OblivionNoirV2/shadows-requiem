@@ -78,9 +78,14 @@ export const boss_stats: boss_stats = {
 //changes that get taken into account when player or boss attacks
 //both def types go up the same
 export const boss_stat_changes: { [difficulty: string]: { atk: number, def: number } } = {
+
+    very_easy: {
+        atk: 0.5,
+        def: 0.5
+    },
     easy: {
-        atk: 0.7,
-        def: 0.7
+        atk: 0.75,
+        def: 0.75
     },
     //default, no changes
     normal: {
@@ -88,12 +93,12 @@ export const boss_stat_changes: { [difficulty: string]: { atk: number, def: numb
         def: 1.0
     },
     hard: {
-        atk: 1.3,
-        def: 1.3
+        atk: 1.25,
+        def: 1.25
     },
     nightmare: {
-        atk: 1.6,
-        def: 1.6
+        atk: 1.5,
+        def: 1.5
     }
 }
 

@@ -398,6 +398,10 @@ a:not(.story-link, .story-back) {
   cursor: pointer;
 }
 
+.diff-select>option:hover {
+  cursor: pointer;
+}
+
 @keyframes crawl {
   0% {
     top: 100%;

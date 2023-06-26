@@ -53,11 +53,31 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
        diff-select'
                         onChange={handleDiffChange}>
                         <option disabled>Select difficulty: </option>
-                        <option value='easy'>Easy</option>
-                        <option value='normal'>Normal</option>
-                        <option value='hard'>Hard</option>
-                        <option value='nightmare'>Nightmare</option>
-
+                        <option
+                            title='Reduces boss attack and defense by 50%'
+                            value='very_easy'>
+                            Very Easy
+                        </option>
+                        <option
+                            title='Reduces boss attack and defense by 25%'
+                            value='easy'>
+                            Easy
+                        </option>
+                        <option
+                            title='Standard, no changes'
+                            value='normal'
+                            selected>Normal
+                        </option>
+                        <option
+                            title='Raises boss attack and defense by 25%'
+                            value='hard'>
+                            Hard
+                        </option>
+                        <option
+                            title='Raises boss attack and defense by 50%'
+                            value='nightmare'>
+                            Nightmare
+                        </option>
                     </select>
                     <button onClick={() => { handleCreditsClick(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
        py-8 px-6 rounded-2xl text-7xl text-slate-400 glow-ani-border'>
