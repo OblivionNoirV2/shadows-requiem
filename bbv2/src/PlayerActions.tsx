@@ -135,12 +135,11 @@ function Randomizer(min: number, max: number) {
 
 export let new_knight_mp: number = 180;
 //can stack, to a max of +50%
-export const attacks_object: { [attack: string]: Function } = {
+
+export const attacks_map: Map<string, Function> = new Map<string, Function>([
     /*knight attacks*/
 
-    //Standard attack
-    'Sword Slash': function SwordSlash() {
-        //temp, use the lookup in the future
+    ['Sword Slash', function SwordSlash() {
         new_knight_mp -= 10;
         return (
             RNG(
@@ -155,10 +154,9 @@ export const attacks_object: { [attack: string]: Function } = {
                 }
             )
         );
-    },
-    //High risk high reward
-    //Can range from 3181 to 23100 on normal mode(max damage with crit)
-    'Whims Of Fate': function WhimsOfFate() {
+    }],
+
+    ['Whims Of Fate', function WhimsOfFate() {
         console.log("whims of fate")
         return (
             RNG(
@@ -173,9 +171,9 @@ export const attacks_object: { [attack: string]: Function } = {
                 }
             )
         );
-    },
-    //med-heavy damage, slightly higher crit rate
-    'Deathblow': function Deathblow() {
+    }],
+
+    ['Deathblow', function Deathblow() {
         return (
             RNG(
                 {
@@ -189,13 +187,9 @@ export const attacks_object: { [attack: string]: Function } = {
                 }
             )
         );
-    },
-    //also lowers defense for 60 seconds
+    }],
 
-    //use icons to indicate stat debuffs for boss
-
-    'Skull Crusher': function SkullCrusher() {
-        //there's a cap on how much you can lower it
+    ['Skull Crusher', function SkullCrusher() {
         if (sm.boss_stats.p_def > 0.60) {
             if (Randomizer(0, 100) < 50) {
                 sm.boss_stats.p_def -= parseFloat(0.10.toFixed(2));
@@ -203,9 +197,7 @@ export const attacks_object: { [attack: string]: Function } = {
                 setTimeout(() => {
                     sm.boss_stats.p_def += 0.10;
                     console.log("defense restored", sm.boss_stats.p_def);
-
                 }, 60000);
-
             }
         }
 
@@ -222,11 +214,9 @@ export const attacks_object: { [attack: string]: Function } = {
                 }
             )
         );
-    },
+    }],
 
-    //Raises entire parties def for 90 seconds
-    //won't return anything
-    'Rebellion': function Rebellion() {
+    ['Rebellion', function Rebellion() {
         statup_sfx.play();
         sm.player_pdef_list.forEach((player_def_ref) => {
             //2.5 cap
@@ -244,16 +234,15 @@ export const attacks_object: { [attack: string]: Function } = {
                 }, 90000);
             }
         });
-    },
+    }],
 
-    //ult
-    'Thousand Men': function ThousandMen() {
-
-    },
+    ['Thousand Men', function ThousandMen() {
+        // Function implementation for "Thousand Men"
+    }],
 
     /*mage attacks*/
-    //moderate phys attack, cannot miss
-    'Mirage Blade': function MirageBlade() {
+
+    ['Mirage Blade', function MirageBlade() {
         return (
             RNG(
                 {
@@ -267,9 +256,9 @@ export const attacks_object: { [attack: string]: Function } = {
                 }
             )
         )
-    },
+    }],
     //Rebellion but for mag def
-    'Crystallize': function Crystallize() {
+    ['Crystallize', function Crystallize() {
         statup_sfx.play();
         sm.player_mdef_list.forEach((player_def_ref) => {
             //2.5 cap
@@ -287,9 +276,8 @@ export const attacks_object: { [attack: string]: Function } = {
                 }, 90000);
             }
         });
-    },
-    //moderate mag attack
-    'Black Fire': function BlackFire() {
+    }],
+    ['Black Fire', function BlackFire() {
         return (
             RNG(
                 {
@@ -302,10 +290,9 @@ export const attacks_object: { [attack: string]: Function } = {
                     sfx_type: "darkmag"
                 }
             )
-        )
-    },
-    //heavy mag attack
-    "Eclipse": function Eclipse() {
+        );
+    }],
+    ['Eclipse', function Eclipse() {
         return (
             RNG(
                 {
@@ -318,34 +305,26 @@ export const attacks_object: { [attack: string]: Function } = {
                     sfx_type: "darkmag"
                 }
             )
-        )
-
-    },
-    //cut boss mdef by 0.4 for 30 sec
-    'Shattered Mirror': function ShatteredMirror() {
+        );
+    }],
+    ['Shattered Mirror', function ShatteredMirror() {
         glass_shatter.play();
         if (mag > .60) {
             setTimeout(() => {
                 statdown_sfx.play();
-
             }, 500)
             mag -= .40;
             console.log("mdef lowered", mag);
             setTimeout(() => {
                 mag += 0.30;
                 console.log("mdef restored", mag);
-
             }, 30000);
         }
-    },
+    }],
+    ['Radiant Supernova', function RadiantSupernova() {
 
-    'Radiant Supernova': function RadiantSupernova() {
-
-    },
-
-    /*wmage attacks*/
-    //light magic atk
-    'Pierce Evil': function PierceEvil() {
+    }],
+    ['Pierce Evil', function PierceEvil() {
         healsfx.play();
         return (
             RNG(
@@ -359,43 +338,31 @@ export const attacks_object: { [attack: string]: Function } = {
                     sfx_type: "lightmag"
                 }
             )
-        )
-    },
-    //heals all by 40% of their max hp
-    'Radiant Sky': function RadiantSky() {
+        );
+    }],
+    ['Radiant Sky', function RadiantSky() {
         healsfx.play();
 
-    },
-    //revives one with 1/2 hp
-    'Rebirth': function Rebirth() {
+    }],
+    ['Rebirth', function Rebirth() {
         healsfx.play();
 
-    },
-    //heals one by 80% of their max hp
-    'Moonlight': function Moonlight() {
+    }],
+    ['Moonlight', function Moonlight() {
         healsfx.play();
 
-    },
-    //Removes status effects from one
-    'Purification': function Purification() {
+    }],
+    ['Purification', function Purification() {
         healsfx.play();
 
-    },
-    //Fully restores party hp/mp and removes any ailments
-    'Supreme Altar': function SupremeAltar() {
+    }],
+    ['Supreme Altar', function SupremeAltar() {
 
+    }],
+    ['Border Of Life', function BorderOfLife() {
 
-    },
-
-    /*rmage attacks*/
-    //Cuts own hp in exchange for huge damage on next turn
-    //SS already scales with hp and isn't affected by this
-    //Her gimmick is she does the most damage, but is fragile
-    'Border Of Life': function BorderOfLife() {
-
-    },
-    //high crit rate, high damage
-    'Bloody Vengeance': function BloodyVengeance() {
+    }],
+    ['Bloody Vengeance', function BloodyVengeance() {
         return (
             RNG(
                 {
@@ -408,12 +375,9 @@ export const attacks_object: { [attack: string]: Function } = {
                     sfx_type: "sword"
                 }
             )
-        )
-
-    },
-
-    'Chain Lightning': function ChainLightning() {
-        //This one is unique in that it runs 2-5 times
+        );
+    }],
+    ['Chain Lightning', function ChainLightning() {
         const num_of_hits = Randomizer(2, 6);
 
         return (
@@ -428,33 +392,47 @@ export const attacks_object: { [attack: string]: Function } = {
                 sfx_count: num_of_hits,
                 is_cl: true
             })
+        );
+    }],
+    ['My Turn', function MyTurn() {
 
-        )
-    },
-    //Negates boss's next turn (ie he does nothing and it switches back to player)
-    'My Turn': function MyTurn() {
+    }],
+    ['Scarlet Subversion', function ScarletSubversion() {
 
-    },
+    }],
+    ['Desperation', function Desperation() {
+        return (
+            RNG(
+                {
+                    min: 800,
+                    crit_rate: 0.04,
+                    phys_or_mag: "phys",
+                    variance: 1.10,
+                    is_ult: false,
+                    miss_rate: 0.08,
+                    sfx_type: "punch"
+                }
+            )
+        );
+    }],
+]);
 
-    //ult
-    'Scarlet Subversion': function ScarletSubversion() {
 
-    }
-};
 //holds descriptions and mp costs 
+
 export const AttackEncyclopedia: { [key: string]: { description: string, mp_cost: number } } = {
     'Sword Slash': {
         description: "A basic sword slash.",
         mp_cost: 0
     }
-
 }
 export const knight_attacks = [
     "Sword Slash", //light
     "Whims Of Fate",
     "Deathblow", //med-heavy
     "Rebellion",
-    "Skull Crusher" //very heavy, lowers boss def
+    "Skull Crusher", //very heavy, lowers boss def
+    "Desperation" //Everyone has this. Last resort, weak, costs nothing
 ]
 //ultima should appear as the 6th attack once the bar is full
 export const knight_ultima = "Thousand Men";
@@ -464,7 +442,8 @@ export const dmage_attacks = [
     "Crystallize",
     "Black Fire",
     "Shattered Mirror", //heavily lowers boss m def
-    "Eclipse"
+    "Eclipse",
+    "Desperation"
 ]
 export const dmage_ultima = "Radiant Supernova"
 export const wmage_attacks = [
@@ -473,6 +452,7 @@ export const wmage_attacks = [
     "Rebirth",
     "Moonlight",
     "Purification",
+    "Desperation"
 ]
 export const wmage_ultima = "Supreme Altar"
 export const rmage_attacks = [
@@ -480,7 +460,8 @@ export const rmage_attacks = [
     "Bloody Vengeance",
     "Chain Lightning",
     "My Turn",
-    "Hypervelocity"
+    "Hypervelocity",
+    "Desperation"
 ]
 export const rmage_ultima = "Scarlet Subversion"
 
@@ -500,16 +481,22 @@ export function PlayerAttack(attack: string) {
     console.log("inside playerattack, attack:" + attack);
     //function returns a damage value
     //temp, will use a global message to display the result
-    let result = attacks_object[attack]();
-    console.log("result type:", typeof result)
+    let check = attacks_map.get(attack);
+    if (check) {
+        let result = check();
+        console.log("result type:", typeof result)
 
-    if (typeof result === "object") {
-        new_set_hp -= result.result;
-        //getting NaN here
-        console.log("hp_subtracted: ", new_set_hp)
+        if (typeof result === "object") {
+            new_set_hp -= result.result;
+
+            console.log("hp_subtracted: ", new_set_hp)
+
+        }
+        return result;
 
     }
-    return result;
+
+
 
 }
 
@@ -537,7 +524,11 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
     } else {
         return (
             <img
-                src={require(`./assets/images/player/attacks/${player}/${attack}.png`)}
+                src={
+                    attack == 'Desperation' ?
+                        //no img for desperation, just sfx
+                        null :
+                        require(`./assets/images/player/attacks/${player}/${attack}.png`)}
                 className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl '
                 alt='attack image'
                 style={{ position: 'absolute', top: 0, left: 0 }}

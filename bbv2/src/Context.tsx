@@ -64,7 +64,7 @@ export const KnightMPContext = createContext<KnightMPContextValue>({
 });
 
 export function KnightMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [KnightMP, setKnightMP] = useState(180);
+    const [KnightMP, setKnightMP] = useState(sm.knight_stats.mp);
 
     useEffect(() => {
         console.log('KnightMP updated:', KnightMP);

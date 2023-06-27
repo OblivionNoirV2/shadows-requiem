@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 
 
 export const player_inventory = {
-    "HP Potion": 5,
-    "MP Potion": 5,
+    "HP Potion": 10,
+    "MP Potion": 10,
     "Revive": 4,
 }
 
