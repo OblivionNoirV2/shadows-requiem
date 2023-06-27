@@ -8,6 +8,7 @@ import { BossContext } from './Context';
 import { TurnNumberContext, } from './Context';
 import { RNGResult } from './PlayerActions';
 import { new_set_hp } from './PlayerActions';
+import { selected_difficulty } from './StartMenu';
 
 interface GoBackProps {
     onBackToTitle: () => void;
@@ -38,10 +39,12 @@ interface BossAreaProps {
 }
 
 export const BossArea = () => {
+
     const [bossStage, setBossStage] = useState(1);
 
     console.log("rendered bossarea")
     useEffect(() => {
+        console.log("boss stage updated", selected_difficulty)
         if (new_set_hp >= 666666) {
             setBossStage(1);
         } else if (new_set_hp >= 333333 && new_set_hp < 666666) {

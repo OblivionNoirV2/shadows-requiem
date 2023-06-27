@@ -12,7 +12,7 @@ import { selected_difficulty } from './StartMenu';
 import { player_mdef_map, player_pdef_map } from './StatManagement';
 import { min_max_vals_map } from './StatManagement';
 
-type phys_or_mag = 'phys' | 'mag';
+type phys_or_mag = "phys" | "mag"
 
 interface RNGProps {
     min: number;
@@ -29,14 +29,28 @@ interface RNGProps {
 export let phys = sm.boss_stats.get('p_def');
 export let mag = sm.boss_stats.get('m_def');
 
-let difficulty_stats = boss_stat_changes.get(selected_difficulty);
-export const getConvertToStat = () => (
-    {
+
+export const getConvertToStat = () => {
+    //DO NOT TOUCH
+    const difficulty_stats = boss_stat_changes.get(selected_difficulty);
+
+    let phys = sm.boss_stats.get('p_def');
+    let mag = sm.boss_stats.get('m_def');
+    console.log("phys: ", phys);
+    console.log("mag: ", mag);
+    //stats here are wrong!
+    console.log("difficulty_stats: ", difficulty_stats);
+    //but this is right
+    console.log("selected_difficulty: ", selected_difficulty);
+
+    console.log("diff stats def", difficulty_stats!.def);
+
+    return {
         "phys":
             (
                 phys !== undefined &&
                     difficulty_stats !== undefined ?
-                    phys * difficulty_stats.def : 0 //should never be 0 but it satisifies TS
+                    phys * difficulty_stats.def : 0
             ),
         "mag":
             (
@@ -44,8 +58,9 @@ export const getConvertToStat = () => (
                     difficulty_stats !== undefined ?
                     mag * difficulty_stats.def : 0
             ),
-    }
-);
+    };
+};
+
 
 
 //if crit or miss, play a specific sfx
@@ -118,13 +133,16 @@ function RNG(props: RNGProps) {
 
     console.log("calculated damage: " + calculated_damage);
     //won't update properly if I don't do this first?
+    //this is correct
+    console.log("in rng", selected_difficulty)
     const converted = getConvertToStat();
+
     //account for defense
     const result = (
         (calculated_damage / converted[props.phys_or_mag])
     ).toFixed(2);
-    console.log(selected_difficulty)
-    console.log("def value", converted[props.phys_or_mag])
+
+    //console.log("def value", converted[props.phys_or_mag])
     let crit_msg: boolean;
     //don't show the crit message if it's cl, it would be misleading
     //since it's multiple attacks
@@ -166,6 +184,8 @@ function StatBuffDebuff(stat_map: Map<string, number | undefined>,
     );
 
 }
+const player_def = min_max_vals_map.get("player") as sm.Stats | undefined;
+const bossminmax = min_max_vals_map.get("boss");
 export const attacks_map: Map<string, Function> = new Map([
     /*knight attacks*/
 
@@ -225,12 +245,12 @@ export const attacks_map: Map<string, Function> = new Map([
 
     [
         'Skull Crusher', function SkullCrusher() {
-            let bossminmax = min_max_vals_map.get("boss");
             let boss_pdef = sm.boss_stats.get('p_def');
             //only reduce the defense if it's higher than the threshold
             //of 0.60
             //todo: use a map for that instead of hardcoding
-            if (bossminmax && boss_pdef !== undefined && boss_pdef > 0.60
+            if (bossminmax && boss_pdef !== undefined
+                && boss_pdef > 0.60
                 && Randomizer(0, 100) < bossminmax["p_def"].min) {
                 // Decrease the defense value
                 sm.boss_stats.set('p_def', boss_pdef - parseFloat(0.10.toFixed(2)));
@@ -259,16 +279,20 @@ export const attacks_map: Map<string, Function> = new Map([
         }
     ],
 
-    [
+    [   //raises pdef for all
         'Rebellion', function Rebellion() {
-
-            StatBuffDebuff(player_pdef_map, 0.60, 2.50);
-
+            if (player_def !== undefined) {
+                StatBuffDebuff(
+                    player_pdef_map,
+                    player_def.p_def.min,
+                    player_def.p_def.max
+                );
+            }
         }
     ],
 
     ['Thousand Men', function ThousandMen() {
-        // Function implementation for "Thousand Men"
+
     }],
 
     /*mage attacks*/
@@ -290,11 +314,15 @@ export const attacks_map: Map<string, Function> = new Map([
             )
         }
     ],
-    //Rebellion but for mag def
-    [
+    [   //Rebellion but for mag def
         'Crystallize', function Crystallize() {
-            //use a map for that instead of hardcoding
-            StatBuffDebuff(player_mdef_map, 0.60, 2.50);
+            if (player_def !== undefined) {
+                StatBuffDebuff(
+                    player_mdef_map,
+                    player_def.m_def.min,
+                    player_def.m_def.max
+                );
+            }
         }
     ],
     [
@@ -393,60 +421,69 @@ export const attacks_map: Map<string, Function> = new Map([
     ['Border Of Life', function BorderOfLife() {
 
     }],
-    ['Bloody Vengeance', function BloodyVengeance() {
-        return (
-            RNG(
-                {
-                    min: 13000,
-                    crit_rate: 0.20,
-                    phys_or_mag: "phys",
-                    variance: 1.10,
-                    is_ult: false,
-                    miss_rate: 0.08,
-                    sfx_type: "sword"
-                }
-            )
-        );
-    }],
-    ['Chain Lightning', function ChainLightning() {
-        const num_of_hits = Randomizer(2, 6);
+    [
+        'Bloody Vengeance', function BloodyVengeance() {
+            return (
+                RNG(
+                    {
+                        min: 13000,
+                        crit_rate: 0.20,
+                        phys_or_mag: "phys",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.08,
+                        sfx_type: "sword"
+                    }
+                )
+            );
+        }
+    ],
+    [
+        'Chain Lightning', function ChainLightning() {
+            const num_of_hits = Randomizer(2, 6);
 
-        return (
-            RNG({
-                min: (4800 * num_of_hits),
-                crit_rate: 0.08,
-                phys_or_mag: "mag",
-                variance: 1.10,
-                is_ult: false,
-                miss_rate: 0.08,
-                sfx_type: "lightning",
-                sfx_count: num_of_hits,
-                is_cl: true
-            })
-        );
-    }],
+            return (
+                RNG(
+                    {
+                        min: (4800 * num_of_hits),
+                        crit_rate: 0.08,
+                        phys_or_mag: "mag",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.08,
+                        sfx_type: "lightning",
+                        sfx_count: num_of_hits,
+                        is_cl: true
+                    }
+                )
+            );
+        }
+    ],
     ['My Turn', function MyTurn() {
 
     }],
     ['Scarlet Subversion', function ScarletSubversion() {
 
     }],
-    ['Desperation', function Desperation() {
-        return (
-            RNG(
-                {
-                    min: 800,
-                    crit_rate: 0.04,
-                    phys_or_mag: "phys",
-                    variance: 1.10,
-                    is_ult: false,
-                    miss_rate: 0.08,
-                    sfx_type: "punch"
-                }
-            )
-        );
-    }],
-]);
+    [
+        'Desperation', function Desperation() {
+            return (
+                RNG(
+                    {
+                        min: 800,
+                        crit_rate: 0.04,
+                        phys_or_mag: "phys",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.08,
+                        sfx_type: "punch"
+                    }
+                )
+            );
+        }
+    ],
+]
+);
 
 
 //holds descriptions and mp costs 

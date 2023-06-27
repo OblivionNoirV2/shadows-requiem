@@ -99,6 +99,7 @@ export const boss_stats: StatMap = new Map
 //both def and atk types go up the same
 //These are NOT the actual stat (see above), 
 //just what gets added for the difficulty
+
 export const boss_stat_changes: Map<string, { atk: number, def: number }> = new Map
     (
         [
@@ -145,7 +146,7 @@ interface StatRange {
     max: number;
 }
 
-interface Stats {
+export interface Stats {
     p_def: StatRange;
     m_def: StatRange;
     p_atk: StatRange;
