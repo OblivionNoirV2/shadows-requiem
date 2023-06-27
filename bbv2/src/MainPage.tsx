@@ -7,9 +7,8 @@ import * as sfx from './sfxManagement';
 import { BossContext } from './Context';
 import { TurnNumberContext, } from './Context';
 import { RNGResult } from './PlayerActions';
-import { KnightMPContext } from './Context';
 import { new_set_hp } from './PlayerActions';
-import { new_knight_mp } from './PlayerActions';
+
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -376,16 +375,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
-    //yes this is needed
-    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
-
-    useEffect(() => {
-        setKnightMP(new_knight_mp);
-    }, [new_knight_mp]);
-    useEffect(() => {
-        //correct
-        console.log("KnightMP changed to: " + KnightMP);
-    }, [KnightMP]);
 
 
     const [isUltimaReady, setIsUltimaReady] = useState(false);

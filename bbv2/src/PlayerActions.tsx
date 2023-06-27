@@ -10,7 +10,7 @@ import { stat } from 'fs';
 import { boss_stat_changes } from './StatManagement';
 import { selected_difficulty } from './StartMenu';
 import { player_mdef_map, player_pdef_map } from './StatManagement';
-
+import { min_max_vals_map } from './StatManagement';
 
 type phys_or_mag = 'phys' | 'mag';
 
@@ -145,8 +145,6 @@ function Randomizer(min: number, max: number) {
 }
 
 
-export let new_knight_mp: number = 180;
-//buffs can stack, to a max of 2.5 for each stat
 function StatBuffDebuff(stat_map: Map<string, number | undefined>,
     min_val: number, max_val: number) {
     statup_sfx.play();
@@ -173,7 +171,6 @@ export const attacks_map: Map<string, Function> = new Map([
 
     [
         'Sword Slash', function SwordSlash() {
-            new_knight_mp -= 10;
             return (
                 RNG(
                     {
@@ -228,12 +225,13 @@ export const attacks_map: Map<string, Function> = new Map([
 
     [
         'Skull Crusher', function SkullCrusher() {
+            let bossminmax = min_max_vals_map.get("boss");
             let boss_pdef = sm.boss_stats.get('p_def');
             //only reduce the defense if it's higher than the threshold
             //of 0.60
             //todo: use a map for that instead of hardcoding
-            if (boss_pdef !== undefined && boss_pdef > 0.60 &&
-                Randomizer(0, 100) < 50) {
+            if (bossminmax && boss_pdef !== undefined && boss_pdef > 0.60
+                && Randomizer(0, 100) < bossminmax["p_def"].min) {
                 // Decrease the defense value
                 sm.boss_stats.set('p_def', boss_pdef - parseFloat(0.10.toFixed(2)));
                 console.log("defense lowered", sm.boss_stats.get('p_def'));

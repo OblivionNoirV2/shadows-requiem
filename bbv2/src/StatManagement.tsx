@@ -102,11 +102,11 @@ export const boss_stats: StatMap = new Map
 export const boss_stat_changes: Map<string, { atk: number, def: number }> = new Map
     (
         [
-            ["very_easy", { atk: 0.5, def: 0.5 }],
+            ["very_easy", { atk: 0.50, def: 0.50 }],
             ["easy", { atk: 0.75, def: 0.75 }],
-            ["normal", { atk: 1.0, def: 1.0 }],
+            ["normal", { atk: 1.00, def: 1.00 }],
             ["hard", { atk: 1.25, def: 1.25 }],
-            ["nightmare", { atk: 1.5, def: 1.5 }]
+            ["nightmare", { atk: 1.50, def: 1.50 }]
         ]
     );
 
@@ -140,7 +140,20 @@ export const all_player_defs = new Map([...player_mdef_map, ...player_pdef_map])
 
 //determines how high or low a stat can go through buffs/debuffs. 
 //Same limits shared across all players
-export const min_max_vals_map: Map<string, object> = new Map([
+interface StatRange {
+    min: number;
+    max: number;
+}
+
+interface Stats {
+    p_def: StatRange;
+    m_def: StatRange;
+    p_atk: StatRange;
+    m_atk: StatRange;
+    ev?: StatRange;
+}
+
+export const min_max_vals_map: Map<string, Stats> = new Map([
     [
         "player", {
             "p_def": {
@@ -151,14 +164,21 @@ export const min_max_vals_map: Map<string, object> = new Map([
                 "min": 0.50,
                 "max": 2.20
             },
+            "p_atk": {
+                "min": 0.50,
+                "max": 2.20
+            },
+            "m_atk": {
+                "min": 0.50,
+                "max": 2.20
+            },
             "ev": {
                 "min": 0.00,
                 "max": 0.40
             }
         }
     ],
-    [//remember that difficulty options higher than normal 
-        //may override these values
+    [
         "boss", {
             "p_def": {
                 "min": 0.50,
@@ -168,10 +188,19 @@ export const min_max_vals_map: Map<string, object> = new Map([
                 "min": 0.50,
                 "max": 2.50
             },
+            "p_atk": {
+                "min": 0.50,
+                "max": 2.50
+            },
+            "m_atk": {
+                "min": 0.50,
+                "max": 2.50
+            },
         }
     ]
+]
+)
 
-])
 //probably don't need this
 function UpdateStats(player_name: string, stats_to_update: string[], is_boss: boolean): void {
     const updated_stats = new Map<string, player_stats>();
