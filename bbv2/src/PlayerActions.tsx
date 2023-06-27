@@ -469,7 +469,7 @@ export const knight_attacks = [
     "Whims Of Fate",
     "Deathblow", //med-heavy
     "Rebellion",
-    "Skull Crusher", //very heavy, lowers boss def
+    "Skull Crusher", //very heavy, 50% chance lowers boss def
     "Desperation" //Everyone has this. Last resort, weak, costs nothing
 ]
 //ultima should appear as the 6th attack once the bar is full

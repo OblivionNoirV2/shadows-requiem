@@ -89,11 +89,16 @@ export const boss_stats: StatMap = new Map
             ["max_hp", 999999],
             ["p_def", 1.00],
             ["m_def", 1.00],
+            ["m_atk", 1.00],
+            ["p_atk", 1.00]
         ]
     );
 
 //changes that get taken into account when player or boss attacks
-//both def types go up the same
+//they're multipliers
+//both def and atk types go up the same
+//These are NOT the actual stat (see above), 
+//just what gets added for the difficulty
 export const boss_stat_changes: Map<string, { atk: number, def: number }> = new Map
     (
         [
@@ -133,9 +138,40 @@ export const player_pdef_map: Map<string, number | undefined> = new Map
 
 export const all_player_defs = new Map([...player_mdef_map, ...player_pdef_map])
 
-//link the hp/mp bars to the values here
-//doesn't need to return anything, just update the values
+//determines how high or low a stat can go through buffs/debuffs. 
+//Same limits shared across all players
+export const min_max_vals_map: Map<string, object> = new Map([
+    [
+        "player", {
+            "p_def": {
+                "min": 0.50,
+                "max": 2.20
+            },
+            "m_def": {
+                "min": 0.50,
+                "max": 2.20
+            },
+            "ev": {
+                "min": 0.00,
+                "max": 0.40
+            }
+        }
+    ],
+    [//remember that difficulty options higher than normal 
+        //may override these values
+        "boss", {
+            "p_def": {
+                "min": 0.50,
+                "max": 2.50
+            },
+            "m_def": {
+                "min": 0.50,
+                "max": 2.50
+            },
+        }
+    ]
 
+])
 //probably don't need this
 function UpdateStats(player_name: string, stats_to_update: string[], is_boss: boolean): void {
     const updated_stats = new Map<string, player_stats>();

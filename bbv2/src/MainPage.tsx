@@ -55,12 +55,16 @@ export const BossArea = () => {
     useEffect(() => {
         if (bossStage === 2) {
             //Boss gets further buffed or debuffed based on difficulty
-            //when attacking
+            //when attacking using the multipliers
             sm.boss_stats.set('m_def', 1.25);
             sm.boss_stats.set('p-def', 1.25);
+            sm.boss_stats.set('m_atk', 1.10);
+            sm.boss_stats.set('p_atk', 1.10);
         } else if (bossStage === 3) {
             sm.boss_stats.set('m_def', 1.50);
             sm.boss_stats.set('p-def', 1.50);
+            sm.boss_stats.set('m_atk', 1.20);
+            sm.boss_stats.set('p_atk', 1.20);
 
         }
 
