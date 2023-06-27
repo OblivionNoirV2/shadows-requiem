@@ -9,6 +9,7 @@ import { AttackSfxLookup, playClickSfx } from './sfxManagement';
 import { stat } from 'fs';
 import { boss_stat_changes } from './StatManagement';
 import { selected_difficulty } from './StartMenu';
+import { player_mdef_map, player_pdef_map } from './StatManagement';
 
 
 type phys_or_mag = 'phys' | 'mag';
@@ -25,15 +26,26 @@ interface RNGProps {
     is_cl?: boolean;
 }
 //export so we can use them to display status icons for the boss 
-export let phys = sm.boss_stats.p_def;
-export let mag = sm.boss_stats.m_def;
+export let phys = sm.boss_stats.get('p_def');
+export let mag = sm.boss_stats.get('m_def');
 
-export const getConvertToStat = () => ({
-    //currently not updating properly
-    //need seperate variable
-    "phys": (phys * boss_stat_changes[selected_difficulty].def),
-    "mag": (mag * boss_stat_changes[selected_difficulty].def),
-});
+let difficulty_stats = boss_stat_changes.get(selected_difficulty);
+export const getConvertToStat = () => (
+    {
+        "phys":
+            (
+                phys !== undefined &&
+                    difficulty_stats !== undefined ?
+                    phys * difficulty_stats.def : 0 //should never be 0 but it satisifies TS
+            ),
+        "mag":
+            (
+                mag !== undefined &&
+                    difficulty_stats !== undefined ?
+                    mag * difficulty_stats.def : 0
+            ),
+    }
+);
 
 
 //if crit or miss, play a specific sfx
@@ -134,107 +146,128 @@ function Randomizer(min: number, max: number) {
 
 
 export let new_knight_mp: number = 180;
-//can stack, to a max of +50%
+//buffs can stack, to a max of 2.5 for each stat
+function StatBuffDebuff(stat_map: Map<string, number | undefined>,
+    min_val: number, max_val: number) {
+    statup_sfx.play();
+    stat_map.forEach((value, key, map) => {
+        if (value !== undefined && value < max_val) {
+            map.set(key, value + 0.25);
+            console.log(key, map.get(key));
+            setTimeout(() => {
+                let current_value = map.get(key);
+                //makes sure we don't lower it too low
+                if (current_value !== undefined
+                    && current_value > min_val) {
+                    //Decrease the defense value
+                    map.set(key, current_value - 0.25);
+                }
+            }, 90000);
+        }
+    }
+    );
 
-export const attacks_map: Map<string, Function> = new Map<string, Function>([
+}
+export const attacks_map: Map<string, Function> = new Map([
     /*knight attacks*/
 
-    ['Sword Slash', function SwordSlash() {
-        new_knight_mp -= 10;
-        return (
-            RNG(
-                {
-                    min: 4000,
-                    crit_rate: 0.08,
-                    phys_or_mag: "phys",
-                    variance: 1.2,
-                    is_ult: false,
-                    miss_rate: 0.08,
-                    sfx_type: "sword"
-                }
-            )
-        );
-    }],
-
-    ['Whims Of Fate', function WhimsOfFate() {
-        console.log("whims of fate")
-        return (
-            RNG(
-                {
-                    min: 7000,
-                    crit_rate: 0.35,
-                    phys_or_mag: "phys",
-                    variance: 2.2,
-                    is_ult: false,
-                    miss_rate: 0.35,
-                    sfx_type: "dice"
-                }
-            )
-        );
-    }],
-
-    ['Deathblow', function Deathblow() {
-        return (
-            RNG(
-                {
-                    min: 7800,
-                    crit_rate: 0.12,
-                    phys_or_mag: "phys",
-                    variance: 1.20,
-                    is_ult: false,
-                    miss_rate: 0.08,
-                    sfx_type: "sword"
-                }
-            )
-        );
-    }],
-
-    ['Skull Crusher', function SkullCrusher() {
-        if (sm.boss_stats.p_def > 0.60) {
-            if (Randomizer(0, 100) < 50) {
-                sm.boss_stats.p_def -= parseFloat(0.10.toFixed(2));
-                console.log("defense lowered", sm.boss_stats.p_def);
-                setTimeout(() => {
-                    sm.boss_stats.p_def += 0.10;
-                    console.log("defense restored", sm.boss_stats.p_def);
-                }, 60000);
-            }
-        }
-
-        return (
-            RNG(
-                {
-                    min: 10900,
-                    crit_rate: 0.10,
-                    phys_or_mag: "phys",
-                    variance: 1.10,
-                    is_ult: false,
-                    miss_rate: 0.10,
-                    sfx_type: "sword"
-                }
-            )
-        );
-    }],
-
-    ['Rebellion', function Rebellion() {
-        statup_sfx.play();
-        sm.player_pdef_list.forEach((player_def_ref) => {
-            //2.5 cap
-            if (player_def_ref.key in player_def_ref.stat &&
-                player_def_ref.stat[player_def_ref.key] < 2.50) {
-
-                player_def_ref.stat[player_def_ref.key] += 0.25;
-
-                console.log(player_def_ref.stat[player_def_ref.key]);
-
-                setTimeout(() => {
-                    if (player_def_ref.key in player_def_ref.stat) {
-                        player_def_ref.stat[player_def_ref.key] -= 0.25;
+    [
+        'Sword Slash', function SwordSlash() {
+            new_knight_mp -= 10;
+            return (
+                RNG(
+                    {
+                        min: 4000,
+                        crit_rate: 0.08,
+                        phys_or_mag: "phys",
+                        variance: 1.20,
+                        is_ult: false,
+                        miss_rate: 0.08,
+                        sfx_type: "sword"
                     }
-                }, 90000);
+                )
+            );
+        }
+    ],
+
+    [
+        'Whims Of Fate', function WhimsOfFate() {
+            return (
+                RNG(
+                    {
+                        min: 7000,
+                        crit_rate: 0.35,
+                        phys_or_mag: "phys",
+                        variance: 2.20,
+                        is_ult: false,
+                        miss_rate: 0.35,
+                        sfx_type: "dice"
+                    }
+                )
+            );
+        }
+    ],
+
+    [
+        'Deathblow', function Deathblow() {
+            return (
+                RNG(
+                    {
+                        min: 7800,
+                        crit_rate: 0.12,
+                        phys_or_mag: "phys",
+                        variance: 1.20,
+                        is_ult: false,
+                        miss_rate: 0.08,
+                        sfx_type: "sword"
+                    }
+                )
+            );
+        }
+    ],
+
+    [
+        'Skull Crusher', function SkullCrusher() {
+            let boss_pdef = sm.boss_stats.get('p_def');
+            //only reduce the defense if it's higher than the threshold
+            //of 0.60
+            //todo: use a map for that instead of hardcoding
+            if (boss_pdef !== undefined && boss_pdef > 0.60 &&
+                Randomizer(0, 100) < 50) {
+                // Decrease the defense value
+                sm.boss_stats.set('p_def', boss_pdef - parseFloat(0.10.toFixed(2)));
+                console.log("defense lowered", sm.boss_stats.get('p_def'));
+
+                setTimeout(() => {
+                    // Restore the original defense value
+                    sm.boss_stats.set('p_def', boss_pdef! + parseFloat(0.10.toFixed(2)));
+                    console.log("defense restored", sm.boss_stats.get('p_def'));
+                }, 60000);
+
             }
-        });
-    }],
+            return (
+                RNG(
+                    {
+                        min: 10900,
+                        crit_rate: 0.10,
+                        phys_or_mag: "phys",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.10,
+                        sfx_type: "sword"
+                    }
+                )
+            );
+        }
+    ],
+
+    [
+        'Rebellion', function Rebellion() {
+
+            StatBuffDebuff(player_pdef_map, 0.60, 2.50);
+
+        }
+    ],
 
     ['Thousand Men', function ThousandMen() {
         // Function implementation for "Thousand Men"
@@ -242,104 +275,104 @@ export const attacks_map: Map<string, Function> = new Map<string, Function>([
 
     /*mage attacks*/
 
-    ['Mirage Blade', function MirageBlade() {
-        return (
-            RNG(
-                {
-                    min: 5700,
-                    crit_rate: 0.08,
-                    phys_or_mag: "phys",
-                    variance: 1.10,
-                    is_ult: false,
-                    miss_rate: 0.00,
-                    sfx_type: "darkmag"
-                }
-            )
-        )
-    }],
-    //Rebellion but for mag def
-    ['Crystallize', function Crystallize() {
-        statup_sfx.play();
-        sm.player_mdef_list.forEach((player_def_ref) => {
-            //2.5 cap
-            if (player_def_ref.key in player_def_ref.stat &&
-                player_def_ref.stat[player_def_ref.key] < 2.50) {
-
-                player_def_ref.stat[player_def_ref.key] += 0.25;
-
-                console.log(player_def_ref.stat[player_def_ref.key]);
-
-                setTimeout(() => {
-                    if (player_def_ref.key in player_def_ref.stat) {
-                        player_def_ref.stat[player_def_ref.key] -= 0.25;
+    [
+        'Mirage Blade', function MirageBlade() {
+            return (
+                RNG(
+                    {
+                        min: 5700,
+                        crit_rate: 0.08,
+                        phys_or_mag: "phys",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.00,
+                        sfx_type: "darkmag"
                     }
-                }, 90000);
-            }
-        });
-    }],
-    ['Black Fire', function BlackFire() {
-        return (
-            RNG(
-                {
-                    min: 8200,
-                    crit_rate: 0.08,
-                    phys_or_mag: "mag",
-                    variance: 1.10,
-                    is_ult: false,
-                    miss_rate: 0.08,
-                    sfx_type: "darkmag"
-                }
+                )
             )
-        );
-    }],
-    ['Eclipse', function Eclipse() {
-        return (
-            RNG(
-                {
-                    min: 13000,
-                    crit_rate: 0.08,
-                    phys_or_mag: "mag",
-                    variance: 1.10,
-                    is_ult: false,
-                    miss_rate: 0.08,
-                    sfx_type: "darkmag"
-                }
-            )
-        );
-    }],
-    ['Shattered Mirror', function ShatteredMirror() {
-        glass_shatter.play();
-        if (mag > .60) {
-            setTimeout(() => {
-                statdown_sfx.play();
-            }, 500)
-            mag -= .40;
-            console.log("mdef lowered", mag);
-            setTimeout(() => {
-                mag += 0.30;
-                console.log("mdef restored", mag);
-            }, 30000);
         }
-    }],
+    ],
+    //Rebellion but for mag def
+    [
+        'Crystallize', function Crystallize() {
+            //use a map for that instead of hardcoding
+            StatBuffDebuff(player_mdef_map, 0.60, 2.50);
+        }
+    ],
+    [
+        'Black Fire', function BlackFire() {
+            return (
+                RNG(
+                    {
+                        min: 8200,
+                        crit_rate: 0.08,
+                        phys_or_mag: "mag",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.08,
+                        sfx_type: "darkmag"
+                    }
+                )
+            );
+        }
+    ],
+    [
+        'Eclipse', function Eclipse() {
+            return (
+                RNG(
+                    {
+                        min: 13000,
+                        crit_rate: 0.08,
+                        phys_or_mag: "mag",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.08,
+                        sfx_type: "darkmag"
+                    }
+                )
+            );
+        }
+    ],
+    [
+        'Shattered Mirror', function ShatteredMirror() {
+            glass_shatter.play();
+            if (mag !== undefined && mag > .60) {
+                setTimeout(() => {
+                    statdown_sfx.play();
+                }, 500)
+                mag -= .40;
+                console.log("mdef lowered", mag);
+                setTimeout(() => {
+                    if (mag !== undefined) {
+                        mag += 0.30;
+                        console.log("mdef restored", mag);
+                    }
+
+                }, 30000);
+            }
+        }
+    ],
     ['Radiant Supernova', function RadiantSupernova() {
 
     }],
-    ['Pierce Evil', function PierceEvil() {
-        healsfx.play();
-        return (
-            RNG(
-                {
-                    min: 3500,
-                    crit_rate: 0.08,
-                    phys_or_mag: "mag",
-                    variance: 1.10,
-                    is_ult: false,
-                    miss_rate: 0.08,
-                    sfx_type: "lightmag"
-                }
-            )
-        );
-    }],
+    [
+        'Pierce Evil', function PierceEvil() {
+            healsfx.play();
+            return (
+                RNG(
+                    {
+                        min: 3500,
+                        crit_rate: 0.08,
+                        phys_or_mag: "mag",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.08,
+                        sfx_type: "lightmag"
+                    }
+                )
+            );
+        }
+    ],
     ['Radiant Sky', function RadiantSky() {
         healsfx.play();
 
@@ -420,12 +453,17 @@ export const attacks_map: Map<string, Function> = new Map<string, Function>([
 
 //holds descriptions and mp costs 
 
-export const AttackEncyclopedia: { [key: string]: { description: string, mp_cost: number } } = {
-    'Sword Slash': {
-        description: "A basic sword slash.",
-        mp_cost: 0
-    }
-}
+export const AttackEncyclopedia: Map<string, object> = new Map([
+    [
+        'Sword Slash', {
+            description: "A basic sword slash.",
+            mp_cost: 0
+        }
+    ],
+])
+
+
+
 export const knight_attacks = [
     "Sword Slash", //light
     "Whims Of Fate",

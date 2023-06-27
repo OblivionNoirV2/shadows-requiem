@@ -56,11 +56,11 @@ export const BossArea = () => {
         if (bossStage === 2) {
             //Boss gets further buffed or debuffed based on difficulty
             //when attacking
-            sm.boss_stats.m_def = 1.25;
-            sm.boss_stats.p_def = 1.25;
+            sm.boss_stats.set('m_def', 1.25);
+            sm.boss_stats.set('p-def', 1.25);
         } else if (bossStage === 3) {
-            sm.boss_stats.m_def = 1.50;
-            sm.boss_stats.p_def = 1.50;
+            sm.boss_stats.set('m_def', 1.50);
+            sm.boss_stats.set('p-def', 1.50);
 
         }
 
@@ -117,7 +117,7 @@ export const BossHpBar = () => {
     return (
         <progress className={
             'block h-8 glow-ani-border-black boss-prog w-full'
-        } value={new_set_hp} max={sm.boss_stats.max_hp}></progress>
+        } value={new_set_hp} max={sm.boss_stats.get("max_hp")}></progress>
     )
 }
 
@@ -156,8 +156,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
     const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
 
-    //mp contexts
-    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
 
 
     function HandleItemUse(item: string) {
@@ -532,11 +530,15 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         {UpdateStatusEffects('knight')}
                                     </ul>
                                 </section>
-                                <progress className='p-hp' max={sm.knight_stats.hp}></progress>
+                                <progress className='p-hp'
+                                    max={sm.knight_stats.get('max-hp')}
+                                    value={sm.knight_stats.get('hp')}>
+
+                                </progress>
                                 <div>MP</div>
                                 <progress className='mb-4 p-mb p-mp'
-                                    max={sm.knight_stats.mp}
-                                    value={KnightMP}>
+                                    max={sm.knight_stats.get('max_mp')}
+                                    value={sm.knight_stats.get('mp')}>
                                 </progress>
                             </span>
                         </li>
@@ -569,12 +571,13 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     </ul>
                                 </section>
                                 <progress className='p-hp'
-                                    max={sm.dmage_stats.hp}
-                                    value={sm.dmage_stats.hp}>
+                                    max={sm.dmage_stats.get('max_hp')}
+                                    value={sm.dmage_stats.get('hp')}>
                                 </progress>
                                 <div>MP</div>
                                 <progress className='mb-4 p-mb p-mp'
-                                    max={sm.dmage_stats.mp}>
+                                    max={sm.dmage_stats.get('max-mp')}
+                                    value={sm.dmage_stats.get('mp')}>
 
                                 </progress>
                             </span>
@@ -608,8 +611,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     </ul>
                                 </section>
                                 <progress className='p-hp'
-                                    max={sm.wmage_stats.hp}
-                                    value={sm.wmage_stats.hp}>
+                                    max={sm.wmage_stats.get('max_hp')}
+                                    value={sm.wmage_stats.get('hp')}>
                                 </progress>
                                 <div>MP</div>
                                 <progress className='mb-4 p-mb p-mp'>
@@ -642,11 +645,13 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     </ul>
                                 </section>
                                 <progress className='p-hp'
-                                    max={sm.rmage_stats.hp}
-                                    value={sm.rmage_stats.mp}>
+                                    max={sm.rmage_stats.get('max_hp')}
+                                    value={sm.rmage_stats.get('hp')}>
                                 </progress>
                                 <div>MP</div>
-                                <progress className='mb-4 p-mb p-mp'>
+                                <progress className='mb-4 p-mb p-mp'
+                                    max={sm.rmage_stats.get('max-mp')}
+                                    value={sm.rmage_stats.get('mp')}>
 
                                 </progress>
                             </span>

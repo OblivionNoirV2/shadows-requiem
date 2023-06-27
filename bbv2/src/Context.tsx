@@ -3,12 +3,12 @@ import * as sm from './StatManagement';
 import { PlayerMenu, BossHpBar, BossArea, MainPage } from './MainPage';
 
 interface BossContextValue {
-    BossHP: number;
+    BossHP: number | undefined;
     setBossHP: (value: number) => void;
 }
 
 export const BossContext = createContext<BossContextValue>({
-    BossHP: sm.boss_stats.hp,
+    BossHP: sm.boss_stats.get('max_hp'),
     setBossHP: () => { },
 });
 
@@ -54,17 +54,17 @@ export function TurnNumberContextProvider({ children }: { children: React.ReactE
 //states for MP 
 
 interface KnightMPContextValue {
-    KnightMP: number;
+    KnightMP: number | undefined;
     setKnightMP: (value: number) => void;
 }
 
 export const KnightMPContext = createContext<KnightMPContextValue>({
-    KnightMP: sm.knight_stats.mp,
+    KnightMP: sm.knight_stats.get('max_mp'),
     setKnightMP: () => { },
 });
 
 export function KnightMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [KnightMP, setKnightMP] = useState(sm.knight_stats.mp);
+    const [KnightMP, setKnightMP] = useState(sm.knight_stats.get('max_mp'));
 
     useEffect(() => {
         console.log('KnightMP updated:', KnightMP);
