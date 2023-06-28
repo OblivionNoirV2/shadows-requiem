@@ -4,6 +4,7 @@ import * as sm from './StatManagement';
 import * as iv from './Inventory';
 import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
+import * as e from './Encyclopedia';
 import { BossContext } from './Context';
 import { TurnNumberContext, } from './Context';
 import { RNGResult } from './PlayerActions';
@@ -25,10 +26,10 @@ interface ItemList {
 }
 //match keywords to the lists above
 const player_attacks: AttackList = {
-    knight: pa.knight_attacks,
-    dmage: pa.dmage_attacks,
-    wmage: pa.wmage_attacks,
-    rmage: pa.rmage_attacks
+    knight: e.knight_attacks,
+    dmage: e.dmage_attacks,
+    wmage: e.wmage_attacks,
+    rmage: e.rmage_attacks
 };
 
 
