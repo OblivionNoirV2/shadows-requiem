@@ -156,6 +156,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
                     mp_cost: 20
                 }
             ],
+            //Everyone has this
             [
                 'Desperation', {
                     description: "Absolute last resort, costs nothing but does hardly anything. You are essentially smacking him with a wet noodle. Physical damage.",
@@ -172,7 +173,7 @@ export const knight_attacks = [
     "Deathblow", //med-heavy
     "Rebellion",
     "Skull Crusher", //very heavy, 50% chance lowers boss def
-    "Desperation" //Everyone has this. Last resort, weak, costs nothing
+    "Desperation"
 ]
 //ultima should appear as the 6th attack once the bar is full
 export const knight_ultima = "Thousand Men";

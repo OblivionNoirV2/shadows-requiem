@@ -90,8 +90,8 @@ export const BossArea = () => {
 
     //todo: same images, but wider AR
     return (
-        <main className='boss-container w-full flex flex-col mt-48
-        mr-[42rem]
+        <main className='boss-container flex flex-col mt-48
+        mr-[40rem]
         '>
             <section className='flex flex-col items-center w-[56rem]
              relative'>
@@ -283,8 +283,12 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                     }, 2000);
                                                 }
                                             }}
-                                            >
+                                                title={e.AttackEncyclopedia.get(attack)?.description}>
+
                                                 {attack}
+                                                <span className='ml-2 text-[rgb(93,93,255)]'>
+                                                    {e.AttackEncyclopedia.get(attack)?.mp_cost}
+                                                </span>
                                             </button>
                                         </li>
                                 )
