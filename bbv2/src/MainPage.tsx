@@ -471,11 +471,27 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     }
 
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
+    //Increase by 1 each turn if it's <= 20
+    //Then reset to 0 after used 
+    const [ultValue, setUltValue] = useState(-1);
     //gets checked whenever it's the player's turn
     function HandleUltima() {
 
 
     }
+    useEffect(() => {
+        if (ultValue < 20) {
+            setUltValue(ultValue + 1);
+            //is actually 20 turns, but I need the -1 offset 
+            //or it starts with it already filled a little
+            if (ultValue === 19) {
+                setIsUltimaReady(true);
+            }
+        }
+        console.log("ultValue: " + ultValue);
+
+
+    }, [TurnNumber])
 
     return (
         <>
@@ -658,12 +674,24 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             </span>
                         </li>
                         <li className=''>
-                            {/*Goes up each player turn,by 2, to 20*/}
-                            <progress
-                                className='ultima-bar flex 
+                            {/*Goes up each player turn,by 2, to 20. 
+                            Switches to a button when full
+                            Will pull up a menu of 4 cells as a row*/}
+                            {isUltimaReady ?
+                                <button className='ult-btn text-2xl'>
+                                    <strong>
+                                        Use Ultima
+                                    </strong>
+                                </button>
+                                :
+                                <progress
+                                    className='ultima-bar flex 
                                 justify-start w-2/5 mt-4 h-6'
-                                value={10} max={20}>
-                            </progress>
+                                    value={ultValue} max={20}>
+                                </progress>
+
+                            }
+
                         </li>
                     </ul>
                 </section>

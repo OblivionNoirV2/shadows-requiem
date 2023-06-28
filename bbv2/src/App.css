@@ -232,10 +232,11 @@ the padding from .battle-menu causes issues with pushing things down*/
   border-radius: 0.1rem;
 }
 
-.rainbowglow {
-  /* add this to  ultima when it's ready*/
-  animation: rainbow-bg 2.5s linear;
+.ult-btn {
+  animation: rainbow-bg 5s linear;
   animation-iteration-count: infinite;
+  border: .2rem double white;
+
 }
 
 @keyframes rainbow-bg {
