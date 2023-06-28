@@ -156,7 +156,7 @@ function RNG(props: RNGProps) {
     };
 };
 
-function Randomizer(min: number, max: number) {
+export function Randomizer(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
@@ -575,6 +575,7 @@ export let selected_attack: string | null = null;
 export let is_attack_triggered: boolean = false;
 
 //cannot use state here, so we're doing it this way
+//maybe change to use the map
 export let new_set_hp: number = 999999;
 
 export function PlayerAttack(attack: string) {
@@ -596,15 +597,7 @@ export function PlayerAttack(attack: string) {
         return result;
 
     }
-
-
-
 }
-
-//use this outcome to display a message
-//returns either a miss message or an object with the damage and crit message
-
-
 
 
 interface Attack {
@@ -612,10 +605,7 @@ interface Attack {
     player: string | null;
     isPlayerTurn: boolean;
 }
-//Need to add in checks to make sure it's the right character, 
-//and de select the attack when it's done 
-//Also need to lock the menus when an attack is happening
-//And needs to show when button is clicked, not the character
+
 export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
     console.log("inside show attack:" + player, attack)
 

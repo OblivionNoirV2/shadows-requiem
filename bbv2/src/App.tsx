@@ -6,11 +6,14 @@ import SnowAnimation from './SnowAnimation';
 import ti from './assets/sound/ost/Twilight Imperium.wav';
 //title theme
 import tt from './assets/sound/ost/Forboding.wav';
+import wind from './assets/sound/sfx/Wind.mp3';
+import wind2 from './assets/sound/sfx/wind2.wav';
 import UpdateStats from './StatManagement';
 import StartMenu from './StartMenu';
 import MainPage from './MainPage';
 import * as sm from './StatManagement';
 import Story from './Story';
+import { Randomizer } from './PlayerActions';
 
 //Page will need to completely re-render, so use a hook to flip it
 
@@ -20,7 +23,31 @@ import Story from './Story';
 //contains the boss image and the health bar 
 //will use ternaries to determine stage 
 
+//environmental sfx
+const windSfx = new Audio(wind);
+const windSfx2 = new Audio(wind2);
 
+function scheduleWindSfx() {
+  const interval = Randomizer(15000, 25000);
+  setTimeout(() => {
+    windSfx.play();
+    windSfx.volume = 0.5;
+    scheduleWindSfx();
+  }, interval);
+};
+
+function scheduleWindSfx2() {
+  const interval = Randomizer(10000, 15000);
+  setTimeout(() => {
+    windSfx2.play();
+    windSfx2.volume = 0.5;
+    scheduleWindSfx2();
+  }, interval);
+};
+
+// Initial invocation:
+scheduleWindSfx();
+scheduleWindSfx2();
 
 const App: React.FC = () => {
   const [isMusicOn, setIsMusicOn] = useState(false);
@@ -73,6 +100,7 @@ const App: React.FC = () => {
     current_track.play();
     current_track.loop = true;
 
+
   }
   useEffect(() => {
     if (isMusicOn) {
@@ -122,6 +150,8 @@ const App: React.FC = () => {
           type='audio/wav' />
         <source src='./assets/sound/sfx/selectclick.wav' />
         <source src='./assets/sound/sfx/swordslash.mp3' />
+        <source src='./assets/sound/sfx/Wind.mp3' />
+        <source src='./assets/sound/sfx/wind2.wav' />
 
       </audio>
       <Routes>
