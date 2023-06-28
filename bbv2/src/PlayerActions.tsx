@@ -14,17 +14,7 @@ import { min_max_vals_map } from './StatManagement';
 
 type phys_or_mag = "phys" | "mag"
 
-interface RNGProps {
-    min: number;
-    crit_rate: number;
-    phys_or_mag: phys_or_mag;
-    variance: number; //float to 2 dec points
-    is_ult: boolean;
-    miss_rate?: number;
-    sfx_type: string;//run multiple times if lightning
-    sfx_count?: number;
-    is_cl?: boolean;
-}
+
 
 export const getConvertToStat = () => {
     //DO NOT TOUCH
@@ -69,6 +59,18 @@ let statdown_sfx = new Audio(AttackSfxLookup["statdown"]);
 let glass_shatter = new Audio(AttackSfxLookup["glass"]);
 export type RNGResult = string | { result: number, crit: boolean };
 
+
+interface RNGProps {
+    min: number;
+    crit_rate?: number; //ults don't crit
+    phys_or_mag: phys_or_mag;
+    variance: number; //float to 2 dec points
+    is_ult: boolean;
+    miss_rate?: number;
+    sfx_type: string;//run multiple times if lightning
+    sfx_count?: number;
+    is_cl?: boolean;
+}
 function RNG(props: RNGProps) {
     console.log("in rng", selected_difficulty)
 
@@ -113,7 +115,7 @@ function RNG(props: RNGProps) {
     const max = props.min * props.variance;
     let crit: boolean;
     //bool to check for crit if it's not an ult
-    if (!props.is_ult) {
+    if (!props.is_ult && props.crit_rate) {
         crit = Math.random() < props.crit_rate;
     } else {
         //always false if it's an ult
@@ -287,9 +289,27 @@ export const attacks_map: Map<string, Function> = new Map([
         }
     ],
 
-    ['Thousand Men', function ThousandMen() {
-
-    }],
+    [
+        'Thousand Men', function ThousandMen() {
+            statup_sfx.play();
+            //also reduces boss attack for a bit
+            sm.boss_stats.set('p_atk', parseFloat((sm.boss_stats.get('p_atk')! - 0.30).toFixed(2)));
+            setTimeout(() => {
+                sm.boss_stats.set('p_atk', parseFloat((sm.boss_stats.get('p_atk')! + 0.30).toFixed(2)));
+            }, 90000);
+            return (
+                RNG(
+                    {
+                        min: 55000,
+                        phys_or_mag: "phys",
+                        variance: 1.05,//lower for ults
+                        is_ult: true,
+                        sfx_type: "sword"//change
+                    }
+                )
+            )
+        }
+    ],
 
     /*mage attacks*/
 
@@ -377,9 +397,33 @@ export const attacks_map: Map<string, Function> = new Map([
             }
         }
     ],
-    ['Radiant Supernova', function RadiantSupernova() {
+    [
+        'Radiant Supernova', function RadiantSupernova() {
+            statup_sfx.play();
+            //Also restores her mp a good bit
 
-    }],
+            //make sure it doesn't go over the max
+            if (sm.dmage_stats.get('mp')! + 80 > sm.dmage_stats.get('maxmp')!) {
+                sm.dmage_stats.set('mp', sm.dmage_stats.get('maxmp')!);
+            } else {
+                sm.dmage_stats.set('mp', (sm.dmage_stats.get('mp')! + 80));
+
+            }
+
+            return (
+                RNG(
+                    {
+                        min: 62400,
+                        phys_or_mag: "mag",
+                        variance: 1.05,//lower for ults
+                        is_ult: true,
+                        sfx_type: "sword"//change
+                    }
+                )
+            )
+
+        }
+    ],
     [
         'Pierce Evil', function PierceEvil() {
             healsfx.play();
@@ -398,28 +442,40 @@ export const attacks_map: Map<string, Function> = new Map([
             );
         }
     ],
-    ['Radiant Sky', function RadiantSky() {
-        healsfx.play();
+    [
+        'Radiant Sky', function RadiantSky() {
+            healsfx.play();
 
-    }],
-    ['Rebirth', function Rebirth() {
-        healsfx.play();
+        }
+    ],
+    [
+        'Rebirth', function Rebirth() {
+            healsfx.play();
 
-    }],
-    ['Moonlight', function Moonlight() {
-        healsfx.play();
+        }
+    ],
+    [
+        'Moonlight', function Moonlight() {
+            healsfx.play();
 
-    }],
-    ['Purification', function Purification() {
-        healsfx.play();
+        }
+    ],
+    [
+        'Purification', function Purification() {
+            healsfx.play();
 
-    }],
-    ['Supreme Altar', function SupremeAltar() {
+        }
+    ],
+    [
+        'Supreme Altar', function SupremeAltar() {
 
-    }],
-    ['Border Of Life', function BorderOfLife() {
+        }
+    ],
+    [
+        'Border Of Life', function BorderOfLife() {
 
-    }],
+        }
+    ],
     [
         'Bloody Vengeance', function BloodyVengeance() {
             return (
@@ -459,12 +515,35 @@ export const attacks_map: Map<string, Function> = new Map([
         }
     ],
     //boss does nothing next turn, ie immediately switches back to you
-    ['My Turn', function MyTurn() {
+    [
+        'My Turn', function MyTurn() {
 
-    }],
-    ['Scarlet Subversion', function ScarletSubversion() {
-
-    }],
+        }
+    ],
+    [
+        'Scarlet Subversion', function ScarletSubversion() {
+            //Scales based on her current hp. 
+            //Less hp = more damage
+            const max_dmg = 100250;
+            //then for every hp point she has, 
+            //subtract 250 from the max damage
+            const dmg = max_dmg - (sm.rmage_stats.get('hp')! * 250);
+            //375 hp(max) = 6450 dmg
+            //187 hp = 53450
+            //1 hp = 100000 dmg
+            return (
+                RNG(
+                    {
+                        min: dmg,
+                        phys_or_mag: "mag",
+                        variance: 1.00, //no variance, purely based on hp 
+                        is_ult: true,
+                        sfx_type: "darkmag"//change, want explosion
+                    }
+                )
+            )
+        }
+    ],
     [
         'Desperation', function Desperation() {
             return (
