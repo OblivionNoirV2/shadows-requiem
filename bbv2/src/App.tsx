@@ -45,7 +45,7 @@ function scheduleWindSfx2() {
   }, interval);
 };
 
-// Initial invocation:
+
 scheduleWindSfx();
 scheduleWindSfx2();
 

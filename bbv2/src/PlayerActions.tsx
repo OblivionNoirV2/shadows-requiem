@@ -173,7 +173,7 @@ function StatBuffDebuff(stat_map: Map<string, number | undefined>,
                 //makes sure we don't lower it too low
                 if (current_value !== undefined
                     && current_value > min_val) {
-                    //Decrease the defense value
+                    //revert
                     map.set(key, current_value - 0.25);
                 }
             }, 90000);
@@ -196,7 +196,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "phys",
                         variance: 1.20,
                         is_ult: false,
-                        miss_rate: 0.06,
+                        miss_rate: 0.05,
                         sfx_type: "sword"
                     }
                 )
@@ -232,7 +232,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "phys",
                         variance: 1.20,
                         is_ult: false,
-                        miss_rate: 0.06,
+                        miss_rate: 0.05,
                         sfx_type: "sword"
                     }
                 )
@@ -269,7 +269,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "phys",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.06,
+                        miss_rate: 0.05,
                         sfx_type: "sword"
                     }
                 )
@@ -351,7 +351,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "mag",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.06,
+                        miss_rate: 0.05,
                         sfx_type: "darkmag"
                     }
                 )
@@ -368,7 +368,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "mag",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.06,
+                        miss_rate: 0.05,
                         sfx_type: "darkmag"
                     }
                 )
@@ -392,7 +392,6 @@ export const attacks_map: Map<string, Function> = new Map([
                         sm.boss_stats.set('m_def', mag + parseFloat(0.30.toFixed(2)));
                         console.log("mdef restored", sm.boss_stats.get('m_def'));
                     }
-
                 }, 30000);
             }
         }
@@ -435,7 +434,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "mag",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.06,
+                        miss_rate: 0.05,
                         sfx_type: "lightmag"
                     }
                 )
@@ -486,7 +485,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "phys",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.06,
+                        miss_rate: 0.05,
                         sfx_type: "sword"
                     }
                 )
@@ -505,7 +504,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "mag",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.06,
+                        miss_rate: 0.05,
                         sfx_type: "lightning",
                         sfx_count: num_of_hits,
                         is_cl: true
@@ -549,12 +548,12 @@ export const attacks_map: Map<string, Function> = new Map([
             return (
                 RNG(
                     {
-                        min: 800,
+                        min: 1000,
                         crit_rate: 0.03,
                         phys_or_mag: "phys",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.06,
+                        miss_rate: 0.05,
                         sfx_type: "punch"
                     }
                 )
@@ -616,12 +615,14 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
         return (
             <img
                 src={
-                    attack == 'Desperation' ?
+
+                    attack === 'Desperation' ?
                         //no img for desperation, just sfx
                         null :
                         require(`./assets/images/player/attacks/${player}/${attack}.png`)}
-                className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl '
-                alt='attack image'
+                className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl'
+                //prevents text from showing for desperation
+                alt={attack === 'Desperation' ? undefined : attack}
                 style={{ position: 'absolute', top: 0, left: 0 }}
             />
         );
