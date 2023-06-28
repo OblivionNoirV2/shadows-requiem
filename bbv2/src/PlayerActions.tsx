@@ -25,10 +25,6 @@ interface RNGProps {
     sfx_count?: number;
     is_cl?: boolean;
 }
-//export so we can use them to display status icons for the boss 
-export let phys = sm.boss_stats.get('p_def');
-export let mag = sm.boss_stats.get('m_def');
-
 
 export const getConvertToStat = () => {
     //DO NOT TOUCH
@@ -162,7 +158,7 @@ function Randomizer(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
-
+//for raising all player stats
 function StatBuffDebuff(stat_map: Map<string, number | undefined>,
     min_val: number, max_val: number) {
     statup_sfx.play();
@@ -171,7 +167,7 @@ function StatBuffDebuff(stat_map: Map<string, number | undefined>,
             map.set(key, value + 0.25);
             console.log(key, map.get(key));
             setTimeout(() => {
-                let current_value = map.get(key);
+                const current_value = map.get(key);
                 //makes sure we don't lower it too low
                 if (current_value !== undefined
                     && current_value > min_val) {
@@ -182,7 +178,6 @@ function StatBuffDebuff(stat_map: Map<string, number | undefined>,
         }
     }
     );
-
 }
 const player_def = min_max_vals_map.get("player") as sm.Stats | undefined;
 const bossminmax = min_max_vals_map.get("boss");
@@ -195,11 +190,11 @@ export const attacks_map: Map<string, Function> = new Map([
                 RNG(
                     {
                         min: 4000,
-                        crit_rate: 0.08,
+                        crit_rate: 0.06,
                         phys_or_mag: "phys",
                         variance: 1.20,
                         is_ult: false,
-                        miss_rate: 0.08,
+                        miss_rate: 0.06,
                         sfx_type: "sword"
                     }
                 )
@@ -235,7 +230,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "phys",
                         variance: 1.20,
                         is_ult: false,
-                        miss_rate: 0.08,
+                        miss_rate: 0.06,
                         sfx_type: "sword"
                     }
                 )
@@ -250,15 +245,16 @@ export const attacks_map: Map<string, Function> = new Map([
             //of 0.60
             //todo: use a map for that instead of hardcoding
             if (bossminmax && boss_pdef !== undefined
-                && boss_pdef > 0.60
-                && Randomizer(0, 100) < bossminmax["p_def"].min) {
-                // Decrease the defense value
-                sm.boss_stats.set('p_def', boss_pdef - parseFloat(0.10.toFixed(2)));
+                && boss_pdef > bossminmax["p_def"].min
+                && Randomizer(0, 100) < 50) {
+                statdown_sfx.play();
+                //Decrease the defense value
+                sm.boss_stats.set('p_def', boss_pdef - parseFloat(0.20.toFixed(2)));
                 console.log("defense lowered", sm.boss_stats.get('p_def'));
 
                 setTimeout(() => {
                     // Restore the original defense value
-                    sm.boss_stats.set('p_def', boss_pdef! + parseFloat(0.10.toFixed(2)));
+                    sm.boss_stats.set('p_def', boss_pdef! + parseFloat(0.20.toFixed(2)));
                     console.log("defense restored", sm.boss_stats.get('p_def'));
                 }, 60000);
 
@@ -267,11 +263,11 @@ export const attacks_map: Map<string, Function> = new Map([
                 RNG(
                     {
                         min: 10900,
-                        crit_rate: 0.10,
+                        crit_rate: 0.06,
                         phys_or_mag: "phys",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.10,
+                        miss_rate: 0.06,
                         sfx_type: "sword"
                     }
                 )
@@ -303,7 +299,7 @@ export const attacks_map: Map<string, Function> = new Map([
                 RNG(
                     {
                         min: 5700,
-                        crit_rate: 0.08,
+                        crit_rate: 0.06,
                         phys_or_mag: "phys",
                         variance: 1.10,
                         is_ult: false,
@@ -331,11 +327,11 @@ export const attacks_map: Map<string, Function> = new Map([
                 RNG(
                     {
                         min: 8200,
-                        crit_rate: 0.08,
+                        crit_rate: 0.06,
                         phys_or_mag: "mag",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.08,
+                        miss_rate: 0.06,
                         sfx_type: "darkmag"
                     }
                 )
@@ -348,11 +344,11 @@ export const attacks_map: Map<string, Function> = new Map([
                 RNG(
                     {
                         min: 13000,
-                        crit_rate: 0.08,
+                        crit_rate: 0.06,
                         phys_or_mag: "mag",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.08,
+                        miss_rate: 0.06,
                         sfx_type: "darkmag"
                     }
                 )
@@ -361,17 +357,20 @@ export const attacks_map: Map<string, Function> = new Map([
     ],
     [
         'Shattered Mirror', function ShatteredMirror() {
-            glass_shatter.play();
-            if (mag !== undefined && mag > .60) {
+            let mag = sm.boss_stats.get('m_def');
+
+            if (bossminmax && mag !== undefined
+                && mag > bossminmax["m_def"].min) {
+                glass_shatter.play();
                 setTimeout(() => {
                     statdown_sfx.play();
                 }, 500)
-                mag -= .40;
-                console.log("mdef lowered", mag);
+                sm.boss_stats.set('m_def', mag - parseFloat(0.30.toFixed(2)));
+                console.log("mdef lowered", sm.boss_stats.get('m_def'));
                 setTimeout(() => {
                     if (mag !== undefined) {
-                        mag += 0.30;
-                        console.log("mdef restored", mag);
+                        sm.boss_stats.set('m_def', mag + parseFloat(0.30.toFixed(2)));
+                        console.log("mdef restored", sm.boss_stats.get('m_def'));
                     }
 
                 }, 30000);
@@ -388,11 +387,11 @@ export const attacks_map: Map<string, Function> = new Map([
                 RNG(
                     {
                         min: 3500,
-                        crit_rate: 0.08,
+                        crit_rate: 0.06,
                         phys_or_mag: "mag",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.08,
+                        miss_rate: 0.06,
                         sfx_type: "lightmag"
                     }
                 )
@@ -431,7 +430,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "phys",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.08,
+                        miss_rate: 0.06,
                         sfx_type: "sword"
                     }
                 )
@@ -446,11 +445,11 @@ export const attacks_map: Map<string, Function> = new Map([
                 RNG(
                     {
                         min: (4800 * num_of_hits),
-                        crit_rate: 0.08,
+                        crit_rate: 0.06,
                         phys_or_mag: "mag",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.08,
+                        miss_rate: 0.06,
                         sfx_type: "lightning",
                         sfx_count: num_of_hits,
                         is_cl: true
@@ -459,6 +458,7 @@ export const attacks_map: Map<string, Function> = new Map([
             );
         }
     ],
+    //boss does nothing next turn, ie immediately switches back to you
     ['My Turn', function MyTurn() {
 
     }],
@@ -471,11 +471,11 @@ export const attacks_map: Map<string, Function> = new Map([
                 RNG(
                     {
                         min: 800,
-                        crit_rate: 0.04,
+                        crit_rate: 0.03,
                         phys_or_mag: "phys",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.08,
+                        miss_rate: 0.06,
                         sfx_type: "punch"
                     }
                 )
@@ -485,17 +485,29 @@ export const attacks_map: Map<string, Function> = new Map([
 ]
 );
 
-
+interface AttackData {
+    description: string;
+    mp_cost: number;
+}
 //holds descriptions and mp costs 
 
-export const AttackEncyclopedia: Map<string, object> = new Map([
-    [
-        'Sword Slash', {
-            description: "A basic sword slash.",
-            mp_cost: 0
-        }
-    ],
-])
+export const AttackEncyclopedia: Map<string, AttackData> = new Map
+    (
+        [
+            [
+                'Sword Slash', {
+                    description: "A basic sword slash.",
+                    mp_cost: 5
+                }
+            ],
+            [
+                'Whims Of Fate', {
+                    description: "Is Lady Luck on your side today?",
+                    mp_cost: 15
+                }
+            ]
+        ]
+    )
 
 
 

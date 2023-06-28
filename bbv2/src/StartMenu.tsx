@@ -9,6 +9,7 @@ interface StartMenuProps {
 }
 //use this instead of context because the places it's needed can't use hooks
 export let selected_difficulty: string = 'normal';
+
 const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
     const [isCreditsShown, setIsCreditsShown] = useState(false);
     const [selectedDifficulty, setSelectedDifficulty] = useState('normal');
@@ -52,7 +53,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
        py-8 px-6 rounded-2xl text-7xl text-center text-slate-400 glow-ani-border
        diff-select'
                         onChange={handleDiffChange} onClick={sfx.playClickSfx}>
-                        <option disabled selected>
+                        <option disabled>
                             Select difficulty
                         </option>
                         <option
@@ -66,6 +67,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                             Easy
                         </option>
                         <option
+                            selected
                             title='Standard, no changes'
                             value='normal'>Normal
                         </option>
@@ -93,7 +95,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                             <cite>Programmer: Benjamin Donahue</cite>
                             <cite>Designer: Benjamin Donahue</cite>
                             <cite>Music: Benjamin Donahue</cite>
-                            <cite>Images: Midjourney AI (At least until I can afford an artist)</cite>
+                            <cite>Images: Midjourney AI </cite>
                             <cite>Volume on symbol: Pixel Perfect</cite>
                             <cite>Volume off symbol: Google</cite>
                             <cite>SFX:
