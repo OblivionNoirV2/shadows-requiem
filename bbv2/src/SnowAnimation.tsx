@@ -5,7 +5,7 @@ const SnowAnimation = () => {
     const createDrops = () => {
         //init array to hold the drops
         const drops = [];
-        for (let i = 0; i < 150; i++) {
+        for (let i = 0; i < 120; i++) {
             drops.push(
                 <div className="drop"
                     key={i}

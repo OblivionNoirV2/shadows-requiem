@@ -27,6 +27,8 @@ import { Randomizer } from './PlayerActions';
 const windSfx = new Audio(wind);
 const windSfx2 = new Audio(wind2);
 
+//Putting these in one function causes browser bugs for some reason
+//Makes things freeze up
 function scheduleWindSfx() {
   const interval = Randomizer(15000, 25000);
   setTimeout(() => {

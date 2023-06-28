@@ -76,16 +76,16 @@ function RNG(props: RNGProps) {
 
 
     const sfx = new Audio(AttackSfxLookup[props.sfx_type]);
-    sfx.volume = 0.2;
+    sfx.volume = 0.4;
     console.log("sfx: ", sfx);
-    let playCount = 0;
+    let play_count = 0;
     function playNext() {
         if (props.sfx_count) {
-            if (playCount < props.sfx_count) {
+            if (play_count < props.sfx_count) {
                 const clone = new Audio(sfx.src);
                 clone.volume = sfx.volume;
                 clone.play();
-                playCount++;
+                play_count++;
                 setTimeout(playNext, 500);
             }
         }
@@ -392,12 +392,12 @@ export const attacks_map: Map<string, Function> = new Map([
                         sm.boss_stats.set('m_def', mag + parseFloat(0.30.toFixed(2)));
                         console.log("mdef restored", sm.boss_stats.get('m_def'));
                     }
-                }, 30000);
+                }, 60000);
             }
         }
     ],
     [
-        'Radiant Supernova', function RadiantSupernova() {
+        'Nightmare Supernova', function NightmareSupernova() {
             statup_sfx.play();
             //Also restores her mp a good bit
 
@@ -442,40 +442,57 @@ export const attacks_map: Map<string, Function> = new Map([
         }
     ],
     [
+        //light heal, targets all
         'Radiant Sky', function RadiantSky() {
             healsfx.play();
 
         }
     ],
-    [
+    [ //revives one with 66% hp
         'Rebirth', function Rebirth() {
             healsfx.play();
 
         }
     ],
-    [
+    [   //Big heal, targets one
         'Moonlight', function Moonlight() {
             healsfx.play();
 
         }
     ],
-    [
+    [ //Removes status effects from one
         'Purification', function Purification() {
             healsfx.play();
 
         }
     ],
-    [
+    [   //Heals all, restores mp and removes any debuffs
         'Supreme Altar', function SupremeAltar() {
 
         }
     ],
-    [
+    [   //Huge damage, but sacrifices hp instead of mp
+        //This attack can kill her if she's not careful
+        //Could be used to build up a SS
         'Border Of Life', function BorderOfLife() {
+
+            return (
+                RNG(
+                    {
+                        min: 18500,
+                        crit_rate: 0.06,
+                        phys_or_mag: "mag",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.05,
+                        sfx_type: "BOL" //sparkle?
+                    }
+                )
+            )
 
         }
     ],
-    [
+    [   //Heavy phys, high crit rate
         'Bloody Vengeance', function BloodyVengeance() {
             return (
                 RNG(
@@ -493,6 +510,7 @@ export const attacks_map: Map<string, Function> = new Map([
         }
     ],
     [
+        //Hits 2-5 times 
         'Chain Lightning', function ChainLightning() {
             const num_of_hits = Randomizer(2, 6);
 
@@ -541,6 +559,11 @@ export const attacks_map: Map<string, Function> = new Map([
                     }
                 )
             )
+        }
+    ],
+    [   //like crystallize but for ev
+        'Hypervelocity', function Hypervelocity() {
+
         }
     ],
     [
@@ -626,9 +649,7 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
                 style={{ position: 'absolute', top: 0, left: 0 }}
             />
         );
-
     }
-
 }
 
 
