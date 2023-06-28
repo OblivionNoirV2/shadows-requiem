@@ -115,16 +115,13 @@ export const BossArea = () => {
 }
 
 
-
-interface BossHpBarProps {
-    bossHP: number;
-}
-
 export const BossHpBar = () => {
     return (
         <progress className={
             'block h-8 glow-ani-border-black boss-prog w-full'
-        } value={new_set_hp} max={sm.boss_stats.get("max_hp")}></progress>
+        }
+            value={new_set_hp} max={sm.boss_stats.get("max_hp")}>
+        </progress>
     )
 }
 
@@ -140,7 +137,6 @@ interface PlayerMenuProps {
 }
 
 function bossAttackAlgo() {
-    //something's off with the turn number
 
     console.log("boss attack");
 
@@ -471,14 +467,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     }
 
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
-    //Increase by 1 each turn if it's <= 20
-    //Then reset to 0 after used 
+
+    //Then reset to -1 after used(or 0?)
     const [ultValue, setUltValue] = useState(-1);
-    //gets checked whenever it's the player's turn
-    function HandleUltima() {
-
-
-    }
+    //ult management
     useEffect(() => {
         if (ultValue < 20) {
             setUltValue(ultValue + 1);
@@ -492,6 +484,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
 
     }, [TurnNumber])
+    const [isUltMenuShown, setIsUltMenuShown] = useState(false);
+    function HandleUltMenu() {
+        setIsUltMenuShown(!isUltMenuShown);
+    }
 
     return (
         <>
@@ -673,16 +669,23 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 </progress>
                             </span>
                         </li>
-                        <li className=''>
+                        <li className='flex-row flex'>
                             {/*Goes up each player turn,by 2, to 20. 
                             Switches to a button when full
                             Will pull up a menu of 4 cells as a row*/}
                             {isUltimaReady ?
-                                <button className='ult-btn text-2xl'>
+                                <button className={
+                                    !isUltMenuShown ? 'ult-btn text-2xl' : 'ult-close-btn'
+                                }
+                                    onClick={HandleUltMenu}>
                                     <strong>
-                                        Use Ultima
+                                        {
+                                            isUltMenuShown ?
+                                                'Close' : 'Use Ultima'
+                                        }
                                     </strong>
                                 </button>
+
                                 :
                                 <progress
                                     className='ultima-bar flex 
@@ -691,9 +694,26 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 </progress>
 
                             }
+                            {
+                                isUltMenuShown &&
+                                <div className='flex flex-row'>
+                                    {e.ultimas.map((attack, index) => {
+                                        return (
+                                            <ul>
+                                                <li className='ult-atk-btn'>
+                                                    <button key={index}>
+                                                        {attack}
+                                                    </button>
+                                                </li>
+                                            </ul>
 
+                                        )
+                                    })}
+                                </div>
+                            }
                         </li>
                     </ul>
+
                 </section>
                 <section className=''>
                     <BossArea

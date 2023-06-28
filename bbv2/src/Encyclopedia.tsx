@@ -176,7 +176,7 @@ export const knight_attacks = [
     "Desperation"
 ]
 //ultima should appear as the 6th attack once the bar is full
-export const knight_ultima = "Thousand Men";
+
 //Buttons are formed from these 
 export const dmage_attacks = [
     "Mirage Blade",
@@ -186,7 +186,7 @@ export const dmage_attacks = [
     "Eclipse",
     "Desperation"
 ]
-export const dmage_ultima = "Nightmare Supernova"
+
 export const wmage_attacks = [
     "Pierce Evil",
     "Radiant Sky",
@@ -195,7 +195,7 @@ export const wmage_attacks = [
     "Purification",
     "Desperation"
 ]
-export const wmage_ultima = "Supreme Altar"
+
 export const rmage_attacks = [
     "Border Of Life",
     "Bloody Vengeance",
@@ -203,4 +203,11 @@ export const rmage_attacks = [
     "My Turn",
     "Hypervelocity",
     "Desperation"
+]
+
+export const ultimas = [
+    "Thousand Men",
+    "Nightmare Supernova",
+    "Supreme Altar",
+    "Scarlet Subversion"
 ]

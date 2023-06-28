@@ -205,9 +205,6 @@ html {
 .battle-menu {
   font-size: x-large;
   color: white;
-  background-color: rgba(0, 0, 0, 0.15);
-  backdrop-filter: blur(1rem);
-  -webkit-backdrop-filter: blur(1rem);
 
   padding: 0.3rem 0.2rem 0.3rem 0.2rem;
   border: 0.2rem solid black;
@@ -215,12 +212,12 @@ html {
 
 }
 
+
+
 .battle-menu>li,
 .atk-btn {
   width: 100%;
-  /* adjust as needed */
   height: 100%;
-  /* adjust as needed */
   padding: 0 0.1rem 0 0.1rem;
 }
 
@@ -406,4 +403,30 @@ a:not(.story-link, .story-back) {
 .diff-select>option {
   font-size: 2rem;
   color: rgb(136, 8, 8);
+}
+
+.ult-atk-btn {
+  font-size: 1.2rem;
+  margin-left: .25rem;
+  border-radius: 1rem;
+  background-color: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(1rem);
+  -webkit-backdrop-filter: blur(1rem);
+  border: 0.2rem solid black;
+  width: 10rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+  min-height: 7rem;
+  color: white;
+  white-space: pre-wrap;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ult-close-btn {
+  border: .2rem solid white;
+  color: white;
+  font-size: 1.3rem;
+  background-color: black;
 }
