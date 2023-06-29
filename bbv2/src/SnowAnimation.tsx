@@ -2,24 +2,24 @@ import React from 'react';
 import './snow.css';
 
 const SnowAnimation = () => {
-    const createDrops = () => {
-        //init array to hold the drops
-        const drops = [];
-        for (let i = 0; i < 120; i++) {
-            drops.push(
-                <div className="drop"
+    const createFlakes = () => {
+        //init array to hold the snowflakes
+        const flakes = [];
+        for (let i = 0; i < 175; i++) {
+            flakes.push(
+                <div className="flake"
                     key={i}
                     style={{
-                        animationDuration: `${Math.random() * 3 + 2.5}s`,
+                        animationDuration: `${Math.random() * 3 + 3.5}s`,
                         animationDelay: `${Math.random() * 1}s`,
                         left: `${Math.random() * 100}vw`
                     }}
                 />);
         }
-        return drops;
+        return flakes;
     };
 
-    return <div className="snow">{createDrops()}</div>;
+    return <div className="snow">{createFlakes()}</div>;
 };
 
 export default SnowAnimation;

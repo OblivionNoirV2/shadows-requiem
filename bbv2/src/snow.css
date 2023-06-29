@@ -7,22 +7,25 @@
     right: 0;
     bottom: 0;
     overflow: hidden;
-    opacity: 0.8;
     z-index: 3;
 }
 
-.drop {
-    background: rgba(255, 255, 255, 0.935);
-    width: 0.4rem;
-    height: 0.6rem;
+.flake {
+    background-image: url('assets/images/bg-and-effects/snowflake.png');
+    background-size: cover;
+    width: .8rem;
+    height: .8rem;
     position: absolute;
-    bottom: 100%;
     animation: fall linear infinite;
-    border-radius: 100%;
+    opacity: 0.75;
 }
 
 @keyframes fall {
-    to {
-        transform: translateY(100vh);
+    0% {
+        transform: translateY(0vh) rotate(0deg);
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(360deg);
     }
 }
