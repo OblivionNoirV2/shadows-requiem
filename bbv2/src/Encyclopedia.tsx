@@ -110,7 +110,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             ],
             [
                 'Moonlight', {
-                    description: "Heal one ally by a large amount",
+                    description: "Heal one ally by a large amount.",
                     mp_cost: 20
                 }
             ],
@@ -128,7 +128,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             //rmage
             [   //Since this one CAN kill you, there's no need to check for sufficient hp
                 'Border Of Life', {
-                    description: "Sacrifice your own life force to deal huge magic damage. Uses HP insteasd of MP.",
+                    description: "Sacrifice your own life force to deal huge magic damage. Uses HP instead of MP.",
                     mp_cost: 0
                 }
             ],
@@ -144,9 +144,9 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
                     mp_cost: 35
                 }
             ],
-            [ //Short timer, 15 sec or so
+            [ //Short timer, 20 sec or so
                 'My Turn', {
-                    description: "Negates the King's turns for a very short period",
+                    description: "Negates the King's turns for a very short period.",
                     mp_cost: 40
                 }
             ],

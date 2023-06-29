@@ -1,0 +1,1 @@
+add a page in start menu that holds encyclopedia data for attacks and items
