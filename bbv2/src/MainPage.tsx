@@ -488,7 +488,17 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     function HandleUltMenu() {
         setIsUltMenuShown(!isUltMenuShown);
     }
+    //Match the ult buttons to their appropriate styling
+    const ultBtnClassLookup: Map<string, string> = new Map(
+        [
+            ["Thousand Men", "knight-ult-btn"],
+            ["Nightmare Supernova", "dmage-ult-btn"],
+            ["Supreme Altar", "wmage-ult-btn"],
+            ["Scarlet Subversion", "rmage-ult-btn"]
 
+        ]
+    );
+    //For mobile, move the characters under the boss and enable scroll
     return (
         <>
             {/*score tracker*/}
@@ -502,7 +512,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
                 {/*party members*/}
                 <section className='party-col w-full h-full flex 
-                flex-col -mt-4 ml-4'>
+                 -mt-4 ml-4'>
                     <ul className='w-full'>
                         <li>
                             <div>
@@ -522,7 +532,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     : undefined
                             }
                                 className={
-                                    selectedCharacter === 'knight' ? 'is-selected' : 'is-not-selected'}>
+                                    selectedCharacter === 'knight' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
                                 <img src={require('./assets/images/player/sprites/knight.png')}
                                     alt='knight'></img>
                             </button>
@@ -561,7 +571,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     () => HandleSelection("dmage")
                                     : undefined
                             }
-                                className={selectedCharacter === 'dmage' ? 'is-selected' : 'is-not-selected'}>
+                                className={selectedCharacter === 'dmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
                                 <img src={require('./assets/images/player/sprites/dmage.png')}
                                     alt='dark mage'></img>
                             </button>
@@ -601,7 +611,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     () => HandleSelection("wmage") :
                                     undefined
                             }
-                                className={selectedCharacter === 'wmage' ? 'is-selected' : 'is-not-selected'}>
+                                className={selectedCharacter === 'wmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
                                 <img src={require('./assets/images/player/sprites/wmage.png')}
                                     alt='white mage'></img>
                             </button>
@@ -635,7 +645,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                         </li>
                         <li>
                             <button onClick={() => HandleSelection("rmage")}
-                                className={selectedCharacter === 'rmage' ? 'is-selected' : 'is-not-selected'}>
+                                className={selectedCharacter === 'rmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
                                 <img src={require('./assets/images/player/sprites/rmage.png')}
                                     alt='red mage'></img>
                             </button>
@@ -675,7 +685,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             Will pull up a menu of 4 cells as a row*/}
                             {isUltimaReady ?
                                 <button className={
-                                    !isUltMenuShown ? 'ult-btn text-2xl' : 'ult-close-btn'
+                                    !isUltMenuShown ? 'ult-btn text-2xl ' : 'ult-close-btn'
                                 }
                                     onClick={HandleUltMenu}>
                                     <strong>
@@ -700,8 +710,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     {e.ultimas.map((attack, index) => {
                                         return (
                                             <ul>
-                                                <li className='ult-atk-btn'>
-                                                    <button key={index}>
+                                                <li >
+                                                    <button key={index} className={`ult-atk-btn ${ultBtnClassLookup.get(attack)}`}>
                                                         {attack}
                                                     </button>
                                                 </li>

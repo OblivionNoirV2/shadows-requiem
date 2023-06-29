@@ -123,7 +123,6 @@ const App: React.FC = () => {
   //start with false state, to render the start menu
   const [isGameStarted, setIsGameStarted] = useState(false);
 
-  const is_mobile = window.innerWidth <= 768;
 
 
   const navigate = useNavigate();
@@ -168,16 +167,7 @@ const App: React.FC = () => {
       }
       <SnowOnOff />
 
-      <main>
-        {is_mobile && (
-          <>
-            <h1 className='flex m-auto justify-center text-white 
-            text-4xl'>
-              Sorry, this game isn't meant for mobile devices
-            </h1>
-          </>
-        )}
-      </main>
+
     </>
 
   );

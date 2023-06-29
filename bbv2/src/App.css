@@ -99,8 +99,8 @@ html {
   margin-top: 0.75rem;
 }
 
-/*this doesn't apply to the characters or menus*/
-button:hover {
+/*this */
+.character-btn:hover {
   cursor: pointer;
   border-color: darkblue;
 }
@@ -209,7 +209,9 @@ html {
   padding: 0.3rem 0.2rem 0.3rem 0.2rem;
   border: 0.2rem solid black;
   border-radius: 1rem;
-
+  background-color: rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(1rem);
+  -webkit-backdrop-filter: blur(1rem);
 }
 
 
@@ -219,6 +221,7 @@ html {
   width: 100%;
   height: 100%;
   padding: 0 0.1rem 0 0.1rem;
+
 }
 
 /*They are seperate because if put into the same class 
@@ -235,6 +238,8 @@ the padding from .battle-menu causes issues with pushing things down*/
   border: .2rem double white;
 
 }
+
+
 
 @keyframes rainbow-bg {
 
@@ -288,14 +293,6 @@ the padding from .battle-menu causes issues with pushing things down*/
   }
 }
 
-.signup-form>label {
-  margin-top: 1rem;
-}
-
-.signup-form>input {
-  border-radius: 0.1rem;
-}
-
 .fade-out {
   animation: fade-out 3s linear;
 }
@@ -316,7 +313,6 @@ the padding from .battle-menu causes issues with pushing things down*/
   right: 1rem;
   width: 3.5rem;
   height: 2rem;
-  /* Allow the container to expand to accommodate the text and the switch */
 }
 
 .snow-switch-container>h4 {
@@ -409,19 +405,80 @@ a:not(.story-link, .story-back) {
   font-size: 1.2rem;
   margin-left: .25rem;
   border-radius: 1rem;
-  background-color: rgba(0, 0, 0, 0.15);
+  background-color: rgba(134, 134, 134, 0.15);
   backdrop-filter: blur(1rem);
   -webkit-backdrop-filter: blur(1rem);
   border: 0.2rem solid black;
   width: 10rem;
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
   min-height: 7rem;
-  color: white;
   white-space: pre-wrap;
   text-align: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: bold;
+}
+
+@keyframes greyscale-border {
+  0% {
+    border-color: rgb(0, 0, 0);
+  }
+
+  50% {
+    border-color: rgb(65, 64, 64);
+  }
+
+  100% {
+    border-color: rgb(139, 139, 139);
+  }
+}
+
+@keyframes purple-border {
+  0% {
+    border-color: rgb(19, 0, 25);
+  }
+
+  50% {
+    border-color: rgb(66, 1, 86);
+  }
+
+  100% {
+    bborder-color: rgb(139, 2, 181);
+  }
+}
+
+@keyframes whitescale-border {
+  0% {
+    border-color: rgb(255, 255, 255);
+  }
+
+  50% {
+    border-color: rgb(152, 217, 252);
+  }
+
+  100% {
+    border-color: rgb(86, 212, 251);
+  }
+}
+
+@keyframes red-border {
+  0% {
+    border-color: rgb(50, 0, 0);
+  }
+
+  50% {
+    border-color: rgb(121, 1, 1);
+  }
+
+  100% {
+    border-color: rgb(255, 0, 0);
+  }
+}
+
+.ult-atk-btn:hover {
+  animation: rainbow-border 1s linear infinite;
+
 }
 
 .ult-close-btn {
@@ -429,4 +486,36 @@ a:not(.story-link, .story-back) {
   color: white;
   font-size: 1.3rem;
   background-color: black;
+}
+
+.knight-ult-btn {
+  color: black;
+}
+
+.knight-ult-btn:hover {
+  animation: greyscale-border 1s linear infinite;
+}
+
+.dmage-ult-btn {
+  color: rgb(219, 1, 231);
+}
+
+.dmage-ult-btn:hover {
+  animation: purple-border 1s linear infinite;
+}
+
+.wmage-ult-btn {
+  color: white
+}
+
+.wmage-ult-btn:hover {
+  animation: whitescale-border 1s linear infinite;
+}
+
+.rmage-ult-btn {
+  color: rgb(255, 0, 0);
+}
+
+.rmage-ult-btn:hover {
+  animation: red-border 1s linear infinite;
 }
