@@ -144,17 +144,7 @@ const App: React.FC = () => {
   return (
 
     <>
-      <audio>
-        <source src={ti}
-          type='audio/wav' />
-        <source src={tt}
-          type='audio/wav' />
-        <source src='./assets/sound/sfx/selectclick.wav' />
-        <source src='./assets/sound/sfx/swordslash.mp3' />
-        <source src='./assets/sound/sfx/Wind.mp3' />
-        <source src='./assets/sound/sfx/wind2.wav' />
 
-      </audio>
       <Routes>
         <Route path='/' element={<StartMenu on_start={startGame} />} />
         <Route path='/Game' element={<MainPage onBackToTitle={HandleBackToTitle} />} />
