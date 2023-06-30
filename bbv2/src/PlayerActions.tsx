@@ -602,7 +602,7 @@ export let new_set_hp: number = 999999;
 
 export function PlayerAttack(attack: string) {
     selected_attack = attack;
-    console.log("inside playerattack, attack:" + attack);
+    console.log("inside playerattack,selected attack:" + attack);
     //function returns a damage value
     //temp, will use a global message to display the result
     let check = attacks_map.get(attack);
@@ -625,30 +625,62 @@ export function PlayerAttack(attack: string) {
 interface Attack {
     attack: string | null;
     player: string | null;
-    isPlayerTurn: boolean;
+    is_player_turn: boolean;
+    is_ultima: boolean;
 }
+const UltPathLookup: Map<string, string> = new Map(
+    [
+        [
+            'Thousand Men', require('./assets/images/player/attacks/knight/Thousand Men.png')
 
-export const ShowAttack: React.FC<Attack> = ({ attack, player }) => {
+        ],
+        [
+            'Nightmare Supernova', require('./assets/images/player/attacks/dmage/Nightmare Supernova.png')
+        ],
+        [
+            'Supreme Altar', require('./assets/images/player/attacks/wmage/Supreme Altar.png')
+        ],
+        [
+            'Scarlet Subversion', require('./assets/images/player/attacks/rmage/Scarlet Subversion.png')
+        ],
+    ]
+)
+
+export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
+    //seperate image lookup for the ults
     console.log("inside show attack:" + player, attack)
-
-    //console.log("turn number:" + turn_number)
-    if (player === null || attack === null) {
-        return null;
-    } else {
+    //Recieving false when it should not be
+    console.log("is_ultima:", is_ultima)
+    if (is_ultima === true) {
         return (
             <img
                 src={
-
-                    attack === 'Desperation' ?
-                        //no img for desperation, just sfx
-                        null :
-                        require(`./assets/images/player/attacks/${player}/${attack}.png`)}
+                    attack !== null ?
+                        UltPathLookup.get(attack) : undefined}
                 className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl'
-                //prevents text from showing for desperation
-                alt={attack === 'Desperation' ? undefined : attack}
-                style={{ position: 'absolute', top: 0, left: 0 }}
-            />
-        );
+                style={{ position: 'absolute', top: 0, left: 0 }}>
+            </img>
+
+        )
+
+    } else {
+        if (player === null || attack === null) {
+            return null;
+        } else {
+            return (
+                <img
+                    src={
+                        attack === 'Desperation' ?
+                            //no img for desperation, just sfx
+                            null :
+                            require(`./assets/images/player/attacks/${player}/${attack}.png`)}
+                    className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl'
+                    //prevents text from showing for desperation
+                    alt={attack === 'Desperation' ? undefined : attack}
+                    style={{ position: 'absolute', top: 0, left: 0 }}
+                />
+            );
+        }
     }
 }
 

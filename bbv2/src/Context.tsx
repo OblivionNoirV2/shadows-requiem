@@ -97,6 +97,77 @@ export function AttackShownContextProvider({ children }: { children: React.React
         </AttackShownContext.Provider>
     )
 }
+
+export interface CurrentAttackContextValue {
+    currentAttack: string;
+    setCurrentAttack: (value: string) => void;
+}
+export const CurrentAttackContext = createContext<CurrentAttackContextValue>({
+    currentAttack: '',
+    setCurrentAttack: () => { },
+})
+
+export function CurrentAttackContextProvider({ children }: { children: React.ReactElement }) {
+    const [currentAttack, setCurrentAttack] = useState('');
+
+    useEffect(() => {
+        console.log('CurrentAttack updated:', currentAttack);
+    }, [currentAttack]);
+
+    return (
+        <CurrentAttackContext.Provider value={{ currentAttack, setCurrentAttack }}>
+            {children}
+        </CurrentAttackContext.Provider>
+    )
+}
+
+export interface AttackMadeContextValue {
+    isAttackMade: boolean;
+    setIsAttackMade: (value: boolean) => void;
+}
+
+export const AttackMadeContext = createContext<AttackMadeContextValue>({
+    isAttackMade: false,
+    setIsAttackMade: () => { },
+})
+
+export function AttackMadeContextProvider({ children }: { children: React.ReactElement }) {
+    const [isAttackMade, setIsAttackMade] = useState(false);
+
+    useEffect(() => {
+        console.log('AttackMade updated:', isAttackMade);
+    }, [isAttackMade]);
+
+    return (
+        <AttackMadeContext.Provider value={{ isAttackMade, setIsAttackMade }}>
+            {children}
+        </AttackMadeContext.Provider>
+    )
+}
+
+export interface UltimaContextValue {
+    isUltima: boolean;
+    setIsUltima: (value: boolean) => void;
+}
+export const UltimaContext = createContext<UltimaContextValue>({
+    isUltima: false,
+    setIsUltima: () => { },
+})
+
+export function UltimaContextProvider({ children }: { children: React.ReactElement }) {
+    const [isUltima, setIsUltima] = useState(false);
+
+    useEffect(() => {
+        console.log('Ultima updated:', isUltima);
+    }, [isUltima]);
+
+    return (
+        <UltimaContext.Provider value={{ isUltima, setIsUltima }}>
+            {children}
+        </UltimaContext.Provider>
+    )
+}
+
 //states for MP 
 
 interface KnightMPContextValue {

@@ -6,7 +6,13 @@ import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
 import * as e from './Encyclopedia';
 import { BossContext } from './Context';
-import { TurnNumberContext, MessageContext, AttackShownContext } from './Context';
+import {
+    TurnNumberContext,
+    MessageContext,
+    AttackShownContext,
+    CurrentAttackContext,
+    AttackMadeContext, UltimaContext
+} from './Context';
 import { RNGResult } from './PlayerActions';
 import { new_set_hp } from './PlayerActions';
 import { selected_difficulty } from './StartMenu';
@@ -188,8 +194,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
     }
 
-
-    const [currentAttack, setCurrentAttack] = useState("");
+    //global
+    const { currentAttack, setCurrentAttack } = useContext(CurrentAttackContext);
     //clicking the top button will show attacks and remove the other two
     //if the attacks are shown, change "attacks" to "back"
 
@@ -201,9 +207,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         bossAttackAlgo();
 
     }, [TurnNumber, setTurnNumber]);
-
-    const [isAttackMade, setIsAttackMade] = useState(false);
-    //needs global
+    //global
+    const { isAttackMade, setIsAttackMade } = useContext(AttackMadeContext);
+    //global
     const { message, setMessage } = useContext(MessageContext);
     function handleAtkClick(attack: string) {
         let atk_result = pa.PlayerAttack(attack);
@@ -348,8 +354,15 @@ const MessageArea: React.FC<MessageAreaProps> = ({ message }) => {
 }
 //Need to keep this independent of the bossarea component
 const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isPlayerTurn }) => {
+    const { isUltima, setIsUltima } = useContext(UltimaContext);
+
     let current_attack = pa.selected_attack;
-    console.log("current_attack:" + current_attack);
+    //console.log("current_attack:" + current_attack);
+
+    //not updating??
+    console.log("isultima:" + isUltima)
+    //this is correct
+
     return (
         <div>
             <span className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl 
@@ -359,7 +372,8 @@ const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isP
             <pa.ShowAttack
                 attack={current_attack}
                 player={player}
-                isPlayerTurn={isPlayerTurn}
+                is_player_turn={isPlayerTurn}
+                is_ultima={isUltima}
             />
         </div>
     )
@@ -385,6 +399,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
     const { isAttackAreaShown, setIsAttackAreaShown } = useContext(AttackShownContext);
     const { message, setMessage } = useContext(MessageContext);
+    const { currentAttack, setCurrentAttack } = useContext(CurrentAttackContext);
     const [isUltimaReady, setIsUltimaReady] = useState(false);
     //Manage the turn based system
     //Score will go up by 1 each player turn
@@ -471,6 +486,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     }
 
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
+    const { isAttackMade, setIsAttackMade } = useContext(AttackMadeContext);
 
     //Then reset to -1 after used(or 0?)
     const [ultValue, setUltValue] = useState(-1);
@@ -484,9 +500,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 setIsUltimaReady(true);
             }
         }
-        console.log("ultValue: " + ultValue);
-
-
     }, [TurnNumber])
     const [isUltMenuShown, setIsUltMenuShown] = useState(false);
     function handleUltMenu() {
@@ -502,21 +515,33 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
         ]
     );
+    const { isUltima, setIsUltima } = useContext(UltimaContext);
     function handleUltimaClick(attack: string) {
+        setIsUltima(true);
         //ultima is used, so reset the ultValue
         setUltValue(0);
         setIsUltimaReady(false);
         //Hide the ult menu
         setIsUltMenuShown(false);
+        //Tried to put this in its own function, messes up image paths 
+        //and I don't know why
         let atk_result = pa.PlayerAttack(attack);
         console.log("ult atkresult:", atk_result);
         setMessage(atk_result);
         setIsAttackAreaShown(true);
-        //setCurrentAttack(attack);
+        setCurrentAttack(attack);
+        setIsAttackMade(true);
 
-        //setIsAttackMade(true);
+        sfx.playClickSfx();
+        {
+            setTimeout(() => {
+                setTurnNumber(TurnNumber + 1)
+                setIsAttackAreaShown(false);
+                setIsAttackMade(false);
+                setIsUltima(false);
 
-
+            }, 2000);
+        }
 
     }
     //For mobile, move the characters under the boss and enable scroll
