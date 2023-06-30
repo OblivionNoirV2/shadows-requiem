@@ -529,11 +529,14 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             ["Nightmare Supernova", "dmage-ult-btn"],
             ["Supreme Altar", "wmage-ult-btn"],
             ["Scarlet Subversion", "rmage-ult-btn"]
-
         ]
     );
     const { isUltima, setIsUltima } = useContext(UltimaContext);
+    const [isScreenDark, setIsScreenDark] = useState(false);
+
     function handleUltimaClick(attack: string) {
+        setIsScreenDark(true);
+        console.log("inside ult click", attack)
         setIsUltima(true);
         //ultima is used, so reset the ultValue
         setUltValue(0);
@@ -549,6 +552,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         setCurrentAttack(attack);
         setIsAttackMade(true);
 
+
         sfx.playClickSfx();
         {
             setTimeout(() => {
@@ -556,14 +560,17 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 setIsAttackAreaShown(false);
                 setIsAttackMade(false);
                 setIsUltima(false);
-
-            }, 2000);
+                setIsScreenDark(false);
+            }, 4000);
         }
-
     }
     //For mobile, move the characters under the boss and enable scroll
     return (
         <>
+            {isScreenDark && (
+                <div className='fade'></div>
+            )}
+
             {/*score tracker*/}
             <strong>
                 <section className='text-white text-4xl flex justify-end 
@@ -599,11 +606,12 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 className={
                                     selectedCharacter === 'knight' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
                                 <img src={require('./assets/images/player/sprites/knight.png')}
-                                    alt='knight'></img>
+                                    alt='knight'>
+                                </img>
                             </button>
                             <span>
                                 {
-                                    !isAttackAreaShown &&
+
                                     isPlayerTurn && selectedCharacter === 'knight' &&
                                     <PlayerMenu
                                         player='knight'
@@ -644,6 +652,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             </button>
                             <span>
                                 {
+
                                     isPlayerTurn && selectedCharacter === 'dmage' &&
                                     <PlayerMenu
                                         player='dmage'
@@ -712,10 +721,11 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             </span>
                         </li>
                         <li>
-                            <button onClick={!isAttackAreaShown &&
-                                isPlayerTurn ?
-                                () => HandleSelection("rmage") :
-                                undefined
+                            <button onClick={
+                                !isAttackAreaShown &&
+                                    isPlayerTurn ?
+                                    () => HandleSelection("rmage") :
+                                    undefined
                             }
                                 className={selectedCharacter === 'rmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
                                 <img src={require('./assets/images/player/sprites/rmage.png')}
@@ -784,7 +794,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                                 <li >
                                                     <button key={index}
                                                         className={`ult-atk-btn ${ultBtnClassLookup.get(attack)}`}
-                                                        onClick={() => handleUltimaClick(attack)}>
+                                                        onClick={() => handleUltimaClick(attack)}
+                                                        title={e.AttackEncyclopedia.get(attack)?.description}>
                                                         {attack}
                                                     </button>
                                                 </li>
@@ -795,7 +806,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             }
                         </li>
                     </ul>
-
                 </section>
                 <section className=''>
                     <BossArea
