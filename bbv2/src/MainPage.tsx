@@ -11,7 +11,12 @@ import {
     MessageContext,
     AttackShownContext,
     CurrentAttackContext,
-    AttackMadeContext, UltimaContext
+    AttackMadeContext,
+    UltimaContext,
+    KnightMPContext,
+    DmageMPContext,
+    WmageMPContext,
+    RmageMPContext
 } from './Context';
 import { RNGResult } from './PlayerActions';
 import { new_set_hp } from './PlayerActions';
@@ -167,6 +172,10 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     //global, starts false
     const { isAttackAreaShown, setIsAttackAreaShown } = useContext(AttackShownContext);
 
+    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
+    const { DmageMP, setDmageMP } = useContext(DmageMPContext);
+    const { WmageMP, setWmageMP } = useContext(WmageMPContext);
+    const { RmageMP, setRmageMP } = useContext(RmageMPContext);
 
 
     function HandleItemUse(item: string) {
@@ -401,6 +410,14 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     const { message, setMessage } = useContext(MessageContext);
     const { currentAttack, setCurrentAttack } = useContext(CurrentAttackContext);
     const [isUltimaReady, setIsUltimaReady] = useState(false);
+
+    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
+    const { DmageMP, setDmageMP } = useContext(DmageMPContext);
+    const { WmageMP, setWmageMP } = useContext(WmageMPContext);
+    const { RmageMP, setRmageMP } = useContext(RmageMPContext);
+
+
+
     //Manage the turn based system
     //Score will go up by 1 each player turn
 
@@ -572,8 +589,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             </div>
                         </li>
                         <li>
+                            {/*buttons get locked when attack is happening*/}
                             <button onClick={
-                                isPlayerTurn ?
+                                !isAttackAreaShown &&
+                                    isPlayerTurn ?
                                     () => HandleSelection("knight")
                                     : undefined
                             }
@@ -584,6 +603,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             </button>
                             <span>
                                 {
+                                    !isAttackAreaShown &&
                                     isPlayerTurn && selectedCharacter === 'knight' &&
                                     <PlayerMenu
                                         player='knight'
@@ -613,7 +633,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                         </li>
                         <li>
                             <button onClick={
-                                isPlayerTurn ?
+                                !isAttackAreaShown &&
+                                    isPlayerTurn ?
                                     () => HandleSelection("dmage")
                                     : undefined
                             }
@@ -653,7 +674,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                         </li>
                         <li>
                             <button onClick={
-                                isPlayerTurn ?
+                                !isAttackAreaShown &&
+                                    isPlayerTurn ?
                                     () => HandleSelection("wmage") :
                                     undefined
                             }
@@ -690,7 +712,11 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             </span>
                         </li>
                         <li>
-                            <button onClick={() => HandleSelection("rmage")}
+                            <button onClick={!isAttackAreaShown &&
+                                isPlayerTurn ?
+                                () => HandleSelection("rmage") :
+                                undefined
+                            }
                                 className={selectedCharacter === 'rmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
                                 <img src={require('./assets/images/player/sprites/rmage.png')}
                                     alt='red mage'></img>
