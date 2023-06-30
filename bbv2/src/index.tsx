@@ -14,6 +14,9 @@ import {
   BossContextProvider,
   TurnNumberContextProvider,
   KnightMPContextProvider,
+  DmageMPContextProvider,
+  WmageMPContextProvider,
+  RmageMPContextProvider,
   MessageContextProvider,
   AttackShownContextProvider,
   CurrentAttackContextProvider,
@@ -35,17 +38,23 @@ root.render(
       <BossContextProvider>
         <TurnNumberContextProvider>
           <KnightMPContextProvider>
-            <MessageContextProvider>
-              <AttackShownContextProvider>
-                <CurrentAttackContextProvider>
-                  <AttackMadeContextProvider>
-                    <UltimaContextProvider>
-                      <App />
-                    </UltimaContextProvider>
-                  </AttackMadeContextProvider>
-                </CurrentAttackContextProvider>
-              </AttackShownContextProvider>
-            </MessageContextProvider>
+            <DmageMPContextProvider>
+              <WmageMPContextProvider>
+                <RmageMPContextProvider>
+                  <MessageContextProvider>
+                    <AttackShownContextProvider>
+                      <CurrentAttackContextProvider>
+                        <AttackMadeContextProvider>
+                          <UltimaContextProvider>
+                            <App />
+                          </UltimaContextProvider>
+                        </AttackMadeContextProvider>
+                      </CurrentAttackContextProvider>
+                    </AttackShownContextProvider>
+                  </MessageContextProvider>
+                </RmageMPContextProvider>
+              </WmageMPContextProvider>
+            </DmageMPContextProvider>
           </KnightMPContextProvider>
         </TurnNumberContextProvider>
       </BossContextProvider>

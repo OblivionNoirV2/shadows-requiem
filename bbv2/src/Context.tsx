@@ -168,7 +168,7 @@ export function UltimaContextProvider({ children }: { children: React.ReactEleme
     )
 }
 
-//states for MP 
+//states for MP, link them to the maps 
 
 interface KnightMPContextValue {
     KnightMP: number | undefined;
@@ -194,5 +194,74 @@ export function KnightMPContextProvider({ children }: { children: React.ReactEle
     )
 }
 
+interface DmageMPContextValue {
+    DmageMP: number | undefined;
+    setDmageMP: (value: number) => void;
+}
 
+export const DmageMPContext = createContext<DmageMPContextValue>({
+    DmageMP: sm.dmage_stats.get('max_mp'),
+    setDmageMP: () => { },
+})
 
+export function DmageMPContextProvider({ children }: { children: React.ReactElement }) {
+    const [DmageMP, setDmageMP] = useState(sm.dmage_stats.get('max_mp'));
+
+    useEffect(() => {
+        console.log('DmageMP updated:', DmageMP);
+    }, [DmageMP]);
+
+    return (
+        <DmageMPContext.Provider value={{ DmageMP, setDmageMP }}>
+            {children}
+        </DmageMPContext.Provider>
+    )
+}
+
+export interface WmageContextValue {
+    WmageMP: number | undefined;
+    setWmageMP: (value: number) => void;
+}
+
+export const WmageMPContext = createContext<WmageContextValue>({
+    WmageMP: sm.wmage_stats.get('max_mp'),
+    setWmageMP: () => { },
+})
+
+export function WmageMPContextProvider({ children }: { children: React.ReactElement }) {
+    const [WmageMP, setWmageMP] = useState(sm.wmage_stats.get('max_mp'));
+
+    useEffect(() => {
+        console.log('WmageMP updated:', WmageMP);
+    }, [WmageMP]);
+
+    return (
+        <WmageMPContext.Provider value={{ WmageMP, setWmageMP }}>
+            {children}
+        </WmageMPContext.Provider>
+    )
+}
+
+export interface RmageMPContextValue {
+    RmageMP: number | undefined;
+    setRmageMP: (value: number) => void;
+}
+
+export const RmageMPContext = createContext<RmageMPContextValue>({
+    RmageMP: sm.rmage_stats.get('max_mp'),
+    setRmageMP: () => { },
+})
+
+export function RmageMPContextProvider({ children }: { children: React.ReactElement }) {
+    const [RmageMP, setRmageMP] = useState(sm.rmage_stats.get('max_mp'));
+
+    useEffect(() => {
+        console.log('RmageMP updated:', RmageMP);
+    }, [RmageMP]);
+
+    return (
+        <RmageMPContext.Provider value={{ RmageMP, setRmageMP }}>
+            {children}
+        </RmageMPContext.Provider>
+    )
+}
