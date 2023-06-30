@@ -6,7 +6,7 @@ import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
 import * as e from './Encyclopedia';
 import { BossContext } from './Context';
-import { TurnNumberContext, } from './Context';
+import { TurnNumberContext, MessageContext, AttackShownContext } from './Context';
 import { RNGResult } from './PlayerActions';
 import { new_set_hp } from './PlayerActions';
 import { selected_difficulty } from './StartMenu';
@@ -157,7 +157,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [isAttacksActive, setIsAttacksActive] = useState(false);
     const [isItemsActive, setIsItemsActive] = useState(false);
     const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
-    const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
+
+    //global, starts false
+    const { isAttackAreaShown, setIsAttackAreaShown } = useContext(AttackShownContext);
 
 
 
@@ -201,7 +203,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     }, [TurnNumber, setTurnNumber]);
 
     const [isAttackMade, setIsAttackMade] = useState(false);
-    const [message, setMessage] = useState("");
+    //needs global
+    const { message, setMessage } = useContext(MessageContext);
     function handleAtkClick(attack: string) {
         let atk_result = pa.PlayerAttack(attack);
         console.log("handleclick atkresult:", atk_result);
@@ -212,6 +215,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         /*Using this instead of turns 
         fixes weird bug where the attack area doesn't show up*/
         setIsAttackMade(true);
+
     }
     return (
 
@@ -379,8 +383,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
-
-
+    const { isAttackAreaShown, setIsAttackAreaShown } = useContext(AttackShownContext);
+    const { message, setMessage } = useContext(MessageContext);
     const [isUltimaReady, setIsUltimaReady] = useState(false);
     //Manage the turn based system
     //Score will go up by 1 each player turn
@@ -485,7 +489,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
     }, [TurnNumber])
     const [isUltMenuShown, setIsUltMenuShown] = useState(false);
-    function HandleUltMenu() {
+    function handleUltMenu() {
         setIsUltMenuShown(!isUltMenuShown);
     }
     //Match the ult buttons to their appropriate styling
@@ -498,6 +502,23 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
         ]
     );
+    function handleUltimaClick(attack: string) {
+        //ultima is used, so reset the ultValue
+        setUltValue(0);
+        setIsUltimaReady(false);
+        //Hide the ult menu
+        setIsUltMenuShown(false);
+        let atk_result = pa.PlayerAttack(attack);
+        console.log("ult atkresult:", atk_result);
+        setMessage(atk_result);
+        setIsAttackAreaShown(true);
+        //setCurrentAttack(attack);
+
+        //setIsAttackMade(true);
+
+
+
+    }
     //For mobile, move the characters under the boss and enable scroll
     return (
         <>
@@ -687,7 +708,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 <button className={
                                     !isUltMenuShown ? 'ult-btn text-2xl ' : 'ult-close-btn'
                                 }
-                                    onClick={HandleUltMenu}>
+                                    onClick={handleUltMenu}>
                                     <strong>
                                         {
                                             isUltMenuShown ?
@@ -702,7 +723,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 justify-start w-2/5 mt-4 h-6'
                                     value={ultValue} max={20}>
                                 </progress>
-
                             }
                             {
                                 isUltMenuShown &&
@@ -711,12 +731,13 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         return (
                                             <ul>
                                                 <li >
-                                                    <button key={index} className={`ult-atk-btn ${ultBtnClassLookup.get(attack)}`}>
+                                                    <button key={index}
+                                                        className={`ult-atk-btn ${ultBtnClassLookup.get(attack)}`}
+                                                        onClick={() => handleUltimaClick(attack)}>
                                                         {attack}
                                                     </button>
                                                 </li>
                                             </ul>
-
                                         )
                                     })}
                                 </div>

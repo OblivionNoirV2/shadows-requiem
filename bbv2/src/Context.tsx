@@ -49,8 +49,54 @@ export function TurnNumberContextProvider({ children }: { children: React.ReactE
         </TurnNumberContext.Provider>
     )
 }
+//global message updating
+interface MessageContextValue {
+    message: string;
+    setMessage: (value: string) => void;
+}
 
+export const MessageContext = createContext<MessageContextValue>({
+    message: '',
+    setMessage: () => { },
+})
 
+export function MessageContextProvider({ children }: { children: React.ReactElement }) {
+    const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        console.log('Message updated:', message);
+    }, [message]);
+
+    return (
+        <MessageContext.Provider value={{ message, setMessage }}>
+            {children}
+        </MessageContext.Provider>
+    )
+}
+
+interface AttackShownContextValue {
+    isAttackAreaShown: boolean;
+    setIsAttackAreaShown: (value: boolean) => void;
+}
+
+export const AttackShownContext = createContext<AttackShownContextValue>({
+    isAttackAreaShown: false,
+    setIsAttackAreaShown: () => { },
+})
+
+export function AttackShownContextProvider({ children }: { children: React.ReactElement }) {
+    const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
+
+    useEffect(() => {
+        console.log('AttackShown updated:', isAttackAreaShown);
+    }, [isAttackAreaShown]);
+
+    return (
+        <AttackShownContext.Provider value={{ isAttackAreaShown, setIsAttackAreaShown }}>
+            {children}
+        </AttackShownContext.Provider>
+    )
+}
 //states for MP 
 
 interface KnightMPContextValue {

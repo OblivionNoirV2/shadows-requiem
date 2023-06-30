@@ -13,7 +13,7 @@ import { BossArea } from './MainPage';
 import {
   BossContextProvider,
   TurnNumberContextProvider,
-  KnightMPContextProvider,
+  KnightMPContextProvider, MessageContextProvider, AttackShownContextProvider
 
 }
   from './Context';
@@ -30,7 +30,11 @@ root.render(
       <BossContextProvider>
         <TurnNumberContextProvider>
           <KnightMPContextProvider>
-            <App />
+            <MessageContextProvider>
+              <AttackShownContextProvider>
+                <App />
+              </AttackShownContextProvider>
+            </MessageContextProvider>
           </KnightMPContextProvider>
         </TurnNumberContextProvider>
       </BossContextProvider>
