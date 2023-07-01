@@ -471,24 +471,12 @@ export const attacks_map: Map<string, Function> = new Map([
 
         }
     ],
-    [   //Huge damage, but sacrifices hp instead of mp
+    [   //Swaps hp and mp
         //This attack can kill her if she's not careful
         //Could be used to build up a SS
         'Border Of Life', function BorderOfLife() {
 
-            return (
-                RNG(
-                    {
-                        min: 18500,
-                        crit_rate: 0.06,
-                        phys_or_mag: "mag",
-                        variance: 1.10,
-                        is_ult: false,
-                        miss_rate: 0.05,
-                        sfx_type: "BOL" //sparkle?
-                    }
-                )
-            )
+
 
         }
     ],
@@ -598,7 +586,7 @@ export let is_attack_triggered: boolean = false;
 
 //cannot use state here, so we're doing it this way
 //maybe change to use the map
-export let new_set_hp: number = 229999;
+export let new_set_hp: number = 999999;
 
 export function PlayerAttack(attack: string) {
     selected_attack = attack;
@@ -649,7 +637,6 @@ const UltPathLookup: Map<string, string> = new Map(
 export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
     //seperate image lookup for the ults
     console.log("inside show attack:" + player, attack)
-    //Recieving false when it should not be
     console.log("is_ultima:", is_ultima)
     if (is_ultima === true) {
         return (

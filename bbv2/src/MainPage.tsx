@@ -297,15 +297,15 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                         <li key={index} className='atk-btn'
                                         >
                                             <button onClick={() => {
-                                                const attackEncyclopediaEntry = e.AttackEncyclopedia.get(attack)?.mp_cost;
+                                                const attack_encyclopedia_entry = e.AttackEncyclopedia.get(attack)?.mp_cost;
 
-                                                const mpMapValue = MatchToMpMap.get(player);
-                                                console.log("e entry:", attackEncyclopediaEntry);
-                                                console.log("mpMapValue:", mpMapValue);
+                                                const mp_map_value = MatchToMpMap.get(player);
+                                                console.log("e entry:", attack_encyclopedia_entry);
+                                                console.log("mpMapValue:", mp_map_value);
                                                 sfx.playClickSfx();
-                                                if (attackEncyclopediaEntry
-                                                    && mpMapValue !== undefined
-                                                    && attackEncyclopediaEntry > mpMapValue) {
+                                                if (attack_encyclopedia_entry
+                                                    && mp_map_value !== undefined
+                                                    && attack_encyclopedia_entry > mp_map_value) {
                                                     setMessage("Not enough MP!");
                                                     //Just makes the message appear
                                                     setIsAttackMade(true)
@@ -391,7 +391,7 @@ const MessageArea: React.FC<MessageAreaProps> = ({ message }) => {
             "Critical hit! " : ""} Damage dealt: ${message.result}`
         : message;
     return (
-        <h1 className='text-7xl absolute z-20  text-red-600 ml-[90rem]  '>
+        <h1 className='text-7xl absolute z-20  text-white ml-[90rem]  '>
             {message_string}
         </h1>
     )

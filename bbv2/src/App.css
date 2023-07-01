@@ -542,3 +542,22 @@ a:not(.story-link, .story-back) {
     opacity: 0%;
   }
 }
+
+.text-container {
+  position: relative;
+  box-shadow: 1rem 1rem 1rem 1rem rgba(0, 0, 0, 0.9);
+  background-image: url('./assets/images/bg-and-effects/stonetexture.png');
+}
+
+.text-container:before {
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+
+}
