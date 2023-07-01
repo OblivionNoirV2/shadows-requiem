@@ -520,7 +520,7 @@ a:not(.story-link, .story-back) {
   animation: red-border 1s linear infinite;
 }
 
-
+/*for the ultimas*/
 .fade {
   position: fixed;
   top: 0;
