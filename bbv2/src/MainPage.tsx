@@ -21,6 +21,11 @@ import {
 import { RNGResult } from './PlayerActions';
 import { new_set_hp } from './PlayerActions';
 import { selected_difficulty } from './StartMenu';
+import knightbg from './assets/images/bg-and-effects/knightultimabg.png';
+import dmagebg from './assets/images/bg-and-effects/dmageultimabg.png';
+import wmagebg from './assets/images/bg-and-effects/wmageultimabg.png';
+import rmagebg from './assets/images/bg-and-effects/rmageultimabg.png';
+import defaultbg from './assets/images/bg-and-effects/battlebgupscaled.jpeg';
 
 interface GoBackProps {
     onBackToTitle: () => void;
@@ -232,6 +237,13 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         setIsAttackMade(true);
 
     }
+    //Match ther player to the appropriate mp stat
+    const MatchToMpMap: Map<string, number | undefined> = new Map([
+        ["knight", sm.knight_stats.get("mp")],
+        ["dmage", sm.dmage_stats.get("mp")],
+        ["wmage", sm.wmage_stats.get("mp")],
+        ["rmage", sm.rmage_stats.get("mp")]
+    ]);
     return (
 
         <main className='w-full'>
@@ -282,26 +294,49 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
                                 {current_attacks.map(
                                     (attack, index) =>
-                                        <li key={index} className='atk-btn'>
+                                        <li key={index} className='atk-btn'
+                                        >
                                             <button onClick={() => {
-                                                //check for mp here and subtract it
-                                                handleAtkClick(attack);
-                                                setIsAttackAreaShown(true);
+                                                const attackEncyclopediaEntry = e.AttackEncyclopedia.get(attack)?.mp_cost;
 
+                                                const mpMapValue = MatchToMpMap.get(player);
+                                                console.log("e entry:", attackEncyclopediaEntry);
+                                                console.log("mpMapValue:", mpMapValue);
                                                 sfx.playClickSfx();
-                                                {
+                                                if (attackEncyclopediaEntry
+                                                    && mpMapValue !== undefined
+                                                    && attackEncyclopediaEntry > mpMapValue) {
+                                                    setMessage("Not enough MP!");
+                                                    //Just makes the message appear
+                                                    setIsAttackMade(true)
                                                     setTimeout(() => {
-                                                        setTurnNumber(TurnNumber + 1)
-                                                        setIsAttackAreaShown(false);
                                                         setIsAttackMade(false);
+                                                    }, 1000)
+                                                } else {
+                                                    handleAtkClick(attack);
+                                                    setIsAttackAreaShown(true);
 
-                                                    }, 2000);
+
+                                                    {
+                                                        setTimeout(() => {
+                                                            setTurnNumber(TurnNumber + 1)
+                                                            setIsAttackAreaShown(false);
+                                                            setIsAttackMade(false);
+
+                                                        }, 2000);
+                                                    }
+
                                                 }
+                                                //check for mp here and subtract it
+
                                             }}
                                                 title={e.AttackEncyclopedia.get(attack)?.description}>
 
                                                 {attack}
-                                                <span className='ml-2 text-[rgb(93,93,255)]'>
+                                                <span className={
+                                                    attack == "Border Of Life" ? 'ml-2 text-[rgb(0,128,0)]' : 'ml-2 text-[rgb(93,93,255)]'
+                                                }
+                                                >
                                                     {e.AttackEncyclopedia.get(attack)?.mp_cost}
                                                 </span>
                                             </button>
@@ -506,7 +541,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     const { isAttackMade, setIsAttackMade } = useContext(AttackMadeContext);
 
     //Then reset to -1 after used(or 0?)
-    const [ultValue, setUltValue] = useState(-1);
+    const [ultValue, setUltValue] = useState(10);
     //ult management
     useEffect(() => {
         if (ultValue < 20) {
@@ -533,6 +568,15 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     );
     const { isUltima, setIsUltima } = useContext(UltimaContext);
     const [isScreenDark, setIsScreenDark] = useState(false);
+    //switch background based on ult used
+    const UltimaBgLookup: Map<string, string> = new Map(
+        [
+            ["Thousand Men", knightbg],
+            ["Nightmare Supernova", dmagebg],
+            ["Supreme Altar", wmagebg],
+            ["Scarlet Subversion", rmagebg]
+        ]
+    )
 
     function handleUltimaClick(attack: string) {
         setIsScreenDark(true);
@@ -551,7 +595,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         setIsAttackAreaShown(true);
         setCurrentAttack(attack);
         setIsAttackMade(true);
-
+        document.body.style.backgroundImage = `url(${UltimaBgLookup.get(attack)})`;
+        setTimeout(() => {
+            document.body.style.backgroundImage = `url(${defaultbg})`;
+        }, 3000)
 
         sfx.playClickSfx();
         {
@@ -567,6 +614,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     //For mobile, move the characters under the boss and enable scroll
     return (
         <>
+            {/*darkens screen during ultimas*/}
             {isScreenDark && (
                 <div className='fade'></div>
             )}

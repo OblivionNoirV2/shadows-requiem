@@ -531,7 +531,7 @@ export const attacks_map: Map<string, Function> = new Map([
             );
         }
     ],
-    //boss does nothing next turn, ie immediately switches back to you
+    //Light physical damage and boss does nothing next turn
     [
         'My Turn', function MyTurn() {
 
@@ -541,7 +541,7 @@ export const attacks_map: Map<string, Function> = new Map([
         'Scarlet Subversion', function ScarletSubversion() {
             //Scales based on her current hp. 
             //Less hp = more damage
-            const max_dmg = 100250;
+            const max_dmg = 150250;
             //then for every hp point she has, 
             //subtract 250 from the max damage
             const dmg = max_dmg - (sm.rmage_stats.get('hp')! * 250);
@@ -598,7 +598,7 @@ export let is_attack_triggered: boolean = false;
 
 //cannot use state here, so we're doing it this way
 //maybe change to use the map
-export let new_set_hp: number = 999999;
+export let new_set_hp: number = 229999;
 
 export function PlayerAttack(attack: string) {
     selected_attack = attack;

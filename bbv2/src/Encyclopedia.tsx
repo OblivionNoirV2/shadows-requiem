@@ -128,8 +128,8 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             //rmage
             [   //Since this one CAN kill you, there's no need to check for sufficient hp
                 'Border Of Life', {
-                    description: "Sacrifice your own life force to deal huge magic damage. Uses HP instead of MP.",
-                    mp_cost: 0
+                    description: "Sacrifice your own life force to restore MP. Restores 108 MP per use. Uses HP instead of MP.",
+                    mp_cost: 75 //actually hp
                 }
             ],
             [
@@ -144,9 +144,9 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
                     mp_cost: 35
                 }
             ],
-            [ //Short timer, 20 sec or so
+            [
                 'My Turn', {
-                    description: "Negates the King's turns for a very short period.",
+                    description: "Deals light physical damage and negates the King's next turn. Cannot be used sequentially.",
                     mp_cost: 40
                 }
             ],

@@ -72,9 +72,9 @@ export const wmage_stats: StatMap = new Map
 export const rmage_stats: StatMap = new Map
     (
         [
-            ["hp", 375],
+            ["hp", 10], //max is 375
             ["max_hp", 375],
-            ["mp", 540],
+            ["mp", 5],
             ["max_mp", 540],
             ["p_def", 0.90],
             ["m_def", 0.90],
