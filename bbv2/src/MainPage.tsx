@@ -403,10 +403,7 @@ const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isP
     let current_attack = pa.selected_attack;
     //console.log("current_attack:" + current_attack);
 
-    //not updating??
     console.log("isultima:" + isUltima)
-    //this is correct
-
     return (
         <div>
             <span className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl 
@@ -810,7 +807,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             </span>
                         </li>
                         <li className='flex-row flex'>
-                            {/*Goes up each player turn,by 2, to 20. 
+                            {/*Goes up each player turn,by 1, to 20. 
                             Switches to a button when full
                             Will pull up a menu of 4 cells as a row*/}
                             {isUltimaReady ?

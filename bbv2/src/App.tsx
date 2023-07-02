@@ -13,6 +13,7 @@ import StartMenu from './StartMenu';
 import MainPage from './MainPage';
 import * as sm from './StatManagement';
 import Story from './Story';
+import EncyclopediaPage from './EnPage';
 import { Randomizer } from './PlayerActions';
 
 //Page will need to completely re-render, so use a hook to flip it
@@ -150,6 +151,7 @@ const App: React.FC = () => {
         <Route path='/Game' element={<MainPage onBackToTitle={HandleBackToTitle} />} />
         <Route path='/StartMenu' element={<StartMenu on_start={startGame} />} />
         <Route path='/Story' element={<Story />} />
+        <Route path='/Encyclopedia' element={<EncyclopediaPage />} />
       </Routes>
       <VolButton />
       {
