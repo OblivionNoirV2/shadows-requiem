@@ -159,7 +159,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             //Everyone has this
             [
                 'Desperation', {
-                    description: "Absolute last resort, costs nothing but does hardly anything. You are essentially smacking him with a wet noodle. Physical damage.",
+                    description: "Absolute last resort, costs nothing but does hardly anything. You are essentially smacking him with a wet noodle. Physical damage. Everyone has this attack",
                     mp_cost: 0
                 }
             ]

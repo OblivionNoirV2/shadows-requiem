@@ -11,6 +11,7 @@ body {
   background-image: url("assets/images/bg-and-effects/battlebgupscaled.jpeg");
   background-repeat: no-repeat;
   background-size: cover;
+  overflow: scroll;
 }
 
 
@@ -87,9 +88,7 @@ body {
   }
 }
 
-html {
-  overflow: hidden;
-}
+
 
 /*size the portraits*/
 .party-col>ul>li>button {
@@ -559,5 +558,19 @@ input:checked+.slider:before {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+
+
+.en-main:before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
 
 }
