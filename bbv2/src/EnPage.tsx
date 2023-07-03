@@ -4,10 +4,7 @@ import { useEffect } from "react";
 import * as e from './Encyclopedia';
 import paperbg from './assets/images/bg-and-effects/paper.png';
 import { playClickSfx } from "./sfxManagement";
-interface AttacksComponent {
-    player: string;
-    map_name: string;
-}
+
 const AttackingDesc = () => {
     return (
         <p className="text-2xl my-2 leading-relaxed">
@@ -19,6 +16,10 @@ const AttackingDesc = () => {
 
     )
 
+}
+interface AttacksComponent {
+    player: string;
+    map_name: string;
 }
 const AttacksComponent: React.FC<AttacksComponent> = ({ player, map_name }) => {
     return (
@@ -46,7 +47,6 @@ const AttacksComponent: React.FC<AttacksComponent> = ({ player, map_name }) => {
                                                     : `MP Cost: ${attack_data.mp_cost}`
 
                                             }
-
                                         </div>
                                     }
                                 </li>

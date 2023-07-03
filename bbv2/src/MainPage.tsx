@@ -672,16 +672,29 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         {UpdateStatusEffects('knight')}
                                     </ul>
                                 </section>
-                                <progress className='p-hp'
-                                    max={sm.knight_stats.get('max-hp')}
-                                    value={sm.knight_stats.get('hp')}>
-
-                                </progress>
-                                <div>MP</div>
-                                <progress className='mb-4 p-mb p-mp'
-                                    max={sm.knight_stats.get('max_mp')}
-                                    value={sm.knight_stats.get('mp')}>
-                                </progress>
+                                <div className='flex flex-row'>
+                                    <progress className='p-hp'
+                                        max={sm.knight_stats.get('max-hp')}
+                                        value={sm.knight_stats.get('hp')}>
+                                    </progress>
+                                    <div className='ml-2 text-xl hp-text'>
+                                        <strong>
+                                            {sm.knight_stats.get('hp')}/{sm.knight_stats.get('max_hp')}
+                                        </strong>
+                                    </div>
+                                </div>
+                                <h1 className='mr-4 text-xl text-white'>MP</h1>
+                                <div className='flex flex-row'>
+                                    <progress className='mb-4 p-mb p-mp'
+                                        max={sm.knight_stats.get('max_mp')}
+                                        value={sm.knight_stats.get('mp')}>
+                                    </progress>
+                                    <div className='ml-2 text-xl mp-text'>
+                                        <strong>
+                                            {sm.knight_stats.get("mp")}/{sm.knight_stats.get("max_mp")}
+                                        </strong>
+                                    </div>
+                                </div>
                             </span>
                         </li>
                         <li>
@@ -714,16 +727,29 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         {UpdateStatusEffects('dmage')}
                                     </ul>
                                 </section>
-                                <progress className='p-hp'
-                                    max={sm.dmage_stats.get('max_hp')}
-                                    value={sm.dmage_stats.get('hp')}>
-                                </progress>
-                                <div>MP</div>
-                                <progress className='mb-4 p-mb p-mp'
-                                    max={sm.dmage_stats.get('max-mp')}
-                                    value={sm.dmage_stats.get('mp')}>
-
-                                </progress>
+                                <div className='flex flex-row'>
+                                    <progress className='p-hp'
+                                        max={sm.dmage_stats.get('max-hp')}
+                                        value={sm.dmage_stats.get('hp')}>
+                                    </progress>
+                                    <div className='ml-2 text-xl hp-text'>
+                                        <strong>
+                                            {sm.dmage_stats.get('hp')}/{sm.dmage_stats.get('max_hp')}
+                                        </strong>
+                                    </div>
+                                </div>
+                                <h1 className='mr-4 text-xl text-white'>MP</h1>
+                                <div className='flex flex-row'>
+                                    <progress className='mb-4 p-mb p-mp'
+                                        max={sm.dmage_stats.get('max_mp')}
+                                        value={sm.dmage_stats.get('mp')}>
+                                    </progress>
+                                    <strong>
+                                        <div className='ml-2 text-xl mp-text'>
+                                            {sm.dmage_stats.get("mp")}/{sm.dmage_stats.get("max_mp")}
+                                        </div>
+                                    </strong>
+                                </div>
                             </span>
                         </li>
                         <li>
@@ -755,14 +781,30 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         {UpdateStatusEffects('wmage')}
                                     </ul>
                                 </section>
-                                <progress className='p-hp'
-                                    max={sm.wmage_stats.get('max_hp')}
-                                    value={sm.wmage_stats.get('hp')}>
-                                </progress>
-                                <div>MP</div>
-                                <progress className='mb-4 p-mb p-mp'>
+                                <div className='flex flex-row'>
+                                    <progress className='p-hp'
+                                        max={sm.wmage_stats.get('max-hp')}
+                                        value={sm.wmage_stats.get('hp')}>
+                                    </progress>
+                                    <div className='ml-2 text-xl hp-text'>
+                                        <strong>
+                                            {sm.wmage_stats.get('hp')}/{sm.wmage_stats.get('max_hp')}
+                                        </strong>
+                                    </div>
+                                </div>
+                                <h1 className='mr-4 text-xl text-white'>MP</h1>
+                                <div className='flex flex-row'>
+                                    <progress className='mb-4 p-mb p-mp'
+                                        max={sm.wmage_stats.get('max_mp')}
+                                        value={sm.wmage_stats.get('mp')}>
+                                    </progress>
+                                    <div className='ml-2 text-xl mp-text'>
+                                        <strong>
+                                            {sm.wmage_stats.get("mp")}/{sm.wmage_stats.get("max_mp")}
+                                        </strong>
+                                    </div>
+                                </div>
 
-                                </progress>
                             </span>
                         </li>
                         <li>
@@ -794,16 +836,29 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         {UpdateStatusEffects('rmage')}
                                     </ul>
                                 </section>
-                                <progress className='p-hp'
-                                    max={sm.rmage_stats.get('max_hp')}
-                                    value={sm.rmage_stats.get('hp')}>
-                                </progress>
-                                <div>MP</div>
-                                <progress className='mb-4 p-mb p-mp'
-                                    max={sm.rmage_stats.get('max-mp')}
-                                    value={sm.rmage_stats.get('mp')}>
-
-                                </progress>
+                                <div className='flex flex-row'>
+                                    <progress className='p-hp'
+                                        max={sm.rmage_stats.get('max-hp')}
+                                        value={sm.rmage_stats.get('hp')}>
+                                    </progress>
+                                    <div className='ml-2 text-xl hp-text'>
+                                        <strong>
+                                            {sm.rmage_stats.get('hp')}/{sm.rmage_stats.get('max_hp')}
+                                        </strong>
+                                    </div>
+                                </div>
+                                <h1 className='mr-4 text-xl text-white'>MP</h1>
+                                <div className='flex flex-row'>
+                                    <progress className='mb-4 p-mb p-mp'
+                                        max={sm.rmage_stats.get('max_mp')}
+                                        value={sm.rmage_stats.get('mp')}>
+                                    </progress>
+                                    <div className='ml-2 text-xl mp-text'>
+                                        <strong>
+                                            {sm.rmage_stats.get("mp")}/{sm.rmage_stats.get("max_mp")}
+                                        </strong>
+                                    </div>
+                                </div>
                             </span>
                         </li>
                         <li className='flex-row flex'>
@@ -856,7 +911,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     <BossArea
                     />
                 </section>
-            </main>
+            </main >
         </>
     );
 };
