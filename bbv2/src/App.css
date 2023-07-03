@@ -377,7 +377,7 @@ input:checked+.slider:before {
   text-shadow: .1rem .1rem 1rem rgb(139, 139, 139);
 }
 
-a:not(.story-link, .story-back, .e-link) {
+.cite-link {
   color: rgb(132, 0, 255);
 }
 

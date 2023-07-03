@@ -27,28 +27,54 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
 
 
     }
+
+    interface StartMenuButtonProps {
+        text: string;
+        link?: string;
+        onClick: () => void;
+    }
+    const StartMenuButton: React.FC<StartMenuButtonProps> = ({ text, link, onClick }) => {
+        return (
+            <button onClick={onClick} className='bg-[#363040]/60 
+            py-8 px-6 rounded-2xl text-7xl text-slate-400 mt-10 
+            glow-ani-border'>
+                {
+                    link ?
+                        <Link to={link}>
+                            {text}
+                        </Link> :
+                        text
+                }
+            </button>
+        );
+    }
     return (
         <main className='flex flex-col mx-auto w-2/3
    justify-center items-center space-y-4 mt-12 '>
 
-            <h1 className='text-8xl text-black glow-ani-text'>影の鎮魂歌</h1>
+            <h1 className='text-8xl glow-ani-text text-black'>Shadow's Requiem</h1>
             <hr className='bg-black glow-ani-text h-2 w-full border-none'></hr>
-            <h1 className='text-6xl glow-ani-text text-black'>Shadow's Requiem</h1>
             <section className='start-menu space-y-8 flex flex-row'>
                 <div className='flex flex-col space-y-8'>
-                    <button onClick={() => { on_start(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
-       py-8 px-6 rounded-2xl text-7xl text-slate-400 mt-10 
-       glow-ani-border'>
-                        Start Game
-                    </button>
-                    <button className=' bg-[#363040]/60 
-       py-8 px-6 rounded-2xl text-7xl text-slate-400 glow-ani-border'>
-                        <Link to='/Story'
-                            onClick={() => { sfx.playClickSfx() }}
-                            className='story-link'>
-                            Story
-                        </Link>
-                    </button>
+
+                    <StartMenuButton
+                        text='Start Game'
+                        onClick={() => {
+                            on_start();
+                            sfx.playClickSfx();
+                        }}
+                    />
+                    <StartMenuButton
+                        text='Story'
+                        link='/Story'
+                        onClick={sfx.playClickSfx}
+                    />
+                    <StartMenuButton
+                        text='Encyclopedia'
+                        link='/Encyclopedia'
+                        onClick={sfx.playClickSfx}
+                    />
+
                     <select className=' bg-[#363040]/60 
        py-4 px-3 rounded-2xl text-7xl text-center text-slate-400 glow-ani-border
        diff-select'
@@ -85,16 +111,13 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                             Nightmare
                         </option>
                     </select>
-                    <button onClick={() => { sfx.playClickSfx(); }} className='bg-[#363040]/60 
-       py-8 px-6 rounded-2xl text-7xl text-slate-400 glow-ani-border'>
-                        <Link to='/Encyclopedia' className='e-link'>
-                            Encyclopedia
-                        </Link>
-                    </button>
-                    <button onClick={() => { handleCreditsClick(); sfx.playClickSfx(); }} className='bg-[#363040]/60 
-       py-8 px-6 rounded-2xl text-7xl text-slate-400 glow-ani-border'>
-                        Credits
-                    </button>
+                    <StartMenuButton
+                        text='Credits'
+                        onClick={() => {
+                            handleCreditsClick();
+                            sfx.playClickSfx();
+                        }}
+                    />
                 </div>
                 {isCreditsShown &&
                     <section className='flex flex-row m-auto items-center 
@@ -107,7 +130,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                             <cite>Images: Midjourney AI </cite>
                             <cite>Volume on symbol: Pixel Perfect</cite>
                             <cite>Volume off symbol: Google</cite>
-                            <cite>SFX:
+                            <cite className='cite-link'>SFX:
                                 <a href='https://opengameart.org/'
                                     target='_blank'>
                                     OpenGameArt.Org,
@@ -118,9 +141,6 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                                     SoundEffectsFactory
 
                                 </a>
-                            </cite>
-                            <cite>
-
                             </cite>
                         </strong>
                     </section>
