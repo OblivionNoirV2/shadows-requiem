@@ -34,7 +34,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
     const StartMenuButton: React.FC<StartMenuButtonProps> = ({ text, link, onClick }) => {
         return (
             <button onClick={onClick} className='bg-[#363040]/60 
-            py-8 px-6 rounded-2xl text-7xl text-slate-400 mt-10 
+            py-6 px-4 rounded-2xl text-6xl text-slate-400 mt-10 
             glow-ani-border'>
                 {
                     link ?
@@ -50,8 +50,10 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
         <main className='flex flex-col mx-auto w-2/3
    justify-center items-center space-y-4 mt-12 '>
 
-            <h1 className='text-8xl glow-ani-text text-black'>Shadow's Requiem</h1>
+            <h1 className='text-8xl glow-ani-text text-black'>影の鎮魂歌</h1>
             <hr className='bg-black glow-ani-text h-2 w-full border-none'></hr>
+            <h1 className='text-6xl glow-ani-text text-black'>Shadow's Requiem</h1>
+
             <section className='start-menu space-y-8 flex flex-row'>
                 <div className='flex flex-col space-y-8'>
 
@@ -74,7 +76,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                     />
 
                     <select className=' bg-[#363040]/60 
-       py-4 px-3 rounded-2xl text-7xl text-center text-slate-400 glow-ani-border
+       py-4 px-3 rounded-2xl text-6xl text-center text-slate-400 glow-ani-border
        diff-select'
                         onChange={handleDiffChange}
                         onClick={() => sfx.playClickSfx}

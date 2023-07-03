@@ -155,7 +155,7 @@ function RNG(props: RNGProps) {
         crit: crit_msg,
     };
 };
-
+//floor because we want to keep everything as ints
 export function Randomizer(min: number, max: number) {
     return Math.floor(Math.random() * (max - min) + min);
 }
