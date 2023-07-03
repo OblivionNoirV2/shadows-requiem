@@ -24,8 +24,6 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
 
     const handleDiffChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setSelectedDifficulty(e.target.value);
-
-
     }
 
     interface StartMenuButtonProps {

@@ -11,21 +11,34 @@
 }
 
 .flake {
-    background-image: url('assets/images/bg-and-effects/snowflake.png');
+    background-image: url('assets/images/bg-and-effects/snowflakev2.png');
     background-size: cover;
     width: .8rem;
     height: .8rem;
     position: absolute;
     animation: fall linear infinite;
-    opacity: 0.75;
 }
 
 @keyframes fall {
     0% {
         transform: translateY(0vh) rotate(0deg);
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 0.8;
+    }
+
+    80% {
+        opacity: 0.6;
+    }
+
+    90% {
+        opacity: 0.4;
     }
 
     100% {
         transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
     }
 }
