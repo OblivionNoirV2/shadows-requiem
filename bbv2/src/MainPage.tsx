@@ -16,7 +16,11 @@ import {
     KnightMPContext,
     DmageMPContext,
     WmageMPContext,
-    RmageMPContext
+    RmageMPContext,
+    KnightHPContext,
+    DmageHPContext,
+    WmageHPContext,
+    RmageHPContext,
 } from './Context';
 import { RNGResult } from './PlayerActions';
 import { new_set_hp } from './PlayerActions';
@@ -182,6 +186,11 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { WmageMP, setWmageMP } = useContext(WmageMPContext);
     const { RmageMP, setRmageMP } = useContext(RmageMPContext);
 
+    const { KnightHP, setKnightHP } = useContext(KnightHPContext);
+    const { DmageHP, setDmageHP } = useContext(DmageHPContext);
+    const { WmageHP, setWmageHP } = useContext(WmageHPContext);
+    const { RmageHP, setRmageHP } = useContext(RmageHPContext);
+
 
     function HandleItemUse(item: string) {
         console.log("working");
@@ -237,6 +246,10 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         setIsAttackMade(true);
 
     }
+
+
+
+
     //Match ther player to the appropriate mp stat
     const MatchToMpMap: Map<string, number | undefined> = new Map([
         ["knight", sm.knight_stats.get("mp")],
@@ -312,6 +325,17 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                 const mp_map_value = MatchToMpMap.get(player);
                                                 console.log("e entry:", attack_encyclopedia_entry);
                                                 console.log("mpMapValue:", mp_map_value);
+                                                console.log("dmagehp:", DmageHP);
+                                                console.log("dmagemp:", DmageMP);
+                                                setDmageHP(DmageHP! - 100);
+                                                setDmageMP(DmageMP! - 100);
+                                                setKnightHP(KnightHP! - 100);
+                                                setKnightMP(KnightMP! - 100);
+                                                setWmageHP(WmageHP! - 100);
+                                                setWmageMP(WmageMP! - 100);
+                                                setRmageHP(RmageHP! - 100);
+                                                setRmageMP(RmageMP! - 100);
+
                                                 sfx.playClickSfx();
                                                 if (attack_encyclopedia_entry
                                                     && mp_map_value !== undefined
@@ -452,12 +476,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     const { message, setMessage } = useContext(MessageContext);
     const { currentAttack, setCurrentAttack } = useContext(CurrentAttackContext);
     const [isUltimaReady, setIsUltimaReady] = useState(false);
-
-    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
-    const { DmageMP, setDmageMP } = useContext(DmageMPContext);
-    const { WmageMP, setWmageMP } = useContext(WmageMPContext);
-    const { RmageMP, setRmageMP } = useContext(RmageMPContext);
-
 
 
     //Manage the turn based system
@@ -624,7 +642,41 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         player: string;
         stat_name: validMapKeys;
     }
+
     const PlayerComponent: React.FC<PlayerComponentProps> = ({ player, stat_name }) => {
+
+        const { KnightMP, setKnightMP } = useContext(KnightMPContext);
+        const { DmageMP, setDmageMP } = useContext(DmageMPContext);
+        const { WmageMP, setWmageMP } = useContext(WmageMPContext);
+        const { RmageMP, setRmageMP } = useContext(RmageMPContext);
+
+        const { KnightHP, setKnightHP } = useContext(KnightHPContext);
+        const { DmageHP, setDmageHP } = useContext(DmageHPContext);
+        const { WmageHP, setWmageHP } = useContext(WmageHPContext);
+        const { RmageHP, setRmageHP } = useContext(RmageHPContext);
+        //ts won't cooperate, so we're YOLO-ing it with any
+        const MatchToMPState: Map<string, any> = new Map(
+            [
+                ["knight", KnightMP],
+                ["dmage", DmageMP],
+                ["wmage", WmageMP],
+                ["rmage", RmageMP]
+
+            ]
+        )
+        const MatchToHPState: Map<string, any> = new Map(
+            [
+                ["knight", KnightHP],
+                ["dmage", DmageHP],
+                ["wmage", WmageHP],
+                ["rmage", RmageHP]
+
+            ]
+        )
+        useEffect(() => {
+            //this is correct, but the progress bar is not changing???
+            console.log("inside player component", MatchToHPState.get(player))
+        }, [MatchToHPState.get(player)])
         return (
             <>
                 <section className='flex flex-row text-white'>
@@ -636,11 +688,12 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 <div className='flex flex-row'>
                     <progress className='p-hp'
                         max={sm[stat_name].get('max-hp')}
-                        value={sm[stat_name].get('hp')}>
+                        value={
+                            MatchToHPState.get(player)}>
                     </progress>
                     <div className='ml-2 text-xl hp-text'>
                         <strong>
-                            {sm[stat_name].get('hp')}/{sm[stat_name].get('max_hp')}
+                            {MatchToHPState.get(player)}/{sm[stat_name].get('max_hp')}
                         </strong>
                     </div>
                 </div>
@@ -648,11 +701,13 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 <div className='flex flex-row'>
                     <progress className='mb-4 p-mb p-mp'
                         max={sm[stat_name].get('max_mp')}
-                        value={sm[stat_name].get('mp')}>
+                        value={
+                            MatchToMPState.get(player)
+                        }>
                     </progress>
                     <div className='ml-2 text-xl mp-text'>
                         <strong>
-                            {sm[stat_name].get("mp")}/{sm[stat_name].get("max_mp")}
+                            {MatchToMPState.get(player)}/{sm[stat_name].get("max_mp")}
                         </strong>
                     </div>
                 </div>
