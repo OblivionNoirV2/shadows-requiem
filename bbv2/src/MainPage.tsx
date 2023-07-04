@@ -105,10 +105,6 @@ export const BossArea = () => {
         "True Form of the Fallen"
     ];
 
-    //Set the new boss hp when the attack is run
-    //then pass the value up here to update the progress bar
-
-    //todo: same images, but wider AR
     return (
         <main className='boss-container flex flex-col mt-48
         mr-[40rem]
@@ -145,11 +141,7 @@ export const BossHpBar = () => {
     )
 }
 
-/*this must be seperate from the image, otherwise it 
-renders at the wrong time*/
 
-
-//fetch and return list of player attacks in ul format
 interface PlayerMenuProps {
     player: string;
     isPlayerTurn: boolean;
@@ -168,8 +160,6 @@ function bossAttackAlgo() {
 all as one string*/
 
 export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
-    //note that this re-renders whenever the player is selected
-    //this section is also responsible for rendering the attack menu
 
     console.log("player menu rendered")
     const current_attacks = player_attacks[player];
@@ -251,6 +241,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
 
     //Match ther player to the appropriate mp stat
+
+    //todo: change this to state
     const MatchToMpMap: Map<string, number | undefined> = new Map([
         ["knight", sm.knight_stats.get("mp")],
         ["dmage", sm.dmage_stats.get("mp")],
@@ -312,6 +304,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                         //if there's not enough mp, disable the button and grey it out
                         //Use the encyclopaedia to get the mp cost
                         //Mp subtraction is done HERE, then the bar updates through context
+
+                        //IMPORTANT: change this to use state
                         <>
                             <div className='w-full gap-x-2 grid grid-cols-3 grid-rows-auto'>
 
@@ -321,12 +315,13 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                         >
                                             <button onClick={() => {
                                                 const attack_encyclopedia_entry = e.AttackEncyclopedia.get(attack)?.mp_cost;
-
+                                                //max mp for that character
                                                 const mp_map_value = MatchToMpMap.get(player);
                                                 console.log("e entry:", attack_encyclopedia_entry);
                                                 console.log("mpMapValue:", mp_map_value);
                                                 console.log("dmagehp:", DmageHP);
                                                 console.log("dmagemp:", DmageMP);
+                                                //just tests
                                                 setDmageHP(DmageHP! - 100);
                                                 setDmageMP(DmageMP! - 100);
                                                 setKnightHP(KnightHP! - 100);
@@ -645,6 +640,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
     const PlayerComponent: React.FC<PlayerComponentProps> = ({ player, stat_name }) => {
 
+
         const { KnightMP, setKnightMP } = useContext(KnightMPContext);
         const { DmageMP, setDmageMP } = useContext(DmageMPContext);
         const { WmageMP, setWmageMP } = useContext(WmageMPContext);
@@ -654,6 +650,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         const { DmageHP, setDmageHP } = useContext(DmageHPContext);
         const { WmageHP, setWmageHP } = useContext(WmageHPContext);
         const { RmageHP, setRmageHP } = useContext(RmageHPContext);
+
+        console.log(KnightHPContext)
         //ts won't cooperate, so we're YOLO-ing it with any
         const MatchToMPState: Map<string, any> = new Map(
             [
@@ -674,9 +672,12 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             ]
         )
         useEffect(() => {
-            //this is correct, but the progress bar is not changing???
-            console.log("inside player component", MatchToHPState.get(player))
-        }, [MatchToHPState.get(player)])
+            //this is correct, but the hp progress bar is not changing???
+            console.log("inside player component hp", MatchToHPState.get(player))
+            console.log("inside player component mp", MatchToMPState.get(player))
+
+            console.log("dmage hp", DmageHP)
+        }, [MatchToHPState.get(player), MatchToMPState.get(player)])
         return (
             <>
                 <section className='flex flex-row text-white'>

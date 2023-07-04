@@ -102,8 +102,6 @@ const App: React.FC = () => {
     prev_track.currentTime = 0;
     current_track.play();
     current_track.loop = true;
-
-
   }
   useEffect(() => {
     if (isMusicOn) {
