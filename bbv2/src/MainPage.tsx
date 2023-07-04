@@ -517,6 +517,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 break;
         }
 
+
         //Render the status effects
         return (
             status_effects.map((status_effect, index) => (
@@ -608,6 +609,47 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             }, 4000);
         }
     }
+    type validMapKeys = "knight_stats" | "dmage_stats" | "wmage_stats" | "rmage_stats";
+    interface PlayerComponentProps {
+        player: string;
+        stat_name: validMapKeys;
+    }
+    const PlayerComponent: React.FC<PlayerComponentProps> = ({ player, stat_name }) => {
+        return (
+            <>
+                <section className='flex flex-row text-white'>
+                    <h1 className='mr-4 text-xl'>HP</h1>
+                    <ul className='flex flex-row space-x-4'>
+                        {UpdateStatusEffects('player')}
+                    </ul>
+                </section>
+                <div className='flex flex-row'>
+                    <progress className='p-hp'
+                        max={sm[stat_name].get('max-hp')}
+                        value={sm[stat_name].get('hp')}>
+                    </progress>
+                    <div className='ml-2 text-xl hp-text'>
+                        <strong>
+                            {sm[stat_name].get('hp')}/{sm[stat_name].get('max_hp')}
+                        </strong>
+                    </div>
+                </div>
+                <h1 className='mr-4 text-xl text-white'>MP</h1>
+                <div className='flex flex-row'>
+                    <progress className='mb-4 p-mb p-mp'
+                        max={sm[stat_name].get('max_mp')}
+                        value={sm[stat_name].get('mp')}>
+                    </progress>
+                    <div className='ml-2 text-xl mp-text'>
+                        <strong>
+                            {sm[stat_name].get("mp")}/{sm[stat_name].get("max_mp")}
+                        </strong>
+                    </div>
+                </div>
+            </>
+        )
+
+    }
     //For mobile, move the characters under the boss and enable scroll
     return (
         <>
@@ -664,37 +706,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     />
 
                                 }
-                                <section className='flex flex-row text-white'>
-                                    <h1 className='mr-4 text-xl'>HP</h1>
-                                    {/*these will need to update each boss attack 
-                                    (on odd turn numbers)*/}
-                                    <ul className='flex flex-row space-x-4'>
-                                        {UpdateStatusEffects('knight')}
-                                    </ul>
-                                </section>
-                                <div className='flex flex-row'>
-                                    <progress className='p-hp'
-                                        max={sm.knight_stats.get('max-hp')}
-                                        value={sm.knight_stats.get('hp')}>
-                                    </progress>
-                                    <div className='ml-2 text-xl hp-text'>
-                                        <strong>
-                                            {sm.knight_stats.get('hp')}/{sm.knight_stats.get('max_hp')}
-                                        </strong>
-                                    </div>
-                                </div>
-                                <h1 className='mr-4 text-xl text-white'>MP</h1>
-                                <div className='flex flex-row'>
-                                    <progress className='mb-4 p-mb p-mp'
-                                        max={sm.knight_stats.get('max_mp')}
-                                        value={sm.knight_stats.get('mp')}>
-                                    </progress>
-                                    <div className='ml-2 text-xl mp-text'>
-                                        <strong>
-                                            {sm.knight_stats.get("mp")}/{sm.knight_stats.get("max_mp")}
-                                        </strong>
-                                    </div>
-                                </div>
+                                <PlayerComponent
+                                    player='knight'
+                                    stat_name='knight_stats'
+                                />
                             </span>
                         </li>
                         <li>
@@ -719,37 +734,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     />
 
                                 }
-                                <section className='flex flex-row text-white'>
-                                    <h1 className='mr-4 text-xl'>HP</h1>
-                                    {/*these will need to update each boss attack 
-                                    (on odd turn numbers)*/}
-                                    <ul className='flex flex-row space-x-4'>
-                                        {UpdateStatusEffects('dmage')}
-                                    </ul>
-                                </section>
-                                <div className='flex flex-row'>
-                                    <progress className='p-hp'
-                                        max={sm.dmage_stats.get('max-hp')}
-                                        value={sm.dmage_stats.get('hp')}>
-                                    </progress>
-                                    <div className='ml-2 text-xl hp-text'>
-                                        <strong>
-                                            {sm.dmage_stats.get('hp')}/{sm.dmage_stats.get('max_hp')}
-                                        </strong>
-                                    </div>
-                                </div>
-                                <h1 className='mr-4 text-xl text-white'>MP</h1>
-                                <div className='flex flex-row'>
-                                    <progress className='mb-4 p-mb p-mp'
-                                        max={sm.dmage_stats.get('max_mp')}
-                                        value={sm.dmage_stats.get('mp')}>
-                                    </progress>
-                                    <strong>
-                                        <div className='ml-2 text-xl mp-text'>
-                                            {sm.dmage_stats.get("mp")}/{sm.dmage_stats.get("max_mp")}
-                                        </div>
-                                    </strong>
-                                </div>
+                                <PlayerComponent
+                                    player='dmage'
+                                    stat_name='dmage_stats'
+                                />
                             </span>
                         </li>
                         <li>
@@ -773,37 +761,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     />
 
                                 }
-                                <section className='flex flex-row text-white'>
-                                    <h1 className='mr-4 text-xl'>HP</h1>
-                                    {/*these will need to update each boss attack 
-                                    (on odd turn numbers)*/}
-                                    <ul className='flex flex-row space-x-4'>
-                                        {UpdateStatusEffects('wmage')}
-                                    </ul>
-                                </section>
-                                <div className='flex flex-row'>
-                                    <progress className='p-hp'
-                                        max={sm.wmage_stats.get('max-hp')}
-                                        value={sm.wmage_stats.get('hp')}>
-                                    </progress>
-                                    <div className='ml-2 text-xl hp-text'>
-                                        <strong>
-                                            {sm.wmage_stats.get('hp')}/{sm.wmage_stats.get('max_hp')}
-                                        </strong>
-                                    </div>
-                                </div>
-                                <h1 className='mr-4 text-xl text-white'>MP</h1>
-                                <div className='flex flex-row'>
-                                    <progress className='mb-4 p-mb p-mp'
-                                        max={sm.wmage_stats.get('max_mp')}
-                                        value={sm.wmage_stats.get('mp')}>
-                                    </progress>
-                                    <div className='ml-2 text-xl mp-text'>
-                                        <strong>
-                                            {sm.wmage_stats.get("mp")}/{sm.wmage_stats.get("max_mp")}
-                                        </strong>
-                                    </div>
-                                </div>
+                                <PlayerComponent
+                                    player='wmage'
+                                    stat_name='wmage_stats'
+                                />
 
                             </span>
                         </li>
@@ -828,37 +789,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     />
 
                                 }
-                                <section className='flex flex-row text-white'>
-                                    <h1 className='mr-4 text-xl'>HP</h1>
-                                    {/*these will need to update each boss attack 
-                                    (on odd turn numbers)*/}
-                                    <ul className='flex flex-row space-x-4'>
-                                        {UpdateStatusEffects('rmage')}
-                                    </ul>
-                                </section>
-                                <div className='flex flex-row'>
-                                    <progress className='p-hp'
-                                        max={sm.rmage_stats.get('max-hp')}
-                                        value={sm.rmage_stats.get('hp')}>
-                                    </progress>
-                                    <div className='ml-2 text-xl hp-text'>
-                                        <strong>
-                                            {sm.rmage_stats.get('hp')}/{sm.rmage_stats.get('max_hp')}
-                                        </strong>
-                                    </div>
-                                </div>
-                                <h1 className='mr-4 text-xl text-white'>MP</h1>
-                                <div className='flex flex-row'>
-                                    <progress className='mb-4 p-mb p-mp'
-                                        max={sm.rmage_stats.get('max_mp')}
-                                        value={sm.rmage_stats.get('mp')}>
-                                    </progress>
-                                    <div className='ml-2 text-xl mp-text'>
-                                        <strong>
-                                            {sm.rmage_stats.get("mp")}/{sm.rmage_stats.get("max_mp")}
-                                        </strong>
-                                    </div>
-                                </div>
+                                <PlayerComponent
+                                    player='rmage'
+                                    stat_name='rmage_stats'
+                                />
                             </span>
                         </li>
                         <li className='flex-row flex'>
