@@ -1,2 +1,1 @@
 add ability to name characters
-fix overflow on story page
