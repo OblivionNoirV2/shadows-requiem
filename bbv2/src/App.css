@@ -563,20 +563,31 @@ input:checked+.slider:before {
 .text-container {
   position: relative;
   box-shadow: 1rem 1rem 1rem 1rem rgba(0, 0, 0, 0.9);
-  background-image: url('./assets/images/bg-and-effects/stonetexture.png');
 }
 
 .text-container:before {
-  border-top-left-radius: 0.75rem;
-  border-top-right-radius: 0.75rem;
   content: "";
+  display: block;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-image: url('./assets/images/bg-and-effects/stonetexture.png');
+  opacity: 0.6;
 
+}
+
+/*dark overlay between the text and the background*/
+.text-container:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.45);
 }
 
 

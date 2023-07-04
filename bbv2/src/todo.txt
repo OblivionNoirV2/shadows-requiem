@@ -1,4 +1,2 @@
-add a page in start menu that holds encyclopedia data for attacks and items
 add ability to name characters
-show the mp/hp numbers next to the bars
-BOL should show the hp cost instead of 0 and appear green
+fix overflow on story page

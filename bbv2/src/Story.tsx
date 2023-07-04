@@ -17,7 +17,7 @@ export const Story = () => {
                 <BackButton />
             </div>
             <main className="text-container justify-center flex mx-auto 
-        max-w-lg text-slate-300 leading-loose text-3xl mt-[26rem] h-[70vh]
+        max-w-lg text-slate-300 leading-loose text-3xl mt-[28rem] max-h-[50rem]
         rounded-tr-xl rounded-tl-xl ">
                 <div className="px-8 pt-16 z-30">
                     Here lies a king who refuses to pass from this realm.
