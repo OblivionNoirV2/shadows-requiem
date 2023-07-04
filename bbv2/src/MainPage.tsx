@@ -25,7 +25,7 @@ import knightbg from './assets/images/bg-and-effects/knightultimabg.png';
 import dmagebg from './assets/images/bg-and-effects/dmageultimabg.png';
 import wmagebg from './assets/images/bg-and-effects/wmageultimabg.png';
 import rmagebg from './assets/images/bg-and-effects/rmageultimabg.png';
-import defaultbg from './assets/images/bg-and-effects/battlebgupscaled.jpeg';
+import defaultbg from './assets/images/bg-and-effects/newbg.png';
 
 interface GoBackProps {
     onBackToTitle: () => void;
@@ -620,7 +620,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 <section className='flex flex-row text-white'>
                     <h1 className='mr-4 text-xl'>HP</h1>
                     <ul className='flex flex-row space-x-4'>
-                        {UpdateStatusEffects('player')}
+                        {UpdateStatusEffects(player)}
                     </ul>
                 </section>
                 <div className='flex flex-row'>
@@ -648,8 +648,16 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 </div>
             </>
         )
-
     }
+    useEffect(() => {
+        const original_bg = document.body.style.backgroundImage;
+        document.body.style.backgroundImage = `url(${defaultbg})`;
+
+        return () => {
+            document.body.style.backgroundImage = original_bg;
+        };
+    }, []);
+
     //For mobile, move the characters under the boss and enable scroll
     return (
         <>
