@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 
 //shared among all 4, works similarly to spells
 
-
-export const player_inventory: Map<string, object> = new Map(
+interface InventoryItem {
+    description: string;
+    stock: number;
+}
+export const player_inventory: Map<string, InventoryItem> = new Map(
     [
         [
             "Minor HP Potion", {

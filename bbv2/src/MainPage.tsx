@@ -265,16 +265,26 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                     {isItemsActive ? "Back" : "Items"}
                                 </button>
                             </li>
-                            <div className='flex flex-row space-x-4'>
+
+                            <div className=''>
                                 {isItemsActive &&
-                                    Object.entries(iv.player_inventory).map(([item, quantity], index) => (
-                                        <li key={index} className='atk-btn'>
-                                            <button onClick={() => { HandleItemUse(item); sfx.playClickSfx(); }}
-                                                title={GetItemDesc(item)}>
-                                                {item} ({quantity})
-                                            </button>
-                                        </li>
-                                    ))
+                                    <select
+                                        onChange={//Will then show a "use on who? menu"
+                                            (e) => { HandleItemUse(e.target.value); sfx.playClickSfx(); }}
+                                        className='bg-black p-2 rounded-xl text-[1.2rem]'>
+                                        <option>Select an item to use...</option>
+                                        {[...iv.player_inventory.entries()].map(([item, details], index) => (
+                                            <>
+                                                <option
+                                                    key={index}
+                                                    value={item}
+                                                    title={details.description}
+                                                    className='bg-black atk-btn text-sm'>
+                                                    {item} ({details.stock})
+                                                </option>
+                                            </>
+                                        ))}
+                                    </select>
                                 }
                             </div>
                             {isItemsActive ? null :

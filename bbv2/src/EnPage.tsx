@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 import * as e from './Encyclopedia';
+import * as iv from './Inventory';
 import paperbg from './assets/images/bg-and-effects/paper.png';
 import { playClickSfx } from "./sfxManagement";
 
@@ -11,17 +12,21 @@ const AttackingDesc = () => {
             This game uses a combination of turn-based and real-time combat.
             Anytime you perform an action, it switches to the enemy, then back to you, and so forth, but
             status changes (such as status ailments or buffs/debuffs) happen in real time. so don't just sit there
-            and do nothing! Most attacks consume MP, and the amount is indicated next to the attack name. Each character also has an Ultima, which are extremely powerful attacks unlocked when the progress bar is full. It charges a little every turn
+            and do nothing! Most attacks consume MP,
+            and the amount is indicated next to the attack name.
+            Each character also has an Ultima,
+            which are extremely powerful attacks unlocked when the
+            progress bar is full. It charges a little every turn.
         </p>
 
     )
 
 }
-interface AttacksComponent {
+interface AttacksComponentProps {
     player: string;
     map_name: string;
 }
-const AttacksComponent: React.FC<AttacksComponent> = ({ player, map_name }) => {
+const AttacksComponent: React.FC<AttacksComponentProps> = ({ player, map_name }) => {
     return (
         <section>
             <hr></hr>
@@ -59,6 +64,21 @@ const AttacksComponent: React.FC<AttacksComponent> = ({ player, map_name }) => {
     )
 }
 
+const ItemComponent = () => {
+    return (
+        <ul>
+            {[...iv.player_inventory.entries()].map(([item, details], index) => (
+                <li key={index}>
+                    <h1 className="text-2xl">{item}</h1>
+                    <p className="text-lg">{details.description}</p>
+                    <br></br>
+                </li>
+            ))}
+        </ul>
+    )
+}
+
+
 //make it look like a book
 const EncylopediaPage = () => {
     useEffect(() => {
@@ -74,7 +94,7 @@ const EncylopediaPage = () => {
         <main className="en-main flex flex-row
          text-white space-x-32 justify-center w-full mx-auto 
          items-start ">
-            <button className="z-[9999] -ml-36 mt-2"
+            <button className="z-[9999] -ml-72 mt-2"
                 onClick={playClickSfx}>
                 <Link to="/">
                     Return to title
@@ -104,7 +124,7 @@ const EncylopediaPage = () => {
                 />
 
             </div>
-            <div className="flex flex-col z-[9999] max-w-2xl">
+            <div className="flex flex-col z-[9999] max-w-lg">
                 <h1 className="text-7xl my-2">
                     Defending
                 </h1>
@@ -124,8 +144,10 @@ const EncylopediaPage = () => {
                 </h1>
                 <hr></hr>
                 <p className="text-2xl mt-2">
-                    Items are in limited stock, but use no MP. They do use a turn, and are used on whichever character selects it.
+                    Items are in limited stock, but use no MP. They do use a turn and can be used on any character.
                 </p>
+                <hr className="my-2"></hr>
+                <ItemComponent />
             </div>
         </main>
     )
