@@ -549,7 +549,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     const { isAttackMade, setIsAttackMade } = useContext(AttackMadeContext);
 
     //Then reset to -1 after used(or 0?)
-    const [ultValue, setUltValue] = useState(10);
+    const [ultValue, setUltValue] = useState(-1);
     //ult management
     useEffect(() => {
         if (ultValue < 20) {

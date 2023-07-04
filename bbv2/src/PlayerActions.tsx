@@ -73,10 +73,8 @@ interface RNGProps {
 }
 function RNG(props: RNGProps) {
     console.log("in rng", selected_difficulty)
-
-
     const sfx = new Audio(AttackSfxLookup[props.sfx_type]);
-    sfx.volume = 0.4;
+    props.is_ult ? sfx.volume = 0.8 : sfx.volume = 0.3;
     console.log("sfx: ", sfx);
     let play_count = 0;
     function playNext() {
@@ -304,7 +302,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "phys",
                         variance: 1.05,//lower for ults
                         is_ult: true,
-                        sfx_type: "sword"//change
+                        sfx_type: "army"
                     }
                 )
             )
@@ -416,7 +414,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "mag",
                         variance: 1.05,//lower for ults
                         is_ult: true,
-                        sfx_type: "sword"//change
+                        sfx_type: "sn"
                     }
                 )
             )

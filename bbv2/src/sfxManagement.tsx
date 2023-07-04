@@ -14,6 +14,8 @@ import statdown from './assets/sound/sfx/statdown.wav';
 import punch from './assets/sound/sfx/punch.mp3';
 import explosion from './assets/sound/sfx/explosion.wav';
 import bol from './assets/sound/sfx/BOL.wav';
+import army from './assets/sound/sfx/army.mp3';
+import sn from './assets/sound/sfx/SN.mp3';
 export function playClickSfx() {
     const click = new Audio(clicksfx);
     click.play();
@@ -35,7 +37,7 @@ export const AttackSfxLookup: { [name: string]: string } = {
     'glass': glasssfx,
     'punch': punch,
     'explosion': explosion,
-    'BOL': bol
-
-
+    'BOL': bol,
+    'army': army,
+    'sn': sn
 }

@@ -21,7 +21,15 @@ import {
   AttackShownContextProvider,
   CurrentAttackContextProvider,
   AttackMadeContextProvider,
-  UltimaContextProvider
+  UltimaContextProvider,
+  KnightHPContextProvider,
+  DmageHPContextProvider,
+  WmageHPContextProvider,
+  RmageHPContextProvider,
+  KnightStatusContextProvider,
+  DmageStatusContextProvider,
+  WmageStatusContextProvider,
+  RmageStatusContextProvider,
 
 }
   from './Context';
@@ -46,7 +54,23 @@ root.render(
                       <CurrentAttackContextProvider>
                         <AttackMadeContextProvider>
                           <UltimaContextProvider>
-                            <App />
+                            <KnightHPContextProvider>
+                              <DmageHPContextProvider>
+                                <WmageHPContextProvider>
+                                  <RmageHPContextProvider>
+                                    <KnightStatusContextProvider>
+                                      <DmageStatusContextProvider>
+                                        <WmageStatusContextProvider>
+                                          <RmageStatusContextProvider>
+                                            <App />
+                                          </RmageStatusContextProvider>
+                                        </WmageStatusContextProvider>
+                                      </DmageStatusContextProvider>
+                                    </KnightStatusContextProvider>
+                                  </RmageHPContextProvider>
+                                </WmageHPContextProvider>
+                              </DmageHPContextProvider>
+                            </KnightHPContextProvider>
                           </UltimaContextProvider>
                         </AttackMadeContextProvider>
                       </CurrentAttackContextProvider>

@@ -169,7 +169,6 @@ export function UltimaContextProvider({ children }: { children: React.ReactEleme
 }
 
 //states for MP, link them to the maps 
-
 interface KnightMPContextValue {
     KnightMP: number | undefined;
     setKnightMP: (value: number) => void;
@@ -263,5 +262,198 @@ export function RmageMPContextProvider({ children }: { children: React.ReactElem
         <RmageMPContext.Provider value={{ RmageMP, setRmageMP }}>
             {children}
         </RmageMPContext.Provider>
+    )
+}
+
+//states for HP, link them to the maps 
+
+interface KnightHPContextValue {
+    KnightHP: number | undefined;
+    setKnightHP: (value: number) => void;
+}
+
+export const KnightHPContext = createContext<KnightHPContextValue>({
+    KnightHP: sm.knight_stats.get('max_hp'),
+    setKnightHP: () => { },
+})
+
+export function KnightHPContextProvider({ children }: { children: React.ReactElement }) {
+    const [KnightHP, setKnightHP] = useState(sm.knight_stats.get('max_hp'));
+
+    useEffect(() => {
+        console.log('KnightHP updated:', KnightHP);
+    }, [KnightHP]);
+
+    return (
+        <KnightHPContext.Provider value={{ KnightHP, setKnightHP }}>
+            {children}
+        </KnightHPContext.Provider>
+    )
+}
+
+interface DmageHPContextValue {
+    DmageHP: number | undefined;
+    setDmageHP: (value: number) => void;
+}
+
+export const DmageHPContext = createContext<DmageHPContextValue>({
+    DmageHP: sm.dmage_stats.get('max_hp'),
+    setDmageHP: () => { },
+})
+
+export function DmageHPContextProvider({ children }: { children: React.ReactElement }) {
+    const [DmageHP, setDmageHP] = useState(sm.dmage_stats.get('max_hp'));
+
+    useEffect(() => {
+        console.log('DmageHP updated:', DmageHP);
+    }, [DmageHP]);
+
+    return (
+        <DmageHPContext.Provider value={{ DmageHP, setDmageHP }}>
+            {children}
+        </DmageHPContext.Provider>
+    )
+}
+interface WmageHPContextValue {
+    WmageHP: number | undefined;
+    setWmageHP: (value: number) => void;
+}
+export const WmageHPContext = createContext<WmageHPContextValue>({
+    WmageHP: sm.wmage_stats.get('max_hp'),
+    setWmageHP: () => { },
+})
+
+export function WmageHPContextProvider({ children }: { children: React.ReactElement }) {
+    const [WmageHP, setWmageHP] = useState(sm.wmage_stats.get('max_hp'));
+
+    useEffect(() => {
+        console.log('WmageHP updated:', WmageHP);
+    }, [WmageHP]);
+
+    return (
+        <WmageHPContext.Provider value={{ WmageHP, setWmageHP }}>
+            {children}
+        </WmageHPContext.Provider>
+    )
+}
+
+interface RmageHPContextValue {
+    RmageHP: number | undefined;
+    setRmageHP: (value: number) => void;
+}
+
+export const RmageHPContext = createContext<RmageHPContextValue>({
+    RmageHP: sm.rmage_stats.get('max_hp'),
+    setRmageHP: () => { },
+})
+
+export function RmageHPContextProvider({ children }: { children: React.ReactElement }) {
+    const [RmageHP, setRmageHP] = useState(sm.rmage_stats.get('max_hp'));
+
+    useEffect(() => {
+        console.log('RmageHP updated:', RmageHP);
+    }, [RmageHP]);
+
+    return (
+        <RmageHPContext.Provider value={{ RmageHP, setRmageHP }}>
+            {children}
+        </RmageHPContext.Provider>
+    )
+}
+//status effects, list of strings for each character
+
+interface KnightStatusContextValue {
+    KnightStatus: string[];
+    setKnightStatus: (value: string[]) => void;
+}
+
+export const KnightStatusContext = createContext<KnightStatusContextValue>({
+    KnightStatus: [],
+    setKnightStatus: () => { },
+})
+
+export function KnightStatusContextProvider({ children }: { children: React.ReactElement }) {
+    const [KnightStatus, setKnightStatus] = useState<string[]>([]);
+
+    useEffect(() => {
+        console.log('KnightStatus updated:', KnightStatus);
+    }, [KnightStatus]);
+
+    return (
+        <KnightStatusContext.Provider value={{ KnightStatus, setKnightStatus }}>
+            {children}
+        </KnightStatusContext.Provider>
+    )
+}
+
+interface DmageStatusContextValue {
+    DmageStatus: string[];
+    setDmageStatus: (value: string[]) => void;
+}
+
+export const DmageStatusContext = createContext<DmageStatusContextValue>({
+    DmageStatus: [],
+    setDmageStatus: () => { },
+})
+
+export function DmageStatusContextProvider({ children }: { children: React.ReactElement }) {
+    const [DmageStatus, setDmageStatus] = useState<string[]>([]);
+
+    useEffect(() => {
+        console.log('DmageStatus updated:', DmageStatus);
+    }, [DmageStatus]);
+
+    return (
+        <DmageStatusContext.Provider value={{ DmageStatus, setDmageStatus }}>
+            {children}
+        </DmageStatusContext.Provider>
+    )
+}
+
+interface WmageStatusContextValue {
+    WmageStatus: string[];
+    setWmageStatus: (value: string[]) => void;
+}
+
+export const WmageStatusContext = createContext<WmageStatusContextValue>({
+    WmageStatus: [],
+    setWmageStatus: () => { },
+})
+
+export function WmageStatusContextProvider({ children }: { children: React.ReactElement }) {
+    const [WmageStatus, setWmageStatus] = useState<string[]>([]);
+
+    useEffect(() => {
+        console.log('WmageStatus updated:', WmageStatus);
+    }, [WmageStatus]);
+
+    return (
+        <WmageStatusContext.Provider value={{ WmageStatus, setWmageStatus }}>
+            {children}
+        </WmageStatusContext.Provider>
+    )
+}
+
+interface RmageStatusContextValue {
+    RmageStatus: string[];
+    setRmageStatus: (value: string[]) => void;
+}
+
+export const RmageStatusContext = createContext<RmageStatusContextValue>({
+    RmageStatus: [],
+    setRmageStatus: () => { },
+})
+
+export function RmageStatusContextProvider({ children }: { children: React.ReactElement }) {
+    const [RmageStatus, setRmageStatus] = useState<string[]>([]);
+
+    useEffect(() => {
+        console.log('RmageStatus updated:', RmageStatus);
+    }, [RmageStatus]);
+
+    return (
+        <RmageStatusContext.Provider value={{ RmageStatus, setRmageStatus }}>
+            {children}
+        </RmageStatusContext.Provider>
     )
 }
