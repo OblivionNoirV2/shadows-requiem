@@ -694,7 +694,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             <>
                 <section className='flex flex-row text-white'>
                     <div className='flex flex-col'>
-                        <h1>{MatchToName.get(player)}</h1>
+                        <h1 className='text-xl'>{MatchToName.get(player)}</h1>
                         <br></br>
                         <h1 className='mr-4 text-xl'>HP</h1>
                     </div>

@@ -13,8 +13,16 @@ export const NameCharacters = () => {
     const { setDmageName } = useContext(DmageNameContext);
     const { setWmageName } = useContext(WmageNameContext);
     const { setRmageName } = useContext(RmageNameContext);
-
-    const [names, setNames] = React.useState({ "Knight": "", "Dark Mage": "", "White Mage": "", "Red Mage": "" });
+    //Set these on input change, THEN the save button (or enter) retrieves
+    //this data and uses it to set the name states
+    const [names, setNames] = React.useState(
+        {
+            "Knight": "",
+            "Dark Mage": "",
+            "White Mage": "",
+            "Red Mage": ""
+        }
+    );
 
     const handleInputChange = (character: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setNames({ ...names, [character]: event.target.value });
@@ -39,35 +47,38 @@ export const NameCharacters = () => {
                 <hr className="bg-white"></hr>
                 <form className="text-black" onSubmit={handleSaveClick}>
                     <section className="flex flex-row space-x-4">
-                        <section className="flex flex-col space-y-10 mt-2 ">
+                        <section className="flex flex-col space-y-11 mt-2 ">
                             {characters.map((character, index) => (
                                 <ul key={index}>
                                     <li>
                                         <label htmlFor={character}
-                                            className="text-white text-3xl">
+                                            className="
+                                            text-white 
+                                            text-3xl">
                                             {character}
                                         </label>
                                     </li>
                                 </ul>
                             ))}
                         </section>
-                        <section className="flex flex-col space-y-14 mt-2">
+                        <section className="flex flex-col -mt-10">
                             {characters.map((character, index) => (
                                 <ul key={index}>
-                                    <li>
+                                    <li className="mt-14">
                                         <input
                                             type="text"
+                                            maxLength={20}
                                             id={character}
                                             name={character}
-                                            className="text-black"
+                                            className="text-black w-52"
                                             onChange={handleInputChange(character)}
                                         />
                                     </li>
                                 </ul>
                             ))}
+                            <SaveButton onClick={() => handleSaveClick} />
                         </section>
                     </section>
-                    <SaveButton onClick={() => handleSaveClick} />
                 </form>
             </div>
         </main>
@@ -80,7 +91,8 @@ interface SaveButtonProps {
 
 const SaveButton: React.FC<SaveButtonProps> = ({ onClick }) => {
     return (
-        <button className="bg-black text-white px-4 rounded-xl max-w-[4rem]"
+        <button className="bg-black text-white px-4 
+        rounded-xl text-2xl mt-4 "
             onClick={onClick}>
             Save
         </button>
