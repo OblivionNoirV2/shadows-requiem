@@ -15,7 +15,7 @@ import * as sm from './StatManagement';
 import Story from './Story';
 import EncyclopediaPage from './EnPage';
 import { Randomizer } from './PlayerActions';
-
+import { NameCharacters } from './Naming';
 //Page will need to completely re-render, so use a hook to flip it
 
 //this prop just acts as a blank trigger
@@ -150,6 +150,7 @@ const App: React.FC = () => {
         <Route path='/StartMenu' element={<StartMenu on_start={startGame} />} />
         <Route path='/Story' element={<Story />} />
         <Route path='/Encyclopedia' element={<EncyclopediaPage />} />
+        <Route path='/NameCharacters' element={<NameCharacters />} />
       </Routes>
       <VolButton />
       {

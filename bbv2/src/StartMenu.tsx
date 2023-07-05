@@ -46,6 +46,10 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
             </button>
         );
     }
+
+    function HandleNameChanges() {
+
+    }
     return (
         <main className='flex flex-col mx-auto w-2/3
    justify-center items-center space-y-4 mt-12 '>
@@ -110,6 +114,11 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                         </option>
                     </select>
                     <StartMenuButton
+                        text='Name Characters'
+                        onClick={sfx.playClickSfx}
+                        link='/NameCharacters'
+                    />
+                    <StartMenuButton
                         text='Credits'
                         onClick={() => {
                             handleCreditsClick();
@@ -137,14 +146,12 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
                                 <a href='https://www.youtube.com/@SoundEffectsFactory'
                                     target='_blank'>
                                     SoundEffectsFactory
-
                                 </a>
                             </cite>
                         </strong>
                     </section>
                 }
             </section>
-
         </main>
     );
 };

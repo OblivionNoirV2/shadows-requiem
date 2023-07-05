@@ -217,12 +217,12 @@ export function DmageMPContextProvider({ children }: { children: React.ReactElem
     )
 }
 
-export interface WmageContextValue {
+export interface WmageMPContextValue {
     WmageMP: number | undefined;
     setWmageMP: (value: number) => void;
 }
 
-export const WmageMPContext = createContext<WmageContextValue>({
+export const WmageMPContext = createContext<WmageMPContextValue>({
     WmageMP: sm.wmage_stats.get('max_mp'),
     setWmageMP: () => { },
 })
@@ -455,5 +455,103 @@ export function RmageStatusContextProvider({ children }: { children: React.React
         <RmageStatusContext.Provider value={{ RmageStatus, setRmageStatus }}>
             {children}
         </RmageStatusContext.Provider>
+    )
+}
+
+//Names
+
+interface KnightNameContextValue {
+    KnightName: string;
+    setKnightName: (value: string) => void;
+}
+
+export const KnightNameContext = createContext<KnightNameContextValue>({
+    KnightName: 'Knight',
+    setKnightName: () => { },
+})
+
+export function KnightNameContextProvider({ children }: { children: React.ReactElement }) {
+    const [KnightName, setKnightName] = useState('Knight');
+
+    useEffect(() => {
+        console.log('KnightName updated:', KnightName);
+    }, [KnightName]);
+
+    return (
+        <KnightNameContext.Provider value={{ KnightName, setKnightName }}>
+            {children}
+        </KnightNameContext.Provider>
+    )
+}
+
+interface DmageNameContextValue {
+    DmageName: string;
+    setDmageName: (value: string) => void;
+}
+
+export const DmageNameContext = createContext<DmageNameContextValue>({
+    DmageName: 'Dark Mage',
+    setDmageName: () => { },
+})
+
+export function DmageNameContextProvider({ children }: { children: React.ReactElement }) {
+    const [DmageName, setDmageName] = useState('Dark Mage');
+
+    useEffect(() => {
+        console.log('DmageName updated:', DmageName);
+    }, [DmageName]);
+
+    return (
+        <DmageNameContext.Provider value={{ DmageName, setDmageName }}>
+            {children}
+        </DmageNameContext.Provider>
+    )
+}
+
+interface WmageNameContextValue {
+    WmageName: string;
+    setWmageName: (value: string) => void;
+}
+
+export const WmageNameContext = createContext<WmageNameContextValue>({
+    WmageName: 'White Mage',
+    setWmageName: () => { },
+})
+
+export function WmageNameContextProvider({ children }: { children: React.ReactElement }) {
+    const [WmageName, setWmageName] = useState('White Mage');
+
+    useEffect(() => {
+        console.log('WmageName updated:', WmageName);
+    }, [WmageName]);
+
+    return (
+        <WmageNameContext.Provider value={{ WmageName, setWmageName }}>
+            {children}
+        </WmageNameContext.Provider>
+    )
+}
+
+interface RmageNameContextValue {
+    RmageName: string;
+    setRmageName: (value: string) => void;
+}
+
+export const RmageNameContext = createContext<RmageNameContextValue>({
+    RmageName: 'Red Mage',
+    setRmageName: () => { },
+})
+
+export function RmageNameContextProvider({ children }: { children: React.ReactElement }) {
+    const [RmageName, setRmageName] = useState('Red Mage');
+
+    useEffect(() => {
+        console.log('RmageName updated:', RmageName);
+    }, [RmageName]);
+
+    return (
+        <RmageNameContext.Provider value={{ RmageName, setRmageName }}>
+            {children}
+        </RmageNameContext.Provider>
     )
 }

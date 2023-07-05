@@ -30,6 +30,10 @@ import {
   DmageStatusContextProvider,
   WmageStatusContextProvider,
   RmageStatusContextProvider,
+  KnightNameContextProvider,
+  DmageNameContextProvider,
+  WmageNameContextProvider,
+  RmageNameContextProvider,
 
 }
   from './Context';
@@ -62,7 +66,15 @@ root.render(
                                       <DmageStatusContextProvider>
                                         <WmageStatusContextProvider>
                                           <RmageStatusContextProvider>
-                                            <App />
+                                            <KnightNameContextProvider>
+                                              <DmageNameContextProvider>
+                                                <WmageNameContextProvider>
+                                                  <RmageNameContextProvider>
+                                                    <App />
+                                                  </RmageNameContextProvider>
+                                                </WmageNameContextProvider>
+                                              </DmageNameContextProvider>
+                                            </KnightNameContextProvider>
                                           </RmageStatusContextProvider>
                                         </WmageStatusContextProvider>
                                       </DmageStatusContextProvider>

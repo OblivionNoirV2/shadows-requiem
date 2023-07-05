@@ -21,6 +21,14 @@ import {
     DmageHPContext,
     WmageHPContext,
     RmageHPContext,
+    KnightStatusContext,
+    DmageStatusContext,
+    WmageStatusContext,
+    RmageStatusContext,
+    KnightNameContext,
+    DmageNameContext,
+    WmageNameContext,
+    RmageNameContext
 } from './Context';
 import { RNGResult } from './PlayerActions';
 import { new_set_hp } from './PlayerActions';
@@ -239,10 +247,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
 
 
-
-    //Match ther player to the appropriate mp stat
-
-    //todo: change this to state
     const MatchToMpMap: Map<string, number | undefined> = new Map([
         ["knight", sm.knight_stats.get("mp")],
         ["dmage", sm.dmage_stats.get("mp")],
@@ -635,9 +639,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     interface PlayerComponentProps {
         player: string;
         stat_name: validMapKeys;
+        character_name?: string;
     }
 
-    const PlayerComponent: React.FC<PlayerComponentProps> = ({ player, stat_name }) => {
+    const PlayerComponent: React.FC<PlayerComponentProps> = ({ player, stat_name, character_name }) => {
 
 
         const { KnightMP, setKnightMP } = useContext(KnightMPContext);
@@ -649,6 +654,12 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         const { DmageHP, setDmageHP } = useContext(DmageHPContext);
         const { WmageHP, setWmageHP } = useContext(WmageHPContext);
         const { RmageHP, setRmageHP } = useContext(RmageHPContext);
+
+
+        const { KnightName, setKnightName } = useContext(KnightNameContext);
+        const { DmageName, setDmageName } = useContext(DmageNameContext);
+        const { WmageName, setWmageName } = useContext(WmageNameContext);
+        const { RmageName, setRmageName } = useContext(RmageNameContext);
 
         console.log(KnightHPContext)
         //ts won't cooperate, so we're YOLO-ing it with any
@@ -670,22 +681,29 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
             ]
         )
-        useEffect(() => {
-            //this is correct, but the hp progress bar is not changing???
-            console.log("inside player component hp", MatchToHPState.get(player))
-            console.log("inside player component mp", MatchToMPState.get(player))
-            console.log(typeof MatchToHPState.get(player))
-            console.log("dmage hp", DmageHP)
-        }, [MatchToHPState.get(player), MatchToMPState.get(player)])
+
+        const MatchToName: Map<string, any> = new Map(
+            [
+                ["knight", KnightName],
+                ["dmage", DmageName],
+                ["wmage", WmageName],
+                ["rmage", RmageName]
+            ]
+        )
         return (
             <>
                 <section className='flex flex-row text-white'>
-                    <h1 className='mr-4 text-xl'>HP</h1>
+                    <div className='flex flex-col'>
+                        <h1>{MatchToName.get(player)}</h1>
+                        <br></br>
+                        <h1 className='mr-4 text-xl'>HP</h1>
+                    </div>
                     <ul className='flex flex-row space-x-4'>
                         {UpdateStatusEffects(player)}
                     </ul>
                 </section>
                 <div className='flex flex-row'>
+
                     <progress className='p-hp'
                         max={sm[stat_name].get('max_hp')}
                         value={
@@ -777,12 +795,14 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     <PlayerMenu
                                         player='knight'
                                         isPlayerTurn={isPlayerTurn}
+
                                     />
 
                                 }
                                 <PlayerComponent
                                     player='knight'
                                     stat_name='knight_stats'
+                                    character_name='Knight'
                                 />
                             </span>
                         </li>
@@ -811,6 +831,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 <PlayerComponent
                                     player='dmage'
                                     stat_name='dmage_stats'
+                                    character_name='Dark Mage'
                                 />
                             </span>
                         </li>
@@ -838,6 +859,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 <PlayerComponent
                                     player='wmage'
                                     stat_name='wmage_stats'
+                                    character_name='White Mage'
                                 />
 
                             </span>
@@ -866,6 +888,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                 <PlayerComponent
                                     player='rmage'
                                     stat_name='rmage_stats'
+                                    character_name='Red Mage'
                                 />
                             </span>
                         </li>
