@@ -305,7 +305,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                         //Use the encyclopaedia to get the mp cost
                         //Mp subtraction is done HERE, then the bar updates through context
 
-                        //IMPORTANT: change this to use state
                         <>
                             <div className='w-full gap-x-2 grid grid-cols-3 grid-rows-auto'>
 
@@ -675,7 +674,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             //this is correct, but the hp progress bar is not changing???
             console.log("inside player component hp", MatchToHPState.get(player))
             console.log("inside player component mp", MatchToMPState.get(player))
-
+            console.log(typeof MatchToHPState.get(player))
             console.log("dmage hp", DmageHP)
         }, [MatchToHPState.get(player), MatchToMPState.get(player)])
         return (
@@ -688,9 +687,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                 </section>
                 <div className='flex flex-row'>
                     <progress className='p-hp'
-                        max={sm[stat_name].get('max-hp')}
+                        max={sm[stat_name].get('max_hp')}
                         value={
-                            MatchToHPState.get(player)}>
+                            MatchToHPState.get(player)
+                        }>
                     </progress>
                     <div className='ml-2 text-xl hp-text'>
                         <strong>

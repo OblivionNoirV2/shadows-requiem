@@ -113,10 +113,11 @@ body {
 .p-mp {
   max-width: 12rem;
   height: 1.2rem;
+  border-radius: 0.2rem;
 }
 
 .p-mp {
-  border-radius: 0.2rem;
+
   max-width: 10rem;
 }
 
