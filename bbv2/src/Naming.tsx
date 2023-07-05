@@ -30,13 +30,13 @@ export const NameCharacters = () => {
 
     const handleSaveClick = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setKnightName(names['Knight']);
-        setDmageName(names['Dark Mage']);
-        setWmageName(names['White Mage']);
-        setRmageName(names['Red Mage']);
+        //set to default names if left empty, this prevents blank names
+        setKnightName(names['Knight'] || 'Knight');
+        setDmageName(names['Dark Mage'] || 'Dark Mage');
+        setWmageName(names['White Mage'] || 'White Mage');
+        setRmageName(names['Red Mage'] || 'Red Mage');
         console.log(names);
     };
-
 
     return (
         <main className="flex justify-center mx-autos">
@@ -66,6 +66,7 @@ export const NameCharacters = () => {
                                 <ul key={index}>
                                     <li className="mt-14">
                                         <input
+                                            placeholder={character}
                                             type="text"
                                             maxLength={20}
                                             id={character}
@@ -76,7 +77,7 @@ export const NameCharacters = () => {
                                     </li>
                                 </ul>
                             ))}
-                            <SaveButton onClick={() => handleSaveClick} />
+                            <SaveButton />
                         </section>
                     </section>
                 </form>
@@ -89,11 +90,11 @@ interface SaveButtonProps {
     onClick: () => void;
 }
 
-const SaveButton: React.FC<SaveButtonProps> = ({ onClick }) => {
+const SaveButton = () => {
     return (
         <button className="bg-black text-white px-4 
         rounded-xl text-2xl mt-4 "
-            onClick={onClick}>
+            type="submit">
             Save
         </button>
     )
