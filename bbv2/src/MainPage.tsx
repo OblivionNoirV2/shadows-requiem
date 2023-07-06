@@ -260,6 +260,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     type validItemTargets = "knight" | "dmage" | "wmage" | "rmage";
 
     const [itemTarget, setItemTarget] = useState<validItemTargets>()
+    const [currentItem, setCurrentItem] = useState("")
 
     function HandleItemChange(e: string) {
         console.log(iv.player_inventory.get(e))
@@ -272,19 +273,22 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             }, 1000)
         } else {
             setIsSecondaryItemMenuShown(true)
+            setCurrentItem(e);
         }
 
     }
     //Pulls from a map of objects like the attacks do 
     //Store the stock in a map
-    interface UseItemProps {
-        item: string,
-        target: string
-    }
 
-    function UseItem(props: UseItemProps) {
+    function UseItem(item: string, target: string) {
+        console.log("item", item)
+        console.log("target", target)
 
     }
+    //Forces it to wait till the target has been set, eliminating latency issues
+    useEffect(() => {
+        UseItem(currentItem, itemTarget!)
+    }, [itemTarget])
     return (
 
         <main className='w-full'>
@@ -346,22 +350,35 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                         </div>
                                         <ul className=' space-x-4 grid grid-cols-2 grid-rows-2'>
                                             <li>
-                                                <button className='atk-btn'>
+                                                <button className='atk-btn'
+                                                    onClick={() =>
+                                                        setItemTarget("knight")
+                                                    }>
                                                     {KnightName}
                                                 </button>
                                             </li>
                                             <li>
-                                                <button className='atk-btn'>
+                                                <button className='atk-btn'
+                                                    onClick={() =>
+                                                        setItemTarget("dmage")
+                                                    }>
                                                     {DmageName}
                                                 </button>
                                             </li>
                                             <li>
-                                                <button className='atk-btn'>
+                                                <button className='atk-btn'
+                                                    onClick={() =>
+                                                        setItemTarget("wmage")
+
+                                                    }>
                                                     {WmageName}
                                                 </button>
                                             </li>
                                             <li>
-                                                <button className='atk-btn'>
+                                                <button className='atk-btn'
+                                                    onClick={() =>
+                                                        setItemTarget("rmage")
+                                                    }>
                                                     {RmageName}
                                                 </button>
                                             </li>
