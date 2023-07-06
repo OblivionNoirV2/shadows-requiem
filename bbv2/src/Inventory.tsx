@@ -2,6 +2,20 @@ import React, { useState } from 'react';
 
 //shared among all 4, works similarly to spells
 
+
+
+export const item_functions: Map<string, Function> = new Map(
+    [
+        ["Minor HP Potion", function MinorHPpotion() {
+
+
+        }
+        ]
+
+
+    ]
+)
+
 interface InventoryItem {
     description: string;
     stock: number;
@@ -11,7 +25,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Minor HP Potion", {
                 description: "Restores 1/3 of a character's max HP.",
-                stock: 5
+                stock: 5,
             }
         ],
         [

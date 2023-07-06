@@ -257,15 +257,34 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     ]);
 
     const [isSecondaryItemMenuShown, setIsSecondaryItemMenuShown] = useState(false);
-    console.log("first", isSecondaryItemMenuShown)
-    const [currentItem, setCurrentItem] = useState("")
+    type validItemTargets = "knight" | "dmage" | "wmage" | "rmage";
+
+    const [itemTarget, setItemTarget] = useState<validItemTargets>()
+
     function HandleItemChange(e: string) {
-        setCurrentItem(e);
-        console.log(e)
-        setIsSecondaryItemMenuShown(true)
-        console.log(isSecondaryItemMenuShown)
+        console.log(iv.player_inventory.get(e))
+        if (iv.player_inventory.get(e)!.stock <= 0) {
+            setMessage("Not enough stock!");
+            setIsAttackMade(true)
+            //just shows the message
+            setTimeout(() => {
+                setIsAttackMade(false);
+            }, 1000)
+        } else {
+            setIsSecondaryItemMenuShown(true)
+        }
+
+    }
+    //Pulls from a map of objects like the attacks do 
+    //Store the stock in a map
+    interface UseItemProps {
+        item: string,
+        target: string
     }
 
+    function UseItem(props: UseItemProps) {
+
+    }
     return (
 
         <main className='w-full'>
