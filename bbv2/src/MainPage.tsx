@@ -189,10 +189,12 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { WmageHP, setWmageHP } = useContext(WmageHPContext);
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
 
+    const { KnightName } = useContext(KnightNameContext)
+    const { DmageName } = useContext(DmageNameContext)
+    const { WmageName } = useContext(WmageNameContext)
+    const { RmageName } = useContext(RmageNameContext)
 
-    function HandleItemUse(item: string) {
-        console.log("working");
-    };
+
 
     function HandleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);
@@ -254,6 +256,15 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         ["rmage", sm.rmage_stats.get("mp")]
     ]);
 
+    const [isSecondaryItemMenuShown, setIsSecondaryItemMenuShown] = useState(false);
+    console.log("first", isSecondaryItemMenuShown)
+    const [currentItem, setCurrentItem] = useState("")
+    function HandleItemChange(e: string) {
+        setCurrentItem(e);
+        console.log(e)
+        setIsSecondaryItemMenuShown(true)
+        console.log(isSecondaryItemMenuShown)
+    }
 
     return (
 
@@ -265,7 +276,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                         <li>
                             <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}
                             >
-                                {isAttacksActive ? "Back" : "Attacks"}
+                                {isAttacksActive ?
+
+                                    "Back" : "Attacks"}
                             </button>
                         </li>
                     }
@@ -273,29 +286,70 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                         <>
                             <li>
                                 <button onClick={() => { sfx.playClickSfx(); HandleItemsMenu() }}>
-                                    {isItemsActive ? "Back" : "Items"}
+                                    {
+                                        isSecondaryItemMenuShown ? null :
+                                            isItemsActive ? "Back" : "Items"}
                                 </button>
                             </li>
 
-                            <div className=''>
-                                {isItemsActive &&
-                                    <select
-                                        onChange={//Will then show a "use on who? menu"
-                                            (e) => { HandleItemUse(e.target.value); sfx.playClickSfx(); }}
-                                        className='bg-black p-2 rounded-xl text-[1.2rem]'>
-                                        <option>Select an item to use...</option>
-                                        {[...iv.player_inventory.entries()].map(([item, details], index) => (
-                                            <>
-                                                <option
-                                                    key={index}
-                                                    value={item}
-                                                    title={details.description}
-                                                    className='bg-black atk-btn text-sm'>
-                                                    {item} ({details.stock})
-                                                </option>
-                                            </>
-                                        ))}
-                                    </select>
+                            <div className='flex flex-row'>
+                                <div className='flex flex-col'>
+                                    {isSecondaryItemMenuShown &&
+                                        <button className='atk-btn mb-2 '
+                                            onClick={() => setIsSecondaryItemMenuShown(false)}>
+                                            Back
+                                        </button>
+                                    }
+                                    {isItemsActive &&
+                                        <select
+                                            onChange={//Will then show a "use on who? menu"
+                                                (e) => { HandleItemChange(e.target.value); sfx.playClickSfx(); }}
+                                            className='bg-black p-2 rounded-xl text-[1.2rem]'>
+                                            <option>Select an item to use...</option>
+                                            {[...iv.player_inventory.entries()].map(([item, details], index) => (
+                                                <>
+                                                    <option
+                                                        key={index}
+                                                        value={item}
+                                                        title={details.description}
+                                                        className='bg-black atk-btn text-sm'>
+                                                        {item} ({details.stock})
+                                                    </option>
+                                                </>
+                                            ))}
+                                        </select>
+                                    }
+                                </div>
+                                {isSecondaryItemMenuShown &&
+                                    <section className='flex flex-col justify-end  '>
+                                        <div className='flex flex-row'>
+                                            <h1 className=' justify-center mx-auto'>Use on who?</h1>
+                                        </div>
+                                        <ul className=' space-x-4 grid grid-cols-2 grid-rows-2'>
+                                            <li>
+                                                <button className='atk-btn'>
+                                                    {KnightName}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button className='atk-btn'>
+                                                    {DmageName}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button className='atk-btn'>
+                                                    {WmageName}
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button className='atk-btn'>
+                                                    {RmageName}
+                                                </button>
+                                            </li>
+
+                                        </ul>
+                                    </section>
+
                                 }
                             </div>
                             {isItemsActive ? null :
