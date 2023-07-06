@@ -253,6 +253,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         ["wmage", sm.wmage_stats.get("mp")],
         ["rmage", sm.rmage_stats.get("mp")]
     ]);
+
+
     return (
 
         <main className='w-full'>
@@ -324,15 +326,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                 console.log("mpMapValue:", mp_map_value);
                                                 console.log("dmagehp:", DmageHP);
                                                 console.log("dmagemp:", DmageMP);
-                                                //just tests
-                                                setDmageHP(DmageHP! - 100);
-                                                setDmageMP(DmageMP! - 100);
-                                                setKnightHP(KnightHP! - 100);
-                                                setKnightMP(KnightMP! - 100);
-                                                setWmageHP(WmageHP! - 100);
-                                                setWmageMP(WmageMP! - 100);
-                                                setRmageHP(RmageHP! - 100);
-                                                setRmageMP(RmageMP! - 100);
 
                                                 sfx.playClickSfx();
                                                 if (attack_encyclopedia_entry
@@ -345,6 +338,21 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                         setIsAttackMade(false);
                                                     }, 1000)
                                                 } else {
+                                                    switch (player) {
+                                                        case "knight":
+                                                            setKnightMP(KnightMP! - attack_encyclopedia_entry!);
+                                                            break;
+                                                        case "dmage":
+                                                            setDmageMP(DmageMP! - attack_encyclopedia_entry!);
+                                                            break;
+                                                        case "wmage":
+                                                            setWmageMP(WmageMP! - attack_encyclopedia_entry!);
+                                                            break;
+                                                        case "rmage":
+                                                            setRmageMP(RmageMP! - attack_encyclopedia_entry!);
+                                                            break;
+                                                    }
+
                                                     handleAtkClick(attack);
                                                     setIsAttackAreaShown(true);
 
@@ -661,7 +669,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         const { WmageName, setWmageName } = useContext(WmageNameContext);
         const { RmageName, setRmageName } = useContext(RmageNameContext);
 
-        console.log(KnightHPContext)
         //ts won't cooperate, so we're YOLO-ing it with any
         const MatchToMPState: Map<string, any> = new Map(
             [

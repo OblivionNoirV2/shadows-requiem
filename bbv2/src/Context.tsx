@@ -175,12 +175,12 @@ interface KnightMPContextValue {
 }
 
 export const KnightMPContext = createContext<KnightMPContextValue>({
-    KnightMP: sm.knight_stats.get('max_mp'),
+    KnightMP: sm.knight_stats.get('mp'),
     setKnightMP: () => { },
 });
 
 export function KnightMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [KnightMP, setKnightMP] = useState(sm.knight_stats.get('max_mp'));
+    const [KnightMP, setKnightMP] = useState(sm.knight_stats.get('mp'));
 
     useEffect(() => {
         console.log('KnightMP updated:', KnightMP);
@@ -199,12 +199,12 @@ interface DmageMPContextValue {
 }
 
 export const DmageMPContext = createContext<DmageMPContextValue>({
-    DmageMP: sm.dmage_stats.get('max_mp'),
+    DmageMP: sm.dmage_stats.get('mp'),
     setDmageMP: () => { },
 })
 
 export function DmageMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [DmageMP, setDmageMP] = useState(sm.dmage_stats.get('max_mp'));
+    const [DmageMP, setDmageMP] = useState(sm.dmage_stats.get('mp'));
 
     useEffect(() => {
         console.log('DmageMP updated:', DmageMP);
@@ -223,12 +223,12 @@ export interface WmageMPContextValue {
 }
 
 export const WmageMPContext = createContext<WmageMPContextValue>({
-    WmageMP: sm.wmage_stats.get('max_mp'),
+    WmageMP: sm.wmage_stats.get('mp'),
     setWmageMP: () => { },
 })
 
 export function WmageMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [WmageMP, setWmageMP] = useState(sm.wmage_stats.get('max_mp'));
+    const [WmageMP, setWmageMP] = useState(sm.wmage_stats.get('mp'));
 
     useEffect(() => {
         console.log('WmageMP updated:', WmageMP);
@@ -247,12 +247,12 @@ export interface RmageMPContextValue {
 }
 
 export const RmageMPContext = createContext<RmageMPContextValue>({
-    RmageMP: sm.rmage_stats.get('max_mp'),
+    RmageMP: sm.rmage_stats.get('mp'),
     setRmageMP: () => { },
 })
 
 export function RmageMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [RmageMP, setRmageMP] = useState(sm.rmage_stats.get('max_mp'));
+    const [RmageMP, setRmageMP] = useState(sm.rmage_stats.get('mp'));
 
     useEffect(() => {
         console.log('RmageMP updated:', RmageMP);
@@ -273,12 +273,12 @@ interface KnightHPContextValue {
 }
 
 export const KnightHPContext = createContext<KnightHPContextValue>({
-    KnightHP: sm.knight_stats.get('max_hp'),
+    KnightHP: sm.knight_stats.get('hp'),
     setKnightHP: () => { },
 })
 
 export function KnightHPContextProvider({ children }: { children: React.ReactElement }) {
-    const [KnightHP, setKnightHP] = useState(sm.knight_stats.get('max_hp'));
+    const [KnightHP, setKnightHP] = useState(sm.knight_stats.get('hp'));
 
     useEffect(() => {
         console.log('KnightHP updated:', KnightHP);
@@ -297,12 +297,12 @@ interface DmageHPContextValue {
 }
 
 export const DmageHPContext = createContext<DmageHPContextValue>({
-    DmageHP: sm.dmage_stats.get('max_hp'),
+    DmageHP: sm.dmage_stats.get('hp'),
     setDmageHP: () => { },
 })
 
 export function DmageHPContextProvider({ children }: { children: React.ReactElement }) {
-    const [DmageHP, setDmageHP] = useState(sm.dmage_stats.get('max_hp'));
+    const [DmageHP, setDmageHP] = useState(sm.dmage_stats.get('hp'));
 
     useEffect(() => {
         console.log('DmageHP updated:', DmageHP);
@@ -319,12 +319,12 @@ interface WmageHPContextValue {
     setWmageHP: (value: number) => void;
 }
 export const WmageHPContext = createContext<WmageHPContextValue>({
-    WmageHP: sm.wmage_stats.get('max_hp'),
+    WmageHP: sm.wmage_stats.get('hp'),
     setWmageHP: () => { },
 })
 
 export function WmageHPContextProvider({ children }: { children: React.ReactElement }) {
-    const [WmageHP, setWmageHP] = useState(sm.wmage_stats.get('max_hp'));
+    const [WmageHP, setWmageHP] = useState(sm.wmage_stats.get('hp'));
 
     useEffect(() => {
         console.log('WmageHP updated:', WmageHP);
@@ -343,12 +343,12 @@ interface RmageHPContextValue {
 }
 
 export const RmageHPContext = createContext<RmageHPContextValue>({
-    RmageHP: sm.rmage_stats.get('max_hp'),
+    RmageHP: sm.rmage_stats.get('hp'),
     setRmageHP: () => { },
 })
 
 export function RmageHPContextProvider({ children }: { children: React.ReactElement }) {
-    const [RmageHP, setRmageHP] = useState(sm.rmage_stats.get('max_hp'));
+    const [RmageHP, setRmageHP] = useState(sm.rmage_stats.get('hp'));
 
     useEffect(() => {
         console.log('RmageHP updated:', RmageHP);
