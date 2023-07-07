@@ -197,23 +197,51 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     //They don't update with items without these 
     //Since I can't directly set state in the item functions
     useEffect(() => {
-        setKnightHP(sm.knight_stats.get("hp")!);
+        let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0))
+        setKnightHP(khp);
 
     }, [sm.knight_stats.get("hp")]);
 
     useEffect(() => {
-        setDmageHP(sm.dmage_stats.get("hp")!);
+        let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0))
+        setDmageHP(dhp);
 
     }, [sm.dmage_stats.get("hp")]);
 
     useEffect(() => {
-        setWmageHP(sm.wmage_stats.get("hp")!);
+        let whp = parseInt(sm.wmage_stats.get("hp")!.toFixed(0))
+        setWmageHP(whp);
 
     }, [sm.wmage_stats.get("hp")]);
 
     useEffect(() => {
-        setRmageHP(sm.rmage_stats.get("hp")!);
+        let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0))
+        setRmageHP(rhp);
+
     }, [sm.rmage_stats.get("hp")]);
+    //mp
+    useEffect(() => {
+        let kmp = parseInt(sm.knight_stats.get("mp")!.toFixed(0))
+        setKnightMP(kmp);
+
+    }, [sm.knight_stats.get("mp")]);
+
+    useEffect(() => {
+        let dmp = parseInt(sm.dmage_stats.get("mp")!.toFixed(0))
+        setDmageMP(dmp)
+
+    }, [sm.dmage_stats.get("mp")])
+
+    useEffect(() => {
+        let wmp = parseInt(sm.wmage_stats.get("mp")!.toFixed(0))
+        setWmageHP(wmp)
+
+    }, [sm.wmage_stats.get("mp")])
+
+    useEffect(() => {
+        let rmp = parseInt(sm.rmage_stats.get("mp")!.toFixed(0))
+        setRmageMP(rmp)
+    }, [sm.rmage_stats.get("mp")])
 
 
 
@@ -322,6 +350,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             UseItem(currentItem, itemTarget!)
             setIsSecondaryItemMenuShown(false)
             setItemTarget(undefined)
+            setIsItemsActive(false)
             setCurrentItem("")
         }
     }, [itemTarget])

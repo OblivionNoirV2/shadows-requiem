@@ -8,14 +8,37 @@ import * as sm from './StatManagement';
 
 //We can't use state here but the hp/mp states are already linked to 
 //the respective maps
+
+const TargetToStat: Map<string, Map<string, number>> = new Map(
+    [
+        ["knight", sm.knight_stats],
+        ["dmage", sm.dmage_stats],
+        ["wmage", sm.wmage_stats],
+        ["rmage", sm.rmage_stats],
+    ]
+)
+//for standard healing items and spells, restores hp
+//Everything works in percentages
+//If it's a full heal, just set the hp to the max hp
+function Heal(target: string, amount: number) {
+
+    TargetToStat.get(target)!.set(
+        "hp", TargetToStat.get(target)!.get("hp")! + amount);
+}
+
+function HealMP(target: string, amount: number) {
+    console.log("target", target)
+    console.log("amount", amount)
+    TargetToStat.get(target)!.set(
+        "mp", TargetToStat.get(target)!.get("mp")! + amount);
+
+}
 export const item_functions: Map<string, Function> = new Map(
     [
         ["Minor HP Potion", function MinorHpPotion(target: string) {
+
+            Heal(target, TargetToStat.get(target)!.get("max_hp")! * 0.33);
             alert("working!")
-            sm.knight_stats.set("hp", sm.knight_stats.get("hp")! - 100);
-            sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! + 100);
-
-
         }
         ],
         [
@@ -25,6 +48,7 @@ export const item_functions: Map<string, Function> = new Map(
         ],
         [
             "Minor MP Potion", function MinorMpPotion(target: string) {
+                HealMP(target, TargetToStat.get(target)!.get("max_mp")! * 0.33);
 
             }
         ],

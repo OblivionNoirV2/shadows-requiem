@@ -1,0 +1,1 @@
+need to add checks to the text hp/mp values 
