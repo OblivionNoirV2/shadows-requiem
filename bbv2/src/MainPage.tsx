@@ -275,20 +275,30 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             setIsSecondaryItemMenuShown(true)
             setCurrentItem(e);
         }
-
     }
     //Pulls from a map of objects like the attacks do 
     //Store the stock in a map
 
     function UseItem(item: string, target: string) {
+        const item_details = iv.player_inventory.get(item);
         console.log("item", item)
         console.log("target", target)
+        //use the item
+        iv.item_functions.get(item)?.(target);
 
+        console.log("original", item_details)
+        //update stock
+        if (item_details) {
+            item_details.stock -= 1;
+            iv.player_inventory.set(item, item_details);
+            console.log("updated item", item_details)
+        }
     }
     //Forces it to wait till the target has been set, eliminating latency issues
     useEffect(() => {
         UseItem(currentItem, itemTarget!)
     }, [itemTarget])
+
     return (
 
         <main className='w-full'>
@@ -369,7 +379,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                 <button className='atk-btn'
                                                     onClick={() =>
                                                         setItemTarget("wmage")
-
                                                     }>
                                                     {WmageName}
                                                 </button>
@@ -397,7 +406,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                             }
                         </>
                         :
-                        //if there's not enough mp, disable the button and grey it out
+                        //if there's not enough mp, display a message
                         //Use the encyclopaedia to get the mp cost
                         //Mp subtraction is done HERE, then the bar updates through context
 

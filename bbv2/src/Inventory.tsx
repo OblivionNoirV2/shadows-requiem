@@ -3,16 +3,61 @@ import React, { useState } from 'react';
 //shared among all 4, works similarly to spells
 
 
-
+//All the healing functions will work similarly, so use a template like 
+//we did with RNG for player attacks
 export const item_functions: Map<string, Function> = new Map(
     [
-        ["Minor HP Potion", function MinorHPpotion() {
+        ["Minor HP Potion", function MinorHpPotion(target: string) {
+            alert("working!")
 
 
         }
+        ],
+        [
+            "Major HP Potion", function MajorHpPotion(target: string) {
+
+            }
+        ],
+        [
+            "Minor MP Potion", function MinorMpPotion(target: string) {
+
+            }
+        ],
+        [
+            "Major MP Potion", function MajorMpPotion(target: string) {
+
+            }
+        ],
+        [
+            "Minor Revive", function MinorRevive(target: string) {
+
+            }
+        ],
+        [
+            "Major Revive", function MajorRevive(target: string) {
+
+            }
+        ],
+        [
+            "De-toxin", function DeToxin(target: string) {
+
+            }
+        ],
+        [
+            "De-frost", function DeFrost(target: string) {
+
+            }
+        ],
+        [
+            "Purifier", function Purifier(target: string) {
+
+            }
+        ],
+        [
+            "Magic Leaf", function MagicLeaf(target: string) {
+
+            }
         ]
-
-
     ]
 )
 
