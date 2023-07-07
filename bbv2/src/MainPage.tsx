@@ -194,6 +194,27 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { WmageName } = useContext(WmageNameContext)
     const { RmageName } = useContext(RmageNameContext)
 
+    //They don't update with items without these 
+    //Since I can't directly set state in the item functions
+    useEffect(() => {
+        setKnightHP(sm.knight_stats.get("hp")!);
+
+    }, [sm.knight_stats.get("hp")]);
+
+    useEffect(() => {
+        setDmageHP(sm.dmage_stats.get("hp")!);
+
+    }, [sm.dmage_stats.get("hp")]);
+
+    useEffect(() => {
+        setWmageHP(sm.wmage_stats.get("hp")!);
+
+    }, [sm.wmage_stats.get("hp")]);
+
+    useEffect(() => {
+        setRmageHP(sm.rmage_stats.get("hp")!);
+    }, [sm.rmage_stats.get("hp")]);
+
 
 
     function HandleAttacksMenu() {
@@ -296,7 +317,13 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     }
     //Forces it to wait till the target has been set, eliminating latency issues
     useEffect(() => {
-        UseItem(currentItem, itemTarget!)
+        //Everything must be reset here or it gets all weird and buggy
+        if (itemTarget !== undefined) {
+            UseItem(currentItem, itemTarget!)
+            setIsSecondaryItemMenuShown(false)
+            setItemTarget(undefined)
+            setCurrentItem("")
+        }
     }, [itemTarget])
 
     return (

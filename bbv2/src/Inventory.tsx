@@ -1,14 +1,19 @@
 import React, { useState } from 'react';
-
+import * as sm from './StatManagement';
 //shared among all 4, works similarly to spells
 
 
 //All the healing functions will work similarly, so use a template like 
 //we did with RNG for player attacks
+
+//We can't use state here but the hp/mp states are already linked to 
+//the respective maps
 export const item_functions: Map<string, Function> = new Map(
     [
         ["Minor HP Potion", function MinorHpPotion(target: string) {
             alert("working!")
+            sm.knight_stats.set("hp", sm.knight_stats.get("hp")! - 100);
+            sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! + 100);
 
 
         }
