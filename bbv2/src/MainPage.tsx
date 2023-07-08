@@ -71,14 +71,11 @@ export const BossArea = () => {
 
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
     useEffect(() => {
-        //prevents the boss from attacking on the first turn
-        //since you go first
-        if (TurnNumber !== 1) {
-
+        //if it's an even turn, the boss attacks
+        console.log("boss attack")
+        if (TurnNumber % 2 === 0) {
             bossAttackAlgo(bossStage);
-
         }
-
 
     }, [TurnNumber]);
 
@@ -201,53 +198,98 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { WmageName } = useContext(WmageNameContext)
     const { RmageName } = useContext(RmageNameContext)
 
+
+    const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
+    const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
+    const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
+    const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
+    //gets called when the character's hp hits 0 or below
+    //sets the character death state accordingly
+    function HandleDeath(character: string) {
+
+        switch (character) {
+            case "knight":
+                setKnightHP(0);
+                setKnightStatus((prevState: string[]) => [...prevState, "dead"]);
+                console.log("knight status: ", KnightStatus)
+                break;
+            case "dmage":
+                setDmageHP(0);
+                setDmageStatus((prevState: string[]) => [...prevState, "dead"]);
+                console.log("dmage status: ", DmageStatus)
+                break;
+            case "wmage":
+                setWmageHP(0);
+                setWmageStatus((prevState: string[]) => [...prevState, "dead"]);
+                console.log("wmage status: ", WmageStatus)
+                break;
+            case "rmage":
+                setRmageHP(0);
+                setRmageStatus((prevState: string[]) => [...prevState, "dead"]);
+                console.log("rmage status: ", RmageStatus)
+                break;
+        }
+
+    }
+
+
     //They don't update with items without these 
     //Since I can't directly set state in the item functions
     useEffect(() => {
         let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0))
-        setKnightHP(khp);
+        //prevent negative values
+        khp <= 0 ? HandleDeath("knight") :
+            setKnightHP(khp);
 
     }, [sm.knight_stats.get("hp")]);
 
     useEffect(() => {
         let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0))
-        setDmageHP(dhp);
+
+        dhp <= 0 ? HandleDeath("dmage") :
+            setDmageHP(dhp);
 
     }, [sm.dmage_stats.get("hp")]);
 
     useEffect(() => {
         let whp = parseInt(sm.wmage_stats.get("hp")!.toFixed(0))
-        setWmageHP(whp);
+        whp <= 0 ? HandleDeath("wmage") :
+            setWmageHP(whp);
 
     }, [sm.wmage_stats.get("hp")]);
 
     useEffect(() => {
         let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0))
-        setRmageHP(rhp);
+        rhp <= 0 ? HandleDeath("rmage") :
+            setRmageHP(rhp);
 
     }, [sm.rmage_stats.get("hp")]);
     //mp
     useEffect(() => {
         let kmp = parseInt(sm.knight_stats.get("mp")!.toFixed(0))
-        setKnightMP(kmp);
+        kmp <= 0 ? setKnightMP(0) :
+            setKnightMP(kmp);
 
     }, [sm.knight_stats.get("mp")]);
 
     useEffect(() => {
         let dmp = parseInt(sm.dmage_stats.get("mp")!.toFixed(0))
-        setDmageMP(dmp)
+        dmp <= 0 ? setDmageMP(0) :
+            setDmageMP(dmp)
 
     }, [sm.dmage_stats.get("mp")])
 
     useEffect(() => {
         let wmp = parseInt(sm.wmage_stats.get("mp")!.toFixed(0))
-        setWmageHP(wmp)
+        wmp <= 0 ? setWmageMP(0) :
+            setWmageHP(wmp)
 
     }, [sm.wmage_stats.get("mp")])
 
     useEffect(() => {
         let rmp = parseInt(sm.rmage_stats.get("mp")!.toFixed(0))
-        setRmageMP(rmp)
+        rmp <= 0 ? setRmageMP(0) :
+            setRmageMP(rmp)
     }, [sm.rmage_stats.get("mp")])
 
 
@@ -877,7 +919,12 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     </progress>
                     <div className='ml-2 text-xl hp-text'>
                         <strong>
-                            {MatchToHPState.get(player)}/{sm[stat_name].get('max_hp')}
+                            {
+                                MatchToHPState.get(player) > sm[stat_name].get('max_hp')!
+                                    ? `${sm[stat_name].get('max_hp')!} / ${sm[stat_name].get('max_hp')!}`
+                                    : `${MatchToHPState.get(player)} / ${sm[stat_name].get('max_hp')}`
+                            }
+
                         </strong>
                     </div>
                 </div>
@@ -1106,7 +1153,13 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     </ul>
                 </section>
                 <section className=''>
-                    <BossAttackArea />
+                    {/*;ater on link this to the final version of 
+                    when he attacks, which will be slightly randomized 
+                    as opposed to a simple back and forth*/}
+                    {TurnNumber % 2 === 0 &&
+                        <BossAttackArea />
+                    }
+
                     <BossArea
                     />
                 </section>

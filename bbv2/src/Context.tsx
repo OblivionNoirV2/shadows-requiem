@@ -1,7 +1,7 @@
 import { createContext, useState, useEffect } from 'react';
 import * as sm from './StatManagement';
 import { PlayerMenu, BossHpBar, BossArea, MainPage } from './MainPage';
-
+import React from 'react';
 interface BossContextValue {
     BossHP: number | undefined;
     setBossHP: (value: number) => void;
@@ -365,7 +365,8 @@ export function RmageHPContextProvider({ children }: { children: React.ReactElem
 
 interface KnightStatusContextValue {
     KnightStatus: string[];
-    setKnightStatus: (value: string[]) => void;
+    //allows use to use () => spread syntax for adding to the list
+    setKnightStatus: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const KnightStatusContext = createContext<KnightStatusContextValue>({
@@ -389,7 +390,7 @@ export function KnightStatusContextProvider({ children }: { children: React.Reac
 
 interface DmageStatusContextValue {
     DmageStatus: string[];
-    setDmageStatus: (value: string[]) => void;
+    setDmageStatus: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const DmageStatusContext = createContext<DmageStatusContextValue>({
@@ -413,7 +414,7 @@ export function DmageStatusContextProvider({ children }: { children: React.React
 
 interface WmageStatusContextValue {
     WmageStatus: string[];
-    setWmageStatus: (value: string[]) => void;
+    setWmageStatus: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const WmageStatusContext = createContext<WmageStatusContextValue>({
@@ -437,7 +438,7 @@ export function WmageStatusContextProvider({ children }: { children: React.React
 
 interface RmageStatusContextValue {
     RmageStatus: string[];
-    setRmageStatus: (value: string[]) => void;
+    setRmageStatus: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 export const RmageStatusContext = createContext<RmageStatusContextValue>({
