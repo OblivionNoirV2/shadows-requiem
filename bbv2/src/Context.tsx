@@ -361,6 +361,7 @@ export function RmageHPContextProvider({ children }: { children: React.ReactElem
     )
 }
 //status effects, list of strings for each character
+//"dead" is treated as a status effect
 
 interface KnightStatusContextValue {
     KnightStatus: string[];

@@ -122,7 +122,6 @@ const EncylopediaPage = () => {
                     player="Red Mage"
                     map_name="rmage_attacks"
                 />
-
             </div>
             <div className="flex flex-col z-[9999] max-w-lg">
                 <h1 className="text-7xl my-2">

@@ -38,7 +38,7 @@ import dmagebg from './assets/images/bg-and-effects/dmageultimabg.png';
 import wmagebg from './assets/images/bg-and-effects/wmageultimabg.png';
 import rmagebg from './assets/images/bg-and-effects/rmageultimabg.png';
 import defaultbg from './assets/images/bg-and-effects/newbg.png';
-
+import { bossAttackAlgo, BossAttackArea } from './BossAlgorithm';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -68,6 +68,19 @@ interface BossAreaProps {
 }
 
 export const BossArea = () => {
+
+    const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
+    useEffect(() => {
+        //prevents the boss from attacking on the first turn
+        //since you go first
+        if (TurnNumber !== 1) {
+
+            bossAttackAlgo(bossStage);
+
+        }
+
+
+    }, [TurnNumber]);
 
     const [bossStage, setBossStage] = useState(1);
 
@@ -156,12 +169,6 @@ interface PlayerMenuProps {
 
 }
 
-function bossAttackAlgo() {
-
-    console.log("boss attack");
-
-
-}
 
 /*if it's a number, that's the damage dealt. If it's a string,
  it's a miss/critical message. Crits include the message and the damage
@@ -274,11 +281,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { BossHP, setBossHP } = useContext(BossContext);
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
 
-    useEffect(() => {
 
-        bossAttackAlgo();
-
-    }, [TurnNumber, setTurnNumber]);
     //global
     const { isAttackMade, setIsAttackMade } = useContext(AttackMadeContext);
     //global
@@ -358,7 +361,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     return (
 
         <main className='w-full'>
-
             {!isAttackMade ?
                 <ul className='-mt-24 battle-menu'>
                     {isItemsActive ? null :
@@ -559,6 +561,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                         }
                     </section>
                     <MessageArea message={message} />
+
                 </>
 
             }
@@ -914,12 +917,14 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
 
             {/*score tracker*/}
             <strong>
+
                 <section className='text-white text-4xl flex justify-end 
                 mr-24 mt-4 -mb-4'>
                     Turn # {TurnNumber}
                 </section>
             </strong>
             <main className='w-full flex dark-overlay'>
+
 
                 {/*party members*/}
                 <section className='party-col w-full h-full flex 
@@ -1101,6 +1106,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     </ul>
                 </section>
                 <section className=''>
+                    <BossAttackArea />
                     <BossArea
                     />
                 </section>
