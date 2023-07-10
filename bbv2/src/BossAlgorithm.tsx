@@ -36,6 +36,7 @@ interface BossAttackProps {
     wmage_mp: number;
     rmage_mp: number;
 }
+let potential_targets: string[] = [];
 export function bossAttackAlgo(attackProps: BossAttackProps) {
     //first rule out any dead characters as potential targets
     let current_statuses = [
@@ -52,7 +53,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         attackProps.rmage_hp
     ]
     const allies = ["knight", "dmage", "wmage", "rmage"];
-    let potential_targets: string[] = [];
+
 
     current_statuses.forEach((condition, index) => {
         if (!condition.includes("dead")) {
@@ -94,8 +95,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         [100, 6],
         [50, 7]
     ])
-
-    function DetermineTargets() {
+    //determines how likely each character is to be targeted
+    function DetermineWeights() {
         current_statuses.forEach((condition, index) => {
             if (condition.includes("poison")) {
                 character_weights[index] += 2;
@@ -118,14 +119,52 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             )
         })
     }
-    DetermineTargets();
+
     //Target first, then the attack 
 
+    // use a randomzier and set the max to the sum of all the weights
+    let chosen_target: string;
+    function Targeting() {
 
+        //first retrieve highest value from the array 
+        let hit: boolean = false;
+        while (hit === false) {
+            let custom_rng = Randomizer(1, character_weights.reduce((accumulator, currentValue) => {
+                return accumulator + currentValue;
+            }))
+
+            console.log("custom_rng", custom_rng)
+            if (custom_rng < Math.max(...character_weights)) {
+                console.log("highest", Math.max(...character_weights))
+                console.log("index", character_weights.indexOf(Math.max(...character_weights)))
+                hit = true;
+                chosen_target = potential_targets[character_weights.indexOf(Math.max(...character_weights))];
+                console.log("chosen_target", chosen_target)
+            } else {
+                //Then reduce the length until it hits it
+                if (character_weights.length > 1) {
+                    character_weights.splice(character_weights.indexOf(Math.max(...character_weights)));
+
+                } else {
+                    //If it runs out of items, fall back to the last element
+                    console.log("inside else")
+                    chosen_target = potential_targets[character_weights[0]];
+                    console.log("chosen_target", chosen_target)
+                    hit = true;
+                    //then set the target to the last element
+                }
+
+                console.log("character_weights in smaller", character_weights)
+            }
+        }
+    }
+    //use event listeners to determine when certain attacks are eligible
     //Then determine current moveset and weights for each move...
     switch (attackProps.phase) {
         case 1:
             moveset = boss_attacks;
+            DetermineWeights();
+            Targeting();
             break;
         case 2:
             moveset = boss_attacks.concat(phase2_attacks);
