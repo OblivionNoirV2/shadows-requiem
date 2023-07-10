@@ -70,16 +70,46 @@ interface BossAreaProps {
 export const BossArea = () => {
 
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
+    const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
+    const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
+    const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
+    const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
+
+    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
+    const { DmageMP, setDmageMP } = useContext(DmageMPContext);
+    const { WmageMP, setWmageMP } = useContext(WmageMPContext);
+    const { RmageMP, setRmageMP } = useContext(RmageMPContext);
+
+    const { KnightHP, setKnightHP } = useContext(KnightHPContext);
+    const { DmageHP, setDmageHP } = useContext(DmageHPContext);
+    const { WmageHP, setWmageHP } = useContext(WmageHPContext);
+    const { RmageHP, setRmageHP } = useContext(RmageHPContext);
+    const [bossStage, setBossStage] = useState(1);
+
     useEffect(() => {
         //if it's an even turn, the boss attacks
         console.log("boss attack")
         if (TurnNumber % 2 === 0) {
-            bossAttackAlgo(bossStage);
+            bossAttackAlgo({
+                phase: bossStage,
+                knight_status: KnightStatus,
+                dmage_status: DmageStatus,
+                wmage_status: WmageStatus,
+                rmage_status: RmageStatus,
+                knight_hp: KnightHP!,
+                dmage_hp: DmageHP!,
+                wmage_hp: WmageHP!,
+                rmage_hp: RmageHP!,
+                knight_mp: KnightMP!,
+                dmage_mp: DmageMP!,
+                wmage_mp: WmageMP!,
+                rmage_mp: RmageMP!
+            });
         }
 
     }, [TurnNumber]);
 
-    const [bossStage, setBossStage] = useState(1);
+
 
     console.log("rendered bossarea")
     useEffect(() => {
@@ -521,10 +551,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                 const attack_encyclopedia_entry = e.AttackEncyclopedia.get(attack)?.mp_cost;
                                                 //max mp for that character
                                                 const mp_map_value = MatchToMpMap.get(player);
-                                                console.log("e entry:", attack_encyclopedia_entry);
-                                                console.log("mpMapValue:", mp_map_value);
-                                                console.log("dmagehp:", DmageHP);
-                                                console.log("dmagemp:", DmageMP);
 
                                                 sfx.playClickSfx();
                                                 if (attack_encyclopedia_entry
