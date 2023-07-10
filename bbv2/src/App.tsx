@@ -16,13 +16,6 @@ import Story from './Story';
 import EncyclopediaPage from './EnPage';
 import { Randomizer } from './PlayerActions';
 import { NameCharacters } from './Naming';
-//Page will need to completely re-render, so use a hook to flip it
-
-//this prop just acts as a blank trigger
-
-
-//contains the boss image and the health bar 
-//will use ternaries to determine stage 
 
 //environmental sfx
 const windSfx = new Audio(wind);

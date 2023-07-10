@@ -35,8 +35,8 @@ export const knight_stats: StatMap = new Map
         [
             ["hp", 550],
             ["max_hp", 550],
-            ["mp", 180],
-            ["max_mp", 180],
+            ["mp", 140],
+            ["max_mp", 140],
             ["p_def", 1.45],
             ["m_def", 1.00],
             ["ev", 0.05]
@@ -48,8 +48,8 @@ export const dmage_stats: StatMap = new Map
         [
             ["hp", 470],
             ["max_hp", 470],
-            ["mp", 390],
-            ["max_mp", 390],
+            ["mp", 270],
+            ["max_mp", 270],
             ["p_def", 1.30],
             ["m_def", 1.50],
             ["ev", 0.10]
@@ -61,8 +61,8 @@ export const wmage_stats: StatMap = new Map
         [
             ["hp", 400],
             ["max_hp", 400],
-            ["mp", 420],
-            ["max_mp", 420],
+            ["mp", 310],
+            ["max_mp", 310],
             ["p_def", 1.00],
             ["m_def", 1.45],
             ["ev", 0.10]
@@ -75,7 +75,7 @@ export const rmage_stats: StatMap = new Map
             ["hp", 375], //max is 375
             ["max_hp", 375],
             ["mp", 50],
-            ["max_mp", 540],
+            ["max_mp", 430],
             ["p_def", 0.90],
             ["m_def", 0.90],
             ["ev", 0.20]

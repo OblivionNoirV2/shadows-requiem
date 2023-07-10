@@ -37,7 +37,7 @@ import knightbg from './assets/images/bg-and-effects/knightultimabg.png';
 import dmagebg from './assets/images/bg-and-effects/dmageultimabg.png';
 import wmagebg from './assets/images/bg-and-effects/wmageultimabg.png';
 import rmagebg from './assets/images/bg-and-effects/rmageultimabg.png';
-import defaultbg from './assets/images/bg-and-effects/newbg.png';
+import defaultbg from './assets/images/bg-and-effects/battlebgv3.png';
 import { bossAttackAlgo, BossAttackArea } from './BossAlgorithm';
 interface GoBackProps {
     onBackToTitle: () => void;
