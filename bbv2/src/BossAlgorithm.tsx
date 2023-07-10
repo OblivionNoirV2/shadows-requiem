@@ -44,6 +44,13 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         attackProps.wmage_status,
         attackProps.rmage_status
     ];
+
+    let current_hp = [
+        attackProps.knight_hp,
+        attackProps.dmage_hp,
+        attackProps.wmage_hp,
+        attackProps.rmage_hp
+    ]
     const allies = ["knight", "dmage", "wmage", "rmage"];
     let potential_targets: string[] = [];
 
@@ -53,23 +60,86 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         }
     })
     let moveset: string[] = [];
-    //Then determine current moveset...
+
+    /*
+    Give each a number (start at 1 and go up accordingly) then 
+    it’ll go in a chain to determine who he attacks, 
+    starting with the highest number(s). 
+    Eg, if a character ends up at 8, he has an 80% chance to target 
+    that character. If he doesn’t, it moves to the next and sets 
+    that as the target. Do this multiple times depending on how 
+    many targets the attack has. To get around Inversion having 
+    special requirements, remove it from the moveset first if 
+    the conditions are not met 
+     */
+
+    let knight_weight = 1;
+    let dmage_weight = 1;
+    let wmage_weight = 1;
+    let rmage_weight = 1;
+
+    let character_weights = [
+        knight_weight,
+        dmage_weight,
+        wmage_weight,
+        rmage_weight
+    ];
+    //Breakpoint and the weight associated with it
+    const CharacterWeightsMap: Map<number, number> = new Map([
+        [350, 1],
+        [300, 2],
+        [250, 3],
+        [200, 4],
+        [150, 5],
+        [100, 6],
+        [50, 7]
+    ])
+
+    function DetermineTargets() {
+        current_statuses.forEach((condition, index) => {
+            if (condition.includes("poison")) {
+                character_weights[index] += 2;
+            }
+            if (condition.includes("freeze")) {
+                character_weights[index] += 2;
+            }
+            if (condition.includes("curse")) {
+                character_weights[index] += 4;
+            }
+        })
+        current_hp.forEach((hp, index) => {
+            CharacterWeightsMap.forEach((weight, breakpoint) => {
+                if (hp <= breakpoint) {
+                    character_weights[index] += weight;
+                    console.log("character_weights", character_weights)
+
+                }
+            }
+            )
+        })
+    }
+    DetermineTargets();
+    //Target first, then the attack 
+
+
+    //Then determine current moveset and weights for each move...
     switch (attackProps.phase) {
         case 1:
             moveset = boss_attacks;
             break;
         case 2:
             moveset = boss_attacks.concat(phase2_attacks);
+
             break;
         case 3:
             moveset = boss_attacks.concat(phase2_attacks, phase3_attacks);
+
             break;
     }
     console.log("targets", potential_targets)
     console.log("moveset", moveset);
 
-    //weights are determined by phase
-    //Choose t
+
 
 
 }
@@ -83,18 +153,19 @@ const boss_attack_functions: Map<string, Function> = new Map(
 function Percentage() {
     return Math.random();
 }
-//name, percentage chance of being used is determined by phase
-const weights: Map<number, object> = new Map([
+//phase, percentage chance of being used is determined by phase
+const weights: Map<number, object> = new Map(
     [
-        1, {
-            "Shadow Blade": 0.3,
-            "Spheres of Madness": 0.2,
-            "Devourment": 0.1,
-            "Disintegration": 0.2,
-            "Soul Crusher": 0.2
-        }
-    ]
-])
+        [
+            1, {
+                "Shadow Blade": 0.3,
+                "Spheres of Madness": 0.2,
+                "Devourment": 0.1,
+                "Disintegration": 0.2,
+                "Soul Crusher": 0.2
+            }
+        ]
+    ])
 const boss_attacks: string[] = [
     'Shadow Blade', //standard atk, med phys
     'Spheres of Madness', //low mag dmg, hits all allies

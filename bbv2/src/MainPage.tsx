@@ -312,7 +312,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     useEffect(() => {
         let wmp = parseInt(sm.wmage_stats.get("mp")!.toFixed(0))
         wmp <= 0 ? setWmageMP(0) :
-            setWmageHP(wmp)
+            setWmageMP(wmp)
 
     }, [sm.wmage_stats.get("mp")])
 
