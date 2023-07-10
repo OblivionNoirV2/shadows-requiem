@@ -124,47 +124,51 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     // use a randomzier and set the max to the sum of all the weights
     let chosen_target: string;
+    //GALAXY BRAIN TIME
     function Targeting() {
+        //Get max range for the randomizer
+        const total_weights = character_weights.reduce((a, b) => a + b, 0);
+        //Get a random value between 1 and the total weights
+        const random_value = Randomizer(1, total_weights);
 
-        //first retrieve highest value from the array 
-        let hit: boolean = false;
-        while (hit === false) {
-            let custom_rng = Randomizer(1, character_weights.reduce((accumulator, currentValue) => {
-                return accumulator + currentValue;
-            }))
+        //Sort the weights in descending order 
+        //and calculate cumulative weights
+        const weights_with_cumulative = character_weights
+            //Map to an original array to prevent it 
+            //from getting stuck on the first index
+            .map((weight, index) => ({ weight, index }))
+            //Then sort THAT array based on weight
+            .sort((a, b) => b.weight - a.weight)
+            //Map until the cumulative weight is calculated
+            //item, index, and the array itself
+            .map((item, i, arr) => ({
+                ...item,
+                //add the current weight to the previous weight
+                cumulative_weight: arr.slice(0, i + 1).reduce(
+                    (total, current) => total + current.weight, 0),
+            }));
 
-            console.log("custom_rng", custom_rng)
-            if (custom_rng < Math.max(...character_weights)) {
-                console.log("highest", Math.max(...character_weights))
-                console.log("index", character_weights.indexOf(Math.max(...character_weights)))
-                hit = true;
-                chosen_target = potential_targets[character_weights.indexOf(Math.max(...character_weights))];
-                console.log("chosen_target", chosen_target)
-            } else {
-                //Then reduce the length until it hits it
-                if (character_weights.length > 1) {
-                    character_weights.splice(character_weights.indexOf(Math.max(...character_weights)));
-
-                } else {
-                    //If it runs out of items, fall back to the last element
-                    console.log("inside else")
-                    chosen_target = potential_targets[character_weights[0]];
-                    console.log("chosen_target", chosen_target)
-                    hit = true;
-                    //then set the target to the last element
-                }
-
-                console.log("character_weights in smaller", character_weights)
+        for (let weight of weights_with_cumulative) {
+            //Compare the value from above to the cumulative weight 
+            //The higher the individual weight, the higher the chance
+            //it has to hit
+            if (random_value <= weight.cumulative_weight) {
+                chosen_target = potential_targets[weight.index];
+                console.log("chosen_target", chosen_target);
+                break;
             }
         }
     }
+
+
     //use event listeners to determine when certain attacks are eligible
     //Then determine current moveset and weights for each move...
+    DetermineWeights();
+    Targeting();
     switch (attackProps.phase) {
         case 1:
             moveset = boss_attacks;
-            DetermineWeights();
-            Targeting();
+
             break;
         case 2:
             moveset = boss_attacks.concat(phase2_attacks);

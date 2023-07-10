@@ -33,7 +33,7 @@ export interface StatMap extends Map<string, number> { }
 export const knight_stats: StatMap = new Map
     (
         [
-            ["hp", 150],
+            ["hp", 550],
             ["max_hp", 550],
             ["mp", 140],
             ["max_mp", 140],
@@ -46,7 +46,7 @@ export const knight_stats: StatMap = new Map
 export const dmage_stats: StatMap = new Map
     (
         [
-            ["hp", 270],
+            ["hp", 470],
             ["max_hp", 470],
             ["mp", 270],
             ["max_mp", 270],
@@ -59,7 +59,7 @@ export const dmage_stats: StatMap = new Map
 export const wmage_stats: StatMap = new Map
     (
         [
-            ["hp", 300],
+            ["hp", 400],
             ["max_hp", 400],
             ["mp", 310],
             ["max_mp", 310],
@@ -72,7 +72,7 @@ export const wmage_stats: StatMap = new Map
 export const rmage_stats: StatMap = new Map
     (
         [
-            ["hp", 5], //max is 375
+            ["hp", 375], //max is 375
             ["max_hp", 375],
             ["mp", 50],
             ["max_mp", 430],
