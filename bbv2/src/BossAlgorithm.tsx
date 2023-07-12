@@ -7,6 +7,7 @@ import {
     RmageStatusContext
 } from './Context';
 import { useState, useEffect } from 'react';
+import { global_turn_number } from './MainPage';
 
 //This is going to work exactly the same as the player side, 
 //except it's automated
@@ -19,7 +20,7 @@ are more likely to be targeted
 Obviously he will check if a character is dead or not(if their hp is 0)
 
 */
-let current_boss_attack: string = "Shadow Blade";
+let current_boss_attack: string;
 
 interface BossAttackProps {
     phase: number;
@@ -38,6 +39,10 @@ interface BossAttackProps {
 }
 let potential_targets: string[] = [];
 export function bossAttackAlgo(attackProps: BossAttackProps) {
+    //Can't use state, so we're doing it the hacky way
+    //Which can be used to status effects
+    console.log("turn", global_turn_number)
+    current_boss_attack = "Shadow Blade";
     //first rule out any dead characters as potential targets
     let current_statuses = [
         attackProps.knight_status,
@@ -60,7 +65,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             potential_targets.push(allies[index]);
         }
     })
-    let moveset: string[] = [];
+
 
     /*
     Give each a number (start at 1 and go up accordingly) then 
@@ -122,9 +127,9 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     //Target first, then the attack 
 
-    // use a randomzier and set the max to the sum of all the weights
+    //use a randomizer and set the max to the sum of all the weights
     let chosen_target: string;
-    //GALAXY BRAIN TIME
+    /*GALAXY BRAIN TIME*/
     function Targeting() {
         //Get max range for the randomizer
         const total_weights = character_weights.reduce((a, b) => a + b, 0);
@@ -160,55 +165,206 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         }
     }
 
-
     //use event listeners to determine when certain attacks are eligible
     //Then determine current moveset and weights for each move...
     DetermineWeights();
     Targeting();
+
+
+    //He will only use this if everyone's mp is lower than their hp
+    //MP must be <= 25% of max hp
+    let inversion_eligible: boolean = false;
+
+    /*
+    First check conditionals for special attacks. 
+    If any are met, set the moveset probabilities accordingly so 
+    it still matches 100%. Inversion should have a quite high chance 
+    of occurring if the condition is met. 
+    After that, just do it based on a simple range. 
+    Ie the range it falls into determines his attack  
+    */
+
+    function CheckForInversion() {
+        let mp_is_lower_than_hp = true;
+        current_hp.forEach((hp, index) => {
+            if (hp > current_hp[index] * 0.25) {
+                mp_is_lower_than_hp = false;
+            }
+        })
+        if (mp_is_lower_than_hp) {
+            inversion_eligible = true;
+        }
+
+    }
+    //Determines damage and image to show
+    interface BossRNGProps {
+        current_boss_attack: string;
+        min: number;
+        max: number;
+    }
+    function BossRNG(props: BossRNGProps): number | void {
+
+    }
+
+    let moveset: AttackWeightsObject;
+    let chosen_attack_num: number;
     switch (attackProps.phase) {
         case 1:
-            moveset = boss_attacks;
+            moveset = attack_weights.get(1)!;
+            chosen_attack_num = Percentage();
 
             break;
         case 2:
-            moveset = boss_attacks.concat(phase2_attacks);
+            if (inversion_eligible) {
+                //adjust the percentages accordingly
+            } else {
+                //use the default moveset, 
+                //which has inversion at a 0% chance
+                moveset = attack_weights.get(2)!;
+            }
+
 
             break;
         case 3:
-            moveset = boss_attacks.concat(phase2_attacks, phase3_attacks);
+            //will also have checks for unholy symphony,
+            //which will run on a timer 
+            //(this is an incentive to move your ass!)
+            if (inversion_eligible) {
+                //adjust the percentages accordingly
+            } else {
+                //use the default moveset, 
+                //which has inversion at a 0% chance
+                moveset = attack_weights.get(3)!;
+            }
+
+
+            moveset = attack_weights.get(3)!;
 
             break;
     }
     console.log("targets", potential_targets)
-    console.log("moveset", moveset);
 
 
 
 
-}
-
-//This gets added to each phase
-const boss_attack_functions: Map<string, Function> = new Map(
 
 
-);
+    const boss_attack_functions: Map<string, Function> = new Map(
+        [
+            [
+                "Shadow Blade", function ShadowBlade() {
+
+
+                }
+            ],
+            [
+                "Spheres of Madness", function SpheresOfMadness() {
+
+                }
+            ],
+            [
+                "Devourment", function Devourment() {
+
+                }
+            ],
+            [
+                "Disintegration", function Disintegration() {
+
+                }
+            ],
+            [
+                "Soul Crusher", function SoulCrusher() {
+
+                }
+            ],
+            [
+                "Inversion", function Inversion() {
+
+                }
+            ],
+            [
+                "Frozen Soul", function FrozenSoul() {
+
+                }
+            ],
+            [
+                "Unending Grudge", function UnendingGrudge() {
+
+                }
+            ],
+            [
+                "Unholy Symphony", function UnholySymphony() {
+
+                }
+            ],
+            [
+                "Death's Touch", function DeathsTouch() {
+
+                }
+            ],
+            [
+                "Chaos Blade", function ChaosBlade() {
+
+                }
+            ]
+        ]
+    );
+
+    //phase, percentage chance of being used is determined by phase
+
+    //undefined = has special conditions 
+
+    //show the attack
+}//algo function ends here 
 
 function Percentage() {
     return Math.random();
 }
-//phase, percentage chance of being used is determined by phase
-const weights: Map<number, object> = new Map(
+interface AttackWeightsObject {
+    [key: string]: number | undefined
+}
+const attack_weights: Map<number, AttackWeightsObject> = new Map(
     [
         [
             1, {
-                "Shadow Blade": 0.3,
-                "Spheres of Madness": 0.2,
+                "Shadow Blade": 0.3, //standard atk, med phys
+                "Spheres of Madness": 0.2, //low mag dmg, hits all allies
+                "Devourment": 0.1, //Heavy phys, heals boss by damage dealt
+                "Disintegration": 0.2, //med phys dmg, Med chance to lower phys def
+                "Soul Crusher": 0.2 //med mag dmg, med chance to lower mag def
+            }
+        ],
+        [
+            2, {
+                "Shadow Blade": 0.2,
+                "Spheres of Madness": 0.1,
                 "Devourment": 0.1,
                 "Disintegration": 0.2,
-                "Soul Crusher": 0.2
+                "Soul Crusher": 0.2,
+                "Inversion": 0, //Strong chance of occuring whenever all allies have lower mp than 25% of their max hp
+                "Frozen Soul": 0.05,
+                "Unending Grudge": 0.05,
+            }
+        ],
+        [
+            3, {
+                "Shadow Blade": 0.20,
+                "Spheres of Madness": 0.1,
+                "Devourment": 0.1,
+                "Disintegration": 0.1,
+                "Soul Crusher": 0.1,
+                "Inversion": 0.1,
+                "Frozen Soul": 0.05,
+                "Unending Grudge": 0.05,
+                "Unholy Symphony": 0, //Runs every 10 turns
+                "Death's Touch": 0.10,
+                "Chaos Blade": 0.10
+
             }
         ]
     ])
+
+//probably don't need these 
 const boss_attacks: string[] = [
     'Shadow Blade', //standard atk, med phys
     'Spheres of Madness', //low mag dmg, hits all allies
@@ -236,7 +392,6 @@ const phase3_attacks: string[] = [
     "Chaos Blade" //very heavy single target
 
 ]
-//show the attack
 export const BossAttackArea: React.FC = () => {
     const [isBossAttackShown, setIsBossAttackShown] = useState(false);
     //Change the image whenver the attack changes

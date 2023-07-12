@@ -200,7 +200,7 @@ interface PlayerMenuProps {
 /*if it's a number, that's the damage dealt. If it's a string,
  it's a miss/critical message. Crits include the message and the damage
 all as one string*/
-
+export let global_turn_number: number;
 export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
 
     console.log("player menu rendered")
@@ -345,6 +345,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
     }
 
+
     //global
     const { currentAttack, setCurrentAttack } = useContext(CurrentAttackContext);
     //clicking the top button will show attacks and remove the other two
@@ -353,7 +354,10 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { BossHP, setBossHP } = useContext(BossContext);
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
 
+    useEffect(() => {
+        global_turn_number = TurnNumber;
 
+    }, [TurnNumber])
     //global
     const { isAttackMade, setIsAttackMade } = useContext(AttackMadeContext);
     //global
