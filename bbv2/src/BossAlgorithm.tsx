@@ -7,7 +7,7 @@ import {
     RmageStatusContext
 } from './Context';
 import { useState, useEffect } from 'react';
-import { global_turn_number } from './MainPage';
+
 
 //This is going to work exactly the same as the player side, 
 //except it's automated
@@ -36,13 +36,12 @@ interface BossAttackProps {
     dmage_mp: number;
     wmage_mp: number;
     rmage_mp: number;
+    current_turn: number;
 }
 let potential_targets: string[] = [];
 export function bossAttackAlgo(attackProps: BossAttackProps) {
-    //Can't use state, so we're doing it the hacky way
-    //Which can be used to status effects
-    console.log("turn", global_turn_number)
-    current_boss_attack = "Shadow Blade";
+    console.log("attackProps", attackProps)
+    current_boss_attack = "Unholy Symphony";
     //first rule out any dead characters as potential targets
     let current_statuses = [
         attackProps.knight_status,
@@ -208,6 +207,9 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     let moveset: AttackWeightsObject;
     let chosen_attack_num: number;
+    //use this to ensure a gap between unholy symphonys
+    //If the list count gets to 10, he uses it then it resets
+    let last_boss_attacks: string[] = []
     switch (attackProps.phase) {
         case 1:
             moveset = attack_weights.get(1)!;
@@ -226,20 +228,20 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
             break;
         case 3:
-            //will also have checks for unholy symphony,
-            //which will run on a timer 
-            //(this is an incentive to move your ass!)
-            if (inversion_eligible) {
-                //adjust the percentages accordingly
+            if (last_boss_attacks.length >= 10) {
+                //use unholy symphony
+                last_boss_attacks = [];
+
             } else {
-                //use the default moveset, 
-                //which has inversion at a 0% chance
-                moveset = attack_weights.get(3)!;
+                if (inversion_eligible) {
+                    //adjust the percentages accordingly
+                } else {
+                    //use the default moveset, 
+                    //which has inversion at a 0% chance
+                    moveset = attack_weights.get(3)!;
+                }
+
             }
-
-
-            moveset = attack_weights.get(3)!;
-
             break;
     }
     console.log("targets", potential_targets)
