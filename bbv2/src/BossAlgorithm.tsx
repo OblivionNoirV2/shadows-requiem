@@ -1,6 +1,6 @@
 import * as sm from './StatManagement';
 
-import { Randomizer } from './PlayerActions';
+import { Randomizer, selected_attack } from './PlayerActions';
 import {
     KnightStatusContext,
     DmageStatusContext, WmageStatusContext,
@@ -40,6 +40,7 @@ interface BossAttackProps {
 }
 let potential_targets: string[] = [];
 export function bossAttackAlgo(attackProps: BossAttackProps) {
+
     console.log("attackProps", attackProps)
     current_boss_attack = "Unholy Symphony";
     //first rule out any dead characters as potential targets
@@ -199,69 +200,75 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     interface BossRNGProps {
         current_boss_attack: string;
         min: number;
-        max: number;
+        variance: number;
+        chosen_target: string;
+        secondary_targets?: string[];
+        //if an attack hits multiple targets, 
+        //the others are calculated in that function from the 
+        //remaining pool (at random)
     }
-    function BossRNG(props: BossRNGProps): number | void {
+    //use this to ensure a gap between unholy symphonys
+    //If the list count gets to 10, he uses it then it resets
+    let last_boss_attacks: string[] = []
+    //attacks like inversion thast have unioque damage methods 
+    //take place in the function itself
+    function BossRNG(props: BossRNGProps) {
+        current_boss_attack = props.current_boss_attack;
+
+        const atk_max = props.min * props.variance;
+
+        last_boss_attacks.push(current_boss_attack);
 
     }
 
     let moveset: AttackWeightsObject;
     let chosen_attack_num: number;
-    //use this to ensure a gap between unholy symphonys
-    //If the list count gets to 10, he uses it then it resets
-    let last_boss_attacks: string[] = []
-    switch (attackProps.phase) {
-        case 1:
-            moveset = attack_weights.get(1)!;
-            chosen_attack_num = Percentage();
 
-            break;
-        case 2:
-            if (inversion_eligible) {
-                //adjust the percentages accordingly
-            } else {
-                //use the default moveset, 
-                //which has inversion at a 0% chance
-                moveset = attack_weights.get(2)!;
+    let secondary_targets: string[] = [];
+    let potential_secondary: string[];
+
+    function TargetMulti(additional_targets: number) {
+        potential_secondary = potential_targets.filter((target) => target !== chosen_target);
+        while (secondary_targets.length < additional_targets) {
+            let rand = Randomizer(0, 2);
+            if (!secondary_targets.includes(potential_secondary[rand])) {
+                secondary_targets.push(potential_secondary[rand]);
             }
+        }
+        console.log("secondary_targets", secondary_targets)
+        return secondary_targets;
 
-
-            break;
-        case 3:
-            if (last_boss_attacks.length >= 10) {
-                //use unholy symphony
-                last_boss_attacks = [];
-
-            } else {
-                if (inversion_eligible) {
-                    //adjust the percentages accordingly
-                } else {
-                    //use the default moveset, 
-                    //which has inversion at a 0% chance
-                    moveset = attack_weights.get(3)!;
-                }
-
-            }
-            break;
     }
-    console.log("targets", potential_targets)
-
-
-
-
-
-
     const boss_attack_functions: Map<string, Function> = new Map(
         [
             [
                 "Shadow Blade", function ShadowBlade() {
 
-
+                    return (
+                        BossRNG
+                            (
+                                {
+                                    current_boss_attack: "Shadow Blade",
+                                    min: 50,
+                                    variance: 1.10,
+                                    chosen_target: chosen_target
+                                }
+                            )
+                    )
                 }
             ],
-            [
+            [   //Targets 3, starting with the previously chosen
                 "Spheres of Madness", function SpheresOfMadness() {
 
+                    return (
+                        BossRNG({
+                            current_boss_attack: "Spheres of Madness",
+                            min: 25,
+                            variance: 1.10,
+                            chosen_target: chosen_target,
+                            secondary_targets: TargetMulti(2)
+                        })
+                    )
                 }
             ],
             [
@@ -311,6 +318,47 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ]
         ]
     );
+
+    switch (attackProps.phase) {
+        case 1:
+            moveset = attack_weights.get(1)!;
+            chosen_attack_num = Percentage();
+            boss_attack_functions.get("Spheres of Madness")!();
+
+            break;
+        case 2:
+            if (inversion_eligible) {
+                //adjust the percentages accordingly
+            } else {
+                //use the default moveset, 
+                //which has inversion at a 0% chance
+                moveset = attack_weights.get(2)!;
+            }
+
+
+            break;
+        case 3:
+            if (last_boss_attacks.length >= 10) {
+                //use unholy symphony
+                last_boss_attacks = [];
+
+            } else {
+                if (inversion_eligible) {
+                    //adjust the percentages accordingly
+                } else {
+                    //use the default moveset, 
+                    //which has inversion at a 0% chance
+                    moveset = attack_weights.get(3)!;
+                }
+
+            }
+            break;
+    }
+    console.log("targets", potential_targets)
+
+
+
+
 
     //phase, percentage chance of being used is determined by phase
 
