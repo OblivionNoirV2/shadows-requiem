@@ -39,6 +39,7 @@ interface BossAttackProps {
     current_turn: number;
 }
 let potential_targets: string[] = [];
+let boss_atk_message: string = "";
 export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     console.log("attackProps", attackProps)
@@ -201,24 +202,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         current_boss_attack: string;
         min: number;
         variance: number;
-        chosen_target: string;
         secondary_targets?: string[];
         //if an attack hits multiple targets, 
         //the others are calculated in that function from the 
-        //remaining pool (at random)
-    }
-    //use this to ensure a gap between unholy symphonys
-    //If the list count gets to 10, he uses it then it resets
-    let last_boss_attacks: string[] = []
-    //attacks like inversion thast have unioque damage methods 
-    //take place in the function itself
-    function BossRNG(props: BossRNGProps) {
-        current_boss_attack = props.current_boss_attack;
-
-        const atk_max = props.min * props.variance;
-
-        last_boss_attacks.push(current_boss_attack);
-
+        //remaining pool (at random) and passed here
     }
 
     let moveset: AttackWeightsObject;
@@ -226,17 +213,42 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     let secondary_targets: string[] = [];
     let potential_secondary: string[];
+    //use this for things like devourment
+    let prev_dmg: number;
+
+    //use this to ensure a gap between unholy symphonys
+    //If the list count gets to 10, he uses it then it resets
+    let last_boss_attacks: string[] = []
+    //attacks like inversion thast have unioque damage methods 
+    //take place in the function itself
+    function BossRNG(props: BossRNGProps): number | void {
+        current_boss_attack = props.current_boss_attack;
+
+        const atk_max = props.min * props.variance;
+        //remember to accoount for pdef/mdef/ev
+        last_boss_attacks.push(current_boss_attack);
+        console.log("chosen", chosen_target)
+        //also sets the message to be displayed
+        boss_atk_message = "test";
+
+    }
+
 
     function TargetMulti(additional_targets: number) {
-        potential_secondary = potential_targets.filter((target) => target !== chosen_target);
+        potential_secondary = potential_targets.filter(
+            (target) => target !== chosen_target);
         while (secondary_targets.length < additional_targets) {
-            let rand = Randomizer(0, 2);
+            let rand = Randomizer(0, additional_targets);
             if (!secondary_targets.includes(potential_secondary[rand])) {
                 secondary_targets.push(potential_secondary[rand]);
             }
         }
         console.log("secondary_targets", secondary_targets)
         return secondary_targets;
+
+    }
+    //target is already chosen
+    function LowerAllyStat(stat: string, amount: number) {
 
     }
     const boss_attack_functions: Map<string, Function> = new Map(
@@ -251,7 +263,6 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                     current_boss_attack: "Shadow Blade",
                                     min: 50,
                                     variance: 1.10,
-                                    chosen_target: chosen_target
                                 }
                             )
                     )
@@ -261,19 +272,30 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 "Spheres of Madness", function SpheresOfMadness() {
 
                     return (
-                        BossRNG({
-                            current_boss_attack: "Spheres of Madness",
-                            min: 25,
-                            variance: 1.10,
-                            chosen_target: chosen_target,
-                            secondary_targets: TargetMulti(2)
-                        })
+                        BossRNG(
+                            {
+                                current_boss_attack: "Spheres of Madness",
+                                min: 25,
+                                variance: 1.10,
+                                secondary_targets: TargetMulti(2)
+                            }
+                        )
                     )
                 }
             ],
             [
                 "Devourment", function Devourment() {
+                    //also heals boss by 2* damage inflicted
 
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Devourment",
+                                min: 120,
+                                variance: 1.10,
+                            }
+                        )
+                    )
                 }
             ],
             [
@@ -456,9 +478,14 @@ export const BossAttackArea: React.FC = () => {
     return (
         <section className='max-w-[32rem] absolute top-40 z-50  border-red-700'>
             {isBossAttackShown &&
-                <img className='z-50'
-                    src={require(`./assets/images/boss/attacks/${current_boss_attack}.png`)}>
-                </img>
+                <>
+                    <h1 className='text-7xl text-white'>
+                        {boss_atk_message}
+                    </h1>
+                    <img className='z-50'
+                        src={require(`./assets/images/boss/attacks/${current_boss_attack}.png`)}>
+                    </img>
+                </>
             }
         </section>
     )
