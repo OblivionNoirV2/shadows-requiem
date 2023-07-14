@@ -7,7 +7,10 @@ import {
     RmageNameContext
 } from "./Context";
 import { playClickSfx } from "./sfxManagement";
-
+export let knight_name = KnightNameContext;
+export let dmage_name = DmageNameContext;
+export let wmage_name = WmageNameContext;
+export let rmage_name = RmageNameContext;
 export const NameCharacters = () => {
     const characters: string[] = ['Knight', 'Dark Mage', 'White Mage', 'Red Mage'];
 
@@ -39,6 +42,7 @@ export const NameCharacters = () => {
             </button>
         )
     }
+
     const handleSaveClick = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         //set to default names if left empty, this prevents blank names

@@ -8,6 +8,7 @@ import {
 } from './Context';
 import { useState, useEffect } from 'react';
 import * as sfx from './sfxManagement';
+import { knight_name } from './Naming';
 
 //This is going to work exactly the same as the player side, 
 //except it's automated
@@ -40,12 +41,14 @@ interface BossAttackProps {
 }
 let potential_targets: string[] = [];
 let boss_atk_message: string = "";
+let current_char: string;
 
 //use this to ensure a gap between unholy symphonys
 //If the list count gets to 10, he uses it then it resets
 //Also use this for My Turn
 export let last_boss_attacks: string[] = []
 export function bossAttackAlgo(attackProps: BossAttackProps) {
+    console.log("k name", knight_name)
     potential_targets = [];
 
     console.log("attackProps", attackProps)
@@ -292,8 +295,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     function CalculateFinal(props: CalculateFinalProps): number {
         let final_dmg: number;
         let target_stats;
-        //First check for evasion
-        if (MatchToStat.get(props.target)!.ev <= Percentage()) {
+        //First check for evasion. undefined means they're dead
+        if (props.target !== undefined && MatchToStat.get(props.target)!.ev <= Percentage()) {
             //then add defense
             if (props.atk_type === "phys") {
                 final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.pdef);
@@ -303,9 +306,12 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 return final_dmg;
             }
         } else {
-            console.log("evaded")
-            boss_atk_message = `${props.target} evaded the attack!`
-
+            if (props.target !== undefined) {
+                console.log("evaded")
+                //used to determine the message
+                boss_atk_message = 'evaded'
+                current_char = props.target;
+            }
         }
         return 0;
     }
@@ -346,16 +352,17 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             props.secondary_targets.forEach((target) => {
                 console.log("target", target)
                 //add def/ev/mdef to the equation
-                let x = CalculateFinal({
-                    pre_dmg: pre_dmg,
-                    target: target,
-                    atk_type: props.attack_type
-                })
+                let x = CalculateFinal(
+                    {
+                        pre_dmg: pre_dmg,
+                        target: target,
+                        atk_type: props.attack_type
+                    }
+                )
                 DeductHP(target, x);
-            })
-
+            }
+            )
         }
-
     }
 
     //DO NOT TOUCH
@@ -639,13 +646,15 @@ export const BossAttackArea: React.FC = () => {
         console.log("current_boss_attack", current_boss_attack)
     }, [current_boss_attack]);
 
-
+    //use name state here and customize the message accordingly 
     return (
         <section className='max-w-[32rem] absolute top-40 z-50  border-red-700'>
             {isBossAttackShown &&
                 <>
                     <h1 className='text-7xl text-white'>
-                        {boss_atk_message}
+                        {boss_atk_message === 'evaded' ?
+                            `${current_char} evaded` :
+                            boss_atk_message}
                     </h1>
 
                     <img className='z-50'
