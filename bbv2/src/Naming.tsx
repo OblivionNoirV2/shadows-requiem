@@ -1,10 +1,12 @@
 import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import {
     KnightNameContext,
     DmageNameContext,
     WmageNameContext,
     RmageNameContext
 } from "./Context";
+import { playClickSfx } from "./sfxManagement";
 
 export const NameCharacters = () => {
     const characters: string[] = ['Knight', 'Dark Mage', 'White Mage', 'Red Mage'];
@@ -27,7 +29,16 @@ export const NameCharacters = () => {
     const handleInputChange = (character: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
         setNames({ ...names, [character]: event.target.value });
     }
-
+    const ExitBtn = () => {
+        return (
+            <button className="text-4xl text-white px-4 py-2"
+                onClick={() => playClickSfx()}>
+                <Link to="/StartMenu" >
+                    Back to Title
+                </Link>
+            </button>
+        )
+    }
     const handleSaveClick = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         //set to default names if left empty, this prevents blank names
@@ -78,7 +89,9 @@ export const NameCharacters = () => {
                                 </ul>
                             ))}
                             <SaveButton />
+
                         </section>
+                        <ExitBtn />
                     </section>
                 </form>
             </div>
