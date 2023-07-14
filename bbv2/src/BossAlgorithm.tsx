@@ -46,6 +46,7 @@ let boss_atk_message: string = "";
 //Also use this for My Turn
 export let last_boss_attacks: string[] = []
 export function bossAttackAlgo(attackProps: BossAttackProps) {
+    potential_targets = [];
 
     console.log("attackProps", attackProps)
     current_boss_attack = "Unholy Symphony";
@@ -303,12 +304,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             }
         } else {
             console.log("evaded")
-            boss_atk_message = "Evaded"
+            boss_atk_message = `${props.target} evaded the attack!`
 
         }
         return 0;
-
-
     }
     function Percentage() {
         return Math.random();
@@ -356,18 +355,20 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             })
 
         }
-        potential_targets = [];
-        secondary_targets = [];
 
     }
 
-
+    //DO NOT TOUCH
     function TargetMulti(additional_targets: number) {
+        potential_secondary = [];
 
         potential_secondary = potential_targets.filter(
             (target) => target !== chosen_target);
+        console.log("potential_secondary", potential_secondary)
         while (secondary_targets.length < additional_targets) {
-            let rand = Randomizer(0, additional_targets);
+            console.log("potential_secondary in loop", potential_secondary)
+            let rand = Randomizer(0, additional_targets + 1);
+            console.log("rand", rand)
             if (!secondary_targets.includes(potential_secondary[rand])) {
                 secondary_targets.push(potential_secondary[rand]);
             }
