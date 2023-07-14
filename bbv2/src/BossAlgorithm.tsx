@@ -7,7 +7,7 @@ import {
     RmageStatusContext
 } from './Context';
 import { useState, useEffect } from 'react';
-
+import * as sfx from './sfxManagement';
 
 //This is going to work exactly the same as the player side, 
 //except it's automated
@@ -40,6 +40,11 @@ interface BossAttackProps {
 }
 let potential_targets: string[] = [];
 let boss_atk_message: string = "";
+
+//use this to ensure a gap between unholy symphonys
+//If the list count gets to 10, he uses it then it resets
+//Also use this for My Turn
+export let last_boss_attacks: string[] = []
 export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     console.log("attackProps", attackProps)
@@ -202,6 +207,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         current_boss_attack: string;
         min: number;
         variance: number;
+        atk_sfx: string;
         secondary_targets?: string[];
         //if an attack hits multiple targets, 
         //the others are calculated in that function from the 
@@ -214,12 +220,12 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     let secondary_targets: string[] = [];
     let potential_secondary: string[];
     //use this for things like devourment
-    let prev_dmg: number;
+    //Also have Unholy Synphony be the sum of the 
+    //last 10 attacks(divided by 2 maybe). Use a tritone for that sfx!
+    let prev_dmg: number[];
 
-    //use this to ensure a gap between unholy symphonys
-    //If the list count gets to 10, he uses it then it resets
-    let last_boss_attacks: string[] = []
-    //attacks like inversion thast have unioque damage methods 
+
+    //attacks like inversion thast have unique damage methods 
     //take place in the function itself
     function BossRNG(props: BossRNGProps): number | void {
         current_boss_attack = props.current_boss_attack;
@@ -229,12 +235,16 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         last_boss_attacks.push(current_boss_attack);
         console.log("chosen", chosen_target)
         //also sets the message to be displayed
-        boss_atk_message = "test";
+        boss_atk_message = props.current_boss_attack;
 
+        if (props.current_boss_attack === "Devourment") {
+            //heal by whatever the final damage is
+        }
     }
 
 
     function TargetMulti(additional_targets: number) {
+
         potential_secondary = potential_targets.filter(
             (target) => target !== chosen_target);
         while (secondary_targets.length < additional_targets) {
@@ -263,6 +273,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                     current_boss_attack: "Shadow Blade",
                                     min: 50,
                                     variance: 1.10,
+                                    atk_sfx: "placeholder",
                                 }
                             )
                     )
@@ -270,14 +281,14 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [   //Targets 3, starting with the previously chosen
                 "Spheres of Madness", function SpheresOfMadness() {
-
                     return (
                         BossRNG(
                             {
                                 current_boss_attack: "Spheres of Madness",
-                                min: 25,
+                                min: 35,
                                 variance: 1.10,
-                                secondary_targets: TargetMulti(2)
+                                secondary_targets: TargetMulti(2),
+                                atk_sfx: "placeholder",
                             }
                         )
                     )
@@ -293,6 +304,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 current_boss_attack: "Devourment",
                                 min: 120,
                                 variance: 1.10,
+                                atk_sfx: "placeholder",
                             }
                         )
                     )
@@ -325,6 +337,20 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [
                 "Unholy Symphony", function UnholySymphony() {
+                    //min given to the RNG is tht total 
+                    //of the past 10 attacks 
+                    //Targets all allies
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Unholy Symphony",
+                                min: prev_dmg.reduce(
+                                    (accumulator, currentValue) => accumulator + currentValue, 0),
+                                variance: 1.05,
+                                atk_sfx: "US",
+                            }
+                        )
+                    )
 
                 }
             ],

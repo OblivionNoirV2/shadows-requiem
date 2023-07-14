@@ -16,6 +16,7 @@ import explosion from './assets/sound/sfx/explosion.wav';
 import bol from './assets/sound/sfx/BOL.wav';
 import army from './assets/sound/sfx/army.mp3';
 import sn from './assets/sound/sfx/SN.mp3';
+import us from './assets/sound/sfx/US.wav';
 export function playClickSfx() {
     const click = new Audio(clicksfx);
     click.play();
@@ -39,5 +40,6 @@ export const AttackSfxLookup: { [name: string]: string } = {
     'explosion': explosion,
     'BOL': bol,
     'army': army,
-    'sn': sn
+    'sn': sn,
+    'US': us,//unholy symphony
 }
