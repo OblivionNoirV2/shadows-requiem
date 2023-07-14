@@ -8,7 +8,7 @@ import {
 } from './Context';
 import { useState, useEffect } from 'react';
 import * as sfx from './sfxManagement';
-import { knight_name } from './Naming';
+import { min_max_vals_map } from './StatManagement';
 
 //This is going to work exactly the same as the player side, 
 //except it's automated
@@ -21,6 +21,8 @@ are more likely to be targeted
 Obviously he will check if a character is dead or not(if their hp is 0)
 
 */
+
+
 let current_boss_attack: string;
 
 interface BossAttackProps {
@@ -47,8 +49,12 @@ let current_char: string;
 //If the list count gets to 10, he uses it then it resets
 //Also use this for My Turn
 export let last_boss_attacks: string[] = []
+
+//Gradually restore any stats that were lowered each turn
+function CheckForStatDecrease() {
+
+}
 export function bossAttackAlgo(attackProps: BossAttackProps) {
-    console.log("k name", knight_name)
     potential_targets = [];
 
     console.log("attackProps", attackProps)
@@ -331,7 +337,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     }
     //attacks like inversion thast have unique damage methods 
     //take place in the function itself
-    function BossRNG(props: BossRNGProps): number | void {
+    function BossRNG(props: BossRNGProps) {
         current_boss_attack = props.current_boss_attack;
 
         const atk_max = props.min * props.variance;
@@ -436,8 +442,16 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     )
                 }
             ],
-            [ //drops target's phys def
+            [ //drops target's phys def, 40% chance
                 "Disintegration", function Disintegration() {
+                    if (Percentage() <= 0.40) {
+                        if (MatchToStat.get(chosen_target)!.pdef >
+                            min_max_vals_map.get("player")!.p_def.min) {
+                            LowerAllyStat("p_def", 0.20);
+
+                        }
+                    }
+
                     BossRNG(
                         {
                             current_boss_attack: "Disintegration",
@@ -452,6 +466,16 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [ //drops target's mag def
                 "Soul Crusher", function SoulCrusher() {
+                    if (Percentage() <= 0.40) {
+                        if (MatchToStat.get(chosen_target)!.mdef >
+                            min_max_vals_map.get("player")!.m_def.min) {
+                            LowerAllyStat("m_def", 0.20);
+                            //use the maps for controlling stats
+                            //Then restore them a little each boss turn
+                            //until back to normal
+
+                        }
+                    }
 
                     BossRNG(
                         {
@@ -462,8 +486,6 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                             attack_type: "mag"
                         }
                     )
-
-
                 }
             ],
             [
