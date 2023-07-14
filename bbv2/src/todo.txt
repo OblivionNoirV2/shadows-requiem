@@ -1,3 +1,4 @@
 fix issue with music not updating when browser is refreshed 
 
 just use a global song playing state and useffect to update it when the page loads
+convert names to use a map so I can use them in non-react components

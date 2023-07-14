@@ -189,7 +189,12 @@ export const BossHpBar = () => {
         </progress>
     )
 }
-
+export const MatchToMpMap: Map<string, number | undefined> = new Map([
+    ["knight", sm.knight_stats.get("mp")],
+    ["dmage", sm.dmage_stats.get("mp")],
+    ["wmage", sm.wmage_stats.get("mp")],
+    ["rmage", sm.rmage_stats.get("mp")]
+]);
 
 interface PlayerMenuProps {
     player: string;
@@ -374,13 +379,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     }
 
 
-
-    const MatchToMpMap: Map<string, number | undefined> = new Map([
-        ["knight", sm.knight_stats.get("mp")],
-        ["dmage", sm.dmage_stats.get("mp")],
-        ["wmage", sm.wmage_stats.get("mp")],
-        ["rmage", sm.rmage_stats.get("mp")]
-    ]);
 
     const [isSecondaryItemMenuShown, setIsSecondaryItemMenuShown] = useState(false);
     type validItemTargets = "knight" | "dmage" | "wmage" | "rmage";

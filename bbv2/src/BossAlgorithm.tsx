@@ -9,6 +9,7 @@ import {
 import { useState, useEffect } from 'react';
 import * as sfx from './sfxManagement';
 import { min_max_vals_map } from './StatManagement';
+import { MatchToMpMap } from './MainPage';
 
 //This is going to work exactly the same as the player side, 
 //except it's automated
@@ -21,7 +22,12 @@ are more likely to be targeted
 Obviously he will check if a character is dead or not(if their hp is 0)
 
 */
-
+const MatchToHpMap: Map<string, number> = new Map([
+    ["knight", sm.knight_stats.get("hp")!],
+    ["dmage", sm.dmage_stats.get("hp")!],
+    ["wmage", sm.wmage_stats.get("hp")!],
+    ["rmage", sm.rmage_stats.get("hp")!]
+])
 
 let current_boss_attack: string;
 
@@ -51,6 +57,7 @@ let current_char: string;
 export let last_boss_attacks: string[] = []
 
 //Gradually restore any stats that were lowered each turn
+//To do this, make a list of objects to be checked and loop through it
 function CheckForStatDecrease() {
 
 }
@@ -215,7 +222,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     //Determines damage and image to show
 
 
-    let moveset: AttackWeightsObject;
+    let moveset: Map<string, number>;
     let chosen_attack_num: number;
 
     let secondary_targets: string[] = [];
@@ -226,6 +233,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     let prev_dmg: number[];
 
     interface CharacterRespectiveStats {
+        [index: string]: number | undefined //allows usage of string as index
         hp: number;
         mp?: number;
         pdef: number;
@@ -392,6 +400,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     }
     //target is already chosen
     function LowerAllyStat(stat: string, amount: number) {
+        MatchToStat.get(chosen_target)![stat]! -= amount;
 
     }
     const boss_attack_functions: Map<string, Function> = new Map(
@@ -513,14 +522,13 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         {
                             current_boss_attack: "Unholy Symphony",
                             min: prev_dmg.reduce(
-                                (accumulator, currentValue) => accumulator + currentValue, 0),
+                                (accumulator, currentValue) =>
+                                    accumulator + currentValue, 0),
                             variance: 1.05,
                             atk_sfx: "US",
                             attack_type: "none"
                         }
                     )
-
-
                 }
             ],
             [
@@ -535,12 +543,20 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ]
         ]
     );
-
+    //How this will work is each stage gets an array with 
+    //a certain amount of each number in it. 
+    //The number pulled matches whatever attack he uses
+    //which corresponds with a function
+    let attacks_grab_bag: number[] = []
     switch (attackProps.phase) {
         case 1:
-            moveset = attack_weights.get(1)!;
+            attacks_grab_bag = [1, 1, 1, 2, 2, 3, 4, 5];
+
+
             chosen_attack_num = Percentage();
-            boss_attack_functions.get("Spheres of Madness")!();
+
+
+            //boss_attack_functions.get("Spheres of Madness")!();
 
             break;
         case 2:
@@ -549,7 +565,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             } else {
                 //use the default moveset, 
                 //which has inversion at a 0% chance
-                moveset = attack_weights.get(2)!;
+
             }
 
 
@@ -565,7 +581,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 } else {
                     //use the default moveset, 
                     //which has inversion at a 0% chance
-                    moveset = attack_weights.get(3)!;
+
                 }
 
             }
@@ -585,49 +601,29 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 }//algo function ends here 
 
 
-interface AttackWeightsObject {
-    [key: string]: number | undefined
+interface AttackNumsObject {
+    [key: number]: string | undefined
 }
-const attack_weights: Map<number, AttackWeightsObject> = new Map(
+//Not so much weights as they are number labels
+const attack_nums: Map<number, string> = new Map(
     [
-        [
-            1, {
-                "Shadow Blade": 0.3, //standard atk, med phys
-                "Spheres of Madness": 0.2, //low mag dmg, hits all allies
-                "Devourment": 0.1, //Heavy phys, heals boss by damage dealt
-                "Disintegration": 0.2, //med phys dmg, Med chance to lower phys def
-                "Soul Crusher": 0.2 //med mag dmg, med chance to lower mag def
-            }
-        ],
-        [
-            2, {
-                "Shadow Blade": 0.2,
-                "Spheres of Madness": 0.1,
-                "Devourment": 0.1,
-                "Disintegration": 0.2,
-                "Soul Crusher": 0.2,
-                "Inversion": 0, //Strong chance of occuring whenever all allies have lower mp than 25% of their max hp
-                "Frozen Soul": 0.05,
-                "Unending Grudge": 0.05,
-            }
-        ],
-        [
-            3, {
-                "Shadow Blade": 0.20,
-                "Spheres of Madness": 0.1,
-                "Devourment": 0.1,
-                "Disintegration": 0.1,
-                "Soul Crusher": 0.1,
-                "Inversion": 0.1,
-                "Frozen Soul": 0.05,
-                "Unending Grudge": 0.05,
-                "Unholy Symphony": 0, //Runs every 10 turns
-                "Death's Touch": 0.10,
-                "Chaos Blade": 0.10
+        [1, "Shadow Blade"], //standard atk, med phys
+        [2, "Spheres of Madness"], //low mag dmg, hits all allies
+        [3, "Devourment"], //Heavy phys, heals boss by damage dealt
+        [4, "Disintegration"], //med phys dmg, Med chance to lower phys def
+        [5, "Soul Crusher"], //med mag dmg, med chance to lower mag def
+        //phase 2
+        [6, "Inversion"], //Strong chance of occuring whenever all allies have lower mp than 25% of their max hp
+        [7, "Frozen Soul"],
+        [8, "Unending Grudge"],
+        //phase 3
+        [9, "Unholy Symphony"], //Runs every 10 turns
+        [10, "Death's Touch"],
+        [11, "Chaos Blade"]
+    ]
+);
 
-            }
-        ]
-    ])
+
 
 //probably don't need these 
 const boss_attacks: string[] = [
