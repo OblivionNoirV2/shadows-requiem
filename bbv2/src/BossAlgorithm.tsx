@@ -376,6 +376,13 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 DeductHP(target, x);
             }
             )
+        } else {
+            DeductHP(chosen_target, CalculateFinal({
+                pre_dmg: pre_dmg,
+                target: chosen_target,
+                atk_type: props.attack_type
+
+            }))
         }
     }
 
@@ -418,7 +425,6 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 attack_type: "phys"
                             }
                         )
-
                 }
             ],
             [   //Targets 3, starting with the previously chosen
@@ -543,20 +549,25 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ]
         ]
     );
+
+
+    function GetRandomNumber(arr: number[]) {
+        return (arr[Math.floor(Math.random() * arr.length)])
+    }
     //How this will work is each stage gets an array with 
     //a certain amount of each number in it. 
     //The number pulled matches whatever attack he uses
     //which corresponds with a function
     let attacks_grab_bag: number[] = []
+    let chosen_num: number;
     switch (attackProps.phase) {
         case 1:
             attacks_grab_bag = [1, 1, 1, 2, 2, 3, 4, 5];
+            chosen_num = GetRandomNumber(attacks_grab_bag);
+            console.log("chosen_num", chosen_num)
+            attack_nums.get(chosen_num);
 
-
-            chosen_attack_num = Percentage();
-
-
-            //boss_attack_functions.get("Spheres of Madness")!();
+            boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
 
             break;
         case 2:
