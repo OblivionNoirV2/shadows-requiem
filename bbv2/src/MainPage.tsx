@@ -269,67 +269,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     }
 
 
-    //They don't update with items without these 
-    //Since I can't directly set state in the item functions
-    useEffect(() => {
-        let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0))
-        //prevent negative values
-        khp <= 0 ? HandleDeath("knight") :
-            setKnightHP(khp);
-
-    }, [sm.knight_stats.get("hp")]);
-
-    useEffect(() => {
-        let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0))
-
-        dhp <= 0 ? HandleDeath("dmage") :
-            setDmageHP(dhp);
-
-    }, [sm.dmage_stats.get("hp")]);
-
-    useEffect(() => {
-        let whp = parseInt(sm.wmage_stats.get("hp")!.toFixed(0))
-        whp <= 0 ? HandleDeath("wmage") :
-            setWmageHP(whp);
-
-    }, [sm.wmage_stats.get("hp")]);
-
-    useEffect(() => {
-        let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0))
-        rhp <= 0 ? HandleDeath("rmage") :
-            setRmageHP(rhp);
-
-    }, [sm.rmage_stats.get("hp")]);
-    //mp
-    useEffect(() => {
-        let kmp = parseInt(sm.knight_stats.get("mp")!.toFixed(0))
-        kmp <= 0 ? setKnightMP(0) :
-            setKnightMP(kmp);
-
-    }, [sm.knight_stats.get("mp")]);
-
-    useEffect(() => {
-        let dmp = parseInt(sm.dmage_stats.get("mp")!.toFixed(0))
-        dmp <= 0 ? setDmageMP(0) :
-            setDmageMP(dmp)
-
-    }, [sm.dmage_stats.get("mp")])
-
-    useEffect(() => {
-        let wmp = parseInt(sm.wmage_stats.get("mp")!.toFixed(0))
-        wmp <= 0 ? setWmageMP(0) :
-            setWmageMP(wmp)
-
-    }, [sm.wmage_stats.get("mp")])
-
-    useEffect(() => {
-        let rmp = parseInt(sm.rmage_stats.get("mp")!.toFixed(0))
-        rmp <= 0 ? setRmageMP(0) :
-            setRmageMP(rmp)
-    }, [sm.rmage_stats.get("mp")])
-
-
-
     function HandleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);
         console.log("AA: " + isAttacksActive);
@@ -964,7 +903,11 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     </progress>
                     <div className='ml-2 text-xl mp-text'>
                         <strong>
-                            {MatchToMPState.get(player)}/{sm[stat_name].get("max_mp")}
+                            {
+                                MatchToMPState.get(player) > sm[stat_name].get('max_hp')!
+                                    ? `${sm[stat_name].get('max_mp')!} / ${sm[stat_name].get('max_mp')!}`
+                                    : `${MatchToMPState.get(player)} / ${sm[stat_name].get('max_mp')}`
+                            }
                         </strong>
                     </div>
                 </div>

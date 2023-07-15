@@ -400,8 +400,8 @@ export const attacks_map: Map<string, Function> = new Map([
             //Also restores her mp a good bit
 
             //make sure it doesn't go over the max
-            if (sm.dmage_stats.get('mp')! + 80 > sm.dmage_stats.get('maxmp')!) {
-                sm.dmage_stats.set('mp', sm.dmage_stats.get('maxmp')!);
+            if (sm.dmage_stats.get('mp')! + 80 > sm.dmage_stats.get('max_mp')!) {
+                sm.dmage_stats.set('mp', sm.dmage_stats.get('max_p')!);
             } else {
                 sm.dmage_stats.set('mp', (sm.dmage_stats.get('mp')! + 80));
 
