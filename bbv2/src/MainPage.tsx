@@ -90,6 +90,7 @@ export const BossArea = () => {
         //if it's an even turn, the boss attacks
         console.log("boss attack")
         if (TurnNumber % 2 === 0) {
+            //Needs to return what the boss did
             bossAttackAlgo({
                 phase: bossStage,
                 knight_status: KnightStatus,
@@ -273,18 +274,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         setIsAttacksActive(!isAttacksActive);
         console.log("AA: " + isAttacksActive);
     }
-    //do the same for attacks
-    function GetItemDesc(item: string): string {
-        switch (item) {
-            case "HP Potion":
-                return "Restores 50% of one character's HP";
-            case "MP Potion":
-                return "Restores 50% of one character's MP";
-            case "Revive":
-                return "Revives a character with 60% HP";
-        }
-        return "";
-    }
 
     function HandleDefend() {
 
@@ -341,13 +330,22 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     }
     //Pulls from a map of objects like the attacks do 
     //Store the stock in a map
-
+    //type is hp, mp, status. Add it to the dictionairy
     function UseItem(item: string, target: string) {
+        //Need to do the stat changes from the items HERE
+        //have the function return whatever it's healing
+        //Use the item encyclopedia to check what to do with 
+        //the returned number 
         const item_details = iv.player_inventory.get(item);
         console.log("item", item)
         console.log("target", target)
-        //use the item
-        iv.item_functions.get(item)?.(target);
+        //use the item, each of these returns a number or a string
+        //number means it heals hp or mp. string means 
+        //it heals a status, string will specify which status
+
+        let item_return = iv.item_functions.get(item)?.(target);
+        console.log("x", item_return)
+        setKnightMP(sm.knight_stats.get("mp")! - item_return!);
 
         console.log("original", item_details)
         //update stock
@@ -361,6 +359,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     useEffect(() => {
         //Everything must be reset here or it gets all weird and buggy
         if (itemTarget !== undefined) {
+
             UseItem(currentItem, itemTarget!)
             setIsSecondaryItemMenuShown(false)
             setItemTarget(undefined)

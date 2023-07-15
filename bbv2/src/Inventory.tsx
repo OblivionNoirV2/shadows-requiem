@@ -39,8 +39,8 @@ export const item_functions: Map<string, Function> = new Map(
         [
             "Minor HP Potion", function MinorHpPotion(target: string) {
 
-                Heal(target, TargetToStat.get(target)!.get("max_hp")! * 0.33);
-                alert("working!")
+                //Heal(target, TargetToStat.get(target)!.get("max_hp")! * 0.33);
+                return 100;//temp test
             }
         ],
         [
@@ -95,6 +95,7 @@ export const item_functions: Map<string, Function> = new Map(
 interface InventoryItem {
     description: string;
     stock: number;
+    type: string;//what it does
 }
 export const player_inventory: Map<string, InventoryItem> = new Map(
     [
@@ -102,60 +103,71 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
             "Minor HP Potion", {
                 description: "Restores 1/3 of a character's max HP.",
                 stock: 5,
+                type: "hp"
             }
         ],
         [
             "Major HP Potion", {
                 description: "Restores 2/3 of a character's max HP.",
-                stock: 5
+                stock: 5,
+                type: "hp"
             }
         ],
         [
             "Minor MP Potion", {
                 description: "Restores 1/3 of a character's max MP.",
-                stock: 10
+                stock: 10,
+                type: "mp"
             }
         ],
         [
             "Major MP Potion", {
                 description: "Restores 2/3 of a character's max MP.",
-                stock: 5
+                stock: 5,
+                type: "mp"
             }
         ],
         [
             "Minor Revive", {
                 description: "Revives a dead character with 1/3 of their max HP.",
-                stock: 4
+                stock: 4,
+                type: "min revive"
             }
         ],
         [
             "Major Revive", {
                 description: "Revives a dead character with 2/3 of their max HP.",
-                stock: 2
+                stock: 2,
+                type: "maj revive"
+
             }
         ],
         [
             "De-toxin", {
                 description: "Cures poison for one character.",
-                stock: 5
+                stock: 5,
+                type: "de-toxin"
             }
         ],
         [
             "De-frost", {
                 description: "Cures freeze for one character.",
-                stock: 5
+                stock: 5,
+                type: "de-frost"
             }
         ],
         [
             "Purifier", {
                 description: "Cures Curse for one character.",
-                stock: 5
+                stock: 5,
+                type: "de-curse"
             }
         ],
         [
             "Magic Leaf", {
                 description: "Removes all status effects from one character.",
-                stock: 3
+                stock: 3,
+                type: "status-all"
             }
         ]
     ]
