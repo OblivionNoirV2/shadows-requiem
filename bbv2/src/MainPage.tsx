@@ -111,18 +111,61 @@ export const BossArea = () => {
         }
 
     }, [TurnNumber]);
+    //lookup for what's being set for handledeath
+    const SetLookupHash: Map<string, Dispatch<SetStateAction<string[]>>> = new Map
+        (
+            [
+                ["knight", setKnightStatus],
+                ["dmage", setDmageStatus],
+                ["wmage", setWmageStatus],
+                ["rmage", setRmageStatus]
 
-    function HandleDeath(character: string) { }
+            ]
+        )
+    //control dead status
+
+    function HandleDeath(character: string, killed_or_revived: string) {
+        switch (character) {
+            case "knight":
+                killed_or_revived === "killed" ?
+                    setKnightStatus(prevKnightStatus =>
+                        [...prevKnightStatus, "dead"]) :
+                    setKnightStatus(prevKnightStatus =>
+                        prevKnightStatus.filter(
+                            status => status !== "dead"))
+                break;
+            case "dmage":
+
+
+        }
+    }
+    //keep track of the last hp. If it was previously 0 then it changes, 
+    //it's a revive because dead characters do not get targeted in any way
+    //except for revives
+    const [lastKnightHP, setLastKnightHP] = useState<number>();
+    const [lastDmageHP, setLastDmageHP] = useState<number>();
+    const [lastWmageHP, setLastWmageHP] = useState<number>();
+    const [lastRmageHP, setLastRmageHP] = useState<number>();
 
     useEffect(() => {
         let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0));
         if (khp <= 0) {
             //prevent negatives
             setKnightHP(0);
-            HandleDeath("knight");
+            HandleDeath("knight", "killed");
         }
         setKnightHP(khp);
+        setLastKnightHP(khp);
+
+
     }, [sm.knight_stats.get("hp")])
+
+    useEffect(() => {
+        if (lastKnightHP === 0) {
+            HandleDeath("knight", "revived");
+        }
+
+    }, [lastKnightHP])
 
 
     useEffect(() => {
@@ -137,10 +180,17 @@ export const BossArea = () => {
         let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0));
         if (dhp <= 0) {
             setDmageHP(0);
-            HandleDeath("dmage");
+            HandleDeath("dmage", "killed");
         }
         setDmageHP(dhp);
+        setLastDmageHP(dhp);
     }, [sm.dmage_stats.get("hp")])
+
+    useEffect(() => {
+        if (lastDmageHP === 0) {
+            HandleDeath("dmage", "revived");
+        }
+    }, [lastDmageHP])
 
 
     useEffect(() => {
@@ -149,16 +199,24 @@ export const BossArea = () => {
             setDmageMP(0);
         }
         setDmageMP(dmp);
+
     }, [sm.dmage_stats.get("mp")])
 
     useEffect(() => {
         let whp = parseInt(sm.wmage_stats.get("hp")!.toFixed(0));
         if (whp <= 0) {
             setWmageHP(0);
-            HandleDeath("wmage");
+            HandleDeath("wmage", "killed");
         }
         setWmageHP(whp);
     }, [sm.wmage_stats.get("hp")])
+
+    useEffect(() => {
+        if (lastWmageHP === 0) {
+            HandleDeath("wmage", "revived");
+        }
+    }, [lastWmageHP])
+
 
     useEffect(() => {
         let wmp = parseInt(sm.wmage_stats.get("mp")!.toFixed(0));
@@ -172,10 +230,17 @@ export const BossArea = () => {
         let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0));
         if (rhp <= 0) {
             setRmageHP(0);
-            HandleDeath("rmage");
+            HandleDeath("rmage", "killed");
         }
         setRmageHP(rhp);
     }, [sm.rmage_stats.get("hp")])
+
+    useEffect(() => {
+        if (lastRmageHP === 0) {
+            HandleDeath("rmage", "revived");
+        }
+    }, [lastRmageHP])
+
 
     useEffect(() => {
         let rmp = parseInt(sm.rmage_stats.get("mp")!.toFixed(0));
@@ -320,34 +385,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
     const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
-    //gets called when the character's hp hits 0 or below
-    //sets the character death state accordingly
-    function HandleDeath(character: string) {
 
-        switch (character) {
-            case "knight":
-                setKnightHP(0);
-                setKnightStatus((prevState: string[]) => [...prevState, "dead"]);
-                console.log("knight status: ", KnightStatus)
-                break;
-            case "dmage":
-                setDmageHP(0);
-                setDmageStatus((prevState: string[]) => [...prevState, "dead"]);
-                console.log("dmage status: ", DmageStatus)
-                break;
-            case "wmage":
-                setWmageHP(0);
-                setWmageStatus((prevState: string[]) => [...prevState, "dead"]);
-                console.log("wmage status: ", WmageStatus)
-                break;
-            case "rmage":
-                setRmageHP(0);
-                setRmageStatus((prevState: string[]) => [...prevState, "dead"]);
-                console.log("rmage status: ", RmageStatus)
-                break;
-        }
-
-    }
 
 
     function HandleAttacksMenu() {
@@ -355,7 +393,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         console.log("AA: " + isAttacksActive);
     }
 
-    function HandleDefend() {
+    //doubles defense for 3 turns
+    function HandleDefend(player: string) {
+
 
     }
 
@@ -419,6 +459,11 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         const item_details = iv.player_inventory.get(item);
         console.log("item", item)
         console.log("target", target)
+
+        //use the returned value
+        setDmageMP(DmageMP! - 100)
+        //sm.dmage_stats.set("mp", sm.dmage_stats.get("mp")! - 100)
+        //setDmageMP(DmageMP! * item_details?.amount!)
         //use the return value to determine what happens
         //number means it heals hp or mp. string means 
         //it heals a status, string will specify which status
@@ -546,7 +591,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                             </div>
                             {isItemsActive ? null :
                                 <li>
-                                    <button onClick={() => { HandleDefend(); sfx.playClickSfx() }} >
+                                    <button onClick={() => { HandleDefend(player); sfx.playClickSfx() }} >
                                         Defend
                                     </button>
                                 </li>
