@@ -86,12 +86,13 @@ export const BossArea = () => {
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
     const [bossStage, setBossStage] = useState(1);
 
+
+
     useEffect(() => {
         //if it's an even turn, the boss attacks
         console.log("boss attack")
         if (TurnNumber % 2 === 0) {
-            //Needs to return what the boss did
-            bossAttackAlgo({
+            let x = bossAttackAlgo({
                 phase: bossStage,
                 knight_status: KnightStatus,
                 dmage_status: DmageStatus,
@@ -111,7 +112,78 @@ export const BossArea = () => {
 
     }, [TurnNumber]);
 
+    function HandleDeath(character: string) { }
 
+    useEffect(() => {
+        let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0));
+        if (khp <= 0) {
+            //prevent negatives
+            setKnightHP(0);
+            HandleDeath("knight");
+        }
+        setKnightHP(khp);
+    }, [sm.knight_stats.get("hp")])
+
+
+    useEffect(() => {
+        let kmp = parseInt(sm.knight_stats.get("mp")!.toFixed(0));
+        if (kmp <= 0) {
+            setKnightMP(0);
+        }
+        setKnightMP(kmp);
+    }, [sm.knight_stats.get("mp")])
+
+    useEffect(() => {
+        let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0));
+        if (dhp <= 0) {
+            setDmageHP(0);
+            HandleDeath("dmage");
+        }
+        setDmageHP(dhp);
+    }, [sm.dmage_stats.get("hp")])
+
+
+    useEffect(() => {
+        let dmp = parseInt(sm.dmage_stats.get("mp")!.toFixed(0));
+        if (dmp <= 0) {
+            setDmageMP(0);
+        }
+        setDmageMP(dmp);
+    }, [sm.dmage_stats.get("mp")])
+
+    useEffect(() => {
+        let whp = parseInt(sm.wmage_stats.get("hp")!.toFixed(0));
+        if (whp <= 0) {
+            setWmageHP(0);
+            HandleDeath("wmage");
+        }
+        setWmageHP(whp);
+    }, [sm.wmage_stats.get("hp")])
+
+    useEffect(() => {
+        let wmp = parseInt(sm.wmage_stats.get("mp")!.toFixed(0));
+        if (wmp <= 0) {
+            setWmageMP(0);
+        }
+        setWmageMP(wmp);
+    }, [sm.wmage_stats.get("mp")])
+
+    useEffect(() => {
+        let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0));
+        if (rhp <= 0) {
+            setRmageHP(0);
+            HandleDeath("rmage");
+        }
+        setRmageHP(rhp);
+    }, [sm.rmage_stats.get("hp")])
+
+    useEffect(() => {
+        let rmp = parseInt(sm.rmage_stats.get("mp")!.toFixed(0));
+        if (rmp <= 0) {
+            setRmageMP(0);
+        }
+        setRmageMP(rmp);
+    }, [sm.rmage_stats.get("mp")])
 
     console.log("rendered bossarea")
     useEffect(() => {

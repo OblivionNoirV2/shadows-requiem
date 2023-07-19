@@ -289,6 +289,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     }
     function DeductHP(target: string, final_dmg: number) {
+        sm.knight_stats.set("hp", sm.knight_stats.get("hp")! - final_dmg);
+
         switch (target) {
             case "knight":
                 sm.knight_stats.set("hp", sm.knight_stats.get("hp")! - final_dmg);
