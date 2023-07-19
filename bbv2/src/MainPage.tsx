@@ -190,12 +190,20 @@ export const BossHpBar = () => {
         </progress>
     )
 }
-export const MatchToMpMap: Map<string, number | undefined> = new Map([
+export let MatchToMpMap: Map<string, number | undefined> = new Map([
     ["knight", sm.knight_stats.get("mp")],
     ["dmage", sm.dmage_stats.get("mp")],
     ["wmage", sm.wmage_stats.get("mp")],
     ["rmage", sm.rmage_stats.get("mp")]
 ]);
+
+export let MatchToHpMap: Map<string, number | undefined> = new Map([
+    ["knight", sm.knight_stats.get("hp")],
+    ["dmage", sm.dmage_stats.get("hp")],
+    ["wmage", sm.wmage_stats.get("hp")],
+    ["rmage", sm.rmage_stats.get("hp")]
+]);
+
 
 interface PlayerMenuProps {
     player: string;
@@ -339,13 +347,12 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         const item_details = iv.player_inventory.get(item);
         console.log("item", item)
         console.log("target", target)
-        //use the item, each of these returns a number or a string
+        //use the return value to determine what happens
         //number means it heals hp or mp. string means 
         //it heals a status, string will specify which status
+        //Need to set the mp/hp maps too for consistency
 
-        let item_return = iv.item_functions.get(item)?.(target);
-        console.log("x", item_return)
-        setKnightMP(sm.knight_stats.get("mp")! - item_return!);
+
 
         console.log("original", item_details)
         //update stock

@@ -21,81 +21,88 @@ export const TargetToStat: Map<string, Map<string, number>> = new Map(
 //Everything works in percentages
 //If it's a full heal, just set the hp to the max hp
 
-function Heal(target: string, amount: number) {
+//for both hp and mp, since which one is determined on the main page
 
-    TargetToStat.get(target)!.set(
-        "hp", TargetToStat.get(target)!.get("hp")! + amount);
-}
-
-function HealMP(target: string, amount: number) {
-    console.log("target", target)
-    console.log("amount", amount)
-    TargetToStat.get(target)!.set(
-        "mp", TargetToStat.get(target)!.get("mp")! + amount);
-
-}
-export const item_functions: Map<string, Function> = new Map(
+/*export const item_functions: Map<string, Function> = new Map(
     [
         [
-            "Minor HP Potion", function MinorHpPotion(target: string) {
+            "Minor HP Potion", function MinorHpPotion(target: string): number {
 
-                //Heal(target, TargetToStat.get(target)!.get("max_hp")! * 0.33);
-                return 100;//temp test
+                return TargetToStat.get(target)!.get("max_hp")! * 0.33;
             }
         ],
         [
-            "Major HP Potion", function MajorHpPotion(target: string) {
-
-            }
-        ],
-        [
-            "Minor MP Potion", function MinorMpPotion(target: string) {
-                HealMP(target, TargetToStat.get(target)!.get("max_mp")! * 0.33);
+            "Major HP Potion", function MajorHpPotion(target: string): number {
+                return TargetToStat.get(target)!.get("max_hp")! * 0.66;
 
             }
         ],
         [
-            "Major MP Potion", function MajorMpPotion(target: string) {
+            "Minor MP Potion", function MinorMpPotion(target: string): number {
+                return TargetToStat.get(target)!.get("max_mp")! * 0.33;
 
             }
         ],
         [
-            "Minor Revive", function MinorRevive(target: string) {
+            "Major MP Potion", function MajorMpPotion(target: string): number {
+                return TargetToStat.get(target)!.get("max_mp")! * 0.66;
 
             }
         ],
         [
-            "Major Revive", function MajorRevive(target: string) {
+            "Minor Revive", function MinorRevive(target: string): object {
+                return {
+                    "heal_amt": TargetToStat.get(target)!.get("max_hp")! * 0.33,
+                    item_type: "revive"
+
+                }
 
             }
         ],
         [
-            "De-toxin", function DeToxin(target: string) {
+            "Major Revive", function MajorRevive(target: string): object {
+                return {
+                    "heal_amt": TargetToStat.get(target)!.get("max_hp")! * 0.66,
+                    item_type: "revive"
+
+                }
 
             }
         ],
         [
-            "De-frost", function DeFrost(target: string) {
+            "De-toxin", function DeToxin(): string {
+                return "de-toxin"
 
             }
         ],
         [
-            "Purifier", function Purifier(target: string) {
+            "De-frost", function DeFrost(target: string): string {
+                return "de-frost"
+
+            }
+        ],
+        [
+            "Purifier", function Purifier(target: string): string {
+                return "de-curse"
 
             }
         ],
         [
             "Magic Leaf", function MagicLeaf(target: string) {
 
+
             }
         ]
     ]
-)
+)*/
 
+//use this instead of the above for the actual item use
 interface InventoryItem {
     description: string;
     stock: number;
     type: string;//what it does
+    amount?: number;//how much it does, as a decimal in 
+    //comparison to the max hp/mp
 }
 export const player_inventory: Map<string, InventoryItem> = new Map(
     [
@@ -103,42 +110,48 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
             "Minor HP Potion", {
                 description: "Restores 1/3 of a character's max HP.",
                 stock: 5,
-                type: "hp"
+                type: "hp",
+                amount: 0.33
             }
         ],
         [
             "Major HP Potion", {
                 description: "Restores 2/3 of a character's max HP.",
                 stock: 5,
-                type: "hp"
+                type: "hp",
+                amount: 0.66
             }
         ],
         [
             "Minor MP Potion", {
                 description: "Restores 1/3 of a character's max MP.",
                 stock: 10,
-                type: "mp"
+                type: "mp",
+                amount: 0.33
             }
         ],
         [
             "Major MP Potion", {
                 description: "Restores 2/3 of a character's max MP.",
                 stock: 5,
-                type: "mp"
+                type: "mp",
+                amount: 0.66
             }
         ],
         [
             "Minor Revive", {
                 description: "Revives a dead character with 1/3 of their max HP.",
                 stock: 4,
-                type: "min revive"
+                type: "min revive",
+                amount: 0.33//revives with 33% of max hp
             }
         ],
         [
             "Major Revive", {
                 description: "Revives a dead character with 2/3 of their max HP.",
                 stock: 2,
-                type: "maj revive"
+                type: "maj revive",
+                amount: 0.66//revives with 66% of max hp
 
             }
         ],
