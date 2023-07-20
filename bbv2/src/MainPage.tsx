@@ -90,9 +90,11 @@ export const BossArea = () => {
 
     useEffect(() => {
         //if it's an even turn, the boss attacks
+        //chance of him attacking will be higher each stage
+        //something like 70% -> 80% -> 90%
         console.log("boss attack")
         if (TurnNumber % 2 === 0) {
-            let x = bossAttackAlgo({
+            bossAttackAlgo({
                 phase: bossStage,
                 knight_status: KnightStatus,
                 dmage_status: DmageStatus,
@@ -241,7 +243,6 @@ export const BossArea = () => {
         }
     }, [lastRmageHP])
 
-
     useEffect(() => {
         let rmp = parseInt(sm.rmage_stats.get("mp")!.toFixed(0));
         if (rmp <= 0) {
@@ -387,7 +388,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
 
 
-
     function HandleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);
         console.log("AA: " + isAttacksActive);
@@ -448,6 +448,23 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             setCurrentItem(e);
         }
     }
+    //sets hp with items
+    function HpFunction(target: string, amount: number) {
+        switch (target) {
+            case "knight":
+                setKnightHP(parseInt((amount).toFixed(0)))
+                break;
+            case "dmage":
+                setDmageHP(parseInt((amount).toFixed(0)))
+                break;
+            case "wmage":
+                setWmageHP(parseInt((amount).toFixed(0)))
+                break;
+            case "rmage":
+                setRmageHP(parseInt((amount).toFixed(0)))
+                break;
+        }
+    }
     //Pulls from a map of objects like the attacks do 
     //Store the stock in a map
     //type is hp, mp, status. Add it to the dictionairy
@@ -459,9 +476,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         const item_details = iv.player_inventory.get(item);
         console.log("item", item)
         console.log("target", target)
-
-        //use the returned value
-        setDmageMP(DmageMP! - 100)
         //sm.dmage_stats.set("mp", sm.dmage_stats.get("mp")! - 100)
         //setDmageMP(DmageMP! * item_details?.amount!)
         //use the return value to determine what happens
@@ -469,9 +483,31 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         //it heals a status, string will specify which status
         //Need to set the mp/hp maps too for consistency
 
+        switch (item_details!.type) {
+            case "hp":
+                MatchToHpMap.set(target, MatchToHpMap.get(target)! * item_details!.amount!)
+                HpFunction(target, MatchToHpMap.get(target)!)
+                break;
+            case "mp":
+                //heal mp
+                break;
+            case "revive":
+                //revive and heal by the amount
+                break;
+            case "de-toxin":
+                break;
+            case "de-curse":
+                break;
+            case "de-freeze":
+                break;
+            case "status-all":
+                break;
+
+        }
 
 
-        console.log("original", item_details)
+
+        console.log("item details", item_details)
         //update stock
         if (item_details) {
             item_details.stock -= 1;
