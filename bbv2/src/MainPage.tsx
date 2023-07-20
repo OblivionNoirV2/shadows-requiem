@@ -40,7 +40,11 @@ import wmagebg from './assets/images/bg-and-effects/wmageultimabg.png';
 import rmagebg from './assets/images/bg-and-effects/rmageultimabg.png';
 import defaultbg from './assets/images/bg-and-effects/battlebgv3.png';
 import { bossAttackAlgo, BossAttackArea } from './BossAlgorithm';
-import { kill } from 'process';
+import knight_icon from './assets/images/player/sprites/knight.png';
+import dmage_icon from './assets/images/player/sprites/dmage.png';
+import wmage_icon from './assets/images/player/sprites/wmage.png'
+import rmage_icon from './assets/images/player/sprites/rmage.png'
+import dead_icon from './assets/images/icons/dead.png'
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -65,11 +69,12 @@ const player_attacks: AttackList = {
 
 //can use player to retrieve the attacks just like in the below components
 interface BossAreaProps {
-    player: string | null;
+    selectedCharacter: string | null;
+    setSelectedCharacter: (value: string | null) => void
 
 }
 
-export const BossArea = () => {
+export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelectedCharacter }) => {
 
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
     const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
@@ -98,6 +103,9 @@ export const BossArea = () => {
         console.log("boss attack")
         if (TurnNumber % 2 === 0) {
             setIsBossAttacking(true)
+            setSelectedCharacter(null); //Prevents being able to use 
+            //the menu if the character that died was previously
+            // selected
             bossAttackAlgo({
                 phase: bossStage,
                 knight_status: KnightStatus,
@@ -1145,6 +1153,12 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
             document.body.style.backgroundImage = original_bg;
         };
     }, []);
+
+    const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
+    const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
+    const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
+    const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
+
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
     //For mobile, move the characters under the boss and enable scroll
     return (
@@ -1184,27 +1198,39 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                             <li>
                                 {/*buttons get locked when attack is happening*/}
                                 <button onClick={
-                                    !isAttackAreaShown &&
+                                    !KnightStatus.includes("dead") &&
+                                        !isAttackAreaShown &&
+
                                         isPlayerTurn ?
                                         () => HandleSelection("knight")
                                         : undefined
                                 }
                                     className={
-                                        selectedCharacter === 'knight' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
-                                    <img src={require('./assets/images/player/sprites/knight.png')}
-                                        alt='knight'>
+                                        selectedCharacter === 'knight' ?
+                                            'is-selected character-btn' :
+                                            'is-not-selected character-btn'}>
+                                    {/*different image if dead*/}
+                                    <img src={
+                                        !KnightStatus.includes("dead") ?
+                                            knight_icon :
+                                            dead_icon
+                                    }
+                                        alt={
+                                            !KnightStatus.includes("dead") ?
+                                                "dead character" :
+                                                "knight icon"
+                                        }
+                                    >
                                     </img>
                                 </button>
                                 <span>
                                     {
-
                                         isPlayerTurn && selectedCharacter === 'knight' &&
                                         <PlayerMenu
                                             player='knight'
                                             isPlayerTurn={isPlayerTurn}
 
                                         />
-
                                     }
                                     <PlayerComponent
                                         player='knight'
@@ -1221,8 +1247,20 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         : undefined
                                 }
                                     className={selectedCharacter === 'dmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
-                                    <img src={require('./assets/images/player/sprites/dmage.png')}
-                                        alt='dark mage'></img>
+                                    <img src={
+                                        !DmageStatus.includes("dead") ?
+                                            dmage_icon :
+                                            dead_icon
+                                    }
+                                        alt={
+                                            !DmageStatus.includes("dead") ?
+                                                "dead character" :
+                                                "dark mage icon"
+                                        }
+                                    >
+
+
+                                    </img>
                                 </button>
                                 <span>
                                     {
@@ -1354,6 +1392,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                         <BossAttackArea />
                     }
                     <BossArea
+                        selectedCharacter={selectedCharacter}
+                        setSelectedCharacter={setSelectedCharacter}
                     />
                 </section>
             </main >
