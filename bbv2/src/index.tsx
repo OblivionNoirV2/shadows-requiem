@@ -34,6 +34,7 @@ import {
   DmageNameContextProvider,
   WmageNameContextProvider,
   RmageNameContextProvider,
+  BossAttackingContextProvider
 
 }
   from './Context';
@@ -70,7 +71,9 @@ root.render(
                                               <DmageNameContextProvider>
                                                 <WmageNameContextProvider>
                                                   <RmageNameContextProvider>
-                                                    <App />
+                                                    <BossAttackingContextProvider>
+                                                      <App />
+                                                    </BossAttackingContextProvider>
                                                   </RmageNameContextProvider>
                                                 </WmageNameContextProvider>
                                               </DmageNameContextProvider>

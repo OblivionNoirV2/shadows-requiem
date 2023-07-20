@@ -6,9 +6,10 @@ import {
     DmageStatusContext, WmageStatusContext,
     RmageStatusContext
 } from './Context';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import * as sfx from './sfxManagement';
 import { min_max_vals_map } from './StatManagement';
+import { BossAttackingContext } from './Context';
 
 
 //This is going to work exactly the same as the player side, 
@@ -660,11 +661,15 @@ const phase3_attacks: string[] = [
 ]
 export const BossAttackArea: React.FC = () => {
     const [isBossAttackShown, setIsBossAttackShown] = useState(false);
+    const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
+
     //Change the image whenver the attack changes
     useEffect(() => {
         setIsBossAttackShown(true);
         setTimeout(() => {
             setIsBossAttackShown(false);
+            setIsBossAttacking(false);
+
         }, 2000);
         console.log("current_boss_attack", current_boss_attack)
     }, [current_boss_attack]);
@@ -680,7 +685,7 @@ export const BossAttackArea: React.FC = () => {
                             boss_atk_message}
                     </h1>
 
-                    <img className='z-50'
+                    <img className='z-50 mt-72 mr-64'
                         src={
                             require(`./assets/images/boss/attacks/${current_boss_attack}.png`)}>
                     </img>

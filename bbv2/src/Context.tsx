@@ -557,3 +557,28 @@ export function RmageNameContextProvider({ children }: { children: React.ReactEl
         </RmageNameContext.Provider>
     )
 }
+
+
+interface BossAttackingContextValue {
+    isBossAttacking: boolean;
+    setIsBossAttacking: (value: boolean) => void;
+}
+
+export const BossAttackingContext = createContext<BossAttackingContextValue>({
+    isBossAttacking: false,
+    setIsBossAttacking: () => { }
+})
+
+export function BossAttackingContextProvider({ children }: { children: React.ReactElement }) {
+    const [isBossAttacking, setIsBossAttacking] = useState(false);
+
+    useEffect(() => {
+        console.log("is boss attacking updated", isBossAttacking)
+    }, [isBossAttacking])
+
+    return (
+        <BossAttackingContext.Provider value={{ isBossAttacking, setIsBossAttacking }}>
+            {children}
+        </BossAttackingContext.Provider>
+    )
+}
