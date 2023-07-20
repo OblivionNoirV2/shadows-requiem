@@ -111,7 +111,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
                 description: "Restores 1/3 of a character's max HP.",
                 stock: 5,
                 type: "hp",
-                amount: 1.33
+                amount: .33
             }
         ],
         [
@@ -119,7 +119,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
                 description: "Restores 2/3 of a character's max HP.",
                 stock: 5,
                 type: "hp",
-                amount: 0.66
+                amount: .66
             }
         ],
         [
@@ -127,7 +127,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
                 description: "Restores 1/3 of a character's max MP.",
                 stock: 10,
                 type: "mp",
-                amount: 0.33
+                amount: .33
             }
         ],
         [
@@ -135,7 +135,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
                 description: "Restores 2/3 of a character's max MP.",
                 stock: 5,
                 type: "mp",
-                amount: 0.66
+                amount: .66
             }
         ],
         [
@@ -143,7 +143,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
                 description: "Revives a dead character with 1/3 of their max HP.",
                 stock: 4,
                 type: "revive",
-                amount: 0.33//revives with 33% of max hp
+                amount: .33//revives with 33% of max hp
             }
         ],
         [
@@ -151,7 +151,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
                 description: "Revives a dead character with 2/3 of their max HP.",
                 stock: 2,
                 type: "revive",
-                amount: 0.66//revives with 66% of max hp
+                amount: .66//revives with 66% of max hp
 
             }
         ],

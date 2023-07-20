@@ -9,7 +9,7 @@ import {
 import { useState, useEffect } from 'react';
 import * as sfx from './sfxManagement';
 import { min_max_vals_map } from './StatManagement';
-import { MatchToMpMap } from './MainPage';
+
 
 //This is going to work exactly the same as the player side, 
 //except it's automated
@@ -22,12 +22,6 @@ are more likely to be targeted
 Obviously he will check if a character is dead or not(if their hp is 0)
 
 */
-const MatchToHpMap: Map<string, number> = new Map([
-    ["knight", sm.knight_stats.get("hp")!],
-    ["dmage", sm.dmage_stats.get("hp")!],
-    ["wmage", sm.wmage_stats.get("hp")!],
-    ["rmage", sm.rmage_stats.get("hp")!]
-])
 
 let current_boss_attack: string;
 
@@ -130,7 +124,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 character_weights[index] += 2;
             }
             if (condition.includes("freeze")) {
-                character_weights[index] += 2;
+                character_weights[index] += 3;
             }
             if (condition.includes("curse")) {
                 character_weights[index] += 4;
@@ -289,8 +283,6 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     }
     function DeductHP(target: string, final_dmg: number) {
-        sm.knight_stats.set("hp", sm.knight_stats.get("hp")! - final_dmg);
-
         switch (target) {
             case "knight":
                 sm.knight_stats.set("hp", sm.knight_stats.get("hp")! - final_dmg);

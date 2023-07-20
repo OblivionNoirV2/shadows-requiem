@@ -328,18 +328,19 @@ export const BossHpBar = () => {
         </progress>
     )
 }
-export let MatchToMpMap: Map<string, number | undefined> = new Map([
-    ["knight", sm.knight_stats.get("mp")],
-    ["dmage", sm.dmage_stats.get("mp")],
-    ["wmage", sm.wmage_stats.get("mp")],
-    ["rmage", sm.rmage_stats.get("mp")]
+
+export let MatchToMaxHpMap: Map<string, number | undefined> = new Map([
+    ["knight", sm.knight_stats.get("max_hp")],
+    ["dmage", sm.dmage_stats.get("max_hp")],
+    ["wmage", sm.wmage_stats.get("max_hp")],
+    ["rmage", sm.rmage_stats.get("max_hp")]
 ]);
 
-export let MatchToHpMap: Map<string, number | undefined> = new Map([
-    ["knight", sm.knight_stats.get("hp")],
-    ["dmage", sm.dmage_stats.get("hp")],
-    ["wmage", sm.wmage_stats.get("hp")],
-    ["rmage", sm.rmage_stats.get("hp")]
+export let MatchToMaxMpMap: Map<string, number | undefined> = new Map([
+    ["knight", sm.knight_stats.get("max_mp")],
+    ["dmage", sm.dmage_stats.get("max_mp")],
+    ["wmage", sm.wmage_stats.get("max_mp")],
+    ["rmage", sm.rmage_stats.get("max_mp")]
 ]);
 
 
@@ -386,6 +387,19 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
     const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
+
+    const MatchToHpMap: Map<string, number | undefined> = new Map([
+        ["knight", KnightHP],
+        ["dmage", DmageHP],
+        ["wmage", DmageHP],
+        ["rmage", DmageHP]
+    ]);
+    const MatchToMpMap: Map<string, number | undefined> = new Map([
+        ["knight", KnightMP],
+        ["dmage", DmageMP],
+        ["wmage", WmageMP],
+        ["rmage", RmageMP]
+    ]);
 
 
     function HandleAttacksMenu() {
@@ -465,6 +479,23 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 break;
         }
     }
+
+    function MpFunction(target: string, amount: number) {
+        switch (target) {
+            case "knight":
+                setKnightMP(parseInt((amount).toFixed(0)))
+                break;
+            case "dmage":
+                setDmageMP(parseInt((amount).toFixed(0)))
+                break;
+            case "wmage":
+                setWmageMP(parseInt((amount).toFixed(0)))
+                break;
+            case "rmage":
+                setRmageMP(parseInt((amount).toFixed(0)))
+                break;
+        }
+    }
     //Pulls from a map of objects like the attacks do 
     //Store the stock in a map
     //type is hp, mp, status. Add it to the dictionairy
@@ -484,12 +515,15 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         //Need to set the mp/hp maps too for consistency
 
         switch (item_details!.type) {
-            case "hp":
-                MatchToHpMap.set(target, MatchToHpMap.get(target)! * item_details!.amount!)
-                HpFunction(target, MatchToHpMap.get(target)!)
+            case "hp"://set to the current + the max * healing factor (such as .33)
+                MatchToHpMap.set(target, (MatchToHpMap.get(target)!) +
+                    (MatchToMaxHpMap.get(target)! * item_details!.amount!))
+                HpFunction(target, (MatchToHpMap.get(target)!))
                 break;
             case "mp":
-                //heal mp
+                MatchToMpMap.set(target, MatchToMpMap.get(target)! +
+                    (MatchToMaxMpMap.get(target)! * item_details!.amount!))
+                MpFunction(target, MatchToMpMap.get(target)!)
                 break;
             case "revive":
                 //revive and heal by the amount
