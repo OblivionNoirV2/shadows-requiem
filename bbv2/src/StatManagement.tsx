@@ -33,7 +33,7 @@ export interface StatMap extends Map<string, number> { }
 export const knight_stats: StatMap = new Map
     (
         [
-            ["hp", 550],
+            ["hp", 10],
             ["max_hp", 550],
             ["mp", 140],
             ["max_mp", 140],

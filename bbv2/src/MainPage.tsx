@@ -39,6 +39,7 @@ import wmagebg from './assets/images/bg-and-effects/wmageultimabg.png';
 import rmagebg from './assets/images/bg-and-effects/rmageultimabg.png';
 import defaultbg from './assets/images/bg-and-effects/battlebgv3.png';
 import { bossAttackAlgo, BossAttackArea } from './BossAlgorithm';
+import { kill } from 'process';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -129,16 +130,22 @@ export const BossArea = () => {
     function HandleDeath(character: string, killed_or_revived: string) {
         switch (character) {
             case "knight":
-                killed_or_revived === "killed" ?
+                if (killed_or_revived === "killed") {
+                    //check that dead isn't already in it
+                    //if it is, no need to do anything
+                    if (!KnightStatus.includes("dead")) {
+                        setKnightStatus(prev => [...prev, "dead"])
+                    }
+                } else {
                     setKnightStatus(prevKnightStatus =>
-                        [...prevKnightStatus, "dead"]) :
-                    setKnightStatus(prevKnightStatus =>
+                        //remove the status if they are revived
                         prevKnightStatus.filter(
                             status => status !== "dead"))
+                }
+                console.log("status", KnightStatus)
                 break;
+
             case "dmage":
-
-
         }
     }
     //keep track of the last hp. If it was previously 0 then it changes, 
@@ -153,12 +160,13 @@ export const BossArea = () => {
         let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0));
         if (khp <= 0) {
             //prevent negatives
-            setKnightHP(0);
+            setKnightHP(0)
             HandleDeath("knight", "killed");
+        } else {
+            setKnightHP(khp);
         }
-        setKnightHP(khp);
-        setLastKnightHP(khp);
 
+        setLastKnightHP(khp);
 
     }, [sm.knight_stats.get("hp")])
 
@@ -174,7 +182,10 @@ export const BossArea = () => {
         let kmp = parseInt(sm.knight_stats.get("mp")!.toFixed(0));
         if (kmp <= 0) {
             setKnightMP(0);
+        } else {
+            setKnightMP(kmp)
         }
+
         setKnightMP(kmp);
     }, [sm.knight_stats.get("mp")])
 
@@ -183,8 +194,10 @@ export const BossArea = () => {
         if (dhp <= 0) {
             setDmageHP(0);
             HandleDeath("dmage", "killed");
+        } else {
+            setDmageHP(dhp)
         }
-        setDmageHP(dhp);
+
         setLastDmageHP(dhp);
     }, [sm.dmage_stats.get("hp")])
 
@@ -199,8 +212,11 @@ export const BossArea = () => {
         let dmp = parseInt(sm.dmage_stats.get("mp")!.toFixed(0));
         if (dmp <= 0) {
             setDmageMP(0);
+        } else {
+            setDmageMP(dmp);
+
         }
-        setDmageMP(dmp);
+
 
     }, [sm.dmage_stats.get("mp")])
 
@@ -209,8 +225,11 @@ export const BossArea = () => {
         if (whp <= 0) {
             setWmageHP(0);
             HandleDeath("wmage", "killed");
+        } else {
+            setWmageHP(whp);
         }
-        setWmageHP(whp);
+        setLastWmageHP(whp)
+
     }, [sm.wmage_stats.get("hp")])
 
     useEffect(() => {
@@ -224,8 +243,11 @@ export const BossArea = () => {
         let wmp = parseInt(sm.wmage_stats.get("mp")!.toFixed(0));
         if (wmp <= 0) {
             setWmageMP(0);
+        } else {
+            setWmageMP(wmp);
+
         }
-        setWmageMP(wmp);
+
     }, [sm.wmage_stats.get("mp")])
 
     useEffect(() => {
@@ -233,8 +255,11 @@ export const BossArea = () => {
         if (rhp <= 0) {
             setRmageHP(0);
             HandleDeath("rmage", "killed");
+        } else {
+            setRmageHP(rhp);
+
         }
-        setRmageHP(rhp);
+        setLastRmageHP(rhp)
     }, [sm.rmage_stats.get("hp")])
 
     useEffect(() => {
@@ -247,8 +272,10 @@ export const BossArea = () => {
         let rmp = parseInt(sm.rmage_stats.get("mp")!.toFixed(0));
         if (rmp <= 0) {
             setRmageMP(0);
+        } else {
+            setRmageMP(rmp);
         }
-        setRmageMP(rmp);
+
     }, [sm.rmage_stats.get("mp")])
 
     console.log("rendered bossarea")
