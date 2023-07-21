@@ -4,4 +4,4 @@ just use a global song playing state and useffect to update it when the page loa
 convert names to use a map so I can use them in non-react components
 add an indicator whenver a certain hp bar is damaged
 
-take boss attack into account when calculating damage
+BOL needs to subtract hp not mp

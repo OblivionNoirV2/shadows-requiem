@@ -61,7 +61,7 @@ function CheckForStatDecrease() {
 //use this for things like devourment
 //Also have Unholy Synphony be the sum of the 
 //last 10 attacks(divided by 2 maybe). Use a tritone for that sfx!
-export let prev_dmg: number[];
+export let prev_dmg: number[] = [];
 let chosen_target: string;
 export function bossAttackAlgo(attackProps: BossAttackProps) {
     potential_targets = [];
@@ -316,9 +316,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             //then add defense
             if (props.atk_type === "phys") {
                 final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.pdef) * attack_modifier!.atk;
+                prev_dmg.push(final_dmg);
                 return final_dmg;
             } else if (props.atk_type === "mag") {
                 final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.mdef) * attack_modifier!.atk;
+                prev_dmg.push(final_dmg);
                 return final_dmg;
             }
         } else {

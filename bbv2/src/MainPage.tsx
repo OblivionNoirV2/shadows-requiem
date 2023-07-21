@@ -32,7 +32,7 @@ import {
     BossAttackingContext
 } from './Context';
 import { RNGResult } from './PlayerActions';
-import { new_set_hp } from './PlayerActions';
+
 import { selected_difficulty } from './StartMenu';
 import knightbg from './assets/images/bg-and-effects/knightultimabg.png';
 import dmagebg from './assets/images/bg-and-effects/dmageultimabg.png';
@@ -132,7 +132,12 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
             console.log("final targets", boss_return.final_targets)
             switch (boss_return.last_boss_attacks[last_boss_attacks.length - 1]) {
                 case "Devourment":
-                    //heal boss by dprev dmg
+                    //heal boss by prev dmg * 2
+                    sm.boss_stats.set("hp", sm.boss_stats.get("hp")! +
+                        (prev_dmg[prev_dmg.length - 1] * 2))
+                    console.log("in dev switch")
+                    console.log("prev dmg dev", prev_dmg[prev_dmg.length - 1])
+
                     break;
                 case "Frozen Soul":
                     //chance of freeze
@@ -306,15 +311,16 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
 
     console.log("rendered bossarea")
     useEffect(() => {
+        let boss_hp = sm.boss_stats.get("hp")!
         console.log("boss stage updated", selected_difficulty)
-        if (new_set_hp >= 666666) {
+        if (boss_hp >= 666666) {
             setBossStage(1);
-        } else if (new_set_hp >= 333333 && new_set_hp < 666666) {
+        } else if (boss_hp >= 333333 && boss_hp < 666666) {
             setBossStage(2);
         } else {
             setBossStage(3);
         }
-    }, [new_set_hp]);
+    }, [sm.boss_stats.get("hp")]);
     //update the boss stage based on the hp value
     useEffect(() => {
         if (bossStage === 2) {
@@ -327,7 +333,6 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
             sm.boss_stats.set('m_def', 1.50);
             sm.boss_stats.set('p-def', 1.50);
             sm.boss_stats.set('atk', 1.20);
-
         }
 
     }, [bossStage]);
@@ -375,7 +380,7 @@ export const BossHpBar = () => {
         <progress className={
             'block h-8 glow-ani-border-black boss-prog w-full'
         }
-            value={new_set_hp} max={sm.boss_stats.get("max_hp")}>
+            value={sm.boss_stats.get("hp")} max={sm.boss_stats.get("max_hp")}>
         </progress>
     )
 }
@@ -442,8 +447,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const MatchToHpMap: Map<string, number | undefined> = new Map([
         ["knight", KnightHP],
         ["dmage", DmageHP],
-        ["wmage", DmageHP],
-        ["rmage", DmageHP]
+        ["wmage", WmageHP],
+        ["rmage", RmageHP]
     ]);
     const MatchToMpMap: Map<string, number | undefined> = new Map([
         ["knight", KnightMP],
@@ -613,6 +618,39 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         }
     }, [itemTarget])
 
+    function handleMP(attack: string, attack_encyclopedia_entry: number) {
+        switch (player) {
+            case "knight":
+                setKnightMP(KnightMP! - attack_encyclopedia_entry!);
+                break;
+            case "dmage":
+                setDmageMP(DmageMP! - attack_encyclopedia_entry!);
+                break;
+            case "wmage":
+                setWmageMP(WmageMP! - attack_encyclopedia_entry!);
+                break;
+            case "rmage":
+                attack !== "Border Of Life" ?
+                    setRmageMP(RmageMP! - attack_encyclopedia_entry!) :
+                    setRmageHP(RmageHP! - attack_encyclopedia_entry!)
+
+                break;
+        }
+
+        handleAtkClick(attack);
+        setIsAttackAreaShown(true);
+
+
+        {
+            setTimeout(() => {
+                setTurnNumber(TurnNumber + 1)
+                setIsAttackAreaShown(false);
+                setIsAttackMade(false);
+
+            }, 2000);
+        }
+    }
+
     return (
 
         <main className='w-full'>
@@ -731,50 +769,42 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                         <li key={index} className='atk-btn'
                                         >
                                             <button onClick={() => {
-                                                const attack_encyclopedia_entry = e.AttackEncyclopedia.get(attack)?.mp_cost;
+                                                const attack_encyclopedia_entry = e.AttackEncyclopedia.get(attack)!.mp_cost;
                                                 //max mp for that character
                                                 const mp_map_value = MatchToMpMap.get(player);
+                                                //for BOL
+                                                const hp_map_value = MatchToHpMap.get(player)
 
                                                 sfx.playClickSfx();
-                                                if (attack_encyclopedia_entry
-                                                    && mp_map_value !== undefined
-                                                    && attack_encyclopedia_entry > mp_map_value) {
-                                                    setMessage("Not enough MP!");
-                                                    //Just makes the message appear
-                                                    setIsAttackMade(true)
-                                                    setTimeout(() => {
-                                                        setIsAttackMade(false);
-                                                    }, 1000)
-                                                } else {
-                                                    switch (player) {
-                                                        case "knight":
-                                                            setKnightMP(KnightMP! - attack_encyclopedia_entry!);
-                                                            break;
-                                                        case "dmage":
-                                                            setDmageMP(DmageMP! - attack_encyclopedia_entry!);
-                                                            break;
-                                                        case "wmage":
-                                                            setWmageMP(WmageMP! - attack_encyclopedia_entry!);
-                                                            break;
-                                                        case "rmage":
-                                                            setRmageMP(RmageMP! - attack_encyclopedia_entry!);
-                                                            break;
+                                                console.log("attack:", attack)
+                                                if (attack == "Border Of Life") {
+                                                    if (attack_encyclopedia_entry! > hp_map_value!) {
+                                                        setMessage("Not enough HP!");
+                                                        //Just makes the message appear
+                                                        setIsAttackMade(true)
+                                                        setTimeout(() => {
+                                                            setIsAttackMade(false);
+                                                        }, 1000)
+                                                    } else {
+                                                        handleMP(attack, attack_encyclopedia_entry!)
+
                                                     }
 
-                                                    handleAtkClick(attack);
-                                                    setIsAttackAreaShown(true);
-
-
-                                                    {
+                                                } else {
+                                                    if (attack_encyclopedia_entry! > mp_map_value!) {
+                                                        setMessage("Not enough MP!");
+                                                        //Just makes the message appear
+                                                        setIsAttackMade(true)
                                                         setTimeout(() => {
-                                                            setTurnNumber(TurnNumber + 1)
-                                                            setIsAttackAreaShown(false);
                                                             setIsAttackMade(false);
+                                                        }, 1000)
+                                                    } else {
+                                                        handleMP(attack, attack_encyclopedia_entry!)
 
-                                                        }, 2000);
                                                     }
 
                                                 }
+
                                                 //check for mp here and subtract it
 
                                             }}

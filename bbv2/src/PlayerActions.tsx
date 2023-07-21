@@ -584,8 +584,6 @@ export let is_attack_triggered: boolean = false;
 
 //cannot use state here, so we're doing it this way
 //maybe change to use the map
-export let new_set_hp: number = 999999;
-
 export function PlayerAttack(attack: string) {
     selected_attack = attack;
     console.log("inside playerattack,selected attack:" + attack);
@@ -597,9 +595,7 @@ export function PlayerAttack(attack: string) {
         console.log("result type:", typeof result)
 
         if (typeof result === "object") {
-            new_set_hp -= result.result;
-
-            console.log("hp_subtracted: ", new_set_hp)
+            sm.boss_stats.set("hp", sm.boss_stats.get("hp")! - result.result)
 
         }
         return result;
