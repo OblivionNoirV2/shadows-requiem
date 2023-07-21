@@ -39,12 +39,13 @@ import dmagebg from './assets/images/bg-and-effects/dmageultimabg.png';
 import wmagebg from './assets/images/bg-and-effects/wmageultimabg.png';
 import rmagebg from './assets/images/bg-and-effects/rmageultimabg.png';
 import defaultbg from './assets/images/bg-and-effects/battlebgv3.png';
-import { bossAttackAlgo, BossAttackArea } from './BossAlgorithm';
+import { bossAttackAlgo, BossAttackArea, last_boss_attacks } from './BossAlgorithm';
 import knight_icon from './assets/images/player/sprites/knight.png';
 import dmage_icon from './assets/images/player/sprites/dmage.png';
 import wmage_icon from './assets/images/player/sprites/wmage.png'
 import rmage_icon from './assets/images/player/sprites/rmage.png'
 import dead_icon from './assets/images/icons/dead.png'
+import { prev_dmg } from './BossAlgorithm';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -106,7 +107,9 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
             setSelectedCharacter(null); //Prevents being able to use 
             //the menu if the character that died was previously
             // selected
-            bossAttackAlgo({
+            //If the chosen attack(returned) has a chance to inflict
+            //a status effect, do that here
+            const boss_return = bossAttackAlgo({
                 phase: bossStage,
                 knight_status: KnightStatus,
                 dmage_status: DmageStatus,
@@ -122,20 +125,34 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
                 rmage_mp: RmageMP!,
                 current_turn: TurnNumber,
             });
+            console.log("boss return", boss_return)
+            //special cases. Any stat lowering is done in the attack algo
+            console.log("last attacks", boss_return.last_boss_attacks[last_boss_attacks.length - 1])
+            //this is by index
+            console.log("final targets", boss_return.final_targets)
+            switch (boss_return.last_boss_attacks[last_boss_attacks.length - 1]) {
+                case "Devourment":
+                    //heal boss by dprev dmg
+                    break;
+                case "Frozen Soul":
+                    //chance of freeze
+                    break;
+                case "Unending Grudge":
+                    //chance of poison
+                    break;
+                case "Death's Touch":
+                    //chance of curse
+                    break;
+                default:
+                    console.log("no special attacks used")
+                    break;
+
+            }
         }
 
     }, [TurnNumber]);
-    //lookup for what's being set for handledeath
-    const SetLookupHash: Map<string, Dispatch<SetStateAction<string[]>>> = new Map
-        (
-            [
-                ["knight", setKnightStatus],
-                ["dmage", setDmageStatus],
-                ["wmage", setWmageStatus],
-                ["rmage", setRmageStatus]
 
-            ]
-        )
+
     //control dead status
 
     function HandleDeath(character: string, killed_or_revived: string) {

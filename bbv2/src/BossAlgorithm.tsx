@@ -56,6 +56,11 @@ export let last_boss_attacks: string[] = []
 function CheckForStatDecrease() {
 
 }
+//use this for things like devourment
+//Also have Unholy Synphony be the sum of the 
+//last 10 attacks(divided by 2 maybe). Use a tritone for that sfx!
+export let prev_dmg: number[];
+let chosen_target: string;
 export function bossAttackAlgo(attackProps: BossAttackProps) {
     potential_targets = [];
 
@@ -146,7 +151,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     //Target first, then the attack 
 
     //use a randomizer and set the max to the sum of all the weights
-    let chosen_target: string;
+
     /*GALAXY BRAIN TIME*/
     function Targeting() {
         //Get max range for the randomizer
@@ -222,10 +227,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     let secondary_targets: string[] = [];
     let potential_secondary: string[];
-    //use this for things like devourment
-    //Also have Unholy Synphony be the sum of the 
-    //last 10 attacks(divided by 2 maybe). Use a tritone for that sfx!
-    let prev_dmg: number[];
+
 
     interface CharacterRespectiveStats {
         [index: string]: number | undefined //allows usage of string as index
@@ -305,6 +307,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         let final_dmg: number;
         let target_stats;
         //First check for evasion. undefined means they're dead
+        //Also need to account for boss attack!
         if (props.target !== undefined && MatchToStat.get(props.target)!.ev <= Percentage()) {
             //then add defense
             if (props.atk_type === "phys") {
@@ -379,6 +382,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
             }))
         }
+        //then return BossRNG with each function to access this 
+        //Used to determine status effects and attacks with special 
+        //effects like devourment
+        return last_boss_attacks
     }
 
     //DO NOT TOUCH
@@ -409,47 +416,57 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         [
             [
                 "Shadow Blade", function ShadowBlade() {
+                    return (
+                        BossRNG
+                            (
+                                {
+                                    current_boss_attack: "Shadow Blade",
+                                    min: 50,
+                                    variance: 1.10,
+                                    atk_sfx: "placeholder",
+                                    attack_type: "phys"
+                                }
+                            )
 
-                    BossRNG
-                        (
-                            {
-                                current_boss_attack: "Shadow Blade",
-                                min: 50,
-                                variance: 1.10,
-                                atk_sfx: "placeholder",
-                                attack_type: "phys"
-                            }
-                        )
+                    )
+
                 }
             ],
             [   //Targets 3, starting with the previously chosen
                 "Spheres of Madness", function SpheresOfMadness() {
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Spheres of Madness",
+                                min: 35,
+                                variance: 1.10,
+                                secondary_targets: TargetMulti(2),
+                                atk_sfx: "placeholder",
+                                attack_type: "mag"
+                            }
 
-                    BossRNG(
-                        {
-                            current_boss_attack: "Spheres of Madness",
-                            min: 35,
-                            variance: 1.10,
-                            secondary_targets: TargetMulti(2),
-                            atk_sfx: "placeholder",
-                            attack_type: "mag"
-                        }
+                        )
 
                     )
+
                 }
             ],
             [
                 "Devourment", function Devourment() {
                     //also heals boss by 2* damage inflicted
-                    BossRNG(
-                        {
-                            current_boss_attack: "Devourment",
-                            min: 120,
-                            variance: 1.10,
-                            atk_sfx: "placeholder",
-                            attack_type: "phys"
-                        }
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Devourment",
+                                min: 120,
+                                variance: 1.10,
+                                atk_sfx: "placeholder",
+                                attack_type: "phys"
+                            }
+                        )
+
                     )
+
                 }
             ],
             [ //drops target's phys def, 40% chance
@@ -461,15 +478,18 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
                         }
                     }
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Disintegration",
+                                min: 70,
+                                variance: 1.10,
+                                atk_sfx: "placeholder",
+                                attack_type: "phys"
+                            }
+                        )
 
-                    BossRNG(
-                        {
-                            current_boss_attack: "Disintegration",
-                            min: 70,
-                            variance: 1.10,
-                            atk_sfx: "placeholder",
-                            attack_type: "phys"
-                        }
+
                     )
 
                 }
@@ -486,16 +506,19 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
                         }
                     }
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Soul Crusher",
+                                min: 70,
+                                variance: 1.10,
+                                atk_sfx: "placeholder",
+                                attack_type: "mag"
+                            }
+                        )
 
-                    BossRNG(
-                        {
-                            current_boss_attack: "Soul Crusher",
-                            min: 70,
-                            variance: 1.10,
-                            atk_sfx: "placeholder",
-                            attack_type: "mag"
-                        }
                     )
+
                 }
             ],
             [
@@ -518,17 +541,20 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     //min given to the RNG is tht total 
                     //of the past 10 attacks 
                     //Targets all allies
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Unholy Symphony",
+                                min: prev_dmg.reduce(
+                                    (accumulator, currentValue) =>
+                                        accumulator + currentValue, 0),
+                                variance: 1.05,
+                                atk_sfx: "US",
+                                attack_type: "none"
+                            }
 
-                    BossRNG(
-                        {
-                            current_boss_attack: "Unholy Symphony",
-                            min: prev_dmg.reduce(
-                                (accumulator, currentValue) =>
-                                    accumulator + currentValue, 0),
-                            variance: 1.05,
-                            atk_sfx: "US",
-                            attack_type: "none"
-                        }
+                        )
+
                     )
                 }
             ],
@@ -589,21 +615,16 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     //which has inversion at a 0% chance
 
                 }
-
             }
             break;
     }
     console.log("potential targets", potential_targets)
+    let final_targets = secondary_targets.push(chosen_target)
 
-
-
-
-
-    //phase, percentage chance of being used is determined by phase
-
-    //undefined = has special conditions 
-
-    //show the attack
+    return {
+        last_boss_attacks,
+        final_targets
+    }
 }//algo function ends here 
 
 
