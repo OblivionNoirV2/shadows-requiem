@@ -89,8 +89,8 @@ export const boss_stats: StatMap = new Map
             ["max_hp", 999999],
             ["p_def", 1.00],
             ["m_def", 1.00],
-            ["m_atk", 1.00],
-            ["p_atk", 1.00]
+            ["atk", 1.00],
+
         ]
     );
 

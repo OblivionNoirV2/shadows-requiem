@@ -10,6 +10,8 @@ import { useState, useEffect, useContext } from 'react';
 import * as sfx from './sfxManagement';
 import { min_max_vals_map } from './StatManagement';
 import { BossAttackingContext } from './Context';
+//adds a multiplier or divider, depending
+import { selected_difficulty } from './StartMenu';
 
 
 //This is going to work exactly the same as the player side, 
@@ -65,7 +67,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     potential_targets = [];
 
     console.log("attackProps", attackProps)
-    current_boss_attack = "Unholy Symphony";
+
     //first rule out any dead characters as potential targets
     let current_statuses = [
         attackProps.knight_status,
@@ -304,17 +306,19 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     }
     //Match the target to their respective stats and get the final output
     function CalculateFinal(props: CalculateFinalProps): number {
+        let attack_modifier = sm.boss_stat_changes.get(selected_difficulty)
+        console.log("atk modifier", attack_modifier!.atk)
         let final_dmg: number;
         let target_stats;
         //First check for evasion. undefined means they're dead
-        //Also need to account for boss attack!
-        if (props.target !== undefined && MatchToStat.get(props.target)!.ev <= Percentage()) {
+        if (props.target !== undefined &&
+            MatchToStat.get(props.target)!.ev <= Percentage()) {
             //then add defense
             if (props.atk_type === "phys") {
-                final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.pdef);
+                final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.pdef) * attack_modifier!.atk;
                 return final_dmg;
             } else if (props.atk_type === "mag") {
-                final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.mdef);
+                final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.mdef) * attack_modifier!.atk;
                 return final_dmg;
             }
         } else {
@@ -382,10 +386,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
             }))
         }
-        //then return BossRNG with each function to access this 
-        //Used to determine status effects and attacks with special 
-        //effects like devourment
-        return last_boss_attacks
+
     }
 
     //DO NOT TOUCH

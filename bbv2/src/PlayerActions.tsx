@@ -24,9 +24,9 @@ export const getConvertToStat = () => {
     let mag = sm.boss_stats.get('m_def');
     console.log("phys: ", phys);
     console.log("mag: ", mag);
-    //stats here are wrong!
+
     console.log("difficulty_stats: ", difficulty_stats);
-    //but this is right
+
     console.log("selected_difficulty: ", selected_difficulty);
 
     console.log("diff stats def", difficulty_stats!.def);
