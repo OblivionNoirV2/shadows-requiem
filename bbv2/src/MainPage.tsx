@@ -244,8 +244,6 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
             setDmageMP(dmp);
 
         }
-
-
     }, [sm.dmage_stats.get("mp")])
 
     useEffect(() => {
@@ -1234,8 +1232,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     }
                                         alt={
                                             !KnightStatus.includes("dead") ?
-                                                "dead character" :
-                                                "knight icon"
+                                                "knight icon" :
+                                                "dead character"
                                         }
                                     >
                                     </img>
@@ -1263,7 +1261,9 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         () => HandleSelection("dmage")
                                         : undefined
                                 }
-                                    className={selectedCharacter === 'dmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
+                                    className={selectedCharacter === 'dmage' ?
+                                        'is-selected character-btn' :
+                                        'is-not-selected character-btn'}>
                                     <img src={
                                         !DmageStatus.includes("dead") ?
                                             dmage_icon :
@@ -1271,12 +1271,10 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                     }
                                         alt={
                                             !DmageStatus.includes("dead") ?
-                                                "dead character" :
-                                                "dark mage icon"
+                                                "dark mage icon" :
+                                                "dead character"
                                         }
                                     >
-
-
                                     </img>
                                 </button>
                                 <span>
@@ -1305,8 +1303,19 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         undefined
                                 }
                                     className={selectedCharacter === 'wmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
-                                    <img src={require('./assets/images/player/sprites/wmage.png')}
-                                        alt='white mage'></img>
+                                    <img src={
+                                        !WmageStatus.includes("dead") ?
+                                            wmage_icon :
+                                            dead_icon
+                                    }
+                                        alt={
+                                            !WmageStatus.includes("dead") ?
+                                                "white mage icon" :
+                                                "dead character"
+                                        }
+                                    >
+
+                                    </img>
                                 </button>
                                 <span>
                                     {
@@ -1333,9 +1342,21 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                                         () => HandleSelection("rmage") :
                                         undefined
                                 }
-                                    className={selectedCharacter === 'rmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
-                                    <img src={require('./assets/images/player/sprites/rmage.png')}
-                                        alt='red mage'></img>
+                                    className={selectedCharacter === 'rmage' ?
+                                        'is-selected character-btn' :
+                                        'is-not-selected character-btn'}>
+                                    <img src={
+                                        !RmageStatus.includes("dead") ?
+                                            rmage_icon :
+                                            dead_icon
+                                    }
+                                        alt={
+                                            !RmageStatus.includes("dead") ?
+                                                "red mage icon" :
+                                                "dead character"
+                                        }
+                                    >
+                                    </img>
                                 </button>
                                 <span>
                                     {
