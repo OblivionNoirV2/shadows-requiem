@@ -52,7 +52,7 @@ export const dmage_stats: StatMap = new Map
             ["max_mp", 270],
             ["p_def", 1.30],
             ["m_def", 1.50],
-            ["ev", 0.10]
+            ["ev", 0.07]
         ]
     );
 
@@ -65,7 +65,7 @@ export const wmage_stats: StatMap = new Map
             ["max_mp", 310],
             ["p_def", 1.00],
             ["m_def", 1.45],
-            ["ev", 0.10]
+            ["ev", 0.07]
         ]
     );
 
@@ -78,7 +78,7 @@ export const rmage_stats: StatMap = new Map
             ["max_mp", 430],
             ["p_def", 0.90],
             ["m_def", 0.90],
-            ["ev", 0.20]
+            ["ev", 0.15]
         ]
     );
 

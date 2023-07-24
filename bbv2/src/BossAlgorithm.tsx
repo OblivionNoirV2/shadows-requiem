@@ -642,16 +642,20 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     switch (attackProps.phase) {
         case 1:
             attacks_grab_bag = [1, 1, 1, 2, 2, 3, 4, 5];
-            chosen_num = GetRandomNumber(attacks_grab_bag);
+
             break;
         case 2:
             CheckForInversion();
             if (inversion_eligible) {
                 //adjust the percentages accordingly
+                //has a high chance of occuring if eligible
+                attacks_grab_bag = [1, 1, 2, 3, 4, 5,
+                    6, 6, 6, 6, 6, 6, 7, 8]
+
             } else {
                 //use the default moveset, 
                 //which has inversion at a 0% chance
-
+                attacks_grab_bag = [1, 1, 2, 2, 3, 4, 5, 6, 7, 8]
             }
             break;
         case 3:
@@ -663,15 +667,21 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             } else {
                 if (inversion_eligible) {
                     //adjust the percentages accordingly
+                    //9 is unholy symphony, doesn't go off by chance
+                    attacks_grab_bag = [1, 1, 2, 3, 4, 5,
+                        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 8, 10, 11]
+
                 } else {
                     //use the default moveset, 
                     //which has inversion at a 0% chance
-
+                    attacks_grab_bag = [1, 2, 2, 3, 3, 4, 5, 7,
+                        8, 10, 11, 11]
                 }
             }
             break;
-
     }
+
+    chosen_num = GetRandomNumber(attacks_grab_bag);
     console.log("chosen_num", chosen_num)
     attack_nums.get(chosen_num);
     boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
@@ -683,7 +693,6 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         final_targets
     }
 }//algo function ends here 
-
 
 interface AttackNumsObject {
     [key: number]: string | undefined
