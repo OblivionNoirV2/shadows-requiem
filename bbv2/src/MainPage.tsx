@@ -1451,7 +1451,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     </section>
                 }
                 <section className=''>
-                    {/*;ater on link this to the final version of 
+                    {/*later on link this to the final version of 
                     when he attacks, which will be slightly randomized 
                     as opposed to a simple back and forth*/}
                     {TurnNumber % 2 === 0 &&
