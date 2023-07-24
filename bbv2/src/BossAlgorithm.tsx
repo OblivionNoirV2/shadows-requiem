@@ -338,8 +338,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     }
     interface BossRNGProps {
         current_boss_attack: string;
-        min: number;
-        variance: number;
+        min?: number; //because of inversion
+        variance?: number;
         atk_sfx: string;
         secondary_targets?: string[];
         //if an attack hits multiple targets, 
@@ -352,7 +352,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     function BossRNG(props: BossRNGProps) {
         current_boss_attack = props.current_boss_attack;
 
-        const atk_max = props.min * props.variance;
+        const atk_max = props.min! * props.variance!;
         //remember to accoount for pdef/mdef/ev
         last_boss_attacks.push(current_boss_attack);
         console.log("chosen", chosen_target)
@@ -363,7 +363,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             //heal by whatever the final damage is
         }
         //Before def is taken into account
-        let pre_dmg = Randomizer(props.min, atk_max);
+        let pre_dmg = Randomizer(props.min!, atk_max);
         console.log("pre_dmg", pre_dmg)
         if (props.secondary_targets) {
             props.secondary_targets.push(chosen_target)
@@ -524,18 +524,50 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
                 }
             ],
-            [
+            [   //flips hp and mp of all characters
+                //Only triggers if mp is lower than hp for all 
                 "Inversion", function Inversion() {
-
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Inversion",
+                                atk_sfx: "placeholder",
+                                secondary_targets: TargetMulti(3),
+                                attack_type: "mag"
+                            }
+                        )
+                    )
                 }
             ],
             [
                 "Frozen Soul", function FrozenSoul() {
 
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Frozen Soul",
+                                min: 25,
+                                variance: 1.10,
+                                atk_sfx: "placeholder",
+                                attack_type: "mag"
+                            }
+                        )
+                    )
                 }
             ],
             [
                 "Unending Grudge", function UnendingGrudge() {
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Unending Grudge",
+                                min: 25,
+                                variance: 1.10,
+                                atk_sfx: "placeholder",
+                                attack_type: "mag"
+                            }
+                        )
+                    )
 
                 }
             ],
@@ -563,11 +595,34 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [
                 "Death's Touch", function DeathsTouch() {
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Death's Touch",
+                                min: 25,
+                                variance: 1.10,
+                                atk_sfx: "placeholder",
+                                attack_type: "phys"
+
+                            }
+                        )
+                    )
 
                 }
             ],
             [
                 "Chaos Blade", function ChaosBlade() {
+                    return (
+                        BossRNG(
+                            {
+                                current_boss_attack: "Chaos Blade",
+                                min: 135,
+                                variance: 1.10,
+                                atk_sfx: "placeholder",
+                                attack_type: "phys"
+                            }
+                        )
+                    )
 
                 }
             ]
@@ -583,18 +638,14 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     //The number pulled matches whatever attack he uses
     //which corresponds with a function
     let attacks_grab_bag: number[] = []
-    let chosen_num: number;
+    let chosen_num: number = 0;
     switch (attackProps.phase) {
         case 1:
             attacks_grab_bag = [1, 1, 1, 2, 2, 3, 4, 5];
             chosen_num = GetRandomNumber(attacks_grab_bag);
-            console.log("chosen_num", chosen_num)
-            attack_nums.get(chosen_num);
-
-            boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
-
             break;
         case 2:
+            CheckForInversion();
             if (inversion_eligible) {
                 //adjust the percentages accordingly
             } else {
@@ -602,12 +653,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 //which has inversion at a 0% chance
 
             }
-
-
             break;
         case 3:
+            CheckForInversion();
             if (last_boss_attacks.length >= 10) {
-                //use unholy symphony
+                boss_attack_functions.get("Unholy Symphony")!();
                 last_boss_attacks = [];
 
             } else {
@@ -620,7 +670,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 }
             }
             break;
+
     }
+    console.log("chosen_num", chosen_num)
+    attack_nums.get(chosen_num);
+    boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
     console.log("potential targets", potential_targets)
     let final_targets = secondary_targets.push(chosen_target)
 
