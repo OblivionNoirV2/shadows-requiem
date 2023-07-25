@@ -322,9 +322,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         let boss_hp = sm.boss_stats.get("hp")!
         console.log("boss stage updated", selected_difficulty)
-        if (boss_hp >= 666666) {
+        if (boss_hp >= 520000) {
             setBossStage(1);
-        } else if (boss_hp >= 333333 && boss_hp < 666666) {
+        } else if (boss_hp >= 260000 && boss_hp < 519999) {
             setBossStage(2);
         } else {
             setBossStage(3);

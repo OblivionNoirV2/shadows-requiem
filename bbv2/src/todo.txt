@@ -8,3 +8,5 @@ add an indicator whenver a certain hp bar is damaged
 add in some horror sfx for phase 3?
 
 convert the snow to animejs?
+
+do something like isscreendark but permanent for phase 3
