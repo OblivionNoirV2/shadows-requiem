@@ -104,27 +104,29 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     the conditions are not met 
      */
 
-    let knight_weight = 1;
-    let dmage_weight = 1;
-    let wmage_weight = 1;
-    let rmage_weight = 1;
+    let knight_weight: number = 1;
+    let dmage_weight: number = 1;
+    let wmage_weight: number = 1;
+    let rmage_weight: number = 1;
 
-    let character_weights = [
+    let character_weights: number[] = [
         knight_weight,
         dmage_weight,
         wmage_weight,
         rmage_weight
     ];
     //Breakpoint and the weight associated with it
-    const CharacterWeightsMap: Map<number, number> = new Map([
-        [350, 1],
-        [300, 2],
-        [250, 3],
-        [200, 4],
-        [150, 5],
-        [100, 6],
-        [50, 7]
-    ])
+    const CharacterWeightsMap: Map<number, number> = new Map(
+        [
+            [350, 1],
+            [300, 2],
+            [250, 3],
+            [200, 4],
+            [150, 5],
+            [100, 6],
+            [50, 7]
+        ]
+    )
     //determines how likely each character is to be targeted
     function DetermineWeights() {
         current_statuses.forEach((condition, index) => {
@@ -164,20 +166,29 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         //Sort the weights in descending order 
         //and calculate cumulative weights
         const weights_with_cumulative = character_weights
-            //Map to an original array to prevent it 
-            //from getting stuck on the first index
-            .map((weight, index) => ({ weight, index }))
-            //Then sort THAT array based on weight
+            //Map to an original array of objects 
+            .map((weight, index) => (
+                {
+                    weight,
+                    index
+                }
+            )
+            )
+            //Sort those objects high to low
             .sort((a, b) => b.weight - a.weight)
             //Map until the cumulative weight is calculated
             //item, index, and the array itself
-            .map((item, i, arr) => ({
-                ...item,
-                //add the current weight to the previous weight
-                cumulative_weight: arr.slice(0, i + 1).reduce(
-                    (total, current) => total + current.weight, 0),
-            }));
-
+            .map((item, index, arr) => (
+                {
+                    ...item,//represents each object
+                    //add the cumulative weight of all characters 
+                    //to each object. This is what the boss picks from.
+                    //Do this for each array item until it reaches the end
+                    cumulative_weight: arr.slice(0, index + 1).reduce(
+                        (total, current) => total + current.weight, 0),
+                }
+            ));
+        //*brain explosion sound effects*//
         for (let weight of weights_with_cumulative) {
             //Compare the value from above to the cumulative weight 
             //The higher the individual weight, the higher the chance
@@ -359,10 +370,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         //also sets the message to be displayed
         boss_atk_message = props.current_boss_attack;
 
-        if (props.current_boss_attack === "Devourment") {
-            //heal by whatever the final damage is
-        }
-        //Before def is taken into account
+        //Before def/ev is taken into account
         let pre_dmg = Randomizer(props.min!, atk_max);
         console.log("pre_dmg", pre_dmg)
         if (props.secondary_targets) {

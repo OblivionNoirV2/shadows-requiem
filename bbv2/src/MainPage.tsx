@@ -46,6 +46,7 @@ import wmage_icon from './assets/images/player/sprites/wmage.png'
 import rmage_icon from './assets/images/player/sprites/rmage.png'
 import dead_icon from './assets/images/icons/dead.png'
 import { prev_dmg } from './BossAlgorithm';
+import { occurences } from './victory';
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -645,6 +646,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         {
             setTimeout(() => {
                 setTurnNumber(TurnNumber + 1)
+                //for future score
+                occurences.set("turn", (occurences.get("turn")! + 1))
+                console.log("occurences", occurences)
                 setIsAttackAreaShown(false);
                 setIsAttackMade(false);
 
