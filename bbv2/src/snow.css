@@ -10,6 +10,7 @@
     z-index: 3;
 }
 
+/*change to red for phase 3*/
 .flake {
     background-image: url('assets/images/bg-and-effects/snowflakev2.png');
     background-size: cover;

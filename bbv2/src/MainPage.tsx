@@ -74,10 +74,13 @@ const player_attacks: AttackList = {
 interface BossAreaProps {
     selectedCharacter: string | null;
     setSelectedCharacter: (value: string | null) => void
+    bossStage: number;
+    setBossStage: any;
 
 }
 
-export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelectedCharacter }) => {
+export const BossArea: React.FC<BossAreaProps> = ({
+    selectedCharacter, setSelectedCharacter, bossStage, setBossStage }) => {
 
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
     const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
@@ -94,7 +97,7 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
     const { DmageHP, setDmageHP } = useContext(DmageHPContext);
     const { WmageHP, setWmageHP } = useContext(WmageHPContext);
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
-    const [bossStage, setBossStage] = useState(1);
+
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
     //match returned target to their statuses
     const IndexToStatus: Map<number, string[]> = new Map(
@@ -160,6 +163,7 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
             }
         }
     }, [TurnNumber]);
+
 
 
     //control dead status
@@ -338,6 +342,8 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
             sm.boss_stats.set('m_def', 1.50);
             sm.boss_stats.set('p-def', 1.50);
             sm.boss_stats.set('atk', 1.20);
+            document.body.style.backgroundImage = "none"
+            document.body.style.backgroundColor = "black"
         }
 
     }, [bossStage]);
@@ -1211,9 +1217,9 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
     const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
-
+    const [bossStage, setBossStage] = useState(1);
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
-    //For mobile, move the characters under the boss and enable scroll
+
     return (
         <>
             {/*darkens screen during ultimas*/}
@@ -1470,6 +1476,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     <BossArea
                         selectedCharacter={selectedCharacter}
                         setSelectedCharacter={setSelectedCharacter}
+                        bossStage={bossStage}
+                        setBossStage={setBossStage}
                     />
                 </section>
             </main >

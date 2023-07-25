@@ -1,6 +1,12 @@
 import { useEffect } from "react";
 import anime from 'animejs/lib/anime.es.js'
 
+const BackToTitle = () => {
+    //put an arrow next to it
+    return (
+        <h1 className="text-red-900">Back to Title</h1>
+    )
+}
 const YouDied = () => {
     useEffect(() => {
         //change to black
@@ -13,16 +19,20 @@ const YouDied = () => {
         };
     }, []);
     useEffect(() => {
+        const targets = ".yd"
         anime({
-            targets: ".yd",
+            targets: targets,
             scale: 1.3,
             duration: 2000,
             easing: 'linear'
 
         })
+        return () => {
+            anime.remove(targets)
+        }
 
     }, [])
-    //dark souls style, shoudl expand out
+    //dark souls style
     return (
         <main className="justify-center items-center
             flex h-screen">
@@ -34,8 +44,6 @@ const YouDied = () => {
     )
 
 }
-
-
 
 export default YouDied;
 
