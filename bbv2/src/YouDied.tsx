@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import anime from 'animejs/lib/anime.es.js'
 
 const YouDied = () => {
     useEffect(() => {
@@ -14,14 +15,26 @@ const YouDied = () => {
     useEffect(() => {
 
     })
-    //dark souls style
+    //dark souls style, shoudl expand out
     return (
-        <h1 className="text-8xl justify-center items-center flex">
-            YOU DIED
-        </h1>
+        <main className="justify-center items-center
+            flex h-screen">
+            <h1 className="text-[12rem] text-red-900 yd ">
+                YOU DIED
+            </h1>
+            <script src="anime.min.js"></script>
+        </main>
     )
 
 }
+
+anime({
+    targets: ".yd",
+    scale: 1.3,
+    duration: 2000,
+    easing: 'linear'
+
+})
 
 export default YouDied;
 

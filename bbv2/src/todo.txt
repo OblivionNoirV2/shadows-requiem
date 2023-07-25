@@ -1,7 +1,8 @@
 fix issue with music not updating when browser is refreshed 
+(refresh should go back to start menu and reset everything)
 
-just use a global song playing state and useffect to update it when the page loads
 convert names to use a map so I can use them in non-react components
 add an indicator whenver a certain hp bar is damaged
 
-BOL needs to subtract hp not mp
+
+add in some horror sfx for phase 3?
