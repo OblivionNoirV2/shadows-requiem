@@ -170,6 +170,8 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
                     //if it is, no need to do anything
                     if (!KnightStatus.includes("dead")) {
                         setKnightStatus(prev => [...prev, "dead"])
+                        //for future score
+                        occurences.set("deaths", (occurences.get("deaths")! + 1))
                     }
                 } else {
                     setKnightStatus(prevKnightStatus =>
@@ -563,6 +565,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         //Use the item encyclopedia to check what to do with 
         //the returned number 
         const item_details = iv.player_inventory.get(item);
+        //for future score
+        occurences.set("item", (occurences.get("item")! + 1))
         console.log("item", item)
         console.log("target", target)
         //sm.dmage_stats.set("mp", sm.dmage_stats.get("mp")! - 100)
