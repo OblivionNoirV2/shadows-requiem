@@ -13,8 +13,15 @@ const YouDied = () => {
         };
     }, []);
     useEffect(() => {
+        anime({
+            targets: ".yd",
+            scale: 1.3,
+            duration: 2000,
+            easing: 'linear'
 
-    })
+        })
+
+    }, [])
     //dark souls style, shoudl expand out
     return (
         <main className="justify-center items-center
@@ -28,13 +35,7 @@ const YouDied = () => {
 
 }
 
-anime({
-    targets: ".yd",
-    scale: 1.3,
-    duration: 2000,
-    easing: 'linear'
 
-})
 
 export default YouDied;
 
