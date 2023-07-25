@@ -16,6 +16,7 @@ import Story from './Story';
 import EncyclopediaPage from './EnPage';
 import { Randomizer } from './PlayerActions';
 import { NameCharacters } from './Naming';
+import YouDied from './YouDied';
 
 //environmental sfx
 const windSfx = new Audio(wind);
@@ -144,6 +145,7 @@ const App: React.FC = () => {
         <Route path='/Story' element={<Story />} />
         <Route path='/Encyclopedia' element={<EncyclopediaPage />} />
         <Route path='/NameCharacters' element={<NameCharacters />} />
+        <Route path='YouDied' element={<YouDied />} />
       </Routes>
       <VolButton />
       {

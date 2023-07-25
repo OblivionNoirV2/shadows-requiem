@@ -5,6 +5,7 @@ import * as iv from './Inventory';
 import * as pa from './PlayerActions';
 import * as sfx from './sfxManagement';
 import * as e from './Encyclopedia';
+import YouDied from './YouDied';
 import { BossContext } from './Context';
 import {
     TurnNumberContext,

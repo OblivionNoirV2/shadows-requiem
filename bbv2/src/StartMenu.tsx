@@ -1,6 +1,7 @@
 //add a cool flickering animation to the title
 import React, { useEffect, useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
+import YouDied from './YouDied';
 
 import * as sfx from './sfxManagement';
 interface StartMenuProps {
@@ -58,6 +59,11 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
             <h1 className='text-6xl glow-ani-text text-black'>Shadow's Requiem</h1>
             <section className='start-menu space-y-8 flex flex-row'>
                 <div className='flex flex-col space-y-8'>
+                    <StartMenuButton
+                        text="test"
+                        onClick={sfx.playClickSfx}
+                        link='/YouDied'
+                    />
 
                     <StartMenuButton
                         text='Start Game'
