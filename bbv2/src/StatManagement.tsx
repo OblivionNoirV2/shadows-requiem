@@ -85,8 +85,8 @@ export const rmage_stats: StatMap = new Map
 export const boss_stats: StatMap = new Map
     (
         [
-            ["hp", 999999],
-            ["max_hp", 999999],
+            ["hp", 780000],
+            ["max_hp", 780000],
             ["p_def", 1.00],
             ["m_def", 1.00],
             ["atk", 1.00],
@@ -103,11 +103,36 @@ export const boss_stats: StatMap = new Map
 export const boss_stat_changes: Map<string, { atk: number, def: number }> = new Map
     (
         [
-            ["very_easy", { atk: 0.50, def: 0.50 }],
-            ["easy", { atk: 0.75, def: 0.75 }],
-            ["normal", { atk: 1.00, def: 1.00 }],
-            ["hard", { atk: 1.25, def: 1.25 }],
-            ["nightmare", { atk: 1.50, def: 1.50 }]
+            [
+                "very_easy", {
+                    atk: 0.50,
+                    def: 0.50
+                }
+            ],
+            [
+                "easy", {
+                    atk: 0.75,
+                    def: 0.75
+                }
+            ],
+            [
+                "normal", {
+                    atk: 1.00,
+                    def: 1.00
+                }
+            ],
+            [
+                "hard", {
+                    atk: 1.25,
+                    def: 1.25
+                }
+            ],
+            [
+                "nightmare", {
+                    atk: 1.50,
+                    def: 1.50
+                }
+            ]
         ]
     );
 

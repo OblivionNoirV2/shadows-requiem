@@ -94,8 +94,12 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
     const [bossStage, setBossStage] = useState(1);
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
+    //match returned target to their statuses
+    const IndexToStatus: Map<number, string[]> = new Map(
+        [
 
-
+        ]
+    )
     //lock player menus while boss is attacking
     useEffect(() => {
         //if it's an even turn, the boss attacks
@@ -139,7 +143,7 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
                     console.log("prev dmg dev", prev_dmg[prev_dmg.length - 1])
 
                     break;
-                case "Frozen Soul":
+                case "Frozen Soul": //each of these is a 20% chance
                     //chance of freeze
                     break;
                 case "Unending Grudge":
@@ -151,15 +155,12 @@ export const BossArea: React.FC<BossAreaProps> = ({ selectedCharacter, setSelect
                 default:
                     console.log("no special attacks used")
                     break;
-
             }
         }
-
     }, [TurnNumber]);
 
 
     //control dead status
-
     function HandleDeath(character: string, killed_or_revived: string) {
         switch (character) {
             case "knight":
