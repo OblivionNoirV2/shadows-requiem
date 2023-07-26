@@ -13,11 +13,22 @@
 /*change to red for phase 3*/
 .flake {
     background-image: url('assets/images/bg-and-effects/snowflakev2.png');
-    background-size: cover;
     width: .8rem;
     height: .8rem;
+}
+
+.confetti {
+    background-image: url('assets/images/bg-and-effects/confetti.png');
+    width: 2rem;
+    height: 2rem;
+}
+
+.flake,
+.confetti {
+    background-size: cover;
     position: absolute;
     animation: fall linear infinite;
+
 }
 
 @keyframes fall {

@@ -2,13 +2,23 @@ import React from 'react';
 import './snow.css';
 import { Randomizer } from './PlayerActions';
 
-const SnowAnimation = () => {
+const SnowAnimation: React.FC<{ precip_type: string }> = ({ precip_type }) => {
     const createFlakes = () => {
         //init array to hold the snowflakes
         const flakes = [];
-        for (let i = 0; i < 160; i++) {
+        let amount;
+        if (precip_type === 'confetti') {
+            amount = 80
+        } else {
+            amount = 160
+        }
+        for (let i = 0; i < amount; i++) {
             flakes.push(
-                <div className="flake"
+                <div className={
+                    precip_type === 'snow' ?
+                        "flake" :
+                        "confetti"
+                }
                     key={i}
                     style={{
                         animationDuration: `${Math.random() * 3 + 5.5}s`,

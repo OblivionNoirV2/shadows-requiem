@@ -212,7 +212,7 @@ const App: React.FC = () => {
         <VolButton />
       }
       {
-        isSnowOn && <SnowAnimation />
+        isSnowOn && <SnowAnimation precip_type='confetti' />
       }
       <SnowOnOff />
 
