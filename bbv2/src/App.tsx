@@ -145,12 +145,16 @@ const App: React.FC = () => {
     <>
 
       <Routes>
-        <Route path='/' element={<StartMenu on_start={startGame} />} />
+        <Route path='/' element={<StartMenu
+          on_start={startGame}
+          bossStage={bossStage} />} />
         <Route path='/Game' element={<MainPage
           onBackToTitle={HandleBackToTitle}
           bossStage={bossStage}
           setBossStage={setBossStage} />} />
-        <Route path='/StartMenu' element={<StartMenu on_start={startGame} />} />
+        <Route path='/StartMenu' element={<StartMenu
+          on_start={startGame}
+          bossStage={bossStage} />} />
         <Route path='/Story' element={<Story />} />
         <Route path='/Encyclopedia' element={<EncyclopediaPage />} />
         <Route path='/NameCharacters' element={<NameCharacters />} />

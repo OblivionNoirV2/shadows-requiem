@@ -322,12 +322,12 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         let boss_hp = sm.boss_stats.get("hp")!
         console.log("boss stage updated", selected_difficulty)
-        if (boss_hp >= 520000) {
-            setBossStage(1);
-        } else if (boss_hp >= 260000 && boss_hp < 519999) {
+        if (boss_hp >= 468000) {
+            setBossStage(1); //60%
+        } else if (boss_hp >= 195000 && boss_hp < 467999) {
             setBossStage(2);
         } else {
-            setBossStage(3);
+            setBossStage(3); //25%
         }
     }, [sm.boss_stats.get("hp")]);
     //update the boss stage based on the hp value
@@ -1227,10 +1227,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         document.body.style.backgroundImage = `url(${defaultbg})`;
 
         return () => {
-            bossStage !== 3 ?
-                document.body.style.backgroundImage = original_bg :
-                document.body.style.backgroundImage = "none"
-            document.body.style.backgroundColor = "rgb(0, 0, 0)";
+            document.body.style.backgroundImage = original_bg
             //make it black
         };
     }, []);

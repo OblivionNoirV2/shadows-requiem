@@ -6,18 +6,27 @@ import YouDied from './YouDied';
 import * as sfx from './sfxManagement';
 interface StartMenuProps {
     on_start: () => void;
+    bossStage: number
 
 }
 //use this instead of context because the places it's needed can't use hooks
 export let selected_difficulty: string = 'normal';
 
-const StartMenu: React.FC<StartMenuProps> = ({ on_start }) => {
+const StartMenu: React.FC<StartMenuProps> = ({ on_start, bossStage }) => {
     const [isCreditsShown, setIsCreditsShown] = useState(false);
     const [selectedDifficulty, setSelectedDifficulty] = useState('normal');
     useEffect(() => {
         selected_difficulty = selectedDifficulty;
         console.log('selected difficulty:', selected_difficulty);
     }, [selectedDifficulty]);
+
+    useEffect(() => {
+        if (bossStage === 3) {
+            document.body.style.backgroundImage = "none";
+            document.body.style.backgroundColor = "rgb(0,0,0)"
+        }
+
+    }, [bossStage])
     //toggle showing credits on/off
     function handleCreditsClick() {
         setIsCreditsShown(!isCreditsShown);
