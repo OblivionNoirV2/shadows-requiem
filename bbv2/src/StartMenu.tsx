@@ -1,7 +1,8 @@
 //add a cool flickering animation to the title
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Routes, Route, Link } from 'react-router-dom';
 import YouDied from './YouDied';
+import { PrecipTypeContext } from './Context';
 
 import * as sfx from './sfxManagement';
 interface StartMenuProps {
@@ -56,10 +57,13 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start, bossStage }) => {
             </button>
         );
     }
+    const { precipType, setPrecipType } = useContext(PrecipTypeContext)
+    useEffect(() => {
+        setPrecipType("flake")
 
-    function HandleNameChanges() {
+    }, [])
 
-    }
+
     return (
         <main className='flex flex-col mx-auto w-2/3
    justify-center items-center space-y-4 mt-12 '>
@@ -71,7 +75,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start, bossStage }) => {
                     <StartMenuButton
                         text="test"
                         onClick={sfx.playClickSfx}
-                        link='/Victory'
+                        link='/YouDied'
                     />
 
                     <StartMenuButton
@@ -166,6 +170,10 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start, bossStage }) => {
                                 <a href='https://mixkit.co/free-sound-effects/horror/'
                                     target='_blank'>
                                     MixKit
+                                </a>
+                                <a href='https://tuna.voicemod.net/sound/d23c1e88-eb51-448e-8ad1-9abde6e2cad7'
+                                    target='_blank'>
+                                    Voicemod
                                 </a>
                             </cite>
                         </strong>

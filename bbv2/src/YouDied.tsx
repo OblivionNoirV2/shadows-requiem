@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { playClickSfx } from "./sfxManagement";
 import anime from 'animejs/lib/anime.es.js'
 import { Link } from "react-router-dom";
-
+import { PrecipTypeContext } from "./Context";
+import youdiedsfx from './assets/sound/sfx/youdiedsfx.mp3'
 const BackToTitle = () => {
     //put an arrow next to it
     return (
@@ -16,11 +17,16 @@ const BackToTitle = () => {
     )
 }
 const YouDied = () => {
+    const you_died = new Audio(youdiedsfx)
+    const { setPrecipType } = useContext(PrecipTypeContext)
     useEffect(() => {
         //change to black
         const original_bg = document.body.style.backgroundImage;
         document.body.style.backgroundImage = "none"
         document.body.style.backgroundColor = "rgb(0, 0, 0)";
+        you_died.play();
+        you_died.loop = false;
+        setPrecipType("blood")
 
         return () => {
             document.body.style.backgroundImage = original_bg;

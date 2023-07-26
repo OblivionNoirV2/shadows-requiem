@@ -30,7 +30,8 @@ import {
     DmageNameContext,
     WmageNameContext,
     RmageNameContext,
-    BossAttackingContext
+    BossAttackingContext,
+    PrecipTypeContext
 } from './Context';
 import { RNGResult } from './PlayerActions';
 
@@ -80,8 +81,16 @@ interface BossAreaProps {
 let hb = new Audio(heartbeat)
 
 
+
+
 export const BossArea: React.FC<BossAreaProps> = ({
     selectedCharacter, setSelectedCharacter, bossStage, setBossStage }) => {
+    //just in case
+    const { precipType, setPrecipType } = useContext(PrecipTypeContext)
+    useEffect(() => {
+        setPrecipType("flake")
+
+    }, [])
 
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
     const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);

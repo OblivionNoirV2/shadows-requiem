@@ -1,7 +1,7 @@
 import { selected_difficulty } from "./StartMenu";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import victorybg from './assets/images/bg-and-effects/victorybg.png'
-
+import { PrecipTypeContext } from "./Context";
 
 //cause: string. penalty: number
 export const ScoreDeductionsMap: Map<string, number> = new Map(
@@ -64,7 +64,9 @@ const DifficultyToText: Map<string, string> = new Map(
 //fromsoft style text
 //add a gentle pulsing glow animation
 const VictoryScreen = () => {
+    const { setPrecipType } = useContext(PrecipTypeContext)
     useEffect(() => {
+        setPrecipType('confetti');
         const original_bg = document.body.style.backgroundImage;
         document.body.style.backgroundImage = `url(${victorybg})`
         return () => {

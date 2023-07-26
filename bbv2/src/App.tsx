@@ -30,7 +30,7 @@ function scheduleWindSfx() {
   const interval = Randomizer(15000, 25000);
   setTimeout(() => {
     windSfx.play();
-    windSfx.volume = 0.5;
+    windSfx.volume = 0.3;
     scheduleWindSfx();
   }, interval);
 };
@@ -39,7 +39,7 @@ function scheduleWindSfx2() {
   const interval = Randomizer(10000, 15000);
   setTimeout(() => {
     windSfx2.play();
-    windSfx2.volume = 0.5;
+    windSfx2.volume = 0.3;
     scheduleWindSfx2();
   }, interval);
 };
@@ -81,7 +81,7 @@ const App: React.FC = () => {
     return (
       <section className='snow-switch-container'>
 
-        <h4 className='text-slate-300 font-bold mb-8'>Snow</h4>
+        <h4 className='text-slate-300 font-bold mb-8'>Precipitation</h4>
 
 
         <label className="snow-switch">
