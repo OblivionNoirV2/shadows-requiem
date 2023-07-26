@@ -48,6 +48,7 @@ import rmage_icon from './assets/images/player/sprites/rmage.png'
 import dead_icon from './assets/images/icons/dead.png'
 import { prev_dmg } from './BossAlgorithm';
 import { occurences } from './victory';
+import heartbeat from './assets/sound/sfx/heartbeat.wav'
 interface GoBackProps {
     onBackToTitle: () => void;
 }
@@ -78,6 +79,7 @@ interface BossAreaProps {
     setBossStage: any;
 
 }
+let hb = new Audio(heartbeat)
 
 export const BossArea: React.FC<BossAreaProps> = ({
     selectedCharacter, setSelectedCharacter, bossStage, setBossStage }) => {
@@ -331,6 +333,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
         }
     }, [sm.boss_stats.get("hp")]);
     //update the boss stage based on the hp value
+
+    const [isHbTriggered, setIsHbTriggered] = useState(false)
+
     useEffect(() => {
         if (bossStage === 2) {
             //Boss gets further buffed or debuffed based on difficulty
@@ -344,9 +349,20 @@ export const BossArea: React.FC<BossAreaProps> = ({
             sm.boss_stats.set('atk', 1.20);
             document.body.style.backgroundImage = "none"
             document.body.style.backgroundColor = "black"
-        }
+            //prevent duplicate audios
+            if (!isHbTriggered) {
+                hb.play();
+                hb.loop = true;
+            } else {
+                setIsHbTriggered(true)
+                hb.pause()
+                hb.currentTime = 0;
 
-    }, [bossStage]);
+            }
+        }
+        //Both, because if the boss stage hasn't changed during dev 
+        //it won't update otherwise
+    }, [[], bossStage]);
 
     //have to specify exact paths because of how webpack works
     const boss_images = [
@@ -375,7 +391,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     <div className='flex justify-center relative mt-8
                      z-10 
                     text-4xl
-                       text-black stage-label'>
+                       text-white stage-label'>
                         {boss_labels[bossStage - 1]}
                     </div>
                 </strong>
@@ -1243,17 +1259,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     <section className='party-col w-full h-full flex 
                  -mt-4 ml-4'>
                         <ul className='w-full'>
-                            <li>
-                                <div>
-                                    <Link to='/Startmenu' >
-                                        <button className='4 text-lg
-                                 text-white '
-                                            onClick={() => { sfx.playClickSfx(); onBackToTitle() }}>
-                                            Back to title
-                                        </button>
-                                    </Link>
-                                </div>
-                            </li>
+
                             <li>
                                 {/*buttons get locked when attack is happening*/}
                                 <button onClick={

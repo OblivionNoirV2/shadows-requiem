@@ -1,10 +1,18 @@
 import { useEffect } from "react";
+import { playClickSfx } from "./sfxManagement";
 import anime from 'animejs/lib/anime.es.js'
+import { Link } from "react-router-dom";
 
 const BackToTitle = () => {
     //put an arrow next to it
     return (
-        <h1 className="text-red-900">Back to Title</h1>
+        <button onClick={playClickSfx}>
+            <Link to="/StartMenu">
+                <h1 className="text-red-900 text-4xl mt-4">
+                    <span>&#8656;</span>Back to Title
+                </h1>
+            </Link>
+        </button>
     )
 }
 const YouDied = () => {
@@ -30,19 +38,21 @@ const YouDied = () => {
         return () => {
             anime.remove(targets)
         }
-
     }, [])
     //dark souls style
     return (
-        <main className="justify-center items-center
-            flex h-screen">
-            <h1 className="text-[12rem] text-red-900 yd ">
-                YOU DIED
-            </h1>
-            <script src="anime.min.js"></script>
+        <main className="overflow-y-hidden">
+            <BackToTitle />
+            <section className="justify-center items-center
+            flex h-screen overflow-y-hidden">
+
+                <h1 className="text-[12rem] text-red-900 yd ">
+                    YOU DIED
+                </h1>
+                <script src="anime.min.js"></script>
+            </section>
         </main>
     )
-
 }
 
 export default YouDied;
