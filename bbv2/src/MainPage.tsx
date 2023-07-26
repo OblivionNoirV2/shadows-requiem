@@ -47,9 +47,8 @@ import wmage_icon from './assets/images/player/sprites/wmage.png';
 import rmage_icon from './assets/images/player/sprites/rmage.png';
 import dead_icon from './assets/images/icons/dead.png';
 import { prev_dmg } from './BossAlgorithm';
-import { occurences } from './victory';
+import { Occurences } from './victory';
 import heartbeat from './assets/sound/sfx/heartbeatlouder.wav';
-
 
 
 interface MenuProps {
@@ -159,6 +158,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 case "Death's Touch":
                     //chance of curse
                     break;
+                case "Unholy Symphony"://chance of curse to all
+                    break;
                 default:
                     console.log("no special attacks used")
                     break;
@@ -178,7 +179,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     if (!KnightStatus.includes("dead")) {
                         setKnightStatus(prev => [...prev, "dead"])
                         //for future score
-                        occurences.set("deaths", (occurences.get("deaths")! + 1))
+                        Occurences.set("deaths", (Occurences.get("deaths")! + 1))
                     }
                 } else {
                     setKnightStatus(prevKnightStatus =>
@@ -589,7 +590,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         //the returned number 
         const item_details = iv.player_inventory.get(item);
         //for future score
-        occurences.set("item", (occurences.get("item")! + 1))
+        Occurences.set("item", (Occurences.get("item")! + 1))
         console.log("item", item)
         console.log("target", target)
         //sm.dmage_stats.set("mp", sm.dmage_stats.get("mp")! - 100)
@@ -674,8 +675,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             setTimeout(() => {
                 setTurnNumber(TurnNumber + 1)
                 //for future score
-                occurences.set("turn", (occurences.get("turn")! + 1))
-                console.log("occurences", occurences)
+                Occurences.set("turn", (Occurences.get("turn")! + 1))
+                console.log("Occurences", Occurences)
                 setIsAttackAreaShown(false);
                 setIsAttackMade(false);
 

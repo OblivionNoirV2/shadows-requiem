@@ -628,3 +628,20 @@ body:before {
   background-color: rgba(0, 0, 0, 0.3);
   z-index: -1;
 }
+
+/*victory screen stuff*/
+.v-title {
+  animation: victory-glow 5s linear infinite alternate;
+}
+
+@keyframes victory-glow {
+  0% {
+    text-shadow: .05rem .05rem .5rem rgba(255, 255, 255, 0.7);
+
+  }
+
+  100% {
+    text-shadow: .4rem .4rem 1rem rgba(255, 255, 255, 1);
+
+  }
+}

@@ -17,6 +17,7 @@ import EncyclopediaPage from './EnPage';
 import { Randomizer } from './PlayerActions';
 import { NameCharacters } from './Naming';
 import YouDied from './YouDied';
+import VictoryScreen from './victory';
 
 //environmental sfx
 const windSfx = new Audio(wind);
@@ -145,20 +146,67 @@ const App: React.FC = () => {
     <>
 
       <Routes>
-        <Route path='/' element={<StartMenu
-          on_start={startGame}
-          bossStage={bossStage} />} />
-        <Route path='/Game' element={<MainPage
-          onBackToTitle={HandleBackToTitle}
-          bossStage={bossStage}
-          setBossStage={setBossStage} />} />
-        <Route path='/StartMenu' element={<StartMenu
-          on_start={startGame}
-          bossStage={bossStage} />} />
-        <Route path='/Story' element={<Story />} />
-        <Route path='/Encyclopedia' element={<EncyclopediaPage />} />
-        <Route path='/NameCharacters' element={<NameCharacters />} />
-        <Route path='YouDied' element={<YouDied />} />
+        <Route path='/'
+          element={
+            <StartMenu
+              on_start={startGame}
+              bossStage={bossStage}
+            />
+          }
+        />
+        <Route
+          path='/Game'
+          element={
+            <MainPage
+              onBackToTitle={HandleBackToTitle}
+              bossStage={bossStage}
+              setBossStage={setBossStage}
+            />
+          }
+        />
+        <Route
+          path='/StartMenu'
+          element={
+            <StartMenu
+              on_start={startGame}
+              bossStage={bossStage}
+            />
+          }
+        />
+        <Route
+          path='/Story'
+          element={
+            <Story />
+          }
+        />
+        <Route
+          path='/Encyclopedia'
+          element={
+            <EncyclopediaPage
+            />
+          }
+        />
+        <Route
+          path='/NameCharacters'
+          element={
+            <NameCharacters
+            />
+          }
+        />
+        <Route
+          path='YouDied'
+          element={
+            <YouDied
+            />
+          }
+        />
+        <Route
+          path='Victory'
+          element={
+            <VictoryScreen
+            />
+          }
+        />
       </Routes>
       {bossStage !== 3 &&
         <VolButton />

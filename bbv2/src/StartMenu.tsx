@@ -71,7 +71,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start, bossStage }) => {
                     <StartMenuButton
                         text="test"
                         onClick={sfx.playClickSfx}
-                        link='/YouDied'
+                        link='/Victory'
                     />
 
                     <StartMenuButton
