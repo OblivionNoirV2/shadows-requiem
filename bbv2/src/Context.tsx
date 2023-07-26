@@ -582,4 +582,12 @@ export function BossAttackingContextProvider({ children }: { children: React.Rea
         </BossAttackingContext.Provider>
     )
 }
+//for changing it in the victory/death screens
 
+
+type valid_precip = "flake" | "confetti" | "blood"
+interface PrecipTypeContextValue {
+    precipType: valid_precip;
+    setPrecipType: (value: valid_precip) => void
+
+}

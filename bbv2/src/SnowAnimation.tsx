@@ -1,6 +1,8 @@
 import React from 'react';
 import './snow.css';
 import { Randomizer } from './PlayerActions';
+import { StringMappingType } from 'typescript';
+
 
 const SnowAnimation: React.FC<{ precip_type: string }> = ({ precip_type }) => {
     const createFlakes = () => {
@@ -14,11 +16,7 @@ const SnowAnimation: React.FC<{ precip_type: string }> = ({ precip_type }) => {
         }
         for (let i = 0; i < amount; i++) {
             flakes.push(
-                <div className={
-                    precip_type === 'snow' ?
-                        "flake" :
-                        "confetti"
-                }
+                <div className={`${precip_type}`}
                     key={i}
                     style={{
                         animationDuration: `${Math.random() * 3 + 5.5}s`,

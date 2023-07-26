@@ -142,9 +142,7 @@ const App: React.FC = () => {
   and renders the start menu. Trigger the callback when clicked,
   which flips the state to true, and renders the main page*/
   return (
-
     <>
-
       <Routes>
         <Route path='/'
           element={
@@ -212,7 +210,7 @@ const App: React.FC = () => {
         <VolButton />
       }
       {
-        isSnowOn && <SnowAnimation precip_type='confetti' />
+        isSnowOn && <SnowAnimation precip_type='flake' />
       }
       <SnowOnOff />
 

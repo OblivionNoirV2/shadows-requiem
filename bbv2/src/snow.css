@@ -31,6 +31,16 @@
 
 }
 
+/*no rotation for this one*/
+.blood {
+    background-image: url('assets/images/bg-and-effects/blood.png');
+    width: .8rem;
+    height: .8rem;
+    background-size: cover;
+    position: absolute;
+    animation: fall-blood linear infinite;
+}
+
 @keyframes fall {
     0% {
         transform: translateY(0vh) rotate(0deg);
@@ -53,4 +63,29 @@
         transform: translateY(100vh) rotate(360deg);
         opacity: 0;
     }
+}
+
+@keyframes fall-blood {
+    0% {
+        transform: translateY(0vh) translateX(0vw);
+        opacity: 1;
+    }
+
+    60% {
+        opacity: 0.8;
+    }
+
+    80% {
+        opacity: 0.6;
+    }
+
+    90% {
+        opacity: 0.4;
+    }
+
+    100% {
+        transform: translateY(100vh) translateX(-10vw);
+        opacity: 0;
+    }
+
 }
