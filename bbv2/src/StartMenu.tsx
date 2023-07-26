@@ -162,6 +162,11 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start, bossStage }) => {
                                     target='_blank'>
                                     SoundEffectsFactory
                                 </a>
+                                <br></br>
+                                <a href='https://mixkit.co/free-sound-effects/horror/'
+                                    target='_blank'>
+                                    MixKit
+                                </a>
                             </cite>
                         </strong>
                     </section>

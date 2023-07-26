@@ -43,12 +43,13 @@ import defaultbg from './assets/images/bg-and-effects/battlebgv3.png';
 import { bossAttackAlgo, BossAttackArea, last_boss_attacks } from './BossAlgorithm';
 import knight_icon from './assets/images/player/sprites/knight.png';
 import dmage_icon from './assets/images/player/sprites/dmage.png';
-import wmage_icon from './assets/images/player/sprites/wmage.png'
-import rmage_icon from './assets/images/player/sprites/rmage.png'
-import dead_icon from './assets/images/icons/dead.png'
+import wmage_icon from './assets/images/player/sprites/wmage.png';
+import rmage_icon from './assets/images/player/sprites/rmage.png';
+import dead_icon from './assets/images/icons/dead.png';
 import { prev_dmg } from './BossAlgorithm';
 import { occurences } from './victory';
-import heartbeat from './assets/sound/sfx/heartbeat.wav'
+import heartbeat from './assets/sound/sfx/heartbeatlouder.wav';
+
 
 
 interface MenuProps {
@@ -78,6 +79,7 @@ interface BossAreaProps {
 
 }
 let hb = new Audio(heartbeat)
+
 
 export const BossArea: React.FC<BossAreaProps> = ({
     selectedCharacter, setSelectedCharacter, bossStage, setBossStage }) => {
@@ -332,7 +334,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     }, [sm.boss_stats.get("hp")]);
     //update the boss stage based on the hp value
 
-    const [isHbTriggered, setIsHbTriggered] = useState(false)
+    const [isSFXTriggered, setIsSFXTriggered] = useState(false)
 
     useEffect(() => {
         if (bossStage === 2) {
@@ -348,13 +350,14 @@ export const BossArea: React.FC<BossAreaProps> = ({
             document.body.style.backgroundImage = "none"
             document.body.style.backgroundColor = "black"
             //prevent duplicate audios
-            if (!isHbTriggered) {
+            if (!isSFXTriggered) {
                 hb.play();//heartbeat sfx
                 hb.loop = true;
             } else {
-                setIsHbTriggered(true)
+                setIsSFXTriggered(true)
                 hb.pause()
                 hb.currentTime = 0;
+
             }
         }
         //Both, because if the boss stage hasn't changed during dev 
