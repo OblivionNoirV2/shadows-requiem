@@ -99,15 +99,19 @@ const App: React.FC = () => {
     current_track.loop = true;
   }
   useEffect(() => {
-    if (isMusicOn) {
-      if (currentTrack === "battle") {
-        TrackControls(battleOst, titleOst);
-      } else if (currentTrack === "title") {
-        TrackControls(titleOst, battleOst);
-      }
+    if (bossStage === 3) {
+      setIsMusicOn(false)
     } else {
-      battleOst.pause();
-      titleOst.pause();
+      if (isMusicOn) {
+        if (currentTrack === "battle") {
+          TrackControls(battleOst, titleOst);
+        } else if (currentTrack === "title") {
+          TrackControls(titleOst, battleOst);
+        }
+      } else {
+        battleOst.pause();
+        titleOst.pause();
+      }
     }
   }, [isMusicOn, currentTrack]);
   //mute for phase 3
@@ -152,12 +156,13 @@ const App: React.FC = () => {
         <Route path='/NameCharacters' element={<NameCharacters />} />
         <Route path='YouDied' element={<YouDied />} />
       </Routes>
-      <VolButton />
+      {bossStage !== 3 &&
+        <VolButton />
+      }
       {
         isSnowOn && <SnowAnimation />
       }
       <SnowOnOff />
-
 
     </>
 
