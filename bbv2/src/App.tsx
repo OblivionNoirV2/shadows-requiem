@@ -18,6 +18,7 @@ import { Randomizer } from './PlayerActions';
 import { NameCharacters } from './Naming';
 import YouDied from './YouDied';
 import VictoryScreen from './victory';
+import { PrecipTypeContext } from './Context';
 
 //environmental sfx
 const windSfx = new Audio(wind);
@@ -54,6 +55,8 @@ const App: React.FC = () => {
   const [titleOst, setTitleOst] = useState(new Audio(tt));
   const [currentTrack, setCurrentTrack] = useState("title");
   const [isSnowOn, setIsSnowOn] = useState(true);
+
+  const { precipType, setPrecipType } = useContext(PrecipTypeContext)
 
 
   const VolButton: React.FC = () => {
@@ -210,7 +213,7 @@ const App: React.FC = () => {
         <VolButton />
       }
       {
-        isSnowOn && <SnowAnimation precip_type='flake' />
+        isSnowOn && <SnowAnimation precip_type={precipType} />
       }
       <SnowOnOff />
 

@@ -589,5 +589,24 @@ type valid_precip = "flake" | "confetti" | "blood"
 interface PrecipTypeContextValue {
     precipType: valid_precip;
     setPrecipType: (value: valid_precip) => void
+}
 
+export const PrecipTypeContext = createContext<PrecipTypeContextValue>({
+    precipType: "flake",
+    setPrecipType: () => { }
+})
+
+export function PrecipTypeContextProvider({ children }: { children: React.ReactElement }) {
+    const [precipType, setPrecipType] = useState<valid_precip>("flake")
+
+    useEffect(() => {
+        console.log("precip type updated", precipType)
+
+    }, [precipType])
+
+    return (
+        <PrecipTypeContext.Provider value={{ precipType, setPrecipType }}>
+            {children}
+        </PrecipTypeContext.Provider>
+    )
 }
