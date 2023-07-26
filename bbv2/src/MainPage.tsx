@@ -49,9 +49,7 @@ import dead_icon from './assets/images/icons/dead.png'
 import { prev_dmg } from './BossAlgorithm';
 import { occurences } from './victory';
 import heartbeat from './assets/sound/sfx/heartbeat.wav'
-interface GoBackProps {
-    onBackToTitle: () => void;
-}
+
 
 interface MenuProps {
     current_player: string;
@@ -942,9 +940,14 @@ const StatusEffectsHash: { [name: string]: string } = {
 }
 //onBackToTitle is a void function that comes from the interface
 //in the render below it flips the state of the page to the title
-
+interface GoBackProps {
+    onBackToTitle: () => void;
+    bossStage: number;
+    setBossStage: any;
+}
 //then pass the given global state to the playermenu
-export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
+export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
+    bossStage, setBossStage }) => {
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
     const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
@@ -1236,7 +1239,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
     const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
     const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
-    const [bossStage, setBossStage] = useState(1);
+
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
 
     return (

@@ -47,6 +47,7 @@ scheduleWindSfx();
 scheduleWindSfx2();
 
 const App: React.FC = () => {
+
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [battleOst, setBattleOst] = useState(new Audio(ti));
   const [titleOst, setTitleOst] = useState(new Audio(tt));
@@ -109,7 +110,7 @@ const App: React.FC = () => {
       titleOst.pause();
     }
   }, [isMusicOn, currentTrack]);
-
+  //mute for phase 3
   function HandleMusicOnOff(): void {
     setIsMusicOn(!isMusicOn);
   }
@@ -130,6 +131,7 @@ const App: React.FC = () => {
     setCurrentTrack("title");
     navigate('/');
   }
+  const [bossStage, setBossStage] = useState(1)
 
   /*At program start, the ternary returns false 
   and renders the start menu. Trigger the callback when clicked,
@@ -140,7 +142,10 @@ const App: React.FC = () => {
 
       <Routes>
         <Route path='/' element={<StartMenu on_start={startGame} />} />
-        <Route path='/Game' element={<MainPage onBackToTitle={HandleBackToTitle} />} />
+        <Route path='/Game' element={<MainPage
+          onBackToTitle={HandleBackToTitle}
+          bossStage={bossStage}
+          setBossStage={setBossStage} />} />
         <Route path='/StartMenu' element={<StartMenu on_start={startGame} />} />
         <Route path='/Story' element={<Story />} />
         <Route path='/Encyclopedia' element={<EncyclopediaPage />} />
