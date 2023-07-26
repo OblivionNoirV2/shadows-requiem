@@ -351,13 +351,12 @@ export const BossArea: React.FC<BossAreaProps> = ({
             document.body.style.backgroundColor = "black"
             //prevent duplicate audios
             if (!isHbTriggered) {
-                hb.play();
+                hb.play();//heartbeat sfx
                 hb.loop = true;
             } else {
                 setIsHbTriggered(true)
                 hb.pause()
                 hb.currentTime = 0;
-
             }
         }
         //Both, because if the boss stage hasn't changed during dev 
@@ -1225,7 +1224,11 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
         document.body.style.backgroundImage = `url(${defaultbg})`;
 
         return () => {
-            document.body.style.backgroundImage = original_bg;
+            bossStage !== 3 ?
+                document.body.style.backgroundImage = original_bg :
+                document.body.style.backgroundImage = "none"
+            document.body.style.backgroundColor = "rgb(0, 0, 0)";
+            //make it black
         };
     }, []);
 
@@ -1259,7 +1262,17 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle }) => {
                     <section className='party-col w-full h-full flex 
                  -mt-4 ml-4'>
                         <ul className='w-full'>
-
+                            <li>
+                                <div>
+                                    <Link to='/Startmenu' >
+                                        <button className='4 text-lg
+                                 text-white '
+                                            onClick={() => { sfx.playClickSfx(); onBackToTitle() }}>
+                                            Back to title
+                                        </button>
+                                    </Link>
+                                </div>
+                            </li>
                             <li>
                                 {/*buttons get locked when attack is happening*/}
                                 <button onClick={
