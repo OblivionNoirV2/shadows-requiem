@@ -58,6 +58,9 @@ export let last_boss_attacks: string[] = []
 function CheckForStatDecrease() {
 
 }
+export function Percentage() {
+    return Math.random();
+}
 //use this for things like devourment
 //Also have Unholy Synphony be the sum of the 
 //last 10 attacks(divided by 2 maybe). Use a tritone for that sfx!
@@ -344,9 +347,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         }
         return 0;
     }
-    function Percentage() {
-        return Math.random();
-    }
+
     interface BossRNGProps {
         current_boss_attack: string;
         min?: number; //because of inversion

@@ -50,7 +50,7 @@ import dead_icon from './assets/images/icons/dead.png';
 import { prev_dmg } from './BossAlgorithm';
 import { Occurences } from './victory';
 import heartbeat from './assets/sound/sfx/heartbeatlouder.wav';
-import { kill } from 'process';
+import { Percentage } from './BossAlgorithm';
 
 
 interface MenuProps {
@@ -108,12 +108,20 @@ export const BossArea: React.FC<BossAreaProps> = ({
     const { DmageHP, setDmageHP } = useContext(DmageHPContext);
     const { WmageHP, setWmageHP } = useContext(WmageHPContext);
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
+    //will check for any stat abnormalities each turn 
+    //and set things accordingly
+    useEffect(() => {
+
+    })
 
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
     //match returned target to their statuses, for status effects
     const IndexToStatus: Map<number, string[]> = new Map(
         [
-
+            [0, KnightStatus],
+            [1, DmageStatus],
+            [2, WmageStatus],
+            [3, RmageStatus]
         ]
     )
     //lock player menus while boss is attacking
@@ -159,8 +167,11 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     console.log("prev dmg dev", prev_dmg[prev_dmg.length - 1])
 
                     break;
-                case "Frozen Soul": //each of these is a 20% chance
-                    //chance of freeze
+                case "Frozen Soul":
+                    if (Percentage() < 0.25) {
+
+
+                    }
                     break;
                 case "Unending Grudge":
                     //chance of poison
@@ -1285,191 +1296,197 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
 
                 {/*party members*/}
-                {!isBossAttacking &&
-                    <section className='party-col w-full h-full flex 
+
+                <section className='party-col w-full h-full flex 
                  -mt-4 ml-4'>
-                        <ul className='w-full'>
-                            <li>
-                                <div>
-                                    <Link to='/Startmenu' >
-                                        <button className='4 text-lg
+                    <ul className='w-full'>
+                        <li>
+                            <div>
+                                <Link to='/Startmenu' >
+                                    <button className='4 text-lg
                                  text-white '
-                                            onClick={() => { sfx.playClickSfx(); onBackToTitle() }}>
-                                            Back to title
-                                        </button>
-                                    </Link>
-                                </div>
-                            </li>
-                            <li>
-                                {/*buttons get locked when attack is happening*/}
-                                <button onClick={
+                                        onClick={() => { sfx.playClickSfx(); onBackToTitle() }}>
+                                        Back to title
+                                    </button>
+                                </Link>
+                            </div>
+                        </li>
+                        <li>
+                            {/*buttons get locked when attack is happening*/}
+                            <button onClick={
+                                !isBossAttacking &&
                                     !KnightStatus.includes("dead") &&
-                                        !isAttackAreaShown &&
+                                    !isAttackAreaShown &&
 
-                                        isPlayerTurn ?
-                                        () => HandleSelection("knight")
-                                        : undefined
+                                    isPlayerTurn ?
+                                    () => HandleSelection("knight")
+                                    : undefined
+                            }
+                                className={
+                                    selectedCharacter === 'knight' ?
+                                        'is-selected character-btn' :
+                                        'is-not-selected character-btn'}>
+                                {/*different image if dead*/}
+                                <img src={
+                                    !KnightStatus.includes("dead") ?
+                                        knight_icon :
+                                        dead_icon
                                 }
-                                    className={
-                                        selectedCharacter === 'knight' ?
-                                            'is-selected character-btn' :
-                                            'is-not-selected character-btn'}>
-                                    {/*different image if dead*/}
-                                    <img src={
+                                    alt={
                                         !KnightStatus.includes("dead") ?
-                                            knight_icon :
-                                            dead_icon
+                                            "knight icon" :
+                                            "dead character"
                                     }
-                                        alt={
-                                            !KnightStatus.includes("dead") ?
-                                                "knight icon" :
-                                                "dead character"
-                                        }
-                                    >
-                                    </img>
-                                </button>
-                                <span>
-                                    {
-                                        isPlayerTurn && selectedCharacter === 'knight' &&
-                                        <PlayerMenu
-                                            player='knight'
-                                            isPlayerTurn={isPlayerTurn}
-
-                                        />
-                                    }
-                                    <PlayerComponent
+                                >
+                                </img>
+                            </button>
+                            <span>
+                                {
+                                    isPlayerTurn && selectedCharacter === 'knight' &&
+                                    <PlayerMenu
                                         player='knight'
-                                        stat_name='knight_stats'
-                                        character_name='Knight'
+                                        isPlayerTurn={isPlayerTurn}
+
                                     />
-                                </span>
-                            </li>
-                            <li>
-                                <button onClick={
-                                    !isAttackAreaShown &&
-                                        isPlayerTurn ?
-                                        () => HandleSelection("dmage")
-                                        : undefined
                                 }
-                                    className={selectedCharacter === 'dmage' ?
-                                        'is-selected character-btn' :
-                                        'is-not-selected character-btn'}>
-                                    <img src={
+                                <PlayerComponent
+                                    player='knight'
+                                    stat_name='knight_stats'
+                                    character_name='Knight'
+                                />
+                            </span>
+                        </li>
+                        <li>
+                            <button onClick={
+                                !isBossAttacking &&
+                                    !isAttackAreaShown &&
+                                    isPlayerTurn ?
+                                    () => HandleSelection("dmage")
+                                    : undefined
+                            }
+                                className={selectedCharacter === 'dmage' ?
+                                    'is-selected character-btn' :
+                                    'is-not-selected character-btn'}>
+                                <img src={
+                                    !DmageStatus.includes("dead") ?
+                                        dmage_icon :
+                                        dead_icon
+                                }
+                                    alt={
                                         !DmageStatus.includes("dead") ?
-                                            dmage_icon :
-                                            dead_icon
+                                            "dark mage icon" :
+                                            "dead character"
                                     }
-                                        alt={
-                                            !DmageStatus.includes("dead") ?
-                                                "dark mage icon" :
-                                                "dead character"
-                                        }
-                                    >
-                                    </img>
-                                </button>
-                                <span>
-                                    {
+                                >
+                                </img>
+                            </button>
+                            <span>
+                                {
 
-                                        isPlayerTurn && selectedCharacter === 'dmage' &&
-                                        <PlayerMenu
-                                            player='dmage'
-                                            isPlayerTurn={isPlayerTurn}
-
-                                        />
-
-                                    }
-                                    <PlayerComponent
+                                    isPlayerTurn && selectedCharacter === 'dmage' &&
+                                    <PlayerMenu
                                         player='dmage'
-                                        stat_name='dmage_stats'
-                                        character_name='Dark Mage'
+                                        isPlayerTurn={isPlayerTurn}
+
                                     />
-                                </span>
-                            </li>
-                            <li>
-                                <button onClick={
-                                    !isAttackAreaShown &&
-                                        isPlayerTurn ?
-                                        () => HandleSelection("wmage") :
-                                        undefined
+
                                 }
-                                    className={selectedCharacter === 'wmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
-                                    <img src={
+                                <PlayerComponent
+                                    player='dmage'
+                                    stat_name='dmage_stats'
+                                    character_name='Dark Mage'
+                                />
+                            </span>
+                        </li>
+                        <li>
+                            <button onClick={
+                                !isBossAttacking &&
+                                    !isAttackAreaShown &&
+                                    isPlayerTurn ?
+                                    () => HandleSelection("wmage") :
+                                    undefined
+                            }
+                                className={selectedCharacter === 'wmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
+                                <img src={
+                                    !WmageStatus.includes("dead") ?
+                                        wmage_icon :
+                                        dead_icon
+                                }
+                                    alt={
                                         !WmageStatus.includes("dead") ?
-                                            wmage_icon :
-                                            dead_icon
+                                            "white mage icon" :
+                                            "dead character"
                                     }
-                                        alt={
-                                            !WmageStatus.includes("dead") ?
-                                                "white mage icon" :
-                                                "dead character"
-                                        }
-                                    >
+                                >
 
-                                    </img>
-                                </button>
-                                <span>
-                                    {
-                                        isPlayerTurn && selectedCharacter === 'wmage' &&
-                                        <PlayerMenu
-                                            player='wmage'
-                                            isPlayerTurn={isPlayerTurn}
-
-                                        />
-
-                                    }
-                                    <PlayerComponent
+                                </img>
+                            </button>
+                            <span>
+                                {
+                                    isPlayerTurn && selectedCharacter === 'wmage' &&
+                                    <PlayerMenu
                                         player='wmage'
-                                        stat_name='wmage_stats'
-                                        character_name='White Mage'
+                                        isPlayerTurn={isPlayerTurn}
+
                                     />
 
-                                </span>
-                            </li>
-                            <li>
-                                <button onClick={
-                                    !isAttackAreaShown &&
-                                        isPlayerTurn ?
-                                        () => HandleSelection("rmage") :
-                                        undefined
                                 }
-                                    className={selectedCharacter === 'rmage' ?
-                                        'is-selected character-btn' :
-                                        'is-not-selected character-btn'}>
-                                    <img src={
+                                <PlayerComponent
+                                    player='wmage'
+                                    stat_name='wmage_stats'
+                                    character_name='White Mage'
+                                />
+
+                            </span>
+                        </li>
+                        <li>
+                            <button onClick={
+                                !isBossAttacking &&
+                                    !isAttackAreaShown &&
+                                    isPlayerTurn ?
+                                    () => HandleSelection("rmage") :
+                                    undefined
+                            }
+                                className={selectedCharacter === 'rmage' ?
+                                    'is-selected character-btn' :
+                                    'is-not-selected character-btn'}>
+                                <img src={
+                                    !RmageStatus.includes("dead") ?
+                                        rmage_icon :
+                                        dead_icon
+                                }
+                                    alt={
                                         !RmageStatus.includes("dead") ?
-                                            rmage_icon :
-                                            dead_icon
+                                            "red mage icon" :
+                                            "dead character"
                                     }
-                                        alt={
-                                            !RmageStatus.includes("dead") ?
-                                                "red mage icon" :
-                                                "dead character"
-                                        }
-                                    >
-                                    </img>
-                                </button>
-                                <span>
-                                    {
-                                        isPlayerTurn && selectedCharacter === 'rmage' &&
-                                        <PlayerMenu
-                                            player='rmage'
-                                            isPlayerTurn={isPlayerTurn}
-
-                                        />
-
-                                    }
-                                    <PlayerComponent
+                                >
+                                </img>
+                            </button>
+                            <span>
+                                {
+                                    isPlayerTurn && selectedCharacter === 'rmage' &&
+                                    <PlayerMenu
                                         player='rmage'
-                                        stat_name='rmage_stats'
-                                        character_name='Red Mage'
+                                        isPlayerTurn={isPlayerTurn}
+
                                     />
-                                </span>
-                            </li>
-                            <li className='flex-row flex'>
-                                {/*Goes up each player turn,by 1, to 20. 
+
+                                }
+                                <PlayerComponent
+                                    player='rmage'
+                                    stat_name='rmage_stats'
+                                    character_name='Red Mage'
+                                />
+                            </span>
+                        </li>
+                        <li className='flex-row flex'>
+                            {/*Goes up each player turn,by 1, to 20. 
                             Switches to a button when full
                             Will pull up a menu of 4 cells as a row*/}
-                                {isUltimaReady ?
+                            {
+                                !isBossAttacking &&
+                                    isUltimaReady ?
                                     <button className={
                                         !isUltMenuShown ? 'ult-btn text-2xl ' : 'ult-close-btn'
                                     }
@@ -1488,30 +1505,29 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                 justify-start w-2/5 mt-4 h-6'
                                         value={ultValue} max={20}>
                                     </progress>
-                                }
-                                {
-                                    isUltMenuShown &&
-                                    <div className='flex flex-row'>
-                                        {e.ultimas.map((attack, index) => {
-                                            return (
-                                                <ul>
-                                                    <li >
-                                                        <button key={index}
-                                                            className={`ult-atk-btn ${ultBtnClassLookup.get(attack)}`}
-                                                            onClick={() => handleUltimaClick(attack)}
-                                                            title={e.AttackEncyclopedia.get(attack)?.description}>
-                                                            {attack}
-                                                        </button>
-                                                    </li>
-                                                </ul>
-                                            )
-                                        })}
-                                    </div>
-                                }
-                            </li>
-                        </ul>
-                    </section>
-                }
+                            }
+                            {
+                                isUltMenuShown &&
+                                <div className='flex flex-row'>
+                                    {e.ultimas.map((attack, index) => {
+                                        return (
+                                            <ul>
+                                                <li >
+                                                    <button key={index}
+                                                        className={`ult-atk-btn ${ultBtnClassLookup.get(attack)}`}
+                                                        onClick={() => handleUltimaClick(attack)}
+                                                        title={e.AttackEncyclopedia.get(attack)?.description}>
+                                                        {attack}
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                        )
+                                    })}
+                                </div>
+                            }
+                        </li>
+                    </ul>
+                </section>
                 <section className=''>
                     {/*later on link this to the final version of 
                     when he attacks, which will be slightly randomized 
