@@ -20,33 +20,7 @@ import YouDied from './YouDied';
 import VictoryScreen from './victory';
 import { PrecipTypeContext } from './Context';
 
-//environmental sfx
-const windSfx = new Audio(wind);
-const windSfx2 = new Audio(wind2);
 
-//Putting these in one function causes browser bugs for some reason
-//Makes things freeze up
-function scheduleWindSfx() {
-  const interval = Randomizer(15000, 25000);
-  setTimeout(() => {
-    windSfx.play();
-    windSfx.volume = 0.3;
-    scheduleWindSfx();
-  }, interval);
-};
-
-function scheduleWindSfx2() {
-  const interval = Randomizer(10000, 15000);
-  setTimeout(() => {
-    windSfx2.play();
-    windSfx2.volume = 0.3;
-    scheduleWindSfx2();
-  }, interval);
-};
-
-
-scheduleWindSfx();
-scheduleWindSfx2();
 
 const App: React.FC = () => {
 

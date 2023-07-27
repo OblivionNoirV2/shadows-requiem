@@ -631,7 +631,8 @@ body:before {
 
 /*victory screen stuff*/
 .v-title {
-  animation: victory-glow 5s linear infinite alternate;
+
+  animation: victory-glow 1s linear infinite alternate;
 }
 
 @keyframes victory-glow {
@@ -644,4 +645,51 @@ body:before {
     text-shadow: .4rem .4rem 1rem rgba(255, 255, 255, 1);
 
   }
+}
+
+@keyframes rainbow-bg {
+  0% {
+    border-color: red;
+  }
+
+  12.5% {
+    border-color: orange;
+  }
+
+  25% {
+    border-color: yellow;
+  }
+
+  37.5% {
+    border-color: green;
+  }
+
+  50% {
+    border-color: blue;
+  }
+
+  62.5% {
+    border-color: indigo;
+  }
+
+  75% {
+    border-color: violet;
+  }
+
+  87.5% {
+    border-color: silver;
+  }
+
+  100% {
+    border-color: gold;
+  }
+
+}
+
+.results {
+  border: .5rem solid;
+  animation: rainbow-bg 2s linear infinite alternate;
+  background: rgba(4, 4, 4, 0.25);
+  backdrop-filter: blur(1rem);
+  -webkit-backdrop-filter: blur(1rem);
 }

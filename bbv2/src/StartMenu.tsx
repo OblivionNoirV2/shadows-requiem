@@ -75,7 +75,7 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start, bossStage }) => {
                     <StartMenuButton
                         text="test"
                         onClick={sfx.playClickSfx}
-                        link='/YouDied'
+                        link='/Victory'
                     />
 
                     <StartMenuButton
@@ -119,7 +119,8 @@ const StartMenu: React.FC<StartMenuProps> = ({ on_start, bossStage }) => {
                         <option
                             selected
                             title='Standard, no changes'
-                            value='normal'>Normal
+                            value='normal'>
+                            Normal
                         </option>
                         <option
                             title='Raises boss attack and defense by 25%'

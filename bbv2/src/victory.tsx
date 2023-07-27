@@ -80,25 +80,30 @@ const VictoryScreen = () => {
             text-8xl mt-2 opacity-80 v-title ">
                 ENEMY DEFEATED
             </h1>
-            {/*score calc here*/}
-            <section className="flex flex-col items-start w-1/4" >
+            {/*score calc here. rainbow bg!*/}
+            <section className="flex flex-col items-start w-1/4 results 
+            text-4xl p-4 mt-12 rounded-xl" >
                 <ul>
-                    <li>
-                        Deaths: {Occurences.get("death")}
-                    </li>
-                    <li>
-                        Items Used: {Occurences.get("item")}
-                    </li>
-                    <li>
-                        Healing spells used: {Occurences.get("heal")}
-                    </li>
-                    <li>
-                        Turns taken: {Occurences.get("turn")}
-                    </li>
-                    <li>
-                        Difficulty Chosen: {DifficultyToText.get(selected_difficulty)}
-                    </li>
-                    <li>
+                    <div className="space-y-12">
+                        <li>
+                            Deaths: {Occurences.get("death")}
+                        </li>
+                        <li>
+                            Items Used: {Occurences.get("item")}
+                        </li>
+                        <li>
+                            Healing spells used: {Occurences.get("heal")}
+                        </li>
+                        <li>
+                            Turns taken: {Occurences.get("turn")}
+                        </li>
+                        <li>
+                            Difficulty Chosen: {DifficultyToText.get(selected_difficulty)}
+                        </li>
+                    </div>
+                    <hr className="mt-8"></hr>
+
+                    <li className="text-6xl mt-4">
                         Final Score: {CalculateScore()}
                     </li>
                 </ul>
