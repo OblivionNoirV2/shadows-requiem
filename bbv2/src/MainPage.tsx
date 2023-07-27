@@ -666,7 +666,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 setRmageMP(parseInt((amount).toFixed(0)))
                 break;
         }
-    }
+    };
     //Pulls from a map of objects like the attacks do 
     //Store the stock in a map
     //type is hp, mp, status. Add it to the dictionairy
@@ -710,8 +710,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             case "status-all":
                 break;
 
-        }
-
+        };
 
 
         console.log("item details", item_details)
@@ -721,7 +720,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             iv.player_inventory.set(item, item_details);
             console.log("updated item", item_details)
         }
-    }
+    };
     //Forces it to wait till the target has been set, eliminating latency issues
     useEffect(() => {
         //Everything must be reset here or it gets all weird and buggy
@@ -733,7 +732,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             setIsItemsActive(false)
             setCurrentItem("")
         }
-    }, [itemTarget])
+    }, [itemTarget]);
 
     function handleMP(attack: string, attack_encyclopedia_entry: number) {
         switch (player) {
@@ -1047,6 +1046,13 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     const { currentAttack, setCurrentAttack } = useContext(CurrentAttackContext);
     const [isUltimaReady, setIsUltimaReady] = useState(false);
 
+    const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
+    const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
+    const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
+    const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
+
+
+
 
     //Manage the turn based system
     //Score will go up by 1 each player turn
@@ -1068,47 +1074,46 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
 
     //assign the correct class name to the status effect
-    function getClassName(status_effect: string): string {
+    function getClassName(status_effect: string): string | void {
+        //no break because these can stack
         switch (status_effect) {
-            case "poison.png":
+            case "poison":
                 return 'w-6 status-icon status-icon-poison';
-            case "curse.png":
+            case "curse":
                 return 'w-6 status-icon status-icon-curse';
-            case "freeze.png":
+            case "freeze":
                 return 'w-6 status-icon status-icon-freeze';
-            default:
-                return '';
         }
     }
     function GetStatusEffectDesc(status_effect: string): string {
         switch (status_effect) {
-            case "poison.png":
+            case "poison":
                 return "Poisoned";
-            case "curse.png":
+            case "curse":
                 return "Cursed";
-            case "freeze.png":
+            case "freeze":
                 return "Frozen";
             default:
                 return '';
         }
     }
 
-    //these will all be state
+    //match it to the image
     function UpdateStatusEffects(player: string) {
         // Map the player to the corresponding status effects array
         let status_effects: string[];
         switch (player) {
-            case "knight":
-                status_effects = [];
+            case "knight": //remember to reset these when they die, lol
+                status_effects = KnightStatus.filter(status => status !== "dead");
                 break;
-            case "dmage":
-                status_effects = []
+            case "dmage"://death and revives are handled seperately 
+                status_effects = DmageStatus.filter(status => status !== "dead");
                 break;
             case "wmage":
-                status_effects = []
+                status_effects = WmageStatus.filter(status => status !== "dead");
                 break;
             case "rmage":
-                status_effects = []
+                status_effects = RmageStatus.filter(status => status !== "dead");
                 break;
             default:
                 status_effects = [];
@@ -1122,9 +1127,9 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                 <ul key={index}>
                     <li>
                         <img
-                            src={require(`./assets/images/icons/${status_effect}`)}
+                            src={require(`./assets/images/icons/${status_effect}.png`)}
                             alt={status_effect}
-                            className={getClassName(status_effect)}
+                            className={getClassName(status_effect)!}
                             title={GetStatusEffectDesc(status_effect)}
                         />
                     </li>
@@ -1233,6 +1238,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         const { WmageName, setWmageName } = useContext(WmageNameContext);
         const { RmageName, setRmageName } = useContext(RmageNameContext);
 
+
         //ts won't cooperate, so we're YOLO-ing it with any
         const MatchToMPState: Map<string, any> = new Map(
             [
@@ -1261,19 +1267,24 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                 ["rmage", RmageName]
             ]
         )
+
         return (
             <>
                 <section className='flex flex-row text-white'>
                     <div className='flex flex-col'>
                         <h1 className='text-xl'>{MatchToName.get(player)}</h1>
                         <br></br>
-                        <h1 className='mr-4 text-xl'>HP</h1>
+                        <div className='flex '>
+                            <h1 className='mr-4 text-xl'>HP</h1>
+                            <ul className='flex flex-row space-x-4'>
+                                {UpdateStatusEffects(player)}
+                            </ul>
+                        </div>
                     </div>
-                    <ul className='flex flex-row space-x-4'>
-                        {UpdateStatusEffects(player)}
-                    </ul>
+
                 </section>
                 <div className='flex flex-row'>
+
 
                     <progress className='p-hp'
                         max={sm[stat_name].get('max_hp')}
@@ -1282,6 +1293,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                         }>
                     </progress>
                     <div className='ml-2 text-xl hp-text'>
+
                         <strong>
                             {
                                 MatchToHPState.get(player) > sm[stat_name].get('max_hp')!
@@ -1323,10 +1335,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         };
     }, []);
 
-    const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
-    const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
-    const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
-    const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
 
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
 
