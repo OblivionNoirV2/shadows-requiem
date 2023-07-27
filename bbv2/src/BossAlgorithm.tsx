@@ -617,7 +617,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         BossRNG(
                             {
                                 current_boss_attack: "Death's Touch",
-                                min: 25,
+                                min: 45, //but lower chance of inflicting status
                                 variance: 1.10,
                                 atk_sfx: "placeholder",
                                 attack_type: "phys"

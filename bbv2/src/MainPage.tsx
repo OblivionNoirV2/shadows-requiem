@@ -179,8 +179,19 @@ export const BossArea: React.FC<BossAreaProps> = ({
             //convert index to names
             boss_return.final_targets.forEach((item: number) => {
                 targets_list.push(IndexToName.get(item))
+            });
+            //for single target attacks
+            const single_target = boss_return.final_targets[boss_return.final_targets.length - 1];
 
-            })
+            function SingleTargetSpecial(percentage: number,
+                single_target: number, effect: string) {
+                if (Percentage() < percentage) {
+                    const setTarget = PlayerSetStatuses.get(single_target);
+                    if (!PlayerStatuses.get(single_target)!.includes(effect)) {
+                        setTarget!(prevStatus => [...prevStatus, effect])
+                    }
+                }
+            };
             //from here on we're using indexes
             switch (boss_return.last_boss_attacks[last_boss_attacks.length - 1]) {
                 case "Devourment":
@@ -192,24 +203,36 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
                     break;
                 case "Frozen Soul":
+                    SingleTargetSpecial(
+                        .25,
+                        single_target,
+                        "freeze"
+                    )
+                    break;
+                case "Unending Grudge":
+                    SingleTargetSpecial(
+                        .25,
+                        single_target,
+                        "poison"
+                    )
+                    break;
+                case "Death's Touch":
+                    SingleTargetSpecial(
+                        .15,
+                        single_target,
+                        "curse"
+                    )
+                    break;
+                case "Unholy Symphony": //this uses foreach since it's multi-target
                     boss_return.final_targets.forEach((target: number) => {
-                        if (Percentage() < 0.25) {
-                            //apply freeze to the target
+                        if (Percentage() < 0.33) {
+                            //apply curse to the target
                             const setTarget = PlayerSetStatuses.get(target)
-                            if (!PlayerStatuses.get(target)!.includes("freeze")) {
-                                setTarget!(prevStatus => [...prevStatus, "freeze"])
+                            if (!PlayerStatuses.get(target)!.includes("curse")) {
+                                setTarget!(prevStatus => [...prevStatus, "curse"])
                             }
                         }
                     })
-
-                    break;
-                case "Unending Grudge":
-                    //chance of poison
-                    break;
-                case "Death's Touch":
-                    //chance of curse
-                    break;
-                case "Unholy Symphony"://chance of curse to all
                     break;
                 default:
                     console.log("no special attacks used")
