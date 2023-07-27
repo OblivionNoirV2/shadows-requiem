@@ -50,6 +50,7 @@ import dead_icon from './assets/images/icons/dead.png';
 import { prev_dmg } from './BossAlgorithm';
 import { Occurences } from './victory';
 import heartbeat from './assets/sound/sfx/heartbeatlouder.wav';
+import { kill } from 'process';
 
 
 interface MenuProps {
@@ -109,7 +110,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
 
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
-    //match returned target to their statuses
+    //match returned target to their statuses, for status effects
     const IndexToStatus: Map<number, string[]> = new Map(
         [
 
@@ -176,32 +177,45 @@ export const BossArea: React.FC<BossAreaProps> = ({
         }
     }, [TurnNumber]);
 
+    const PlayerStatuses: Map<string, string[]> = new Map
+        (
+            [
+                ["knight", KnightStatus],
+                ["dmage", DmageStatus],
+                ["wmage", WmageStatus],
+                ["rmage", RmageStatus]
+            ]
+        )
+    const PlayerSetStatuses: Map<string,
+        React.Dispatch<React.SetStateAction<string[]>>> = new Map
+            (
+                [
+                    ["knight", setKnightStatus],
+                    ["dmage", setDmageStatus],
+                    ["wmage", setWmageStatus],
+                    ["rmage", setRmageStatus]
+                ]
+            )
 
 
-    //control dead status
+    //control dead and revive status
     function HandleDeath(character: string, killed_or_revived: string) {
-        switch (character) {
-            case "knight":
-                if (killed_or_revived === "killed") {
-                    //check that dead isn't already in it
-                    //if it is, no need to do anything
-                    if (!KnightStatus.includes("dead")) {
-                        setKnightStatus(prev => [...prev, "dead"])
-                        //for future score
-                        Occurences.set("deaths", (Occurences.get("deaths")! + 1))
-                    }
-                } else {
-                    setKnightStatus(prevKnightStatus =>
-                        //remove the status if they are revived
-                        prevKnightStatus.filter(
-                            status => status !== "dead"))
-                }
-                console.log("status", KnightStatus)
-                break;
+        const setStatus = PlayerSetStatuses.get(character);
+        const status = PlayerStatuses.get(character);
 
-            case "dmage":
+        if (killed_or_revived === "killed") {
+            if (!status!.includes("dead")) {
+                setStatus!(prev => [...prev, "dead"]);
+                Occurences.set("death", (Occurences.get("death")! + 1));
+            }
+        } else {
+            //remove dead, since this means they were revived
+            setStatus!(prevStatus => prevStatus.filter(status => status !== "dead"));
         }
+
+        console.log(`${character} status`, status);
     }
+
     //keep track of the last hp. If it was previously 0 then it changes, 
     //it's a revive because dead characters do not get targeted in any way
     //except for revives
@@ -225,7 +239,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     }, [sm.knight_stats.get("hp")])
 
     useEffect(() => {
-        if (lastKnightHP === 0) {
+        if (lastKnightHP === 0 && KnightHP! > 0) {
             HandleDeath("knight", "revived");
         }
 
@@ -256,7 +270,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     }, [sm.dmage_stats.get("hp")])
 
     useEffect(() => {
-        if (lastDmageHP === 0) {
+        if (lastDmageHP === 0 && DmageHP! > 0) {
             HandleDeath("dmage", "revived");
         }
     }, [lastDmageHP])
@@ -285,7 +299,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     }, [sm.wmage_stats.get("hp")])
 
     useEffect(() => {
-        if (lastWmageHP === 0) {
+        if (lastWmageHP === 0 && WmageHP! > 0) {
             HandleDeath("wmage", "revived");
         }
     }, [lastWmageHP])
@@ -315,7 +329,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     }, [sm.rmage_stats.get("hp")])
 
     useEffect(() => {
-        if (lastRmageHP === 0) {
+        if (lastRmageHP === 0 && RmageHP! > 0) {
             HandleDeath("rmage", "revived");
         }
     }, [lastRmageHP])
