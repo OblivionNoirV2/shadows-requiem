@@ -51,6 +51,7 @@ import { prev_dmg } from './BossAlgorithm';
 import { Occurences } from './victory';
 import heartbeat from './assets/sound/sfx/heartbeatlouder.wav';
 import { Percentage } from './BossAlgorithm';
+import { NameToIndex } from './BossAlgorithm';
 
 
 interface MenuProps {
@@ -83,7 +84,7 @@ let hb = new Audio(heartbeat)
 
 
 
-
+let targets_list = []
 export const BossArea: React.FC<BossAreaProps> = ({
     selectedCharacter, setSelectedCharacter, bossStage, setBossStage }) => {
     //just in case
@@ -124,6 +125,23 @@ export const BossArea: React.FC<BossAreaProps> = ({
             [3, RmageStatus]
         ]
     )
+    const IndexToSetStatus: Map<number, React.Dispatch<SetStateAction<string[]>>> = new Map
+        (
+            [
+                [0, setKnightStatus],
+                [1, setDmageStatus],
+                [2, setWmageStatus],
+                [3, setRmageStatus]
+            ]
+        )
+
+    const IndexToName: Map<number, string> = new Map(
+        [
+            [0, "knight"],
+            [1, "dmage"],
+            [2, "wmage"],
+            [3, "rmage"]
+        ])
     //lock player menus while boss is attacking
     useEffect(() => {
         //if it's an even turn, the boss attacks
@@ -158,6 +176,12 @@ export const BossArea: React.FC<BossAreaProps> = ({
             console.log("last attacks", boss_return.last_boss_attacks[last_boss_attacks.length - 1])
             //this is by index
             console.log("final targets", boss_return.final_targets)
+            //convert index to names
+            boss_return.final_targets.forEach((item: number) => {
+                targets_list.push(IndexToName.get(item))
+
+            })
+            //from here on we're using indexes
             switch (boss_return.last_boss_attacks[last_boss_attacks.length - 1]) {
                 case "Devourment":
                     //heal boss by prev dmg * 2
@@ -168,10 +192,16 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
                     break;
                 case "Frozen Soul":
-                    if (Percentage() < 0.25) {
+                    boss_return.final_targets.forEach((target: number) => {
+                        if (Percentage() < 0.25) {
+                            //apply freeze to the target
+                            const setTarget = PlayerSetStatuses.get(target)
+                            if (!PlayerStatuses.get(target)!.includes("freeze")) {
+                                setTarget!(prevStatus => [...prevStatus, "freeze"])
+                            }
+                        }
+                    })
 
-
-                    }
                     break;
                 case "Unending Grudge":
                     //chance of poison
@@ -188,31 +218,32 @@ export const BossArea: React.FC<BossAreaProps> = ({
         }
     }, [TurnNumber]);
 
-    const PlayerStatuses: Map<string, string[]> = new Map
+    const PlayerStatuses: Map<number, string[]> = new Map
         (
             [
-                ["knight", KnightStatus],
-                ["dmage", DmageStatus],
-                ["wmage", WmageStatus],
-                ["rmage", RmageStatus]
+                [0, KnightStatus],
+                [1, DmageStatus],
+                [2, WmageStatus],
+                [3, RmageStatus]
             ]
         )
-    const PlayerSetStatuses: Map<string,
+    const PlayerSetStatuses: Map<number,
         React.Dispatch<React.SetStateAction<string[]>>> = new Map
             (
                 [
-                    ["knight", setKnightStatus],
-                    ["dmage", setDmageStatus],
-                    ["wmage", setWmageStatus],
-                    ["rmage", setRmageStatus]
+                    [0, setKnightStatus],
+                    [1, setDmageStatus],
+                    [2, setWmageStatus],
+                    [3, setRmageStatus]
                 ]
             )
 
 
     //control dead and revive status
     function HandleDeath(character: string, killed_or_revived: string) {
-        const setStatus = PlayerSetStatuses.get(character);
-        const status = PlayerStatuses.get(character);
+        const char_index = NameToIndex.get(character)!
+        const setStatus = PlayerSetStatuses.get(char_index);
+        const status = PlayerStatuses.get(char_index);
 
         if (killed_or_revived === "killed") {
             if (!status!.includes("dead")) {
@@ -223,7 +254,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
             //remove dead, since this means they were revived
             setStatus!(prevStatus => prevStatus.filter(status => status !== "dead"));
         }
-
         console.log(`${character} status`, status);
     }
 
@@ -646,7 +676,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 MpFunction(target, MatchToMpMap.get(target)!)
                 break;
             case "revive":
-                //revive and heal by the amount
+                //Revival is already set to happen auto so just heal
                 break;
             case "de-toxin":
                 break;

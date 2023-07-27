@@ -47,7 +47,15 @@ interface BossAttackProps {
 let potential_targets: string[] = [];
 let boss_atk_message: string = "";
 let current_char: string;
+export const NameToIndex: Map<string, number> = new Map(
+    [
+        ["knight", 0],
+        ["dmage", 1],
+        ["wmage", 2],
+        ["rmage", 3]
 
+    ]
+)
 //use this to ensure a gap between unholy symphonys
 //If the list count gets to 10, he uses it then it resets
 //Also use this for My Turn
@@ -67,6 +75,7 @@ export function Percentage() {
 export let prev_dmg: number[] = [];
 let chosen_target: string;
 export function bossAttackAlgo(attackProps: BossAttackProps) {
+    let final_targets: number[] = []
     potential_targets = [];
 
     console.log("attackProps", attackProps)
@@ -690,12 +699,19 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             break;
     }
 
+
     chosen_num = GetRandomNumber(attacks_grab_bag);
     console.log("chosen_num", chosen_num)
     attack_nums.get(chosen_num);
     boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
     console.log("potential targets", potential_targets)
-    let final_targets = secondary_targets.push(chosen_target)
+    secondary_targets.push(chosen_target)
+    //convert to indexes 
+    secondary_targets.forEach(element => {
+        final_targets.push(NameToIndex.get(element)!)
+
+    });
+
 
     return {
         last_boss_attacks,
