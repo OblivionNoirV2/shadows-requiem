@@ -711,7 +711,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 //remove curse status
                 RemoveStatus(target, "curse");
                 break;
-            case "de-freeze":
+            case "de-frost":
                 //remove freeze status
                 RemoveStatus(target, "freeze")
                 break;
@@ -728,6 +728,26 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             console.log("updated item", item_details)
         }
     };
+    //change "freeze" to "frozen", etc for proper formatting
+    const FixMessage: Map<string, string> = new Map(
+        [
+            ["freeze", "frozen"],
+            ["poison", "poisoned"],
+            ["curse", "cursed"]
+
+        ]
+    );
+    function CheckStatusEffectValidity(effect: string, target: string, status: string) {
+        if (iv.player_inventory.get(currentItem)!.type === effect
+            && !TargetToStatus.get(target)!.includes(status)) {
+            setMessage(`This character is not ${FixMessage.get(status)}!`);
+
+            ShowMessage();
+            return true;
+        } else {
+            return false;
+        }
+    }
     //Forces it to wait till the target has been set, eliminating latency issues
     useEffect(() => {
         //Everything must be reset here or it gets all weird and buggy
@@ -753,7 +773,16 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                     setMessage("This character is already at max MP!");
                     ShowMessage();
                     break;
-                default:
+                //curse
+                case CheckStatusEffectValidity("de-curse", itemTarget, "curse"):
+                    break;
+                //freeze
+                case CheckStatusEffectValidity("de-frost", itemTarget, "freeze"):
+                    break;
+                //poison
+                case CheckStatusEffectValidity("poison", itemTarget, "poison"):
+                    break;
+                default: //if it reaches here, it is VALID
                     UseItem(currentItem, itemTarget!)
                     setIsSecondaryItemMenuShown(false)
                     setItemTarget(undefined)

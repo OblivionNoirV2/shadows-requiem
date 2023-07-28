@@ -11,3 +11,5 @@ Do stat buffs/debuff reversion gradually. Like it checks if anything is abnormal
 
 For status effects, they’re there for a set amount of turns unless an item is used.
 need to remove dead people from item targets
+
+add glow borders to status effects
