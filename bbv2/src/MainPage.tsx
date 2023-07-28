@@ -591,48 +591,43 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         if (iv.player_inventory.get(e)!.stock <= 0) {
             setMessage("Not enough stock!");
             setIsAttackMade(true)
-            //just shows the message
-            setTimeout(() => {
-                setIsAttackMade(false);
-            }, 1000)
+            ShowMessage()
         } else {
             setIsSecondaryItemMenuShown(true)
             setCurrentItem(e);
         }
     }
-    //sets hp with items
+
+    const MatchToHpSetState: Map<string, (value: number) => void> = new Map
+        (
+            [
+                ["knight", setKnightHP],
+                ["dmage", setDmageHP],
+                ["wmage", setWmageHP],
+                ["rmage", setRmageHP]
+
+            ]
+        );
+
+    const MatchToMpSetState: Map<string, (value: number) => void> = new Map
+        (
+            [
+                ["knight", setKnightMP],
+                ["dmage", setDmageMP],
+                ["wmage", setWmageMP],
+                ["rmage", setRmageMP]
+            ]
+        );
+
+    //sets hp/mp with items
     function HpFunction(target: string, amount: number) {
-        switch (target) {
-            case "knight":
-                setKnightHP(parseInt((amount).toFixed(0)))
-                break;
-            case "dmage":
-                setDmageHP(parseInt((amount).toFixed(0)))
-                break;
-            case "wmage":
-                setWmageHP(parseInt((amount).toFixed(0)))
-                break;
-            case "rmage":
-                setRmageHP(parseInt((amount).toFixed(0)))
-                break;
-        }
+        const set_hp = MatchToHpSetState.get(target)!;
+        set_hp(parseInt((amount).toFixed(0)));
     }
 
     function MpFunction(target: string, amount: number) {
-        switch (target) {
-            case "knight":
-                setKnightMP(parseInt((amount).toFixed(0)))
-                break;
-            case "dmage":
-                setDmageMP(parseInt((amount).toFixed(0)))
-                break;
-            case "wmage":
-                setWmageMP(parseInt((amount).toFixed(0)))
-                break;
-            case "rmage":
-                setRmageMP(parseInt((amount).toFixed(0)))
-                break;
-        }
+        const set_mp = MatchToMpSetState.get(target)!;
+        set_mp(parseInt((amount).toFixed(0)));
     };
 
     function ShowMessage() {

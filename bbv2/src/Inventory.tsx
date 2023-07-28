@@ -157,14 +157,14 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         ],
         [
             "De-toxin", {
-                description: "Cures poison for one character.",
+                description: "Cures Poison for one character.",
                 stock: 5,
                 type: "de-toxin"
             }
         ],
         [
             "De-frost", {
-                description: "Cures freeze for one character.",
+                description: "Cures Freeze for one character.",
                 stock: 5,
                 type: "de-frost"
             }
