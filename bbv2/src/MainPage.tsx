@@ -510,16 +510,17 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { WmageHP, setWmageHP } = useContext(WmageHPContext);
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
 
-    const { KnightName } = useContext(KnightNameContext)
-    const { DmageName } = useContext(DmageNameContext)
-    const { WmageName } = useContext(WmageNameContext)
-    const { RmageName } = useContext(RmageNameContext)
+    const { KnightName } = useContext(KnightNameContext);
+    const { DmageName } = useContext(DmageNameContext);
+    const { WmageName } = useContext(WmageNameContext);
+    const { RmageName } = useContext(RmageNameContext);
 
 
     const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
     const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
     const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
+
 
     const MatchToHpMap: Map<string, number | undefined> = new Map([
         ["knight", KnightHP],
@@ -540,8 +541,11 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         console.log("AA: " + isAttacksActive);
     }
 
-    //doubles defense for 3 turns
-    function HandleDefend(player: string) {
+
+    //doubles defense (to a max of whatever that character's max is), 
+    //degrades over 3 turns back to normal
+    function HandleDefend(player: string, current_turn: number) {
+
 
 
     }
@@ -633,17 +637,28 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const TargetToStatus: Map<string, string[]> = new Map
         (
             [
-
+                ["knight", KnightStatus],
+                ["dmage", DmageStatus],
+                ["wmage", WmageStatus],
+                ["rmage", RmageStatus]
             ]
         )
+
+    function ShowMessage() {
+        setIsAttackMade(true)
+        setTimeout(() => {
+            setIsAttackMade(false);
+        }, 1000)
+    }
+    function RemoveStatus(target: string, status_removed: string) {
+        TargetToStatus.set(target,
+            TargetToStatus.get(target)!.filter(
+                status => status !== status_removed))
+    }
     //Pulls from a map of objects like the attacks do 
     //Store the stock in a map
     //type is hp, mp, status. Add it to the dictionairy
     function UseItem(item: string, target: string) {
-        //Need to do the stat changes from the items HERE
-        //have the function return whatever it's healing
-        //Use the item encyclopedia to check what to do with 
-        //the returned number 
         const item_details = iv.player_inventory.get(item);
         //for future score
         Occurences.set("item", (Occurences.get("item")! + 1))
@@ -655,32 +670,45 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         //Need to set the mp/hp maps too for consistency
 
         //if a useless item is attempted, a notice will pop up.
+        //this needs to happen before inventory subtraction
         switch (item_details!.type) {
             case "hp"://set to the current + the max * healing factor (such as .33)
                 MatchToHpMap.set(target, (MatchToHpMap.get(target)!) +
-                    (MatchToMaxHpMap.get(target)! * item_details!.amount!))
-                HpFunction(target, (MatchToHpMap.get(target)!))
+                    (MatchToMaxHpMap.get(target)! * item_details!.amount!));
+                HpFunction(target, (MatchToHpMap.get(target)!));
                 break;
             case "mp":
                 MatchToMpMap.set(target, MatchToMpMap.get(target)! +
-                    (MatchToMaxMpMap.get(target)! * item_details!.amount!))
-                MpFunction(target, MatchToMpMap.get(target)!)
+                    (MatchToMaxMpMap.get(target)! * item_details!.amount!));
+                MpFunction(target, MatchToMpMap.get(target)!);
                 break;
             case "revive":
+                //remove dead status
+                RemoveStatus(target, "dead");
+                //then heal depending on revive type(the given amount in details)
+                MatchToHpMap.set(target, (MatchToHpMap.get(target)!) +
+                    (MatchToMaxHpMap.get(target)! * item_details!.amount!));
+                HpFunction(target, (MatchToHpMap.get(target)!));
                 break;
             case "de-toxin":
+                //remove poison status
+                RemoveStatus(target, "poison");
                 break;
             case "de-curse":
+                //remove curse status
+                RemoveStatus(target, "curse");
                 break;
             case "de-freeze":
+                //remove freeze status
+                RemoveStatus(target, "freeze")
                 break;
             case "status-all":
+                //if it reaches this point the character 
+                //is not dead, so clear the list 
+                TargetToStatus.set(target, [])
                 break;
-
         };
-
         console.log("item details", item_details)
-        //update stock
         if (item_details) {
             item_details.stock -= 1;
             iv.player_inventory.set(item, item_details);
@@ -691,7 +719,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     useEffect(() => {
         //Everything must be reset here or it gets all weird and buggy
         if (itemTarget !== undefined) {
-
             UseItem(currentItem, itemTarget!)
             setIsSecondaryItemMenuShown(false)
             setItemTarget(undefined)
@@ -835,7 +862,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                             </div>
                             {isItemsActive ? null :
                                 <li>
-                                    <button onClick={() => { HandleDefend(player); sfx.playClickSfx() }} >
+                                    <button onClick={() => { HandleDefend(player, TurnNumber); sfx.playClickSfx() }} >
                                         Defend
                                     </button>
                                 </li>
@@ -865,11 +892,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                 if (attack == "Border Of Life") {
                                                     if (attack_encyclopedia_entry! > hp_map_value!) {
                                                         setMessage("Not enough HP!");
-                                                        //Just makes the message appear
-                                                        setIsAttackMade(true)
-                                                        setTimeout(() => {
-                                                            setIsAttackMade(false);
-                                                        }, 1000)
+                                                        ShowMessage()
                                                     } else {
                                                         handleMP(attack, attack_encyclopedia_entry!)
 
@@ -878,11 +901,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                 } else {
                                                     if (attack_encyclopedia_entry! > mp_map_value!) {
                                                         setMessage("Not enough MP!");
-                                                        //Just makes the message appear
-                                                        setIsAttackMade(true)
-                                                        setTimeout(() => {
-                                                            setIsAttackMade(false);
-                                                        }, 1000)
+                                                        ShowMessage()
                                                     } else {
                                                         handleMP(attack, attack_encyclopedia_entry!)
 
@@ -1085,8 +1104,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                 status_effects = [];
                 break;
         }
-
-
         //Render the status effects
         return (
             status_effects.map((status_effect, index) => (
