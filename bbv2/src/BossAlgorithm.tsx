@@ -9,7 +9,13 @@ import {
 import { useState, useEffect, useContext } from 'react';
 import * as sfx from './sfxManagement';
 import { min_max_vals_map } from './StatManagement';
-import { BossAttackingContext } from './Context';
+import {
+    BossAttackingContext,
+    KnightNameContext,
+    DmageNameContext,
+    WmageNameContext,
+    RmageNameContext
+} from './Context';
 //adds a multiplier or divider, depending
 import { selected_difficulty } from './StartMenu';
 
@@ -712,7 +718,6 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     });
 
-
     return {
         last_boss_attacks,
         final_targets
@@ -742,39 +747,24 @@ const attack_nums: Map<number, string> = new Map(
 );
 
 
-
-//probably don't need these 
-const boss_attacks: string[] = [
-    'Shadow Blade', //standard atk, med phys
-    'Spheres of Madness', //low mag dmg, hits all allies
-    "Devourment", //Heavy phys, heals boss by damage dealt
-    "Disintegration", //med phys dmg, Med chance to lower phys def
-    "Soul Crusher", //med mag dmg, med chance to lower mag def
-
-]
-//2 and 3 are just what gets added into it each phase
-//He starts uying status effects in phase 2 
-const phase2_attacks: string[] = [
-    "Inversion" /*Flips everyone's hp and mp 
-    (Does not raise mp, only sets hp to whatever the mp value is) 
-    //He will only use this if everyon's mp is lower than their hp
-    */,
-    "Frozen Soul", //chance of freeze
-    "Unending Grudge", //chance of poison,
-
-]
-
-const phase3_attacks: string[] = [
-    "Unholy Symphony",/*his ultimate, 
-    ignores defenses, high damage to all, chance of curse*/
-    "Death's Touch", //chance of curse
-    "Chaos Blade" //very heavy single target
-
-]
 export const BossAttackArea: React.FC = () => {
     const [isBossAttackShown, setIsBossAttackShown] = useState(false);
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
 
+    const { KnightName } = useContext(KnightNameContext);
+    const { DmageName } = useContext(DmageNameContext);
+    const { WmageName } = useContext(WmageNameContext);
+    const { RmageName } = useContext(RmageNameContext);
+
+    //match targeted character to the chosen name
+    const CharToName: Map<string, string> = new Map(
+        [
+            ["knight", KnightName],
+            ["dmage", DmageName],
+            ["wmage", WmageName],
+            ["rmage", RmageName]
+        ]
+    )
     //Change the image whenver the attack changes
     useEffect(() => {
         setIsBossAttackShown(true);
@@ -786,14 +776,16 @@ export const BossAttackArea: React.FC = () => {
         console.log("current_boss_attack", current_boss_attack)
     }, [current_boss_attack]);
 
+
     //use name state here and customize the message accordingly 
     return (
         <section className='max-w-[32rem] absolute top-40 z-50  border-red-700'>
+
             {isBossAttackShown &&
                 <>
                     <h1 className='text-7xl text-white'>
                         {boss_atk_message === 'evaded' ?
-                            `${current_char} evaded` :
+                            `${CharToName.get(current_char)} evaded` :
                             boss_atk_message}
                     </h1>
 

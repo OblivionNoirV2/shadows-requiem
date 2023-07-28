@@ -629,6 +629,13 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 break;
         }
     };
+    //to check for invalid item usage
+    const TargetToStatus: Map<string, string[]> = new Map
+        (
+            [
+
+            ]
+        )
     //Pulls from a map of objects like the attacks do 
     //Store the stock in a map
     //type is hp, mp, status. Add it to the dictionairy
@@ -642,13 +649,12 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         Occurences.set("item", (Occurences.get("item")! + 1))
         console.log("item", item)
         console.log("target", target)
-        //sm.dmage_stats.set("mp", sm.dmage_stats.get("mp")! - 100)
-        //setDmageMP(DmageMP! * item_details?.amount!)
         //use the return value to determine what happens
         //number means it heals hp or mp. string means 
         //it heals a status, string will specify which status
         //Need to set the mp/hp maps too for consistency
 
+        //if a useless item is attempted, a notice will pop up.
         switch (item_details!.type) {
             case "hp"://set to the current + the max * healing factor (such as .33)
                 MatchToHpMap.set(target, (MatchToHpMap.get(target)!) +
@@ -660,8 +666,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                     (MatchToMaxMpMap.get(target)! * item_details!.amount!))
                 MpFunction(target, MatchToMpMap.get(target)!)
                 break;
-            case "revive": //only dead characters should show in menu.
-                //if a useless item is attempted, a notice will pop up.
+            case "revive":
                 break;
             case "de-toxin":
                 break;
