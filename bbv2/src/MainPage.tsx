@@ -585,6 +585,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [itemTarget, setItemTarget] = useState<validItemTargets>()
     const [currentItem, setCurrentItem] = useState("")
 
+
     function HandleItemChange(e: string) {
         console.log(iv.player_inventory.get(e))
         if (iv.player_inventory.get(e)!.stock <= 0) {
@@ -633,7 +634,14 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 break;
         }
     };
-    //to check for invalid item usage
+
+    function ShowMessage() {
+        setIsAttackMade(true)
+        setTimeout(() => {
+            setIsAttackMade(false);
+        }, 1000)
+    }
+    //to filter out what no longer belongs + check for usage validity
     const TargetToStatus: Map<string, string[]> = new Map
         (
             [
@@ -644,17 +652,21 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             ]
         )
 
-    function ShowMessage() {
-        setIsAttackMade(true)
-        setTimeout(() => {
-            setIsAttackMade(false);
-        }, 1000)
-    }
+    const TargetToSetStatus: Map<string, React.Dispatch<SetStateAction<string[]>>> = new Map
+        (
+            [
+                ["knight", setKnightStatus],
+                ["dmage", setDmageStatus],
+                ["wmage", setWmageStatus],
+                ["rmage", setRmageStatus]
+            ]
+        )
     function RemoveStatus(target: string, status_removed: string) {
-        TargetToStatus.set(target,
-            TargetToStatus.get(target)!.filter(
-                status => status !== status_removed))
+        const set_status = TargetToSetStatus.get(target)!;
+        set_status(TargetToStatus.get(target)!.filter(
+            status => status !== status_removed));
     }
+
     //Pulls from a map of objects like the attacks do 
     //Store the stock in a map
     //type is hp, mp, status. Add it to the dictionairy
@@ -685,6 +697,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             case "revive":
                 //remove dead status
                 RemoveStatus(target, "dead");
+                console.log("knight status", KnightStatus)
                 //then heal depending on revive type(the given amount in details)
                 MatchToHpMap.set(target, (MatchToHpMap.get(target)!) +
                     (MatchToMaxHpMap.get(target)! * item_details!.amount!));
@@ -719,11 +732,35 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     useEffect(() => {
         //Everything must be reset here or it gets all weird and buggy
         if (itemTarget !== undefined) {
-            UseItem(currentItem, itemTarget!)
-            setIsSecondaryItemMenuShown(false)
-            setItemTarget(undefined)
-            setIsItemsActive(false)
-            setCurrentItem("")
+            //check for validity here, these are all INVALID. 
+            ///Default is if it passes the test
+            switch (true) {
+                //revives
+                case iv.player_inventory.get(currentItem)!.type === "revive"
+                    && !TargetToStatus.get(itemTarget)!.includes("dead"):
+                    setMessage("This character is not dead!");
+                    ShowMessage();
+                    break;
+                //hp items
+                case iv.player_inventory.get(currentItem)!.type === "hp"
+                    && MatchToHpMap.get(itemTarget)! >= MatchToMaxHpMap.get(itemTarget)!:
+                    setMessage("This character is already at max HP!");
+                    ShowMessage();
+                    break;
+                //mp items
+                case iv.player_inventory.get(currentItem)!.type === "mp"
+                    && MatchToMpMap.get(itemTarget)! >= MatchToMaxMpMap.get(itemTarget)!:
+                    setMessage("This character is already at max MP!");
+                    ShowMessage();
+                    break;
+                default:
+                    UseItem(currentItem, itemTarget!)
+                    setIsSecondaryItemMenuShown(false)
+                    setItemTarget(undefined)
+                    setIsItemsActive(false)
+                    setCurrentItem("")
+                    break;
+            }
         }
     }, [itemTarget]);
 
