@@ -280,14 +280,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
         console.log(`${character} status`, status);
     }
 
-    //keep track of the last hp. If it was previously 0 then it changes, 
-    //it's a revive because dead characters do not get targeted in any way
-    //except for revives
-    const [lastKnightHP, setLastKnightHP] = useState<number>();
-    const [lastDmageHP, setLastDmageHP] = useState<number>();
-    const [lastWmageHP, setLastWmageHP] = useState<number>();
-    const [lastRmageHP, setLastRmageHP] = useState<number>();
-
     useEffect(() => {
         let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0));
         if (khp <= 0) {
@@ -298,16 +290,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
             setKnightHP(khp);
         }
 
-        setLastKnightHP(khp);
-
     }, [sm.knight_stats.get("hp")])
+    //revives will have to be seperate, otherwise it just immediately reverts
 
-    useEffect(() => {
-        if (lastKnightHP === 0 && KnightHP! > 0) {
-            HandleDeath("knight", "revived");
-        }
-
-    }, [lastKnightHP])
 
 
     useEffect(() => {
@@ -329,15 +314,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
         } else {
             setDmageHP(dhp)
         }
-
-        setLastDmageHP(dhp);
     }, [sm.dmage_stats.get("hp")])
 
-    useEffect(() => {
-        if (lastDmageHP === 0 && DmageHP! > 0) {
-            HandleDeath("dmage", "revived");
-        }
-    }, [lastDmageHP])
 
 
     useEffect(() => {
@@ -358,15 +336,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
         } else {
             setWmageHP(whp);
         }
-        setLastWmageHP(whp)
 
     }, [sm.wmage_stats.get("hp")])
-
-    useEffect(() => {
-        if (lastWmageHP === 0 && WmageHP! > 0) {
-            HandleDeath("wmage", "revived");
-        }
-    }, [lastWmageHP])
 
 
     useEffect(() => {
@@ -375,9 +346,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             setWmageMP(0);
         } else {
             setWmageMP(wmp);
-
         }
-
     }, [sm.wmage_stats.get("mp")])
 
     useEffect(() => {
@@ -387,16 +356,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
             HandleDeath("rmage", "killed");
         } else {
             setRmageHP(rhp);
-
         }
-        setLastRmageHP(rhp)
     }, [sm.rmage_stats.get("hp")])
 
-    useEffect(() => {
-        if (lastRmageHP === 0 && RmageHP! > 0) {
-            HandleDeath("rmage", "revived");
-        }
-    }, [lastRmageHP])
 
     useEffect(() => {
         let rmp = parseInt(sm.rmage_stats.get("mp")!.toFixed(0));
@@ -698,8 +660,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                     (MatchToMaxMpMap.get(target)! * item_details!.amount!))
                 MpFunction(target, MatchToMpMap.get(target)!)
                 break;
-            case "revive":
-                //Revival is already set to happen auto so just heal
+            case "revive": //only dead characters should show in menu.
+                //if a useless item is attempted, a notice will pop up.
                 break;
             case "de-toxin":
                 break;
@@ -711,7 +673,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 break;
 
         };
-
 
         console.log("item details", item_details)
         //update stock

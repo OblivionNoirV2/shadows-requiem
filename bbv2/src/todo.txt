@@ -10,3 +10,4 @@ do something like isscreendark but permanent for phase 3
 Do stat buffs/debuff reversion gradually. Like it checks if anything is abnormal every turn, and it bumps it up or down accordingly
 
 For status effects, they’re there for a set amount of turns unless an item is used.
+need to remove dead people from item targets
