@@ -178,7 +178,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         ],
         [
             "Magic Leaf", {
-                description: "Removes all status effects from one character.",
+                description: "Removes all status effects (aside from Death) from one character.",
                 stock: 3,
                 type: "status-all"
             }

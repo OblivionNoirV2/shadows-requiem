@@ -5,21 +5,26 @@ import * as e from './Encyclopedia';
 import * as iv from './Inventory';
 import paperbg from './assets/images/bg-and-effects/paper.png';
 import { playClickSfx } from "./sfxManagement";
+import * as sm from "./StatManagement";
 
 const AttackingDesc = () => {
     return (
         <p className="text-2xl my-2 leading-relaxed">
-            This game uses a combination of turn-based and real-time combat.
-            Anytime you perform an action, it switches to the enemy, then back to you, and so forth, but
-            status changes (such as status ailments or buffs/debuffs) happen in real time. so don't just sit there
-            and do nothing! Most attacks consume MP,
+            This game is turn based, heavily inspired by classic JRPGs such as Chrono Trigger or Final Fantasy.
+            Most attacks consume MP,
             and the amount is indicated next to the attack name.
             Each character also has an Ultima,
             which are extremely powerful attacks unlocked when the
-            progress bar is full. It charges a little every turn.
+            progress bar is full. It charges a little every turn. You also have items.
+            More on that below.
         </p>
 
     )
+
+}
+//show the stats for each character
+//put this under defending
+const CharacterStats = () => {
 
 }
 interface AttacksComponentProps {
@@ -143,7 +148,8 @@ const EncylopediaPage = () => {
                 </h1>
                 <hr></hr>
                 <p className="text-2xl mt-2">
-                    Items are in limited stock, but use no MP. They do use a turn and can be used on any character.
+                    Items are in limited stock, but use no MP.
+                    They do not use a turn and can be used on any character.
                 </p>
                 <hr className="my-2"></hr>
                 <ItemComponent />
