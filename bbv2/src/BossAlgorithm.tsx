@@ -18,6 +18,8 @@ import {
 } from './Context';
 //adds a multiplier or divider, depending
 import { selected_difficulty } from './StartMenu';
+import anime from 'animejs/lib/anime.es.js'
+import { transform } from 'typescript';
 
 
 //This is going to work exactly the same as the player side, 
@@ -776,6 +778,23 @@ export const BossAttackArea: React.FC = () => {
         console.log("current_boss_attack", current_boss_attack)
     }, [current_boss_attack]);
 
+    const BossAttackAnimation = () => {
+        anime({
+            targets: '.boss-attack',
+            scale: 1.2,
+            duration: 2000,
+            opacity: 0.5,
+            easing: 'linear'
+        });
+    };
+
+    useEffect(() => {
+        if (isBossAttackShown) {
+            BossAttackAnimation();
+        }
+    }, [isBossAttackShown]);
+
+
 
     //use name state here and customize the message accordingly 
     return (
@@ -788,12 +807,18 @@ export const BossAttackArea: React.FC = () => {
                             `${CharToName.get(current_char)} evaded` :
                             boss_atk_message}
                     </h1>
-                    <img className='z-50 mt-72 mr-64'
+                    <img className={
+                        isBossAttackShown ?
+                            'z-50 mt-72 mr-64 boss-attack rounded-xl' :
+                            'z-50 mt-72 mr-64 rounded-xl'
+                    }
                         src={
                             require(`./assets/images/boss/attacks/${current_boss_attack}.png`)}>
                     </img>
                 </>
             }
+            <script src='anime.min.js'></script>
         </section>
     )
 }
+
