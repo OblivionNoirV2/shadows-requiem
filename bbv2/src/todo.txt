@@ -13,3 +13,5 @@ For status effects, they’re there for a set amount of turns unless an item is 
 need to remove dead people from item targets
 
 add glow borders to status effects
+
+not sure why ultima isn't glowing like it should

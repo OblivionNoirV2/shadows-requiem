@@ -189,15 +189,47 @@ body {
 }
 
 .status-icon-poison {
-  box-shadow: -.05rem -.05rem .05rem rgb(56, 173, 2);
+  animation: poison-ani 4s ease-in-out infinite alternate;
 }
 
 .status-icon-curse {
-  box-shadow: -.05rem -.05rem .05rem rgb(136, 8, 8);
+  animation: curse-ani 4s ease-in-out infinite alternate;
 }
 
 .status-icon-freeze {
-  box-shadow: -.05rem -.05rem .05rem rgb(0, 255, 255);
+  animation: freeze-ani 4s ease-in-out infinite alternate;
+}
+
+@keyframes poison-ani {
+  0% {
+    box-shadow: 0rem 0rem 0rem rgba(56, 173, 2, 0);
+  }
+
+  100% {
+    box-shadow: 0rem 0rem 1rem rgba(56, 173, 2, 1);
+  }
+}
+
+@keyframes curse-ani {
+  0% {
+    box-shadow: 0rem 0rem 0rem rgba(136, 8, 8, 0);
+  }
+
+  100% {
+    box-shadow: 0rem 0rem 1rem rgba(136, 8, 8, 1);
+  }
+
+}
+
+@keyframes freeze-ani {
+  0% {
+    box-shadow: 0rem 0rem 0rem rgba(0, 255, 255, 0);
+  }
+
+  100% {
+    box-shadow: 0rem 0rem 1rem rgba(0, 255, 255, 1);
+  }
+
 }
 
 /*background*/

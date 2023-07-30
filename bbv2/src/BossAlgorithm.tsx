@@ -788,12 +788,10 @@ export const BossAttackArea: React.FC = () => {
                             `${CharToName.get(current_char)} evaded` :
                             boss_atk_message}
                     </h1>
-
                     <img className='z-50 mt-72 mr-64'
                         src={
                             require(`./assets/images/boss/attacks/${current_boss_attack}.png`)}>
                     </img>
-
                 </>
             }
         </section>

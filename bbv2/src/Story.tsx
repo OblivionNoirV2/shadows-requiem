@@ -31,8 +31,7 @@ export const Story = () => {
             </main>
         </>
     )
-
-
 }
 
 export default Story;
+

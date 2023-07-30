@@ -666,8 +666,3 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
 }
 
 
-/*
-Flash the image, then call the attack function with the props already 
-passed over here
-
-*/

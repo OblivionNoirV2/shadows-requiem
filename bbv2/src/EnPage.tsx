@@ -16,7 +16,7 @@ const AttackingDesc = () => {
             Each character also has an Ultima,
             which are extremely powerful attacks unlocked when the
             progress bar is full. It charges a little every turn. You also have items.
-            More on that below.
+            More on that to the right.
         </p>
 
     )
@@ -25,6 +25,25 @@ const AttackingDesc = () => {
 //show the stats for each character
 //put this under defending
 const CharacterStats = () => {
+    return (
+        <section>
+            <h1 className="text-4xl mt-2">
+                Each character has their own role.
+                <hr className="max-w-sm mb-4"></hr>
+            </h1>
+            <ul className="text-4xl">
+                <li>Knight
+                    <hr className="max-w-sm mb-4"></hr>
+                    <img></img>
+                    <figcaption></figcaption>
+                </li>
+            </ul>
+        </section>
+    )
+}
+//explains how scoring works
+//put this under stats
+const Scoring = () => {
 
 }
 interface AttacksComponentProps {
@@ -133,14 +152,25 @@ const EncylopediaPage = () => {
                     Defending
                 </h1>
                 <hr></hr>
-                <p className="text-2xl mt-2">
+                <p className="text-2xl mt-2 mb-2">
                     Defending uses no MP and greatly raises that character's
-                    defense for a short time.
+                    defense, decreasing back to normal over the span of 3 turns.
                     It can be used consecutively,
                     but stat buffs do have an upper limit.
                     It does count as a turn. The King is intelligent and
                     targets weaker characters, so use this to your advantage.
                 </p>
+                <hr></hr>
+                <h1 className="text-7xl my-2">
+                    Character Stats
+                </h1>
+                <hr></hr>
+                <CharacterStats />
+                <hr></hr>
+                <h1 className="text-7xl my-2">
+                    Scoring
+                </h1>
+                <hr></hr>
             </div>
             <div className="flex flex-col z-[9999] max-w-lg">
                 <h1 className="text-7xl my-2">
