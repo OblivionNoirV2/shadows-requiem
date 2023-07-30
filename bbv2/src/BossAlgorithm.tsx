@@ -748,7 +748,15 @@ const attack_nums: Map<number, string> = new Map(
     ]
 );
 
-
+export function AttackAnimation() {
+    anime({
+        targets: ['.boss-attack', '.player-attack'],
+        scale: 1.2,
+        duration: 2000,
+        opacity: 0.5,
+        easing: 'linear'
+    });
+};
 export const BossAttackArea: React.FC = () => {
     const [isBossAttackShown, setIsBossAttackShown] = useState(false);
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
@@ -778,19 +786,11 @@ export const BossAttackArea: React.FC = () => {
         console.log("current_boss_attack", current_boss_attack)
     }, [current_boss_attack]);
 
-    const BossAttackAnimation = () => {
-        anime({
-            targets: '.boss-attack',
-            scale: 1.2,
-            duration: 2000,
-            opacity: 0.5,
-            easing: 'linear'
-        });
-    };
+
 
     useEffect(() => {
         if (isBossAttackShown) {
-            BossAttackAnimation();
+            AttackAnimation();
         }
     }, [isBossAttackShown]);
 

@@ -11,7 +11,7 @@ import { boss_stat_changes } from './StatManagement';
 import { selected_difficulty } from './StartMenu';
 import { player_mdef_map, player_pdef_map } from './StatManagement';
 import { min_max_vals_map } from './StatManagement';
-
+import { AttackAnimation } from './BossAlgorithm';
 type phys_or_mag = "phys" | "mag"
 
 
@@ -632,13 +632,17 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
     //seperate image lookup for the ults
     console.log("inside show attack:" + player, attack)
     console.log("is_ultima:", is_ultima)
+
+    useEffect(() => {
+        AttackAnimation()
+    }, [attack])
     if (is_ultima === true) {
         return (
             <img
                 src={
                     attack !== null ?
                         UltPathLookup.get(attack) : undefined}
-                className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl'
+                className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl player-attack'
                 style={{ position: 'absolute', top: 0, left: 0 }}>
             </img>
 
@@ -655,7 +659,7 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
                             //no img for desperation, just sfx
                             null :
                             require(`./assets/images/player/attacks/${player}/${attack}.png`)}
-                    className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl'
+                    className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl player-attack'
                     //prevents text from showing for desperation
                     alt={attack === 'Desperation' ? undefined : attack}
                     style={{ position: 'absolute', top: 0, left: 0 }}
