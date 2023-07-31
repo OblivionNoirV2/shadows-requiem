@@ -34,7 +34,7 @@ export const knight_stats: StatMap = new Map
     (
         [
             ["hp", 10],
-            ["max_hp", 550],
+            ["max_hp", 730],
             ["mp", 140],
             ["max_mp", 140],
             ["p_def", 1.45],

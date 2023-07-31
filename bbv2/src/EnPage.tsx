@@ -6,6 +6,11 @@ import * as iv from './Inventory';
 import paperbg from './assets/images/bg-and-effects/paper.png';
 import { playClickSfx } from "./sfxManagement";
 import * as sm from "./StatManagement";
+import knight_img from './assets/images/player/sprites/knight.png'
+import dmage_img from './assets/images/player/sprites/dmage.png'
+import { MatchToMaxHpMap } from "./MainPage";
+import { MatchToMaxMpMap } from "./MainPage";
+import { StringMappingType } from "typescript";
 
 const AttackingDesc = () => {
     return (
@@ -22,21 +27,88 @@ const AttackingDesc = () => {
     )
 
 }
+
+const MatchToPdef: Map<string, number> = new Map
+    (
+        [
+
+        ]
+    );
+
+const MatchToMdef: Map<string, number> = new Map
+    (
+        [
+
+        ]
+    );
+
+const MatchToEv: Map<string, number> = new Map
+    (
+        [
+
+        ]
+    );
+
+const MatchToCharDesc: Map<String, string> = new Map
+    (
+        [
+
+        ]
+    );
+interface CharacterComponentProps {
+    name: string;
+    img_src: string;
+    lookup_name: string;
+
+};
+
+const CharacterStatComponent: React.FC<CharacterComponentProps> = ({
+    name, img_src, lookup_name }) => {
+    return (
+        <li>
+            <h1>{name}</h1>
+            <hr className="max-w-sm mb-4"></hr>
+            <img src={img_src}
+                className="max-w-[12rem] rounded-xl " />
+            <figcaption className="text-[1.5rem]">
+                <ul>
+                    <li>
+                        Max HP: {MatchToMaxHpMap.get(lookup_name)}
+                    </li>
+                    <li>
+                        Max MP: {MatchToMaxMpMap.get(lookup_name)}
+                    </li>
+                    <li>
+                        Physical Defense: {sm.knight_stats.get("p_def")}
+                    </li>
+                    <li>
+                        Magical Defense: {sm.knight_stats.get("m_def")}
+                    </li>
+                    <li>
+                        Evasion: {sm.knight_stats.get("ev")}
+                    </li>
+                </ul>
+            </figcaption>
+        </li>
+
+    )
+
+}
 //show the stats for each character
 //put this under defending
 const CharacterStats = () => {
     return (
         <section>
             <h1 className="text-4xl mt-2">
-                Each character has their own role.
+                Each character has their own role. Hover over each stat to see its purpose.
                 <hr className="max-w-sm mb-4"></hr>
             </h1>
             <ul className="text-4xl">
-                <li>Knight
-                    <hr className="max-w-sm mb-4"></hr>
-                    <img></img>
-                    <figcaption></figcaption>
-                </li>
+                <CharacterStatComponent
+                    name="Knight"
+                    img_src={knight_img}
+                    lookup_name="knight"
+                />
             </ul>
         </section>
     )
