@@ -31,6 +31,10 @@ const AttackingDesc = () => {
 const MatchToPdef: Map<string, number> = new Map
     (
         [
+            ["knight", sm.knight_stats.get("d_p_def")!],
+            ["dmage", sm.dmage_stats.get("d_p_def")!],
+            ["wmage", sm.wmage_stats.get("d_p_def")!],
+            ["rmage", sm.rmage_stats.get("d_p_def")!],
 
         ]
     );
@@ -38,6 +42,10 @@ const MatchToPdef: Map<string, number> = new Map
 const MatchToMdef: Map<string, number> = new Map
     (
         [
+            ["knight", sm.knight_stats.get("d_m_def")!],
+            ["dmage", sm.dmage_stats.get("d_m_def")!],
+            ["wmage", sm.wmage_stats.get("d_m_def")!],
+            ["rmage", sm.rmage_stats.get("d_m_def")!],
 
         ]
     );
@@ -45,6 +53,10 @@ const MatchToMdef: Map<string, number> = new Map
 const MatchToEv: Map<string, number> = new Map
     (
         [
+            ["knight", sm.knight_stats.get("d_ev")!],
+            ["dmage", sm.dmage_stats.get("d_ev")!],
+            ["wmage", sm.wmage_stats.get("d_ev")!],
+            ["rmage", sm.rmage_stats.get("d_ev")!],
 
         ]
     );
@@ -79,10 +91,10 @@ const CharacterStatComponent: React.FC<CharacterComponentProps> = ({
                         Max MP: {MatchToMaxMpMap.get(lookup_name)}
                     </li>
                     <li>
-                        Physical Defense: {sm.knight_stats.get("p_def")}
+                        Physical Defense: {MatchToPdef.get(lookup_name)}
                     </li>
                     <li>
-                        Magical Defense: {sm.knight_stats.get("m_def")}
+                        Magical Defense: {MatchToMdef.get(lookup_name)}
                     </li>
                     <li>
                         Evasion: {sm.knight_stats.get("ev")}
