@@ -70,7 +70,6 @@ const MatchToCharDesc: Map<String, string> = new Map
             ["dmage", "She is a spellcaster with a balanced spread of support, offense and stat debuffing."],
             ["wmage", "The primary medic of the party. Somwhat fragile, but has great magic defense. Can also deal light damage."],
             ["rmage", "High risk, high reward glass cannon. She has potential to deal the most damage out of everyone, but is very fragile."]
-
         ]
     );
 interface CharacterComponentProps {
@@ -155,7 +154,30 @@ const CharacterStats = () => {
 //explains how scoring works
 //put this under stats
 const Scoring = () => {
-
+    return (
+        <>
+            <h1 className="text-4xl mb-4">
+                Scoring is based on several factors, which are:
+            </h1>
+            {/*for some reason the type does not work here, but it does 
+            with css*/}
+            <ol className="text-2xl space-y-8 ml-4">
+                <li> Difficulty chosen: Higher difficulties grant more
+                    points; easier choices have the opposite effect.
+                </li>
+                <li>
+                    Deaths: More character deaths = lower score.
+                </li>
+                <li>
+                    Item Usage: Lower item usage demonstrates more ability to survive on
+                    limited resources, so you want to keep your item consumption low.
+                </li>
+                <li>
+                    Turn count: The more efficient you are, the better.
+                </li>
+            </ol>
+        </>
+    )
 }
 interface AttacksComponentProps {
     player: string;
@@ -282,6 +304,7 @@ const EncylopediaPage = () => {
                     Scoring
                 </h1>
                 <hr></hr>
+                <Scoring />
             </div>
             <div className="flex flex-col z-[9999] max-w-lg">
                 <h1 className="text-7xl my-2">

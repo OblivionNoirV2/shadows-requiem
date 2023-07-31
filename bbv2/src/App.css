@@ -286,6 +286,11 @@ html {
 
 }
 
+ol {
+  list-style: upper-roman;
+}
+
+
 /*They are seperate because if put into the same class 
 the padding from .battle-menu causes issues with pushing things down*/
 .battle-menu>li:hover,
