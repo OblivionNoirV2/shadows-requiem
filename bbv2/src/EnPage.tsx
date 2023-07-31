@@ -6,8 +6,10 @@ import * as iv from './Inventory';
 import paperbg from './assets/images/bg-and-effects/paper.png';
 import { playClickSfx } from "./sfxManagement";
 import * as sm from "./StatManagement";
-import knight_img from './assets/images/player/sprites/knight.png'
-import dmage_img from './assets/images/player/sprites/dmage.png'
+import knight_img from './assets/images/player/sprites/knight.png';
+import dmage_img from './assets/images/player/sprites/dmage.png';
+import wmage_img from './assets/images/player/sprites/wmage.png';
+import rmage_img from './assets/images/player/sprites/rmage.png';
 import { MatchToMaxHpMap } from "./MainPage";
 import { MatchToMaxMpMap } from "./MainPage";
 import { StringMappingType } from "typescript";
@@ -27,7 +29,7 @@ const AttackingDesc = () => {
     )
 
 }
-
+//default values so they are not affected by any ongoing battle
 const MatchToPdef: Map<string, number> = new Map
     (
         [
@@ -64,6 +66,10 @@ const MatchToEv: Map<string, number> = new Map
 const MatchToCharDesc: Map<String, string> = new Map
     (
         [
+            ["knight", "The main shield of the party. He is resistant to physical attacks and can take the most damage. Deals all physical damage."],
+            ["dmage", "She is a spellcaster with a balanced spread of support, offense and stat debuffing."],
+            ["wmage", "The primary medic of the party. Somwhat fragile, but has great magic defense. Can also deal light damage."],
+            ["rmage", "High risk, high reward glass cannon. She has potential to deal the most damage out of everyone, but is very fragile."]
 
         ]
     );
@@ -73,38 +79,44 @@ interface CharacterComponentProps {
     lookup_name: string;
 
 };
-
+//description will go on the right, so two columns in row
 const CharacterStatComponent: React.FC<CharacterComponentProps> = ({
     name, img_src, lookup_name }) => {
     return (
-        <li>
-            <h1>{name}</h1>
-            <hr className="max-w-sm mb-4"></hr>
-            <img src={img_src}
-                className="max-w-[12rem] rounded-xl " />
-            <figcaption className="text-[1.5rem]">
-                <ul>
-                    <li>
-                        Max HP: {MatchToMaxHpMap.get(lookup_name)}
-                    </li>
-                    <li>
-                        Max MP: {MatchToMaxMpMap.get(lookup_name)}
-                    </li>
-                    <li>
-                        Physical Defense: {MatchToPdef.get(lookup_name)}
-                    </li>
-                    <li>
-                        Magical Defense: {MatchToMdef.get(lookup_name)}
-                    </li>
-                    <li>
-                        Evasion: {sm.knight_stats.get("ev")}
-                    </li>
-                </ul>
-            </figcaption>
-        </li>
-
+        <>
+            <li className="flex flex-row">
+                <div className="flex flex-col">
+                    <h1>{name}</h1>
+                    <hr className="mb-4"></hr>
+                    <img src={img_src}
+                        className="max-w-[12rem] rounded-xl " />
+                    <figcaption className="text-[1.5rem]">
+                        <ul>
+                            <li title="Maximum HP of the character. If HP reaches 0, they die.">
+                                Max HP: {MatchToMaxHpMap.get(lookup_name)}
+                            </li>
+                            <li title="Maximum MP of the character. Required to use most attacks.">
+                                Max MP: {MatchToMaxMpMap.get(lookup_name)}
+                            </li>
+                            <li title="Determines how much damage the character takes from physical attacks, as a division. Ex. 1.45 = 45% less damage and 0.9 means 10% more.">
+                                Physical Defense: {MatchToPdef.get(lookup_name)}
+                            </li>
+                            <li title="Determines how much damage the character takes from magic attacks, as a division. Ex. 1.2 = 20% less damage and 0.9 means 10% more.">
+                                Magical Defense: {MatchToMdef.get(lookup_name)}
+                            </li>
+                            <li title="Chance of evading attacks, as a percentage. Ex. 0.07 = 7% chance to dodge.">
+                                Evasion: {MatchToEv.get(lookup_name)}
+                            </li>
+                        </ul>
+                    </figcaption>
+                </div>
+                <p className="flex flex-col mt-16 text-[1.5rem] max-w-[12rem] ml-10">
+                    {MatchToCharDesc.get(lookup_name)}
+                </p>
+            </li>
+            <br></br>
+        </>
     )
-
 }
 //show the stats for each character
 //put this under defending
@@ -120,6 +132,21 @@ const CharacterStats = () => {
                     name="Knight"
                     img_src={knight_img}
                     lookup_name="knight"
+                />
+                <CharacterStatComponent
+                    name="Dark Mage"
+                    img_src={dmage_img}
+                    lookup_name="dmage"
+                />
+                <CharacterStatComponent
+                    name="White Mage"
+                    img_src={wmage_img}
+                    lookup_name="wmage"
+                />
+                <CharacterStatComponent
+                    name="Red Mage"
+                    img_src={rmage_img}
+                    lookup_name="rmage"
                 />
             </ul>
         </section>

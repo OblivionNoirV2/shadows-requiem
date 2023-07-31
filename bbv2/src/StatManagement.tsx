@@ -58,8 +58,8 @@ export const dmage_stats: StatMap = new Map
             ["max_mp", 270],
             ["p_def", 1.20],
             ["d_p_def", 1.20],
-            ["m_def", 1.50],
-            ["d_m_def", 1.50],
+            ["m_def", 1.20],
+            ["d_m_def", 1.20],
             ["ev", 0.07],
             ["d_ev", 0.07]
         ]
