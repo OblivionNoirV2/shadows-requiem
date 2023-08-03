@@ -52,6 +52,7 @@ import { Occurences } from './victory';
 import heartbeat from './assets/sound/sfx/heartbeatlouder.wav';
 import { Percentage } from './BossAlgorithm';
 import { NameToIndex } from './BossAlgorithm';
+import { StringMappingType } from 'typescript';
 
 
 interface MenuProps {
@@ -522,33 +523,81 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
 
 
-    const MatchToHpMap: Map<string, number | undefined> = new Map([
-        ["knight", KnightHP],
-        ["dmage", DmageHP],
-        ["wmage", WmageHP],
-        ["rmage", RmageHP]
-    ]);
-    const MatchToMpMap: Map<string, number | undefined> = new Map([
-        ["knight", KnightMP],
-        ["dmage", DmageMP],
-        ["wmage", WmageMP],
-        ["rmage", RmageMP]
-    ]);
+    const MatchToHpMap: Map<string, number | undefined> = new Map
+        (
+            [
+                ["knight", KnightHP],
+                ["dmage", DmageHP],
+                ["wmage", WmageHP],
+                ["rmage", RmageHP]
+            ]
+        );
+    const MatchToMpMap: Map<string, number | undefined> = new Map
+        (
+            [
+                ["knight", KnightMP],
+                ["dmage", DmageMP],
+                ["wmage", WmageMP],
+                ["rmage", RmageMP]
+            ]
+        );
 
 
     function HandleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);
         console.log("AA: " + isAttacksActive);
     }
+    interface MaxStatsObject {
+        max_p_def: number,
+        max_m_def: number,
+        max_m_atk: number,
+        max_p_atk: number
+    }
 
 
-    //doubles defense (to a max of whatever that character's max is), 
-    //degrades over 3 turns back to normal
-    function HandleDefend(player: string, current_turn: number) {
-
-
+    /*this will run every turn, checks for any stat abnormalities 
+    and makes adjustments accordingly. Poison and freeze remove themselves 
+    after 3 turns, curse does not because it kills the character 
+    after 5 turns. Other stats go up/down .25 each turn 
+    accordingly if they're abnormal. Same goes for boss
+    */
+    function StatReversion() {
 
     }
+
+
+
+
+
+
+    //doubles defense (up to a max of whatever that character's max is), 
+    //
+    function HandleDefend(player: string) {
+
+        console.log("og mdef", sm.player_mdef_map.get(player)!)
+        //first check that it doesn't exceed maximums 
+        if (sm.player_mdef_map.get(player)! < sm.min_max_vals_map.get("player")!.m_def.max) {
+            //if it's less than max, apply the buff
+            sm.player_mdef_map.set(player, (sm.player_mdef_map.get(player)! + 0.50));
+            console.log("new mdef", sm.player_mdef_map.get(player)!)
+            //if it exceeds after setting, revert back to the max
+            if (sm.player_mdef_map.get(player)! > sm.min_max_vals_map.get("player")!.m_def.max) {
+                sm.player_mdef_map.set(player, sm.min_max_vals_map.get("player")!.m_def.max)
+            }
+        }
+        //then the same thing for pdef
+        if (sm.player_pdef_map.get(player)! < sm.min_max_vals_map.get("player")!.p_def.max) {
+            //if it's less than max, apply the buff
+            sm.player_pdef_map.set(player, (sm.player_pdef_map.get(player)! + 0.50));
+            console.log("new pdef", sm.player_pdef_map.get(player)!)
+            //if it exceeds after setting, revert back to the max
+            if (sm.player_pdef_map.get(player)! > sm.min_max_vals_map.get("player")!.p_def.max) {
+                sm.player_pdef_map.set(player, sm.min_max_vals_map.get("player")!.p_def.max)
+            }
+        }
+    }
+
+
 
 
     //global
@@ -923,7 +972,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                             </div>
                             {isItemsActive ? null :
                                 <li>
-                                    <button onClick={() => { HandleDefend(player, TurnNumber); sfx.playClickSfx() }} >
+                                    <button onClick={() => { HandleDefend(player); sfx.playClickSfx() }} >
                                         Defend
                                     </button>
                                 </li>

@@ -15,3 +15,5 @@ need to remove dead people from item targets
 add glow borders to status effects
 
 not sure why ultima isn't glowing like it should
+
+add images to the rest of encylopedia

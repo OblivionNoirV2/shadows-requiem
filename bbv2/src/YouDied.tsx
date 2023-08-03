@@ -39,7 +39,6 @@ const YouDied = () => {
             scale: 1.3,
             duration: 2000,
             easing: 'linear'
-
         })
         return () => {
             anime.remove(targets)

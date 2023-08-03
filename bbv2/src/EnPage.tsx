@@ -166,7 +166,7 @@ const Scoring = () => {
                     points; easier choices have the opposite effect.
                 </li>
                 <li>
-                    Deaths: More character deaths = lower score.
+                    Deaths: More character deaths means a lower score.
                 </li>
                 <li>
                     Item Usage: Lower item usage demonstrates more ability to survive on

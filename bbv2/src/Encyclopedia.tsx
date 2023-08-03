@@ -21,7 +21,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             ],
             [
                 'Whims Of Fate', {
-                    description: "Is Lady Luck on your side today?",
+                    description: "Is Lady Luck on your side today? Physical damage.",
                     mp_cost: 15
                 }
             ],
