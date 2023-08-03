@@ -383,6 +383,64 @@ export const BossArea: React.FC<BossAreaProps> = ({
             setBossStage(3); //25%
         }
     }, [sm.boss_stats.get("hp")]);
+
+    interface MaxStatsObject {
+        max_p_def: number,
+        max_m_def: number,
+        max_m_atk: number,
+        max_p_atk: number
+    }
+
+
+    /*this will run every turn, checks for any stat abnormalities 
+    and makes adjustments accordingly. stats go up/down .25 each turn 
+    accordingly if they're abnormal. Same goes for boss
+    */
+    function StatReversion() {
+        console.log("sr running")
+        // Define a list of character names
+        const characterNames = ['knight', 'dmage', 'wmage', 'rmage'];
+        // Define a list of stats to check for each character
+        const statNames = ['m_def', 'p_def', 'p_atk', 'm_atk', 'ev'];
+
+        //Loop over each character
+        for (let characterName of characterNames) {
+            // Get the corresponding stat map for the current character
+            const statMap = (sm as any)[`${characterName}_stats`];
+
+            // Loop over each stat to check
+            for (let statName of statNames) {
+                // Get the current and default stat values
+                const currentStat = statMap.get(statName)!;
+                const defaultStat = statMap.get(`d_${statName}`)!;
+
+                // If the current stat is higher than the default, decrease it
+                if (currentStat > defaultStat) {
+                    let newStat = currentStat - 0.25;
+                    newStat = Math.max(newStat, (sm.min_max_vals_map.get("player") as any)[statName].min); // Ensure it's not less than the min
+                    statMap.set(statName, newStat);
+                }
+                // If the current stat is lower than the default, increase it
+                else if (currentStat < defaultStat) {
+                    let newStat = currentStat + 0.25;
+                    newStat = Math.min(newStat, (sm.min_max_vals_map.get("player") as any)[statName].max); // Ensure it's not more than the max
+                    statMap.set(statName, newStat);
+                }
+                console.log(sm.knight_stats.get("p_def"))
+            }
+        }
+    }
+
+    useEffect(() => {
+        console.log("original", sm.knight_stats.get("p_def"))
+        StatReversion()
+
+    }, [TurnNumber])
+
+
+
+
+
     //update the boss stage based on the hp value
 
     const [isSFXTriggered, setIsSFXTriggered] = useState(false)
@@ -547,32 +605,12 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
         setIsAttacksActive(!isAttacksActive);
         console.log("AA: " + isAttacksActive);
     }
-    interface MaxStatsObject {
-        max_p_def: number,
-        max_m_def: number,
-        max_m_atk: number,
-        max_p_atk: number
-    }
-
-
-    /*this will run every turn, checks for any stat abnormalities 
-    and makes adjustments accordingly. Poison and freeze remove themselves 
-    after 3 turns, curse does not because it kills the character 
-    after 5 turns. Other stats go up/down .25 each turn 
-    accordingly if they're abnormal. Same goes for boss
-    */
-    function StatReversion() {
-
-    }
-
-
-
 
 
 
     //doubles defense (up to a max of whatever that character's max is), 
     //
-    function HandleDefend(player: string) {
+    function HandleDefend(player: string, current_turn: number) {
 
         console.log("og mdef", sm.player_mdef_map.get(player)!)
         //first check that it doesn't exceed maximums 
@@ -595,6 +633,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 sm.player_pdef_map.set(player, sm.min_max_vals_map.get("player")!.p_def.max)
             }
         }
+        setTurnNumber(TurnNumber + 1)
     }
 
 
@@ -972,7 +1011,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                             </div>
                             {isItemsActive ? null :
                                 <li>
-                                    <button onClick={() => { HandleDefend(player); sfx.playClickSfx() }} >
+                                    <button onClick={() => { HandleDefend(player, TurnNumber); sfx.playClickSfx() }} >
                                         Defend
                                     </button>
                                 </li>
