@@ -20,6 +20,7 @@ import {
 import { selected_difficulty } from './StartMenu';
 import anime from 'animejs/lib/anime.es.js'
 import { transform } from 'typescript';
+import { stat } from 'fs/promises';
 
 
 //This is going to work exactly the same as the player side, 
@@ -69,11 +70,28 @@ export const NameToIndex: Map<string, number> = new Map(
 //Also use this for My Turn
 export let last_boss_attacks: string[] = []
 
-//Gradually restore any stats that were lowered each turn
-//To do this, make a list of objects to be checked and loop through it
-function CheckForStatDecrease() {
+//Gradually revert any boss stats that were lowered or increased
+function CheckForStatChange() {
+    const boss_stats_to_check = ["p_def", "m_def", "atk"];
 
+    for (let stat_name of boss_stats_to_check) {
+        //first check if it's higher or lower than the default
+        if (sm.boss_stats.get(stat_name)! > sm.boss_stats.get(`d_${stat_name}`)!) {
+            sm.boss_stats.set(stat_name, sm.boss_stats.get(stat_name)! + 0.25)
+        } else if (sm.boss_stats.get(stat_name)! < sm.boss_stats.get(`d_${stat_name}`)!) {
+            sm.boss_stats.set(stat_name, sm.boss_stats.get(stat_name)! - 0.25)
+        }
+        //then make sure it doesn't exceed limits
+        if (sm.boss_stats.get(stat_name)! > (sm.min_max_vals_map.get("boss") as any)[stat_name].max) {
+            sm.boss_stats.set(stat_name, (sm.min_max_vals_map.get("boss") as any)[stat_name].max);
+        }
+        //ensure it's not below the min
+        else if (sm.boss_stats.get(stat_name)! < (sm.min_max_vals_map.get("boss") as any)[stat_name].min) {
+            sm.boss_stats.set(stat_name, (sm.min_max_vals_map.get("boss") as any)[stat_name].min);
+        }
+    }
 }
+
 export function Percentage() {
     return Math.random();
 }
@@ -83,6 +101,7 @@ export function Percentage() {
 export let prev_dmg: number[] = [];
 let chosen_target: string;
 export function bossAttackAlgo(attackProps: BossAttackProps) {
+    CheckForStatChange()
     let final_targets: number[] = []
     potential_targets = [];
 

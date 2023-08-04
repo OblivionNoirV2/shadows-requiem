@@ -398,39 +398,40 @@ export const BossArea: React.FC<BossAreaProps> = ({
     */
     function StatReversion() {
         console.log("sr running")
-        // Define a list of character names
-        const characterNames = ['knight', 'dmage', 'wmage', 'rmage'];
-        // Define a list of stats to check for each character
-        const statNames = ['m_def', 'p_def', 'p_atk', 'm_atk', 'ev'];
+        //list of character names
+        const character_names = ['knight', 'dmage', 'wmage', 'rmage'];
+        //list of stats to check for each character
+        const stat_names = ['m_def', 'p_def', 'p_atk', 'm_atk', 'ev'];
 
         //Loop over each character
-        for (let characterName of characterNames) {
+        for (let character_name of character_names) {
             // Get the corresponding stat map for the current character
-            const statMap = (sm as any)[`${characterName}_stats`];
+            const stat_map = (sm as any)[`${character_name}_stats`];
 
-            // Loop over each stat to check
-            for (let statName of statNames) {
-                // Get the current and default stat values
-                const currentStat = statMap.get(statName)!;
-                const defaultStat = statMap.get(`d_${statName}`)!;
+            //Loop over each stat to check
+            for (let statName of stat_names) {
+                //Get the current and default stat values
+                const current_stat = stat_map.get(statName)!;
+                const default_stat = stat_map.get(`d_${statName}`)!;
 
-                // If the current stat is higher than the default, decrease it
-                if (currentStat > defaultStat) {
-                    let newStat = currentStat - 0.25;
-                    newStat = Math.max(newStat, (sm.min_max_vals_map.get("player") as any)[statName].min); // Ensure it's not less than the min
-                    statMap.set(statName, newStat);
+                //If the current stat is higher than the default, decrease it
+                if (current_stat > default_stat) {
+                    let new_stat = current_stat - 0.25;
+                    //ensure it's not less than the min
+                    new_stat = Math.max(new_stat, (sm.min_max_vals_map.get("player") as any)[statName].min);
+                    stat_map.set(statName, new_stat);
                 }
-                // If the current stat is lower than the default, increase it
-                else if (currentStat < defaultStat) {
-                    let newStat = currentStat + 0.25;
-                    newStat = Math.min(newStat, (sm.min_max_vals_map.get("player") as any)[statName].max); // Ensure it's not more than the max
-                    statMap.set(statName, newStat);
+                //If the current stat is lower than the default, increase it
+                else if (current_stat < default_stat) {
+                    let new_stat = current_stat + 0.25;
+                    //ensure it's not more than the max
+                    new_stat = Math.min(new_stat, (sm.min_max_vals_map.get("player") as any)[statName].max);
+                    stat_map.set(statName, new_stat);
                 }
-                console.log(sm.knight_stats.get("p_def"))
             }
         }
     }
-
+    //check for abnormalities each turn
     useEffect(() => {
         console.log("original", sm.knight_stats.get("p_def"))
         StatReversion()

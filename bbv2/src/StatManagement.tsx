@@ -103,8 +103,11 @@ export const boss_stats: StatMap = new Map
             ["hp", 780000],
             ["max_hp", 780000],
             ["p_def", 1.00],
+            ["d_p_def", 1.00],
             ["m_def", 1.00],
+            ["d_m_def", 1.00],
             ["atk", 1.00],
+            ["d_atk", 1.00]
 
         ]
     );
@@ -177,7 +180,7 @@ export const player_pdef_map: Map<string, number | undefined> = new Map
     );
 
 
-export const all_player_defs = new Map([...player_mdef_map, ...player_pdef_map])
+
 
 //determines how high or low a stat can go through buffs/debuffs. 
 //Same limits shared across all players
