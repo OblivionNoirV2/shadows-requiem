@@ -439,11 +439,11 @@ export const attacks_map: Map<string, Function> = new Map([
             );
         }
     ],
-    [
+    [ //heal spells will return what it does and the amount, like items
+        //will open up a menu similar to the item menu
         //light heal, targets all
         'Radiant Sky', function RadiantSky() {
             healsfx.play();
-
         }
     ],
     [ //revives one with 66% hp

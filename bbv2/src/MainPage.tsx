@@ -187,8 +187,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
             function SingleTargetSpecial(percentage: number,
                 single_target: number, effect: string) {
                 if (Percentage() < percentage) {
-                    const setTarget = PlayerSetStatuses.get(single_target);
-                    if (!PlayerStatuses.get(single_target)!.includes(effect)) {
+                    const setTarget = player_set_statuses.get(single_target);
+                    if (!player_statuses.get(single_target)!.includes(effect)) {
                         setTarget!(prevStatus => [...prevStatus, effect])
                     }
                 }
@@ -228,8 +228,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     boss_return.final_targets.forEach((target: number) => {
                         if (Percentage() < 0.33) {
                             //apply curse to the target
-                            const setTarget = PlayerSetStatuses.get(target)
-                            if (!PlayerStatuses.get(target)!.includes("curse")) {
+                            const setTarget = player_set_statuses.get(target)
+                            if (!player_statuses.get(target)!.includes("curse")) {
                                 setTarget!(prevStatus => [...prevStatus, "curse"])
                             }
                         }
@@ -240,9 +240,34 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     break;
             }
         }
+        //Then do the status effect stuff. 
+        //Each have a small chance of auto-removal
+        for (let i of player_statuses.values()) {
+
+            if (i.includes("poison")) {
+                if (Percentage() < 0.2) {
+                    //remove it
+                } else {
+                    //remove 15% of max hp
+                }
+            } else if (i.includes("freeze")) {
+                if (Percentage() < 0.3) {
+                    //remove it
+                } else {
+                    //that character remains frozen(they cannot act)
+                }
+
+            } else if (i.includes("curse")) {
+                if (Percentage() < 0.10) {
+                    //remove it
+                } else if (Percentage() < 0.25) {
+                    //kill them
+                }
+            }
+        }
     }, [TurnNumber]);
 
-    const PlayerStatuses: Map<number, string[]> = new Map
+    const player_statuses: Map<number, string[]> = new Map
         (
             [
                 [0, KnightStatus],
@@ -251,7 +276,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 [3, RmageStatus]
             ]
         )
-    const PlayerSetStatuses: Map<number,
+    const player_set_statuses: Map<number,
         React.Dispatch<React.SetStateAction<string[]>>> = new Map
             (
                 [
@@ -266,12 +291,12 @@ export const BossArea: React.FC<BossAreaProps> = ({
     //control dead and revive status
     function HandleDeath(character: string, killed_or_revived: string) {
         const char_index = NameToIndex.get(character)!
-        const setStatus = PlayerSetStatuses.get(char_index);
-        const status = PlayerStatuses.get(char_index);
+        const setStatus = player_set_statuses.get(char_index);
+        const status = player_statuses.get(char_index);
 
         if (killed_or_revived === "killed") {
             if (!status!.includes("dead")) {
-                setStatus!(prev => [...prev, "dead"]);
+                setStatus!(["dead"]);//also removes everything else
                 Occurences.set("death", (Occurences.get("death")! + 1));
             }
         } else {
