@@ -610,3 +610,6 @@ export function PrecipTypeContextProvider({ children }: { children: React.ReactE
         </PrecipTypeContext.Provider>
     )
 }
+
+
+//for stat deductions 

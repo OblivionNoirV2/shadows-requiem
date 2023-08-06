@@ -242,26 +242,15 @@ export const BossArea: React.FC<BossAreaProps> = ({
         }
         //Then do the status effect stuff. 
         //Each have a small chance of auto-removal
-        for (let i of player_statuses.values()) {
+        for (let [char_id, statuses] of player_statuses.entries()) {
+            let set_status = player_set_statuses.get(char_id)
 
-            if (i.includes("poison")) {
+            if (statuses.includes("poison")) {
                 if (Percentage() < 0.2) {
                     //remove it
+                    set_status!((prev: string[]) => prev.filter(status => status !== "poison"));
                 } else {
                     //remove 15% of max hp
-                }
-            } else if (i.includes("freeze")) {
-                if (Percentage() < 0.3) {
-                    //remove it
-                } else {
-                    //that character remains frozen(they cannot act)
-                }
-
-            } else if (i.includes("curse")) {
-                if (Percentage() < 0.10) {
-                    //remove it
-                } else if (Percentage() < 0.25) {
-                    //kill them
                 }
             }
         }

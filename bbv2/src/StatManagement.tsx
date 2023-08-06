@@ -192,9 +192,10 @@ interface StatRange {
 export interface Stats {
     p_def: StatRange;
     m_def: StatRange;
-    p_atk: StatRange;
-    m_atk: StatRange;
+    p_atk?: StatRange;
+    m_atk?: StatRange;
     ev?: StatRange;
+    atk?: StatRange;
 }
 
 export const min_max_vals_map: Map<string, Stats> = new Map([
@@ -232,14 +233,11 @@ export const min_max_vals_map: Map<string, Stats> = new Map([
                 "min": 0.50,
                 "max": 2.50
             },
-            "p_atk": {
+            "atk": {
                 "min": 0.50,
                 "max": 2.50
             },
-            "m_atk": {
-                "min": 0.50,
-                "max": 2.50
-            },
+
         }
     ]
 ]
