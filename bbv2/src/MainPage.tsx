@@ -86,6 +86,21 @@ let hb = new Audio(heartbeat)
 
 
 let targets_list = []
+export let MatchToMaxHpMap: Map<string, number | undefined> = new Map([
+    ["knight", sm.knight_stats.get("max_hp")],
+    ["dmage", sm.dmage_stats.get("max_hp")],
+    ["wmage", sm.wmage_stats.get("max_hp")],
+    ["rmage", sm.rmage_stats.get("max_hp")]
+]);
+
+export let MatchToMaxMpMap: Map<string, number | undefined> = new Map([
+    ["knight", sm.knight_stats.get("max_mp")],
+    ["dmage", sm.dmage_stats.get("max_mp")],
+    ["wmage", sm.wmage_stats.get("max_mp")],
+    ["rmage", sm.rmage_stats.get("max_mp")]
+]);
+
+
 export const BossArea: React.FC<BossAreaProps> = ({
     selectedCharacter, setSelectedCharacter, bossStage, setBossStage }) => {
     //just in case
@@ -110,11 +125,32 @@ export const BossArea: React.FC<BossAreaProps> = ({
     const { DmageHP, setDmageHP } = useContext(DmageHPContext);
     const { WmageHP, setWmageHP } = useContext(WmageHPContext);
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
-    //will check for any stat abnormalities each turn 
-    //and set things accordingly
-    useEffect(() => {
 
-    })
+
+
+
+
+    const MatchToHpSetState: Map<string, (value: number) => void> = new Map
+        (
+            [
+                ["knight", setKnightHP],
+                ["dmage", setDmageHP],
+                ["wmage", setWmageHP],
+                ["rmage", setRmageHP]
+
+            ]
+        );
+
+    const MatchToMpSetState: Map<string, (value: number) => void> = new Map
+        (
+            [
+                ["knight", setKnightMP],
+                ["dmage", setDmageMP],
+                ["wmage", setWmageMP],
+                ["rmage", setRmageMP]
+            ]
+        );
+
 
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
     //match returned target to their statuses, for status effects
@@ -240,21 +276,66 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     break;
             }
         }
+
+        //15% of max hp
+        function PoisonDamage() {
+
+        };
+        //20% chance of death.
+        //counting the prev 0.15, this is a 17% chance
+        function HandleCurse() {
+
+        }
         //Then do the status effect stuff. 
         //Each have a small chance of auto-removal
-        for (let [char_id, statuses] of player_statuses.entries()) {
-            let set_status = player_set_statuses.get(char_id)
 
+        function RemovalManagement(
+            set_status: Function,
+            rate: number,
+            status_name: string,
+            function_to_execute: Function | null) {
+            if (Percentage() < rate) {
+                //remove it
+                set_status!((prev: string[]) => prev.filter(status => status !== status_name));
+            } else {
+                //function to run, or nothing in the case of freeze
+
+            }
+
+        }
+        for (let [char_id, statuses] of player_statuses.entries()) {
+
+            let set_status = player_set_statuses.get(char_id)
+            console.log(typeof set_status)
             if (statuses.includes("poison")) {
-                if (Percentage() < 0.2) {
-                    //remove it
-                    set_status!((prev: string[]) => prev.filter(status => status !== "poison"));
-                } else {
-                    //remove 15% of max hp
-                }
+                RemovalManagement(
+                    set_status!,
+                    0.2,
+                    "poison",
+                    PoisonDamage
+                )
+            }
+            //No else if, needs to check for all
+            if (statuses.includes("freeze")) {
+                RemovalManagement(
+                    set_status!,
+                    0.3,
+                    "freeze",
+                    null //no function, just stays as is
+                )
+            }
+            //this one's a bit cruel, but only happens in phase 3
+            if (statuses.includes("curse")) {
+                RemovalManagement(
+                    set_status!,
+                    0.15,
+                    "curse",
+                    HandleCurse
+                )
             }
         }
     }, [TurnNumber]);
+
 
     const player_statuses: Map<number, string[]> = new Map
         (
@@ -536,19 +617,7 @@ export const BossHpBar = () => {
     )
 }
 
-export let MatchToMaxHpMap: Map<string, number | undefined> = new Map([
-    ["knight", sm.knight_stats.get("max_hp")],
-    ["dmage", sm.dmage_stats.get("max_hp")],
-    ["wmage", sm.wmage_stats.get("max_hp")],
-    ["rmage", sm.rmage_stats.get("max_hp")]
-]);
 
-export let MatchToMaxMpMap: Map<string, number | undefined> = new Map([
-    ["knight", sm.knight_stats.get("max_mp")],
-    ["dmage", sm.dmage_stats.get("max_mp")],
-    ["wmage", sm.wmage_stats.get("max_mp")],
-    ["rmage", sm.rmage_stats.get("max_mp")]
-]);
 
 
 interface PlayerMenuProps {
@@ -594,6 +663,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
     const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
+
 
 
     const MatchToHpMap: Map<string, number | undefined> = new Map
@@ -721,6 +791,10 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 ["rmage", setRmageMP]
             ]
         );
+
+
+
+
 
     //sets hp/mp with items
     function HpFunction(target: string, amount: number) {
