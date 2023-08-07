@@ -278,9 +278,16 @@ export const BossArea: React.FC<BossAreaProps> = ({
         }        //Then do the status effect stuff. 
         //Each have a small chance of auto-removal
 
+        //because I need a string to use the maps for these 
+        function ConvertToStr(char_num: number) {
+            return IndexToName.get(char_num)
+
+        }
+
         const IndexToMaxHP: Map<number, number> = new Map
             (
                 [
+
 
                 ]
             )
@@ -289,22 +296,29 @@ export const BossArea: React.FC<BossAreaProps> = ({
         //15% of max hp. Can kill. 
         function PoisonDamage(char_id: number) {
             console.log("CHRID", char_id)
+            const char_str = ConvertToStr(char_id)
             //then use the id to subtract hp accordingly 
+
 
         };
 
-        //20% chance of death.
-        //counting the prev 0.15, this is actually a 17% chance
+        /*
+        20% chance of death.
+        counting the prev 20% chance to remove it that comes before, 
+        this is actually a 16% chance
+        */
         function HandleCurse() {
 
         }
 
-        function RemovalManagement(
-            set_status: Function,
-            rate: number,
-            status_name: string,
-            function_to_execute: Function | null,
-            char_id: number) {
+        function RemovalManagement
+            (
+                set_status: Function,
+                rate: number,
+                status_name: string,
+                function_to_execute: Function | null,
+                char_id: number
+            ) {
             if (Percentage() < rate) {
                 //remove it
                 set_status!((prev: string[]) => prev.filter(status => status !== status_name));
@@ -332,7 +346,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             if (statuses.includes("freeze")) {
                 RemovalManagement(
                     set_status!,
-                    0.20,
+                    0.25,
                     "freeze",
                     null, //no function, just stays as is
                     char_id
@@ -342,7 +356,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             if (statuses.includes("curse")) {
                 RemovalManagement(
                     set_status!,
-                    0.05,
+                    0.20,
                     "curse",
                     HandleCurse,
                     char_id
@@ -1336,14 +1350,15 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         }
     }
     //match returned target to their statuses, for status effects
-    const IndexToStatus: Map<number, string[]> = new Map(
-        [
-            [0, KnightStatus],
-            [1, DmageStatus],
-            [2, WmageStatus],
-            [3, RmageStatus]
-        ]
-    )
+    const IndexToStatus: Map<number, string[]> = new Map
+        (
+            [
+                [0, KnightStatus],
+                [1, DmageStatus],
+                [2, WmageStatus],
+                [3, RmageStatus]
+            ]
+        )
     const IndexToSetStatus: Map<number, React.Dispatch<SetStateAction<string[]>>> = new Map
         (
             [
