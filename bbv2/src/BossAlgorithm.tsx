@@ -457,13 +457,18 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     }
     //target is already chosen
     function LowerAllyStat(stat: string, amount: number) {
-        MatchToStat.get(chosen_target)![stat]! -= amount;
+        console.log("inside las, chosen target", chosen_target)
+        if (MatchToStat.get(chosen_target)![stat] !== undefined) {
+            MatchToStat.get(chosen_target)![stat]! -= amount;
+        }
+
 
     }
     const boss_attack_functions: Map<string, Function> = new Map(
         [
             [
                 "Shadow Blade", function ShadowBlade() {
+                    console.log("inside atk chosen", chosen_target)
                     return (
                         BossRNG
                             (
@@ -482,6 +487,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [   //Targets 3, starting with the previously chosen
                 "Spheres of Madness", function SpheresOfMadness() {
+                    console.log("inside atk chosen", chosen_target)
                     return (
                         BossRNG(
                             {
@@ -544,6 +550,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [ //drops target's mag def
                 "Soul Crusher", function SoulCrusher() {
+                    console.log("inside atk chosen", chosen_target)
                     if (Percentage() <= 0.40) {
                         if (MatchToStat.get(chosen_target)!.mdef >
                             min_max_vals_map.get("player")!.m_def.min) {

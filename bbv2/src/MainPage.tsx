@@ -275,62 +275,77 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     console.log("no special attacks used")
                     break;
             }
-        }
+        }        //Then do the status effect stuff. 
+        //Each have a small chance of auto-removal
 
-        //15% of max hp
-        function PoisonDamage() {
+        const IndexToMaxHP: Map<number, number> = new Map
+            (
+                [
+
+                ]
+            )
+
+
+        //15% of max hp. Can kill. 
+        function PoisonDamage(char_id: number) {
+            console.log("CHRID", char_id)
+            //then use the id to subtract hp accordingly 
 
         };
+
         //20% chance of death.
-        //counting the prev 0.15, this is a 17% chance
+        //counting the prev 0.15, this is actually a 17% chance
         function HandleCurse() {
 
         }
-        //Then do the status effect stuff. 
-        //Each have a small chance of auto-removal
 
         function RemovalManagement(
             set_status: Function,
             rate: number,
             status_name: string,
-            function_to_execute: Function | null) {
+            function_to_execute: Function | null,
+            char_id: number) {
             if (Percentage() < rate) {
                 //remove it
                 set_status!((prev: string[]) => prev.filter(status => status !== status_name));
             } else {
                 //function to run, or nothing in the case of freeze
+                function_to_execute !== null &&
+                    function_to_execute(char_id)
 
             }
-
         }
         for (let [char_id, statuses] of player_statuses.entries()) {
 
             let set_status = player_set_statuses.get(char_id)
-            console.log(typeof set_status)
+
             if (statuses.includes("poison")) {
                 RemovalManagement(
                     set_status!,
-                    0.2,
+                    0.10,
                     "poison",
-                    PoisonDamage
+                    PoisonDamage,
+                    char_id
                 )
             }
             //No else if, needs to check for all
             if (statuses.includes("freeze")) {
                 RemovalManagement(
                     set_status!,
-                    0.3,
+                    0.20,
                     "freeze",
-                    null //no function, just stays as is
+                    null, //no function, just stays as is
+                    char_id
                 )
             }
             //this one's a bit cruel, but only happens in phase 3
             if (statuses.includes("curse")) {
                 RemovalManagement(
                     set_status!,
-                    0.15,
+                    0.05,
                     "curse",
-                    HandleCurse
+                    HandleCurse,
+                    char_id
                 )
             }
         }
@@ -1375,6 +1390,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
             }
         }
     }, [TurnNumber])
+
     const [isUltMenuShown, setIsUltMenuShown] = useState(false);
     function handleUltMenu() {
         setIsUltMenuShown(!isUltMenuShown);
