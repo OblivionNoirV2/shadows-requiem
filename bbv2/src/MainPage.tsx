@@ -1335,28 +1335,33 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                 return '';
         }
     }
+    //match returned target to their statuses, for status effects
+    const IndexToStatus: Map<number, string[]> = new Map(
+        [
+            [0, KnightStatus],
+            [1, DmageStatus],
+            [2, WmageStatus],
+            [3, RmageStatus]
+        ]
+    )
+    const IndexToSetStatus: Map<number, React.Dispatch<SetStateAction<string[]>>> = new Map
+        (
+            [
+                [0, setKnightStatus],
+                [1, setDmageStatus],
+                [2, setWmageStatus],
+                [3, setRmageStatus]
+            ]
+        )
 
     //match it to the image
     function UpdateStatusEffects(player: string) {
         // Map the player to the corresponding status effects array
         let status_effects: string[];
-        switch (player) {
-            case "knight": //remember to reset these when they die, lol
-                status_effects = KnightStatus.filter(status => status !== "dead");
-                break;
-            case "dmage"://death and revives are handled seperately 
-                status_effects = DmageStatus.filter(status => status !== "dead");
-                break;
-            case "wmage":
-                status_effects = WmageStatus.filter(status => status !== "dead");
-                break;
-            case "rmage":
-                status_effects = RmageStatus.filter(status => status !== "dead");
-                break;
-            default:
-                status_effects = [];
-                break;
-        }
+        //convert to index
+        const player_num = NameToIndex.get(player)!
+        status_effects = IndexToStatus.get(player_num)!.filter(status => status !== "dead")
+
         //Render the status effects
         return (
             status_effects.map((status_effect, index) => (
