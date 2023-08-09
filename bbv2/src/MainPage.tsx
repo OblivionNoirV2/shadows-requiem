@@ -130,27 +130,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
 
 
-    const MatchToHpSetState: Map<string, (value: number) => void> = new Map
-        (
-            [
-                ["knight", setKnightHP],
-                ["dmage", setDmageHP],
-                ["wmage", setWmageHP],
-                ["rmage", setRmageHP]
-
-            ]
-        );
-
-    const MatchToMpSetState: Map<string, (value: number) => void> = new Map
-        (
-            [
-                ["knight", setKnightMP],
-                ["dmage", setDmageMP],
-                ["wmage", setWmageMP],
-                ["rmage", setRmageMP]
-            ]
-        );
-
 
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
     //match returned target to their statuses, for status effects
@@ -275,7 +254,49 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     console.log("no special attacks used")
                     break;
             }
-        }        //Then do the status effect stuff. 
+        }
+        const MatchToHpSetState: Map<string, (value: number) => void> = new Map
+            (
+                [
+                    ["knight", setKnightHP],
+                    ["dmage", setDmageHP],
+                    ["wmage", setWmageHP],
+                    ["rmage", setRmageHP]
+
+                ]
+            );
+
+        const MatchToMpSetState: Map<string, (value: number) => void> = new Map
+            (
+                [
+                    ["knight", setKnightMP],
+                    ["dmage", setDmageMP],
+                    ["wmage", setWmageMP],
+                    ["rmage", setRmageMP]
+                ]
+            );
+        //need to make context for these 
+        const MatchToHpMap: Map<string, number | undefined> = new Map
+            (
+                [
+                    ["knight", KnightHP],
+                    ["dmage", DmageHP],
+                    ["wmage", WmageHP],
+                    ["rmage", RmageHP]
+                ]
+            );
+        const MatchToMpMap: Map<string, number | undefined> = new Map
+            (
+                [
+                    ["knight", KnightMP],
+                    ["dmage", DmageMP],
+                    ["wmage", WmageMP],
+                    ["rmage", RmageMP]
+                ]
+            );
+
+
+        //Then do the status effect stuff.
         //Each have a small chance of auto-removal
 
         //because I need a string to use the maps for these 
@@ -283,21 +304,28 @@ export const BossArea: React.FC<BossAreaProps> = ({
             return IndexToName.get(char_num)
 
         }
+        function ReturnHpSetChar(char_str: string) {
+            return MatchToHpSetState.get(char_str)
 
-        const IndexToMaxHP: Map<number, number> = new Map
-            (
-                [
+        }
 
-
-                ]
-            )
 
 
         //15% of max hp. Can kill. 
         function PoisonDamage(char_id: number) {
             console.log("CHRID", char_id)
             const char_str = ConvertToStr(char_id)
-            //then use the id to subtract hp accordingly 
+            //then use the str to subtract hp accordingly 
+            //with match2maxhpmap
+            const char_max_hp = MatchToMaxHpMap.get(char_str!)
+            //retieve the hp pf the character being targeted
+            const set_char = ReturnHpSetChar(char_str!);
+            //then set accordingly
+            let x = set_char!(MatchToHpMap.get(char_str!)! - parseInt((char_max_hp! * 0.05).toFixed(0)))!
+            console.log("hp after poison", x)
+
+
+
 
 
         };
