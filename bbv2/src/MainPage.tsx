@@ -321,12 +321,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             //retieve the hp pf the character being targeted
             const set_char = ReturnHpSetChar(char_str!);
             //then set accordingly
-            let x = set_char!(MatchToHpMap.get(char_str!)! - parseInt((char_max_hp! * 0.05).toFixed(0)))!
-            console.log("hp after poison", x)
-
-
-
-
+            set_char!(MatchToHpMap.get(char_str!)! - parseInt((char_max_hp! * 0.05).toFixed(0)))!
 
         };
 

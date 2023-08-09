@@ -469,10 +469,20 @@ export const attacks_map: Map<string, Function> = new Map([
 
         }
     ],
-    [   //Swaps hp and mp
-        //This attack can kill her if she's not careful
-        //Could be used to build up a SS
+    [   //Uses hp to deal huge dmg, doesn't miss
         'Border Of Life', function BorderOfLife() {
+            return (
+                RNG(
+                    {
+                        min: 26000,
+                        crit_rate: .25,
+                        phys_or_mag: "mag",
+                        variance: 1.10,
+                        is_ult: false,
+                        sfx_type: "bol"
+                    }
+                )
+            )
 
 
 
