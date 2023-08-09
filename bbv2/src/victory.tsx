@@ -7,7 +7,7 @@ import { PrecipTypeContext } from "./Context";
 export const ScoreDeductionsMap: Map<string, number> = new Map(
     [
         ["death", 1000],
-        ["item", 40],
+        ["item", 10],
         ["heal", 20],
         ["turn", 15] //per turn
 

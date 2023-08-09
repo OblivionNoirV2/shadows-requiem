@@ -355,7 +355,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             if (Percentage() < 0.20) {
                 const char_str = ConvertToStr(char_id);
                 const set_status = TargetToSetStatus.get(char_str!);
-                set_status!(["dead"])
+                set_status!(["dead"]);
             }
 
         }
@@ -437,31 +437,27 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
 
     //control dead and revive status
-    function HandleDeath(character: string, killed_or_revived: string) {
+    //lets try seperating these 2
+    function HandleDeath(character: string) {
         const char_index = NameToIndex.get(character)!
         const setStatus = player_set_statuses.get(char_index);
         const status = player_statuses.get(char_index);
+        setStatus!(["dead"]);//also removes everything else
+        Occurences.set("death", (Occurences.get("death")! + 1));
+    }
 
-        if (killed_or_revived === "killed") {
-            if (!status!.includes("dead")) {
-                setStatus!(["dead"]);//also removes everything else
-                Occurences.set("death", (Occurences.get("death")! + 1));
-            }
-        } else {
-            //remove dead, since this means they were revived
-            setStatus!(prevStatus => prevStatus.filter(status => status !== "dead"));
-        }
-        console.log(`${character} status`, status);
+    function HandleRevive(character: string) {
+
     }
 
     useEffect(() => {
+        //the get value is still set to 0 after the death,
+        //which is why this breaks
         let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0));
         if (khp <= 0) {
             //prevent negatives
             setKnightHP(0)
-            HandleDeath("knight", "killed");
-        } else {
-            setKnightHP(khp);
+            HandleDeath("knight");
         }
 
     }, [sm.knight_stats.get("hp")])
@@ -484,7 +480,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0));
         if (dhp <= 0) {
             setDmageHP(0);
-            HandleDeath("dmage", "killed");
+            HandleDeath("dmage");
         } else {
             setDmageHP(dhp)
         }
@@ -506,7 +502,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let whp = parseInt(sm.assassin_stats.get("hp")!.toFixed(0));
         if (whp <= 0) {
             setAssassinHP(0);
-            HandleDeath("assassin", "killed");
+            HandleDeath("assassin");
         } else {
             setAssassinHP(whp);
         }
@@ -527,7 +523,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0));
         if (rhp <= 0) {
             setRmageHP(0);
-            HandleDeath("rmage", "killed");
+            HandleDeath("rmage");
         } else {
             setRmageHP(rhp);
         }
@@ -878,6 +874,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     function HpFunction(target: string, amount: number) {
         const set_hp = MatchToHpSetState.get(target)!;
         set_hp(parseInt((amount).toFixed(0)));
+        return parseInt((amount).toFixed(0))
     }
 
     function MpFunction(target: string, amount: number) {
@@ -938,6 +935,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 MatchToHpMap.set(target, (MatchToHpMap.get(target)!) +
                     (MatchToMaxHpMap.get(target)! * item_details!.amount!));
                 HpFunction(target, (MatchToHpMap.get(target)!));
+
                 break;
             case "mp":
                 MatchToMpMap.set(target, MatchToMpMap.get(target)! +
@@ -952,6 +950,10 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 MatchToHpMap.set(target, (MatchToHpMap.get(target)!) +
                     (MatchToMaxHpMap.get(target)! * item_details!.amount!));
                 HpFunction(target, (MatchToHpMap.get(target)!));
+
+
+
+
                 break;
             case "de-toxin":
                 //remove poison status

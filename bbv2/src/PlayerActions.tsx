@@ -461,15 +461,14 @@ export const attacks_map: Map<string, Function> = new Map([
     ],
     [
         'Smokescreen', function Smokescreen() {
-            if (sm.assassin_stats.get("ev")! < min_max_vals_map.get("player")!.ev!.max) {
-
+            const as_ev = sm.assassin_stats.get("ev")!
+            console.log("prev iv", as_ev)
+            const max_ev = min_max_vals_map.get("player")!.ev!.max
+            if (as_ev < max_ev) {
+                sm.assassin_stats.set("ev", as_ev + 0.25)
+                console.log("new as ev", sm.assassin_stats.get("ev"))
             }
-            sm.assassin_stats.get("ev")
-            //raises his ev 
-
-
         }
-
     ],
     //red mage
     [   //Uses hp to deal huge dmg, doesn't miss
