@@ -3,20 +3,20 @@ import { Link } from "react-router-dom";
 import {
     KnightNameContext,
     DmageNameContext,
-    WmageNameContext,
+    AssassinNameContext,
     RmageNameContext
 } from "./Context";
 import { playClickSfx } from "./sfxManagement";
 export let knight_name = KnightNameContext;
 export let dmage_name = DmageNameContext;
-export let wmage_name = WmageNameContext;
+export let assassin_name = AssassinNameContext;
 export let rmage_name = RmageNameContext;
 export const NameCharacters = () => {
     const characters: string[] = ['Knight', 'Dark Mage', 'White Mage', 'Red Mage'];
 
     const { setKnightName } = useContext(KnightNameContext);
     const { setDmageName } = useContext(DmageNameContext);
-    const { setWmageName } = useContext(WmageNameContext);
+    const { setAssassinName } = useContext(AssassinNameContext);
     const { setRmageName } = useContext(RmageNameContext);
     //Set these on input change, THEN the save button (or enter) retrieves
     //this data and uses it to set the name states
@@ -48,7 +48,7 @@ export const NameCharacters = () => {
         //set to default names if left empty, this prevents blank names
         setKnightName(names['Knight'] || 'Knight');
         setDmageName(names['Dark Mage'] || 'Dark Mage');
-        setWmageName(names['White Mage'] || 'White Mage');
+        setAssassinName(names['White Mage'] || 'White Mage');
         setRmageName(names['Red Mage'] || 'Red Mage');
         console.log(names);
     };

@@ -13,7 +13,7 @@ export const TargetToStat: Map<string, Map<string, number>> = new Map(
     [
         ["knight", sm.knight_stats],
         ["dmage", sm.dmage_stats],
-        ["wmage", sm.wmage_stats],
+        ["assassin", sm.assassin_stats],
         ["rmage", sm.rmage_stats],
     ]
 )

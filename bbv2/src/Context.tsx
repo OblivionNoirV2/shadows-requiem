@@ -217,27 +217,27 @@ export function DmageMPContextProvider({ children }: { children: React.ReactElem
     )
 }
 
-export interface WmageMPContextValue {
-    WmageMP: number | undefined;
-    setWmageMP: (value: number) => void;
+export interface AssassinMPContextValue {
+    AssassinMP: number | undefined;
+    setAssassinMP: (value: number) => void;
 }
 
-export const WmageMPContext = createContext<WmageMPContextValue>({
-    WmageMP: sm.wmage_stats.get('mp'),
-    setWmageMP: () => { },
+export const AssassinMPContext = createContext<AssassinMPContextValue>({
+    AssassinMP: sm.assassin_stats.get('mp'),
+    setAssassinMP: () => { },
 })
 
-export function WmageMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [WmageMP, setWmageMP] = useState(sm.wmage_stats.get('mp'));
+export function AssassinMPContextProvider({ children }: { children: React.ReactElement }) {
+    const [AssassinMP, setAssassinMP] = useState(sm.assassin_stats.get('mp'));
 
     useEffect(() => {
-        console.log('WmageMP updated:', WmageMP);
-    }, [WmageMP]);
+        console.log('AssassinMP updated:', AssassinMP);
+    }, [AssassinMP]);
 
     return (
-        <WmageMPContext.Provider value={{ WmageMP, setWmageMP }}>
+        <AssassinMPContext.Provider value={{ AssassinMP, setAssassinMP }}>
             {children}
-        </WmageMPContext.Provider>
+        </AssassinMPContext.Provider>
     )
 }
 
@@ -314,26 +314,26 @@ export function DmageHPContextProvider({ children }: { children: React.ReactElem
         </DmageHPContext.Provider>
     )
 }
-interface WmageHPContextValue {
-    WmageHP: number | undefined;
-    setWmageHP: (value: number) => void;
+interface AssassinHPContextValue {
+    AssassinHP: number | undefined;
+    setAssassinHP: (value: number) => void;
 }
-export const WmageHPContext = createContext<WmageHPContextValue>({
-    WmageHP: sm.wmage_stats.get('hp'),
-    setWmageHP: () => { },
+export const AssassinHPContext = createContext<AssassinHPContextValue>({
+    AssassinHP: sm.assassin_stats.get('hp'),
+    setAssassinHP: () => { },
 })
 
-export function WmageHPContextProvider({ children }: { children: React.ReactElement }) {
-    const [WmageHP, setWmageHP] = useState(sm.wmage_stats.get('hp'));
+export function AssassinHPContextProvider({ children }: { children: React.ReactElement }) {
+    const [AssassinHP, setAssassinHP] = useState(sm.assassin_stats.get('hp'));
 
     useEffect(() => {
-        console.log('WmageHP updated:', WmageHP);
-    }, [WmageHP]);
+        console.log('AssassinHP updated:', AssassinHP);
+    }, [AssassinHP]);
 
     return (
-        <WmageHPContext.Provider value={{ WmageHP, setWmageHP }}>
+        <AssassinHPContext.Provider value={{ AssassinHP, setAssassinHP }}>
             {children}
-        </WmageHPContext.Provider>
+        </AssassinHPContext.Provider>
     )
 }
 
@@ -412,27 +412,27 @@ export function DmageStatusContextProvider({ children }: { children: React.React
     )
 }
 
-interface WmageStatusContextValue {
-    WmageStatus: string[];
-    setWmageStatus: React.Dispatch<React.SetStateAction<string[]>>;
+interface AssassinStatusContextValue {
+    AssassinStatus: string[];
+    setAssassinStatus: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export const WmageStatusContext = createContext<WmageStatusContextValue>({
-    WmageStatus: [],
-    setWmageStatus: () => { },
+export const AssassinStatusContext = createContext<AssassinStatusContextValue>({
+    AssassinStatus: [],
+    setAssassinStatus: () => { },
 })
 
-export function WmageStatusContextProvider({ children }: { children: React.ReactElement }) {
-    const [WmageStatus, setWmageStatus] = useState<string[]>([]);
+export function AssassinStatusContextProvider({ children }: { children: React.ReactElement }) {
+    const [AssassinStatus, setAssassinStatus] = useState<string[]>([]);
 
     useEffect(() => {
-        console.log('WmageStatus updated:', WmageStatus);
-    }, [WmageStatus]);
+        console.log('AssassinStatus updated:', AssassinStatus);
+    }, [AssassinStatus]);
 
     return (
-        <WmageStatusContext.Provider value={{ WmageStatus, setWmageStatus }}>
+        <AssassinStatusContext.Provider value={{ AssassinStatus, setAssassinStatus }}>
             {children}
-        </WmageStatusContext.Provider>
+        </AssassinStatusContext.Provider>
     )
 }
 
@@ -510,27 +510,27 @@ export function DmageNameContextProvider({ children }: { children: React.ReactEl
     )
 }
 
-interface WmageNameContextValue {
-    WmageName: string;
-    setWmageName: (value: string) => void;
+interface AssassinNameContextValue {
+    AssassinName: string;
+    setAssassinName: (value: string) => void;
 }
 
-export const WmageNameContext = createContext<WmageNameContextValue>({
-    WmageName: 'White Mage',
-    setWmageName: () => { },
+export const AssassinNameContext = createContext<AssassinNameContextValue>({
+    AssassinName: 'White Mage',
+    setAssassinName: () => { },
 })
 
-export function WmageNameContextProvider({ children }: { children: React.ReactElement }) {
-    const [WmageName, setWmageName] = useState('White Mage');
+export function AssassinNameContextProvider({ children }: { children: React.ReactElement }) {
+    const [AssassinName, setAssassinName] = useState('White Mage');
 
     useEffect(() => {
-        console.log('WmageName updated:', WmageName);
-    }, [WmageName]);
+        console.log('AssassinName updated:', AssassinName);
+    }, [AssassinName]);
 
     return (
-        <WmageNameContext.Provider value={{ WmageName, setWmageName }}>
+        <AssassinNameContext.Provider value={{ AssassinName, setAssassinName }}>
             {children}
-        </WmageNameContext.Provider>
+        </AssassinNameContext.Provider>
     )
 }
 

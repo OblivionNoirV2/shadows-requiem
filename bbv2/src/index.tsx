@@ -15,7 +15,7 @@ import {
   TurnNumberContextProvider,
   KnightMPContextProvider,
   DmageMPContextProvider,
-  WmageMPContextProvider,
+  AssassinMPContextProvider,
   RmageMPContextProvider,
   MessageContextProvider,
   AttackShownContextProvider,
@@ -24,15 +24,15 @@ import {
   UltimaContextProvider,
   KnightHPContextProvider,
   DmageHPContextProvider,
-  WmageHPContextProvider,
+  AssassinHPContextProvider,
   RmageHPContextProvider,
   KnightStatusContextProvider,
   DmageStatusContextProvider,
-  WmageStatusContextProvider,
+  AssassinStatusContextProvider,
   RmageStatusContextProvider,
   KnightNameContextProvider,
   DmageNameContextProvider,
-  WmageNameContextProvider,
+  AssassinNameContextProvider,
   RmageNameContextProvider,
   BossAttackingContextProvider,
   PrecipTypeContextProvider
@@ -53,7 +53,7 @@ root.render(
         <TurnNumberContextProvider>
           <KnightMPContextProvider>
             <DmageMPContextProvider>
-              <WmageMPContextProvider>
+              <AssassinMPContextProvider>
                 <RmageMPContextProvider>
                   <MessageContextProvider>
                     <AttackShownContextProvider>
@@ -62,15 +62,15 @@ root.render(
                           <UltimaContextProvider>
                             <KnightHPContextProvider>
                               <DmageHPContextProvider>
-                                <WmageHPContextProvider>
+                                <AssassinHPContextProvider>
                                   <RmageHPContextProvider>
                                     <KnightStatusContextProvider>
                                       <DmageStatusContextProvider>
-                                        <WmageStatusContextProvider>
+                                        <AssassinStatusContextProvider>
                                           <RmageStatusContextProvider>
                                             <KnightNameContextProvider>
                                               <DmageNameContextProvider>
-                                                <WmageNameContextProvider>
+                                                <AssassinNameContextProvider>
                                                   <RmageNameContextProvider>
                                                     <BossAttackingContextProvider>
                                                       <PrecipTypeContextProvider>
@@ -78,15 +78,15 @@ root.render(
                                                       </PrecipTypeContextProvider>
                                                     </BossAttackingContextProvider>
                                                   </RmageNameContextProvider>
-                                                </WmageNameContextProvider>
+                                                </AssassinNameContextProvider>
                                               </DmageNameContextProvider>
                                             </KnightNameContextProvider>
                                           </RmageStatusContextProvider>
-                                        </WmageStatusContextProvider>
+                                        </AssassinStatusContextProvider>
                                       </DmageStatusContextProvider>
                                     </KnightStatusContextProvider>
                                   </RmageHPContextProvider>
-                                </WmageHPContextProvider>
+                                </AssassinHPContextProvider>
                               </DmageHPContextProvider>
                             </KnightHPContextProvider>
                           </UltimaContextProvider>
@@ -95,7 +95,7 @@ root.render(
                     </AttackShownContextProvider>
                   </MessageContextProvider>
                 </RmageMPContextProvider>
-              </WmageMPContextProvider>
+              </AssassinMPContextProvider>
             </DmageMPContextProvider>
           </KnightMPContextProvider>
         </TurnNumberContextProvider>

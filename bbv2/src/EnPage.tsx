@@ -8,7 +8,7 @@ import { playClickSfx } from "./sfxManagement";
 import * as sm from "./StatManagement";
 import knight_img from './assets/images/player/sprites/knight.png';
 import dmage_img from './assets/images/player/sprites/dmage.png';
-import wmage_img from './assets/images/player/sprites/wmage.png';
+import assassin_img from './assets/images/player/sprites/assassin.png';
 import rmage_img from './assets/images/player/sprites/rmage.png';
 import { MatchToMaxHpMap } from "./MainPage";
 import { MatchToMaxMpMap } from "./MainPage";
@@ -35,7 +35,7 @@ const MatchToPdef: Map<string, number> = new Map
         [
             ["knight", sm.knight_stats.get("d_p_def")!],
             ["dmage", sm.dmage_stats.get("d_p_def")!],
-            ["wmage", sm.wmage_stats.get("d_p_def")!],
+            ["assassin", sm.assassin_stats.get("d_p_def")!],
             ["rmage", sm.rmage_stats.get("d_p_def")!],
 
         ]
@@ -46,7 +46,7 @@ const MatchToMdef: Map<string, number> = new Map
         [
             ["knight", sm.knight_stats.get("d_m_def")!],
             ["dmage", sm.dmage_stats.get("d_m_def")!],
-            ["wmage", sm.wmage_stats.get("d_m_def")!],
+            ["assassin", sm.assassin_stats.get("d_m_def")!],
             ["rmage", sm.rmage_stats.get("d_m_def")!],
 
         ]
@@ -57,7 +57,7 @@ const MatchToEv: Map<string, number> = new Map
         [
             ["knight", sm.knight_stats.get("d_ev")!],
             ["dmage", sm.dmage_stats.get("d_ev")!],
-            ["wmage", sm.wmage_stats.get("d_ev")!],
+            ["assassin", sm.assassin_stats.get("d_ev")!],
             ["rmage", sm.rmage_stats.get("d_ev")!],
 
         ]
@@ -68,7 +68,7 @@ const MatchToCharDesc: Map<String, string> = new Map
         [
             ["knight", "The main shield of the party. He is resistant to physical attacks and can take the most damage. Deals all physical damage."],
             ["dmage", "She is a spellcaster with a balanced spread of support, offense and stat debuffing."],
-            ["wmage", "The primary medic of the party. Somwhat fragile, but has great magic defense. Can also deal light damage."],
+            ["assassin", "The primary medic of the party. Somwhat fragile, but has great magic defense. Can also deal light damage."],
             ["rmage", "High risk, high reward glass cannon. She has potential to deal the most damage out of everyone, but is very fragile."]
         ]
     );
@@ -139,8 +139,8 @@ const CharacterStats = () => {
                 />
                 <CharacterStatComponent
                     name="White Mage"
-                    img_src={wmage_img}
-                    lookup_name="wmage"
+                    img_src={assassin_img}
+                    lookup_name="assassin"
                 />
                 <CharacterStatComponent
                     name="Red Mage"
@@ -273,7 +273,7 @@ const EncylopediaPage = () => {
                 />
                 <AttacksComponent
                     player="White Mage"
-                    map_name="wmage_attacks"
+                    map_name="assassin_attacks"
                 />
                 <AttacksComponent
                     player="Red Mage"

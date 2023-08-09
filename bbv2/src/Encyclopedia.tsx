@@ -89,7 +89,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
 
                 }
             ],
-            //wmage
+            //assassin
             [
                 'Pierce Evil', {
                     description: "Attack with a blade of holy energy. Low magic damage.",
@@ -187,7 +187,7 @@ export const dmage_attacks = [
     "Desperation"
 ]
 
-export const wmage_attacks = [
+export const assassin_attacks = [
     "Pierce Evil",
     "Radiant Sky",
     "Rebirth",

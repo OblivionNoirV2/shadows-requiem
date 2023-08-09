@@ -16,19 +16,19 @@ import {
     UltimaContext,
     KnightMPContext,
     DmageMPContext,
-    WmageMPContext,
+    AssassinMPContext,
     RmageMPContext,
     KnightHPContext,
     DmageHPContext,
-    WmageHPContext,
+    AssassinHPContext,
     RmageHPContext,
     KnightStatusContext,
     DmageStatusContext,
-    WmageStatusContext,
+    AssassinStatusContext,
     RmageStatusContext,
     KnightNameContext,
     DmageNameContext,
-    WmageNameContext,
+    AssassinNameContext,
     RmageNameContext,
     BossAttackingContext,
     PrecipTypeContext
@@ -38,13 +38,13 @@ import { RNGResult } from './PlayerActions';
 import { selected_difficulty } from './StartMenu';
 import knightbg from './assets/images/bg-and-effects/knightultimabg.png';
 import dmagebg from './assets/images/bg-and-effects/dmageultimabg.png';
-import wmagebg from './assets/images/bg-and-effects/wmageultimabg.png';
+import assassinbg from './assets/images/bg-and-effects/assassinultimabg.png';
 import rmagebg from './assets/images/bg-and-effects/rmageultimabg.png';
 import defaultbg from './assets/images/bg-and-effects/battlebgv3.png';
 import { bossAttackAlgo, BossAttackArea, last_boss_attacks } from './BossAlgorithm';
 import knight_icon from './assets/images/player/sprites/knight.png';
 import dmage_icon from './assets/images/player/sprites/dmage.png';
-import wmage_icon from './assets/images/player/sprites/wmage.png';
+import assassin_icon from './assets/images/player/sprites/assassin.png';
 import rmage_icon from './assets/images/player/sprites/rmage.png';
 import dead_icon from './assets/images/icons/dead.png';
 import { prev_dmg } from './BossAlgorithm';
@@ -68,7 +68,7 @@ interface ItemList {
 const player_attacks: AttackList = {
     knight: e.knight_attacks,
     dmage: e.dmage_attacks,
-    wmage: e.wmage_attacks,
+    assassin: e.assassin_attacks,
     rmage: e.rmage_attacks
 };
 
@@ -89,14 +89,14 @@ let targets_list = []
 export let MatchToMaxHpMap: Map<string, number | undefined> = new Map([
     ["knight", sm.knight_stats.get("max_hp")],
     ["dmage", sm.dmage_stats.get("max_hp")],
-    ["wmage", sm.wmage_stats.get("max_hp")],
+    ["assassin", sm.assassin_stats.get("max_hp")],
     ["rmage", sm.rmage_stats.get("max_hp")]
 ]);
 
 export let MatchToMaxMpMap: Map<string, number | undefined> = new Map([
     ["knight", sm.knight_stats.get("max_mp")],
     ["dmage", sm.dmage_stats.get("max_mp")],
-    ["wmage", sm.wmage_stats.get("max_mp")],
+    ["assassin", sm.assassin_stats.get("max_mp")],
     ["rmage", sm.rmage_stats.get("max_mp")]
 ]);
 
@@ -113,17 +113,17 @@ export const BossArea: React.FC<BossAreaProps> = ({
     const { TurnNumber, setTurnNumber } = useContext(TurnNumberContext);
     const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
     const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
-    const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
+    const { AssassinStatus, setAssassinStatus } = useContext(AssassinStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
 
     const { KnightMP, setKnightMP } = useContext(KnightMPContext);
     const { DmageMP, setDmageMP } = useContext(DmageMPContext);
-    const { WmageMP, setWmageMP } = useContext(WmageMPContext);
+    const { AssassinMP, setAssassinMP } = useContext(AssassinMPContext);
     const { RmageMP, setRmageMP } = useContext(RmageMPContext);
 
     const { KnightHP, setKnightHP } = useContext(KnightHPContext);
     const { DmageHP, setDmageHP } = useContext(DmageHPContext);
-    const { WmageHP, setWmageHP } = useContext(WmageHPContext);
+    const { AssassinHP, setAssassinHP } = useContext(AssassinHPContext);
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
 
 
@@ -137,7 +137,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         [
             [0, KnightStatus],
             [1, DmageStatus],
-            [2, WmageStatus],
+            [2, AssassinStatus],
             [3, RmageStatus]
         ]
     )
@@ -146,7 +146,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             [
                 [0, setKnightStatus],
                 [1, setDmageStatus],
-                [2, setWmageStatus],
+                [2, setAssassinStatus],
                 [3, setRmageStatus]
             ]
         )
@@ -155,7 +155,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         [
             [0, "knight"],
             [1, "dmage"],
-            [2, "wmage"],
+            [2, "assassin"],
             [3, "rmage"]
         ])
     //lock player menus while boss is attacking
@@ -175,15 +175,15 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 phase: bossStage,
                 knight_status: KnightStatus,
                 dmage_status: DmageStatus,
-                wmage_status: WmageStatus,
+                assassin_status: AssassinStatus,
                 rmage_status: RmageStatus,
                 knight_hp: KnightHP!,
                 dmage_hp: DmageHP!,
-                wmage_hp: WmageHP!,
+                assassin_hp: AssassinHP!,
                 rmage_hp: RmageHP!,
                 knight_mp: KnightMP!,
                 dmage_mp: DmageMP!,
-                wmage_mp: WmageMP!,
+                assassin_mp: AssassinMP!,
                 rmage_mp: RmageMP!,
                 current_turn: TurnNumber,
             });
@@ -260,7 +260,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 [
                     ["knight", setKnightHP],
                     ["dmage", setDmageHP],
-                    ["wmage", setWmageHP],
+                    ["assassin", setAssassinHP],
                     ["rmage", setRmageHP]
 
                 ]
@@ -271,7 +271,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 [
                     ["knight", setKnightMP],
                     ["dmage", setDmageMP],
-                    ["wmage", setWmageMP],
+                    ["assassin", setAssassinMP],
                     ["rmage", setRmageMP]
                 ]
             );
@@ -281,7 +281,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 [
                     ["knight", KnightHP],
                     ["dmage", DmageHP],
-                    ["wmage", WmageHP],
+                    ["assassin", AssassinHP],
                     ["rmage", RmageHP]
                 ]
             );
@@ -290,7 +290,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 [
                     ["knight", KnightMP],
                     ["dmage", DmageMP],
-                    ["wmage", WmageMP],
+                    ["assassin", AssassinMP],
                     ["rmage", RmageMP]
                 ]
             );
@@ -394,7 +394,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             [
                 [0, KnightStatus],
                 [1, DmageStatus],
-                [2, WmageStatus],
+                [2, AssassinStatus],
                 [3, RmageStatus]
             ]
         )
@@ -404,7 +404,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 [
                     [0, setKnightStatus],
                     [1, setDmageStatus],
-                    [2, setWmageStatus],
+                    [2, setAssassinStatus],
                     [3, setRmageStatus]
                 ]
             )
@@ -477,25 +477,25 @@ export const BossArea: React.FC<BossAreaProps> = ({
     }, [sm.dmage_stats.get("mp")])
 
     useEffect(() => {
-        let whp = parseInt(sm.wmage_stats.get("hp")!.toFixed(0));
+        let whp = parseInt(sm.assassin_stats.get("hp")!.toFixed(0));
         if (whp <= 0) {
-            setWmageHP(0);
-            HandleDeath("wmage", "killed");
+            setAssassinHP(0);
+            HandleDeath("assassin", "killed");
         } else {
-            setWmageHP(whp);
+            setAssassinHP(whp);
         }
 
-    }, [sm.wmage_stats.get("hp")])
+    }, [sm.assassin_stats.get("hp")])
 
 
     useEffect(() => {
-        let wmp = parseInt(sm.wmage_stats.get("mp")!.toFixed(0));
+        let wmp = parseInt(sm.assassin_stats.get("mp")!.toFixed(0));
         if (wmp <= 0) {
-            setWmageMP(0);
+            setAssassinMP(0);
         } else {
-            setWmageMP(wmp);
+            setAssassinMP(wmp);
         }
-    }, [sm.wmage_stats.get("mp")])
+    }, [sm.assassin_stats.get("mp")])
 
     useEffect(() => {
         let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0));
@@ -546,7 +546,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     function StatReversion() {
         console.log("sr running")
         //list of character names
-        const character_names = ['knight', 'dmage', 'wmage', 'rmage'];
+        const character_names = ['knight', 'dmage', 'assassin', 'rmage'];
         //list of stats to check for each character
         const stat_names = ['m_def', 'p_def', 'p_atk', 'm_atk', 'ev'];
 
@@ -697,23 +697,23 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
     const { KnightMP, setKnightMP } = useContext(KnightMPContext);
     const { DmageMP, setDmageMP } = useContext(DmageMPContext);
-    const { WmageMP, setWmageMP } = useContext(WmageMPContext);
+    const { AssassinMP, setAssassinMP } = useContext(AssassinMPContext);
     const { RmageMP, setRmageMP } = useContext(RmageMPContext);
 
     const { KnightHP, setKnightHP } = useContext(KnightHPContext);
     const { DmageHP, setDmageHP } = useContext(DmageHPContext);
-    const { WmageHP, setWmageHP } = useContext(WmageHPContext);
+    const { AssassinHP, setAssassinHP } = useContext(AssassinHPContext);
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
 
     const { KnightName } = useContext(KnightNameContext);
     const { DmageName } = useContext(DmageNameContext);
-    const { WmageName } = useContext(WmageNameContext);
+    const { AssassinName } = useContext(AssassinNameContext);
     const { RmageName } = useContext(RmageNameContext);
 
 
     const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
     const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
-    const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
+    const { AssassinStatus, setAssassinStatus } = useContext(AssassinStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
 
 
@@ -723,7 +723,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             [
                 ["knight", KnightHP],
                 ["dmage", DmageHP],
-                ["wmage", WmageHP],
+                ["assassin", AssassinHP],
                 ["rmage", RmageHP]
             ]
         );
@@ -732,7 +732,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             [
                 ["knight", KnightMP],
                 ["dmage", DmageMP],
-                ["wmage", WmageMP],
+                ["assassin", AssassinMP],
                 ["rmage", RmageMP]
             ]
         );
@@ -805,7 +805,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
 
     const [isSecondaryItemMenuShown, setIsSecondaryItemMenuShown] = useState(false);
-    type validItemTargets = "knight" | "dmage" | "wmage" | "rmage";
+    type validItemTargets = "knight" | "dmage" | "assassin" | "rmage";
 
     const [itemTarget, setItemTarget] = useState<validItemTargets>()
     const [currentItem, setCurrentItem] = useState("")
@@ -828,7 +828,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             [
                 ["knight", setKnightHP],
                 ["dmage", setDmageHP],
-                ["wmage", setWmageHP],
+                ["assassin", setAssassinHP],
                 ["rmage", setRmageHP]
 
             ]
@@ -839,7 +839,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             [
                 ["knight", setKnightMP],
                 ["dmage", setDmageMP],
-                ["wmage", setWmageMP],
+                ["assassin", setAssassinMP],
                 ["rmage", setRmageMP]
             ]
         );
@@ -871,7 +871,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             [
                 ["knight", KnightStatus],
                 ["dmage", DmageStatus],
-                ["wmage", WmageStatus],
+                ["assassin", AssassinStatus],
                 ["rmage", RmageStatus]
             ]
         )
@@ -881,7 +881,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             [
                 ["knight", setKnightStatus],
                 ["dmage", setDmageStatus],
-                ["wmage", setWmageStatus],
+                ["assassin", setAssassinStatus],
                 ["rmage", setRmageStatus]
             ]
         )
@@ -1025,8 +1025,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
             case "dmage":
                 setDmageMP(DmageMP! - attack_encyclopedia_entry!);
                 break;
-            case "wmage":
-                setWmageMP(WmageMP! - attack_encyclopedia_entry!);
+            case "assassin":
+                setAssassinMP(AssassinMP! - attack_encyclopedia_entry!);
                 break;
             case "rmage":
                 attack !== "Border Of Life" ?
@@ -1131,9 +1131,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                             <li>
                                                 <button className='atk-btn'
                                                     onClick={() =>
-                                                        setItemTarget("wmage")
+                                                        setItemTarget("assassin")
                                                     }>
-                                                    {WmageName}
+                                                    {AssassinName}
                                                 </button>
                                             </li>
                                             <li>
@@ -1323,7 +1323,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
     const { KnightStatus, setKnightStatus } = useContext(KnightStatusContext);
     const { DmageStatus, setDmageStatus } = useContext(DmageStatusContext);
-    const { WmageStatus, setWmageStatus } = useContext(WmageStatusContext);
+    const { AssassinStatus, setAssassinStatus } = useContext(AssassinStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
 
 
@@ -1378,7 +1378,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
             [
                 [0, KnightStatus],
                 [1, DmageStatus],
-                [2, WmageStatus],
+                [2, AssassinStatus],
                 [3, RmageStatus]
             ]
         )
@@ -1387,7 +1387,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
             [
                 [0, setKnightStatus],
                 [1, setDmageStatus],
-                [2, setWmageStatus],
+                [2, setAssassinStatus],
                 [3, setRmageStatus]
             ]
         )
@@ -1443,7 +1443,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         [
             ["Thousand Men", "knight-ult-btn"],
             ["Nightmare Supernova", "dmage-ult-btn"],
-            ["Supreme Altar", "wmage-ult-btn"],
+            ["Supreme Altar", "assassin-ult-btn"],
             ["Scarlet Subversion", "rmage-ult-btn"]
         ]
     );
@@ -1454,7 +1454,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         [
             ["Thousand Men", knightbg],
             ["Nightmare Supernova", dmagebg],
-            ["Supreme Altar", wmagebg],
+            ["Supreme Altar", assassinbg],
             ["Scarlet Subversion", rmagebg]
         ]
     )
@@ -1492,7 +1492,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
             }, 4000);
         }
     }
-    type validMapKeys = "knight_stats" | "dmage_stats" | "wmage_stats" | "rmage_stats";
+    type validMapKeys = "knight_stats" | "dmage_stats" | "assassin_stats" | "rmage_stats";
     interface PlayerComponentProps {
         player: string;
         stat_name: validMapKeys;
@@ -1504,18 +1504,18 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
         const { KnightMP, setKnightMP } = useContext(KnightMPContext);
         const { DmageMP, setDmageMP } = useContext(DmageMPContext);
-        const { WmageMP, setWmageMP } = useContext(WmageMPContext);
+        const { AssassinMP, setAssassinMP } = useContext(AssassinMPContext);
         const { RmageMP, setRmageMP } = useContext(RmageMPContext);
 
         const { KnightHP, setKnightHP } = useContext(KnightHPContext);
         const { DmageHP, setDmageHP } = useContext(DmageHPContext);
-        const { WmageHP, setWmageHP } = useContext(WmageHPContext);
+        const { AssassinHP, setAssassinHP } = useContext(AssassinHPContext);
         const { RmageHP, setRmageHP } = useContext(RmageHPContext);
 
 
         const { KnightName, setKnightName } = useContext(KnightNameContext);
         const { DmageName, setDmageName } = useContext(DmageNameContext);
-        const { WmageName, setWmageName } = useContext(WmageNameContext);
+        const { AssassinName, setAssassinName } = useContext(AssassinNameContext);
         const { RmageName, setRmageName } = useContext(RmageNameContext);
 
 
@@ -1524,7 +1524,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
             [
                 ["knight", KnightMP],
                 ["dmage", DmageMP],
-                ["wmage", WmageMP],
+                ["assassin", AssassinMP],
                 ["rmage", RmageMP]
 
             ]
@@ -1533,7 +1533,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
             [
                 ["knight", KnightHP],
                 ["dmage", DmageHP],
-                ["wmage", WmageHP],
+                ["assassin", AssassinHP],
                 ["rmage", RmageHP]
 
             ]
@@ -1543,7 +1543,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
             [
                 ["knight", KnightName],
                 ["dmage", DmageName],
-                ["wmage", WmageName],
+                ["assassin", AssassinName],
                 ["rmage", RmageName]
             ]
         )
@@ -1744,17 +1744,17 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                 !isBossAttacking &&
                                     !isAttackAreaShown &&
                                     isPlayerTurn ?
-                                    () => HandleSelection("wmage") :
+                                    () => HandleSelection("assassin") :
                                     undefined
                             }
-                                className={selectedCharacter === 'wmage' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
+                                className={selectedCharacter === 'assassin' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
                                 <img src={
-                                    !WmageStatus.includes("dead") ?
-                                        wmage_icon :
+                                    !AssassinStatus.includes("dead") ?
+                                        assassin_icon :
                                         dead_icon
                                 }
                                     alt={
-                                        !WmageStatus.includes("dead") ?
+                                        !AssassinStatus.includes("dead") ?
                                             "white mage icon" :
                                             "dead character"
                                     }
@@ -1764,17 +1764,17 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                             </button>
                             <span>
                                 {
-                                    isPlayerTurn && selectedCharacter === 'wmage' &&
+                                    isPlayerTurn && selectedCharacter === 'assassin' &&
                                     <PlayerMenu
-                                        player='wmage'
+                                        player='assassin'
                                         isPlayerTurn={isPlayerTurn}
 
                                     />
 
                                 }
                                 <PlayerComponent
-                                    player='wmage'
-                                    stat_name='wmage_stats'
+                                    player='assassin'
+                                    stat_name='assassin_stats'
                                     character_name='White Mage'
                                 />
 

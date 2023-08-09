@@ -64,20 +64,20 @@ export const dmage_stats: StatMap = new Map
             ["d_ev", 0.07]
         ]
     );
-
-export const wmage_stats: StatMap = new Map
+//fragile but very high ev, low mp cost attacks
+export const assassin_stats: StatMap = new Map
     (
         [
             ["hp", 400],
             ["max_hp", 400],
             ["mp", 310],
             ["max_mp", 310],
-            ["p_def", 1.00],
-            ["d_p_def", 1.00],
-            ["m_def", 1.45],
-            ["d_m_def", 1.45],
-            ["ev", 0.07],
-            ["d_ev", 0.07]
+            ["p_def", .90],
+            ["d_p_def", .90],
+            ["m_def", .90],
+            ["d_m_def", .90],
+            ["ev", 0.35],
+            ["d_ev", 0.35]
         ]
     );
 
@@ -88,12 +88,12 @@ export const rmage_stats: StatMap = new Map
             ["max_hp", 375],
             ["mp", 50],
             ["max_mp", 530],
-            ["p_def", 0.90],
-            ["d_p_def", 0.90],
-            ["m_def", 0.90],
-            ["d_m_def", 0.90],
-            ["ev", 0.15],
-            ["d_ev", 0.15]
+            ["p_def", 1.00],
+            ["d_p_def", 1.00],
+            ["m_def", 1.10],
+            ["d_m_def", 1.10],
+            ["ev", 0.12],
+            ["d_ev", 0.12]
         ]
     );
 //is adjusted later based on difficulty
@@ -162,7 +162,7 @@ export const player_mdef_map: Map<string, number | undefined> = new Map
         [
             ['knight', knight_stats.get('m_def')],
             ['dmage', dmage_stats.get('m_def')],
-            ['wmage', wmage_stats.get('m_def')],
+            ['assassin', assassin_stats.get('m_def')],
             ['rmage', rmage_stats.get('m_def')]
 
         ]
@@ -174,7 +174,7 @@ export const player_pdef_map: Map<string, number | undefined> = new Map
         [
             ['knight', knight_stats.get('p_def')],
             ['dmage', dmage_stats.get('p_def')],
-            ['wmage', wmage_stats.get('p_def')],
+            ['assassin', assassin_stats.get('p_def')],
             ['rmage', rmage_stats.get('p_def')]
         ]
     );

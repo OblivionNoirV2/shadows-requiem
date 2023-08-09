@@ -3,7 +3,7 @@ import * as sm from './StatManagement';
 import { Randomizer, selected_attack } from './PlayerActions';
 import {
     KnightStatusContext,
-    DmageStatusContext, WmageStatusContext,
+    DmageStatusContext, AssassinStatusContext,
     RmageStatusContext
 } from './Context';
 import { useState, useEffect, useContext } from 'react';
@@ -13,7 +13,7 @@ import {
     BossAttackingContext,
     KnightNameContext,
     DmageNameContext,
-    WmageNameContext,
+    AssassinNameContext,
     RmageNameContext
 } from './Context';
 //adds a multiplier or divider, depending
@@ -41,15 +41,15 @@ interface BossAttackProps {
     phase: number;
     knight_status: string[];
     dmage_status: string[];
-    wmage_status: string[];
+    assassin_status: string[];
     rmage_status: string[];
     knight_hp: number;
     dmage_hp: number;
-    wmage_hp: number;
+    assassin_hp: number;
     rmage_hp: number;
     knight_mp: number;
     dmage_mp: number;
-    wmage_mp: number;
+    assassin_mp: number;
     rmage_mp: number;
     current_turn: number;
 }
@@ -60,7 +60,7 @@ export const NameToIndex: Map<string, number> = new Map(
     [
         ["knight", 0],
         ["dmage", 1],
-        ["wmage", 2],
+        ["assassin", 2],
         ["rmage", 3]
 
     ]
@@ -111,17 +111,17 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     let current_statuses = [
         attackProps.knight_status,
         attackProps.dmage_status,
-        attackProps.wmage_status,
+        attackProps.assassin_status,
         attackProps.rmage_status
     ];
 
     let current_hp = [
         attackProps.knight_hp,
         attackProps.dmage_hp,
-        attackProps.wmage_hp,
+        attackProps.assassin_hp,
         attackProps.rmage_hp
     ]
-    const allies = ["knight", "dmage", "wmage", "rmage"];
+    const allies = ["knight", "dmage", "assassin", "rmage"];
 
 
     current_statuses.forEach((condition, index) => {
@@ -145,13 +145,13 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     let knight_weight: number = 1;
     let dmage_weight: number = 1;
-    let wmage_weight: number = 1;
+    let assassin_weight: number = 1;
     let rmage_weight: number = 1;
 
     let character_weights: number[] = [
         knight_weight,
         dmage_weight,
-        wmage_weight,
+        assassin_weight,
         rmage_weight
     ];
     //Breakpoint and the weight associated with it
@@ -311,12 +311,12 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 }
             ],
             [
-                "wmage", {
-                    hp: sm.wmage_stats.get("hp")!,
-                    mp: sm.wmage_stats.get("mp")!,
-                    pdef: sm.wmage_stats.get("p_def")!,
-                    mdef: sm.wmage_stats.get("m_def")!,
-                    ev: sm.wmage_stats.get("ev")!
+                "assassin", {
+                    hp: sm.assassin_stats.get("hp")!,
+                    mp: sm.assassin_stats.get("mp")!,
+                    pdef: sm.assassin_stats.get("p_def")!,
+                    mdef: sm.assassin_stats.get("m_def")!,
+                    ev: sm.assassin_stats.get("ev")!
                 }
             ],
             [
@@ -345,8 +345,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             case "dmage":
                 sm.dmage_stats.set("hp", sm.dmage_stats.get("hp")! - final_dmg);
                 break;
-            case "wmage":
-                sm.wmage_stats.set("hp", sm.wmage_stats.get("hp")! - final_dmg);
+            case "assassin":
+                sm.assassin_stats.set("hp", sm.assassin_stats.get("hp")! - final_dmg);
                 break;
             case "rmage":
                 sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - final_dmg);
@@ -789,7 +789,7 @@ export const BossAttackArea: React.FC = () => {
 
     const { KnightName } = useContext(KnightNameContext);
     const { DmageName } = useContext(DmageNameContext);
-    const { WmageName } = useContext(WmageNameContext);
+    const { AssassinName } = useContext(AssassinNameContext);
     const { RmageName } = useContext(RmageNameContext);
 
     //match targeted character to the chosen name
@@ -797,7 +797,7 @@ export const BossAttackArea: React.FC = () => {
         [
             ["knight", KnightName],
             ["dmage", DmageName],
-            ["wmage", WmageName],
+            ["assassin", AssassinName],
             ["rmage", RmageName]
         ]
     )
