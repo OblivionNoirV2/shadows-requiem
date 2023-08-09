@@ -516,12 +516,12 @@ interface AssassinNameContextValue {
 }
 
 export const AssassinNameContext = createContext<AssassinNameContextValue>({
-    AssassinName: 'White Mage',
+    AssassinName: 'Assassin',
     setAssassinName: () => { },
 })
 
 export function AssassinNameContextProvider({ children }: { children: React.ReactElement }) {
-    const [AssassinName, setAssassinName] = useState('White Mage');
+    const [AssassinName, setAssassinName] = useState('Assassin');
 
     useEffect(() => {
         console.log('AssassinName updated:', AssassinName);

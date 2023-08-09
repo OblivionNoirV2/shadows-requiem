@@ -64,7 +64,7 @@ export const dmage_stats: StatMap = new Map
             ["d_ev", 0.07]
         ]
     );
-//fragile but very high ev, low mp cost attacks
+//fragile but very high ev and good at lowering stats
 export const assassin_stats: StatMap = new Map
     (
         [
@@ -77,7 +77,7 @@ export const assassin_stats: StatMap = new Map
             ["m_def", .90],
             ["d_m_def", .90],
             ["ev", 0.35],
-            ["d_ev", 0.35]
+            ["d_ev", 0.30]
         ]
     );
 

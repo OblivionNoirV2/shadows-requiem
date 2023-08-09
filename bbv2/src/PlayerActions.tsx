@@ -160,21 +160,13 @@ export function Randomizer(min: number, max: number) {
 
 //for raising all player stats
 function StatBuffDebuff(stat_map: Map<string, number | undefined>,
-    min_val: number, max_val: number) {
+    min_val: number, max_val: number, increment: number) {
     statup_sfx.play();
     stat_map.forEach((value, key, map) => {
         if (value !== undefined && value < max_val) {
-            map.set(key, value + 0.25);
+            map.set(key, value + increment);
             console.log(key, map.get(key));
-            setTimeout(() => {
-                const current_value = map.get(key);
-                //makes sure we don't lower it too low
-                if (current_value !== undefined
-                    && current_value > min_val) {
-                    //revert
-                    map.set(key, current_value - 0.25);
-                }
-            }, 90000);
+
         }
     }
     );
@@ -252,11 +244,6 @@ export const attacks_map: Map<string, Function> = new Map([
                 sm.boss_stats.set('p_def', boss_pdef - parseFloat(0.20.toFixed(2)));
                 console.log("defense lowered", sm.boss_stats.get('p_def'));
 
-                setTimeout(() => {
-                    // Restore the original defense value
-                    sm.boss_stats.set('p_def', boss_pdef! + parseFloat(0.20.toFixed(2)));
-                    console.log("defense restored", sm.boss_stats.get('p_def'));
-                }, 60000);
 
             }
             return (
@@ -281,7 +268,8 @@ export const attacks_map: Map<string, Function> = new Map([
                 StatBuffDebuff(
                     player_pdef_map,
                     player_def.p_def.min,
-                    player_def.p_def.max
+                    player_def.p_def.max,
+                    0.25
                 );
             }
         }
@@ -334,7 +322,8 @@ export const attacks_map: Map<string, Function> = new Map([
                 StatBuffDebuff(
                     player_mdef_map,
                     player_def.m_def.min,
-                    player_def.m_def.max
+                    player_def.m_def.max,
+                    0.25
                 );
             }
         }
@@ -385,12 +374,7 @@ export const attacks_map: Map<string, Function> = new Map([
                 }, 500)
                 sm.boss_stats.set('m_def', mag - parseFloat(0.30.toFixed(2)));
                 console.log("mdef lowered", sm.boss_stats.get('m_def'));
-                setTimeout(() => {
-                    if (mag !== undefined) {
-                        sm.boss_stats.set('m_def', mag + parseFloat(0.30.toFixed(2)));
-                        console.log("mdef restored", sm.boss_stats.get('m_def'));
-                    }
-                }, 60000);
+
             }
         }
     ],
@@ -421,54 +405,73 @@ export const attacks_map: Map<string, Function> = new Map([
 
         }
     ],
+    //assassin attacks
     [
-        'Pierce Evil', function PierceEvil() {
-            healsfx.play();
+        'Execution', function Execution() {
+            let mag = sm.boss_stats.get('m_def');
+            let phys = sm.boss_stats.get('phys')
+            if (bossminmax && mag! > bossminmax["m_def"].min) {
+                glass_shatter.play();
+                setTimeout(() => {
+                    statdown_sfx.play();
+                }, 500)
+                sm.boss_stats.set('m_def', mag! - parseFloat(0.30.toFixed(2)));
+
+
+            }
+            if (bossminmax && phys! > bossminmax["p_def"].min) {
+                glass_shatter.play();
+                setTimeout(() => {
+                    statdown_sfx.play();
+                }, 500)
+                sm.boss_stats.set('p_def', phys! - parseFloat(0.30.toFixed(2)));
+
+            }
             return (
                 RNG(
                     {
-                        min: 3500,
+                        min: 9200,
                         crit_rate: 0.06,
-                        phys_or_mag: "mag",
+                        phys_or_mag: "phys",
                         variance: 1.10,
                         is_ult: false,
-                        miss_rate: 0.05,
-                        sfx_type: "lightmag"
+                        miss_rate: 0.025,//assassin has half miss rate
+                        sfx_type: "sword"
                     }
                 )
-            );
+            )
         }
     ],
-    [ //heal spells will return what it does and the amount, like items
-        //will open up a menu similar to the item menu
-        //light heal, targets all
-        'Radiant Sky', function RadiantSky() {
-            healsfx.play();
+    [
+        'Backstab', function Backstab() {
+            return (
+                RNG(
+                    {
+                        min: 4000,
+                        crit_rate: 0.50,
+                        phys_or_mag: "phys",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.025,
+                        sfx_type: "sword"
+                    }
+                )
+            )
         }
     ],
-    [ //revives one with 66% hp
-        'Rebirth', function Rebirth() {
-            healsfx.play();
+    [
+        'Smokescreen', function Smokescreen() {
+            if (sm.assassin_stats.get("ev")! < min_max_vals_map.get("player")!.ev!.max) {
+
+            }
+            sm.assassin_stats.get("ev")
+            //raises his ev 
+
 
         }
-    ],
-    [   //Big heal, targets one
-        'Moonlight', function Moonlight() {
-            healsfx.play();
 
-        }
     ],
-    [ //Removes status effects from one
-        'Purification', function Purification() {
-            healsfx.play();
-
-        }
-    ],
-    [   //Heals all, restores mp and removes any debuffs
-        'Supreme Altar', function SupremeAltar() {
-
-        }
-    ],
+    //red mage
     [   //Uses hp to deal huge dmg, doesn't miss
         'Border Of Life', function BorderOfLife() {
             return (
@@ -483,9 +486,6 @@ export const attacks_map: Map<string, Function> = new Map([
                     }
                 )
             )
-
-
-
         }
     ],
     [   //Heavy phys, high crit rate
@@ -630,7 +630,7 @@ const UltPathLookup: Map<string, string> = new Map(
             'Nightmare Supernova', require('./assets/images/player/attacks/dmage/Nightmare Supernova.png')
         ],
         [
-            'Supreme Altar', require('./assets/images/player/attacks/wmage/Supreme Altar.png')
+            'Deathwind', require('./assets/images/player/attacks/assassin/Deathwind.png')
         ],
         [
             'Scarlet Subversion', require('./assets/images/player/attacks/rmage/Scarlet Subversion.png')

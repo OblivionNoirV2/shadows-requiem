@@ -255,6 +255,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     break;
             }
         }
+        //make this a global state
         const MatchToHpSetState: Map<string, (value: number) => void> = new Map
             (
                 [
@@ -324,13 +325,38 @@ export const BossArea: React.FC<BossAreaProps> = ({
             set_char!(MatchToHpMap.get(char_str!)! - parseInt((char_max_hp! * 0.05).toFixed(0)))!
 
         };
+        //use a context for these 
+
+        const TargetToStatus: Map<string, string[]> = new Map
+            (
+                [
+                    ["knight", KnightStatus],
+                    ["dmage", DmageStatus],
+                    ["assassin", AssassinStatus],
+                    ["rmage", RmageStatus]
+                ]
+            )
+        const TargetToSetStatus: Map<string, React.Dispatch<SetStateAction<string[]>>> = new Map
+            (
+                [
+                    ["knight", setKnightStatus],
+                    ["dmage", setDmageStatus],
+                    ["assassin", setAssassinStatus],
+                    ["rmage", setRmageStatus]
+                ]
+            )
 
         /*
         20% chance of death.
         counting the prev 20% chance to remove it that comes before, 
         this is actually a 16% chance
         */
-        function HandleCurse() {
+        function HandleCurse(char_id: number) {
+            if (Percentage() < 0.20) {
+                const char_str = ConvertToStr(char_id);
+                const set_status = TargetToSetStatus.get(char_str!);
+                set_status!(["dead"])
+            }
 
         }
 

@@ -91,15 +91,15 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             ],
             //assassin
             [
-                'Pierce Evil', {
-                    description: "Attack with a blade of holy energy. Low magic damage.",
-                    mp_cost: 6
+                'Execution', {
+                    description: "Deals moderate damage and heavily lowers both boss defenses.",
+                    mp_cost: 16
                 }
             ],
             [
-                'Radiant Sky', {
-                    description: "Restores everyone's HP by a small amount.",
-                    mp_cost: 20
+                'Backstab', {
+                    description: "Low damage, but a high chance of a critical hit",
+                    mp_cost: 8
                 }
             ],
             [
@@ -188,11 +188,7 @@ export const dmage_attacks = [
 ]
 
 export const assassin_attacks = [
-    "Pierce Evil",
-    "Radiant Sky",
-    "Rebirth",
-    "Moonlight",
-    "Purification",
+    "Execution",
     "Desperation"
 ]
 
