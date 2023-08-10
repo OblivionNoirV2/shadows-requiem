@@ -93,7 +93,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             [
                 'Execution', {
                     description: "Deals moderate damage and heavily lowers both boss defenses.",
-                    mp_cost: 16
+                    mp_cost: 26
                 }
             ],
             [
@@ -103,14 +103,14 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
                 }
             ],
             [
-                'Rebirth', {
-                    description: "Revive a fallen ally with most of their HP.",
-                    mp_cost: 35
+                "Night's Whisper", {
+                    description: "Deal a quick jab and disarm your opponent. High chance to lower boss attack.",
+                    mp_cost: 10
                 }
             ],
             [
-                'Moonlight', {
-                    description: "Heal one ally by a large amount.",
+                'Smokescreen', {
+                    description: "Raises the entire party's evasion by a small amount",
                     mp_cost: 20
                 }
             ],
@@ -151,9 +151,9 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
                 }
             ],
             [
-                'Hypervelocity', {
-                    description: "Slightly raises everyone's evasion for a moderate time.",
-                    mp_cost: 20
+                'Incinerate', {
+                    description: "An epic fire spell that deals massive magic damage",
+                    mp_cost: 86
                 }
             ],
             //Everyone has this
@@ -189,7 +189,9 @@ export const dmage_attacks = [
 
 export const assassin_attacks = [
     "Execution",
-    "Desperation"
+    "Night's Whisper",
+    "Smokescreen",
+    "Desperation",
 ]
 
 export const rmage_attacks = [
@@ -197,7 +199,7 @@ export const rmage_attacks = [
     "Bloody Vengeance",
     "Chain Lightning",
     "My Turn",
-    "Hypervelocity",
+    "Incinerate",
     "Desperation"
 ]
 

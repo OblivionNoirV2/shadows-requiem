@@ -11,7 +11,8 @@ import { boss_stat_changes } from './StatManagement';
 import { selected_difficulty } from './StartMenu';
 import { player_mdef_map, player_pdef_map } from './StatManagement';
 import { min_max_vals_map } from './StatManagement';
-import { AttackAnimation } from './BossAlgorithm';
+import { AttackAnimation, Percentage } from './BossAlgorithm';
+import { Stats } from './StatManagement';
 type phys_or_mag = "phys" | "mag"
 
 const player_ev_map: Map<string, number | undefined> = new Map
@@ -187,6 +188,16 @@ function StatBuff(stat_map: Map<string, number | undefined>,
     }
     );
 }
+function LowerSingle(stat_to_lower: string, increment: number) {
+
+    if (sm.boss_stats.get(stat_to_lower)! >
+        min_max_vals_map.get("boss")![stat_to_lower as keyof Stats]!.min!) {
+        setTimeout(() => {
+            statdown_sfx.play();
+        }, 500)
+        sm.boss_stats.set(stat_to_lower, (sm.boss_stats.get(stat_to_lower)! - parseFloat(increment.toFixed(2))));
+    }
+}
 const player_def = min_max_vals_map.get("player") as sm.Stats | undefined;
 const player_ev = min_max_vals_map.get("player") as sm.Stats | undefined;
 const bossminmax = min_max_vals_map.get("boss");
@@ -249,19 +260,8 @@ export const attacks_map: Map<string, Function> = new Map([
 
     [
         'Skull Crusher', function SkullCrusher() {
-            let boss_pdef = sm.boss_stats.get('p_def');
-            //only reduce the defense if it's higher than the threshold
-            //of 0.60
-            //todo: use a map for that instead of hardcoding
-            if (bossminmax && boss_pdef !== undefined
-                && boss_pdef > bossminmax["p_def"].min
-                && Randomizer(0, 100) < 50) {
-                statdown_sfx.play();
-                //Decrease the defense value
-                sm.boss_stats.set('p_def', boss_pdef - parseFloat(0.20.toFixed(2)));
-                console.log("defense lowered", sm.boss_stats.get('p_def'));
-
-
+            if (Percentage() < 0.30) {
+                LowerSingle("p_def", 0.25)
             }
             return (
                 RNG(
@@ -295,10 +295,7 @@ export const attacks_map: Map<string, Function> = new Map([
         'Thousand Men', function ThousandMen() {
             statup_sfx.play();
             //also reduces boss attack for a bit
-            sm.boss_stats.set('p_atk', parseFloat((sm.boss_stats.get('p_atk')! - 0.30).toFixed(2)));
-            setTimeout(() => {
-                sm.boss_stats.set('p_atk', parseFloat((sm.boss_stats.get('p_atk')! + 0.30).toFixed(2)));
-            }, 90000);
+            LowerSingle("atk", 0.70)
             return (
                 RNG(
                     {
@@ -379,18 +376,8 @@ export const attacks_map: Map<string, Function> = new Map([
     ],
     [
         'Shattered Mirror', function ShatteredMirror() {
-            let mag = sm.boss_stats.get('m_def');
-
-            if (bossminmax && mag !== undefined
-                && mag > bossminmax["m_def"].min) {
-                glass_shatter.play();
-                setTimeout(() => {
-                    statdown_sfx.play();
-                }, 500)
-                sm.boss_stats.set('m_def', mag - parseFloat(0.30.toFixed(2)));
-                console.log("mdef lowered", sm.boss_stats.get('m_def'));
-
-            }
+            LowerSingle("m_def", 0.35)
+            glass_shatter.play()
         }
     ],
     [
@@ -423,25 +410,9 @@ export const attacks_map: Map<string, Function> = new Map([
     //assassin attacks
     [
         'Execution', function Execution() {
-            let mag = sm.boss_stats.get('m_def');
-            let phys = sm.boss_stats.get('phys')
-            if (bossminmax && mag! > bossminmax["m_def"].min) {
-                glass_shatter.play();
-                setTimeout(() => {
-                    statdown_sfx.play();
-                }, 500)
-                sm.boss_stats.set('m_def', mag! - parseFloat(0.30.toFixed(2)));
 
-
-            }
-            if (bossminmax && phys! > bossminmax["p_def"].min) {
-                glass_shatter.play();
-                setTimeout(() => {
-                    statdown_sfx.play();
-                }, 500)
-                sm.boss_stats.set('p_def', phys! - parseFloat(0.30.toFixed(2)));
-
-            }
+            LowerSingle("m_def", 0.20)
+            LowerSingle("p_def", 0.20)
             return (
                 RNG(
                     {
@@ -474,6 +445,31 @@ export const attacks_map: Map<string, Function> = new Map([
             )
         }
     ],
+    [
+        "Night's Whisper", function NightsWhisper() {
+            //low damage, high chance to lower boss atk
+
+
+            if (Percentage() < 0.60) {
+                LowerSingle("atk", 0.30)
+
+            }
+            return (
+                RNG(
+                    {
+                        min: 2800,
+                        crit_rate: 0.25,
+                        phys_or_mag: "phys",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.025,
+                        sfx_type: "sword"
+
+                    }
+                )
+            )
+        }
+    ],
     [ //assassin ult
         'Deathwind', function Deathwind() {
 
@@ -499,7 +495,7 @@ export const attacks_map: Map<string, Function> = new Map([
             console.log("prev iv", as_ev)
             const max_ev = min_max_vals_map.get("player")!.ev!.max
             if (as_ev < max_ev) {
-                sm.assassin_stats.set("ev", as_ev + 0.25)
+                sm.assassin_stats.set("ev", as_ev + 0.15)
                 console.log("new as ev", sm.assassin_stats.get("ev"))
             }
         }
@@ -590,10 +586,26 @@ export const attacks_map: Map<string, Function> = new Map([
             )
         }
     ],
-    [   //like crystallize but for ev
-        'Hypervelocity', function Hypervelocity() {
+    [
+        'Incinerate', function Incinerate() {
+            return (
+
+                RNG(
+                    {
+                        min: 42000,
+                        phys_or_mag: "mag",
+                        variance: 1.10,
+                        is_ult: false,
+                        sfx_type: "explosion"
+
+                    }
+
+                )
+
+            )
 
         }
+
     ],
     [
         'Desperation', function Desperation() {
