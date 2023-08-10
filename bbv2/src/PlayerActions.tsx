@@ -14,7 +14,23 @@ import { min_max_vals_map } from './StatManagement';
 import { AttackAnimation } from './BossAlgorithm';
 type phys_or_mag = "phys" | "mag"
 
-
+const player_ev_map: Map<string, number | undefined> = new Map
+    (
+        [
+            [
+                "knight", sm.knight_stats.get("ev")
+            ],
+            [
+                "dmage", sm.dmage_stats.get("ev")
+            ],
+            [
+                "assassin", sm.assassin_stats.get("ev")
+            ],
+            [
+                "rmage", sm.rmage_stats.get("ev")
+            ]
+        ]
+    )
 
 export const getConvertToStat = () => {
     //DO NOT TOUCH
@@ -159,8 +175,8 @@ export function Randomizer(min: number, max: number) {
 }
 
 //for raising all player stats
-function StatBuffDebuff(stat_map: Map<string, number | undefined>,
-    min_val: number, max_val: number, increment: number) {
+function StatBuff(stat_map: Map<string, number | undefined>,
+    max_val: number, increment: number) {
     statup_sfx.play();
     stat_map.forEach((value, key, map) => {
         if (value !== undefined && value < max_val) {
@@ -172,6 +188,7 @@ function StatBuffDebuff(stat_map: Map<string, number | undefined>,
     );
 }
 const player_def = min_max_vals_map.get("player") as sm.Stats | undefined;
+const player_ev = min_max_vals_map.get("player") as sm.Stats | undefined;
 const bossminmax = min_max_vals_map.get("boss");
 export const attacks_map: Map<string, Function> = new Map([
     /*knight attacks*/
@@ -265,9 +282,8 @@ export const attacks_map: Map<string, Function> = new Map([
     [   //raises pdef for all
         'Rebellion', function Rebellion() {
             if (player_def !== undefined) {
-                StatBuffDebuff(
+                StatBuff(
                     player_pdef_map,
-                    player_def.p_def.min,
                     player_def.p_def.max,
                     0.25
                 );
@@ -319,9 +335,8 @@ export const attacks_map: Map<string, Function> = new Map([
     [   //Rebellion but for mag def
         'Crystallize', function Crystallize() {
             if (player_def !== undefined) {
-                StatBuffDebuff(
+                StatBuff(
                     player_mdef_map,
-                    player_def.m_def.min,
                     player_def.m_def.max,
                     0.25
                 );
@@ -456,6 +471,25 @@ export const attacks_map: Map<string, Function> = new Map([
                         sfx_type: "sword"
                     }
                 )
+            )
+        }
+    ],
+    [ //assassin ult
+        'Deathwind', function Deathwind() {
+
+            //Greatly raises all player's ev
+            StatBuff(player_ev_map, player_ev!.ev!.max, 0.40)
+            return (
+                RNG(
+                    {
+                        min: 58000,
+                        phys_or_mag: "phys",
+                        variance: 1.05,
+                        is_ult: true,
+                        sfx_type: "DW"
+                    }
+                )
+
             )
         }
     ],

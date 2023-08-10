@@ -437,31 +437,42 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
 
     //control dead and revive status
-    //lets try seperating these 2
-    function HandleDeath(character: string) {
+    function HandleDeath(character: string, killed_or_revived: string) {
         const char_index = NameToIndex.get(character)!
         const setStatus = player_set_statuses.get(char_index);
         const status = player_statuses.get(char_index);
-        setStatus!(["dead"]);//also removes everything else
-        Occurences.set("death", (Occurences.get("death")! + 1));
-    }
 
-    function HandleRevive(character: string) {
+        if (killed_or_revived === "killed") {
+            if (!status!.includes("dead")) {
+                setStatus!(["dead"]);//also removes everything else
+                Occurences.set("death", (Occurences.get("death")! + 1));
+            }
+        } else {
+            //remove dead, since this means they were revived
+            setStatus!(prevStatus => prevStatus.filter(status => status !== "dead"));
 
+        }
     }
 
     useEffect(() => {
+
         //the get value is still set to 0 after the death,
         //which is why this breaks
         let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0));
+        console.log("initial khp", khp)
         if (khp <= 0) {
             //prevent negatives
             setKnightHP(0)
-            HandleDeath("knight");
+            HandleDeath("knight", "killed");
+        } else {
+            //these are the value before they died, which is wrong
+            console.log("get hp, not dead", sm.knight_stats.get("hp"))
+            console.log("knighthp, not dead", KnightHP)
+            setKnightHP(sm.knight_stats.get("hp")!)
         }
-
+        //try setting the new value with THIS, not state
     }, [sm.knight_stats.get("hp")])
-    //revives will have to be seperate, otherwise it just immediately reverts
+
 
 
 
@@ -480,7 +491,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0));
         if (dhp <= 0) {
             setDmageHP(0);
-            HandleDeath("dmage");
+            HandleDeath("dmage", "killed");
         } else {
             setDmageHP(dhp)
         }
@@ -502,7 +513,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let whp = parseInt(sm.assassin_stats.get("hp")!.toFixed(0));
         if (whp <= 0) {
             setAssassinHP(0);
-            HandleDeath("assassin");
+            HandleDeath("assassin", "killed");
         } else {
             setAssassinHP(whp);
         }
@@ -523,7 +534,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0));
         if (rhp <= 0) {
             setRmageHP(0);
-            HandleDeath("rmage");
+            HandleDeath("rmage", "killed");
         } else {
             setRmageHP(rhp);
         }
