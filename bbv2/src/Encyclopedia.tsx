@@ -92,8 +92,8 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             //assassin
             [
                 'Execution', {
-                    description: "Deals moderate damage and heavily lowers both boss defenses.",
-                    mp_cost: 26
+                    description: "Deals moderate-heavy damage and greatly lowers both boss defenses.",
+                    mp_cost: 28
                 }
             ],
             [
@@ -104,14 +104,26 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             ],
             [
                 "Night's Whisper", {
-                    description: "Deal a quick jab and disarm your opponent. High chance to lower boss attack.",
+                    description: "Deal a quick jab and disarm your opponent. Low damagem, high chance to lower boss attack.",
                     mp_cost: 10
                 }
             ],
             [
                 'Smokescreen', {
-                    description: "Raises the entire party's evasion by a small amount",
+                    description: "Raises the entire party's evasion by a small amount.",
                     mp_cost: 20
+                }
+            ],
+            [
+                'Nightshade', {
+                    description: "Devour the enemy with creatures of another realm. Deals huge physical damage.",
+                    mp_cost: 52
+                }
+            ],
+            [
+                'Dual Slash', {
+                    description: "Moderate physical damage, 50% chance of double damage",
+                    mp_cost: 12
                 }
             ],
             [
@@ -175,7 +187,7 @@ export const knight_attacks = [
     "Skull Crusher", //very heavy, 50% chance lowers boss def
     "Desperation"
 ]
-//ultima should appear as the 6th attack once the bar is full
+
 
 //Buttons are formed from these 
 export const dmage_attacks = [
@@ -191,6 +203,8 @@ export const assassin_attacks = [
     "Execution",
     "Night's Whisper",
     "Smokescreen",
+    "Nightshade",
+    "Dual Slash",
     "Desperation",
 ]
 
@@ -206,6 +220,6 @@ export const rmage_attacks = [
 export const ultimas = [
     "Thousand Men",
     "Nightmare Supernova",
-    "Supreme Altar",
+    "Deathwind",
     "Scarlet Subversion"
 ]

@@ -448,8 +448,6 @@ export const attacks_map: Map<string, Function> = new Map([
     [
         "Night's Whisper", function NightsWhisper() {
             //low damage, high chance to lower boss atk
-
-
             if (Percentage() < 0.60) {
                 LowerSingle("atk", 0.30)
 
@@ -465,6 +463,48 @@ export const attacks_map: Map<string, Function> = new Map([
                         miss_rate: 0.025,
                         sfx_type: "sword"
 
+                    }
+                )
+            )
+        }
+    ],
+    [
+        "Nightshade", function Nightshade() {
+            return (
+                RNG(
+                    {
+                        min: 25400,
+                        crit_rate: 0.06,
+                        phys_or_mag: "mag",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.025,
+                        sfx_type: "darkmag"
+
+                    }
+                )
+            )
+        }
+    ],
+    [
+        "Dual Slash", function DualSlash() {
+            //one or two hits 
+            let min_dmg: number;
+            if (Percentage() > .50) {
+                min_dmg = 6400
+            } else {
+                min_dmg = 12800
+            }
+            return (
+                RNG(
+                    {
+                        min: min_dmg,
+                        crit_rate: 0.06,
+                        phys_or_mag: "phys",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.025,
+                        sfx_type: "sword"
                     }
                 )
             )
@@ -557,6 +597,8 @@ export const attacks_map: Map<string, Function> = new Map([
         }
     ],
     //Light physical damage and boss does nothing next turn
+    //use a global let variable to determine if active. 
+    //The first time the boss tries to attack but this is active, it deacivates.
     [
         'My Turn', function MyTurn() {
 

@@ -456,7 +456,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
     useEffect(() => {
 
-        //the get value is still set to 0 after the death,
+        //the get value is still set to 10 after the death,
         //which is why this breaks
         let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0));
         console.log("initial khp", khp)
