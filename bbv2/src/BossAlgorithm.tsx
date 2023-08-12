@@ -19,8 +19,7 @@ import {
 //adds a multiplier or divider, depending
 import { selected_difficulty } from './StartMenu';
 import anime from 'animejs/lib/anime.es.js'
-import { transform } from 'typescript';
-import { stat } from 'fs/promises';
+
 
 
 //This is going to work exactly the same as the player side, 
@@ -63,6 +62,55 @@ export const NameToIndex: Map<string, number> = new Map(
         ["assassin", 2],
         ["rmage", 3]
 
+    ]
+)
+interface CharacterRespectiveStats {
+    [index: string]: number | undefined //allows usage of string as index
+    hp: number;
+    mp?: number;
+    pdef: number;
+    mdef: number;
+    ev: number;
+}
+//use this for status effects
+export let MatchToStat: Map<string, CharacterRespectiveStats> = new Map(
+    [
+        [
+            "knight", {
+                hp: sm.knight_stats.get("hp")!,
+                mp: sm.knight_stats.get("mp")!,
+                pdef: sm.knight_stats.get("p_def")!,
+                mdef: sm.knight_stats.get("m_def")!,
+                ev: sm.knight_stats.get("ev")!
+            }
+        ],
+        [
+            "dmage", {
+                hp: sm.dmage_stats.get("hp")!,
+                mp: sm.dmage_stats.get("mp")!,
+                pdef: sm.dmage_stats.get("p_def")!,
+                mdef: sm.dmage_stats.get("m_def")!,
+                ev: sm.dmage_stats.get("ev")!
+            }
+        ],
+        [
+            "assassin", {
+                hp: sm.assassin_stats.get("hp")!,
+                mp: sm.assassin_stats.get("mp")!,
+                pdef: sm.assassin_stats.get("p_def")!,
+                mdef: sm.assassin_stats.get("m_def")!,
+                ev: sm.assassin_stats.get("ev")!
+            }
+        ],
+        [
+            "rmage", {
+                hp: sm.rmage_stats.get("hp")!,
+                mp: sm.rmage_stats.get("mp")!,
+                pdef: sm.rmage_stats.get("p_def")!,
+                mdef: sm.rmage_stats.get("m_def")!,
+                ev: sm.rmage_stats.get("ev")!
+            }
+        ]
     ]
 )
 //use this to ensure a gap between unholy symphonys
@@ -127,6 +175,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     current_statuses.forEach((condition, index) => {
         if (!condition.includes("dead")) {
             potential_targets.push(allies[index]);
+            console.log("potential targets", potential_targets)
         }
     })
 
@@ -281,55 +330,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     let potential_secondary: string[];
 
 
-    interface CharacterRespectiveStats {
-        [index: string]: number | undefined //allows usage of string as index
-        hp: number;
-        mp?: number;
-        pdef: number;
-        mdef: number;
-        ev: number;
-    }
 
-    const MatchToStat: Map<string, CharacterRespectiveStats> = new Map(
-        [
-            [
-                "knight", {
-                    hp: sm.knight_stats.get("hp")!,
-                    mp: sm.knight_stats.get("mp")!,
-                    pdef: sm.knight_stats.get("p_def")!,
-                    mdef: sm.knight_stats.get("m_def")!,
-                    ev: sm.knight_stats.get("ev")!
-                }
-            ],
-            [
-                "dmage", {
-                    hp: sm.dmage_stats.get("hp")!,
-                    mp: sm.dmage_stats.get("mp")!,
-                    pdef: sm.dmage_stats.get("p_def")!,
-                    mdef: sm.dmage_stats.get("m_def")!,
-                    ev: sm.dmage_stats.get("ev")!
-                }
-            ],
-            [
-                "assassin", {
-                    hp: sm.assassin_stats.get("hp")!,
-                    mp: sm.assassin_stats.get("mp")!,
-                    pdef: sm.assassin_stats.get("p_def")!,
-                    mdef: sm.assassin_stats.get("m_def")!,
-                    ev: sm.assassin_stats.get("ev")!
-                }
-            ],
-            [
-                "rmage", {
-                    hp: sm.rmage_stats.get("hp")!,
-                    mp: sm.rmage_stats.get("mp")!,
-                    pdef: sm.rmage_stats.get("p_def")!,
-                    mdef: sm.rmage_stats.get("m_def")!,
-                    ev: sm.rmage_stats.get("ev")!
-                }
-            ]
-        ]
-    )
+
 
     interface CalculateFinalProps {
         pre_dmg: number;
@@ -459,6 +461,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     function LowerAllyStat(stat: string, amount: number) {
         console.log("inside las, chosen target", chosen_target)
         if (MatchToStat.get(chosen_target)![stat] !== undefined) {
+            //this needs to be set not get!!!!
+            //do something like the status effects use 
             MatchToStat.get(chosen_target)![stat]! -= amount;
         }
 
@@ -526,6 +530,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             [ //drops target's phys def, 40% chance
                 "Disintegration", function Disintegration() {
                     if (Percentage() <= 0.40) {
+                        //chosen target should never be undefined 
+                        //but it is sometimes...
                         if (MatchToStat.get(chosen_target)!.pdef >
                             min_max_vals_map.get("player")!.p_def.min) {
                             LowerAllyStat("p_def", 0.20);

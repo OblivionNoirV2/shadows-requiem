@@ -17,3 +17,5 @@ add glow borders to status effects
 not sure why ultima isn't glowing like it should
 
 add images to the rest of encylopedia
+
+fix line 463 in boss algo, needs to be set not get

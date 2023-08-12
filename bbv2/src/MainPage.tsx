@@ -366,15 +366,13 @@ export const BossArea: React.FC<BossAreaProps> = ({
         function HandleCurse(char_id: number) {
             if (Percentage() < 0.20) {
                 const char_str = ConvertToStr(char_id)!;
-                //need to do it this way
                 const setter = NameToStats.get(char_str)!
-                //should always be a statmap
+                //should always be a statmap, but I don't want to mess with it now
                 if (typeof setter !== 'number') {
                     setter.set("hp", 0)
-                }
-            }
-
-        }
+                };
+            };
+        };
 
         function RemovalManagement
             (
@@ -392,11 +390,11 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 function_to_execute !== null &&
                     function_to_execute(char_id)
 
-            }
-        }
+            };
+        };
         for (let [char_id, statuses] of player_statuses.entries()) {
 
-            let set_status = player_set_statuses.get(char_id)
+            const set_status = player_set_statuses.get(char_id)
 
             if (statuses.includes("poison")) {
                 RemovalManagement(
@@ -405,8 +403,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     "poison",
                     PoisonDamage,
                     char_id
-                )
-            }
+                );
+            };
             //No else if, needs to check for all
             if (statuses.includes("freeze")) {
                 RemovalManagement(
