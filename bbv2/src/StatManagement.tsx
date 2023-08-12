@@ -70,8 +70,8 @@ export const assassin_stats: StatMap = new Map
         [
             ["hp", 400],
             ["max_hp", 400],
-            ["mp", 310],
-            ["max_mp", 310],
+            ["mp", 250],
+            ["max_mp", 250],
             ["p_def", .90],
             ["d_p_def", .90],
             ["m_def", .90],

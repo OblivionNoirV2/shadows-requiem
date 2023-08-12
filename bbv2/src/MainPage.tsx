@@ -100,6 +100,18 @@ export let MatchToMaxMpMap: Map<string, number | undefined> = new Map([
     ["rmage", sm.rmage_stats.get("max_mp")]
 ]);
 
+//string just for the sake of reusability 
+let NameToStats: Map<string, number | sm.StatMap> = new Map
+    (
+        [
+            ["knight", sm.knight_stats],
+            ["dmage", sm.dmage_stats],
+            ["assassin", sm.assassin_stats],
+            ["rmage", sm.rmage_stats]
+
+        ]
+    )
+
 
 export const BossArea: React.FC<BossAreaProps> = ({
     selectedCharacter, setSelectedCharacter, bossStage, setBossStage }) => {
@@ -353,9 +365,13 @@ export const BossArea: React.FC<BossAreaProps> = ({
         */
         function HandleCurse(char_id: number) {
             if (Percentage() < 0.20) {
-                const char_str = ConvertToStr(char_id);
-                const set_status = TargetToSetStatus.get(char_str!);
-                set_status!(["dead"]);
+                const char_str = ConvertToStr(char_id)!;
+                //need to do it this way
+                const setter = NameToStats.get(char_str)!
+                //should always be a statmap
+                if (typeof setter !== 'number') {
+                    setter.set("hp", 0)
+                }
             }
 
         }
@@ -1739,6 +1755,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                         <li>
                             <button onClick={
                                 !isBossAttacking &&
+                                    !DmageStatus.includes("dead") &&
                                     !isAttackAreaShown &&
                                     isPlayerTurn ?
                                     () => HandleSelection("dmage")
@@ -1781,6 +1798,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                         <li>
                             <button onClick={
                                 !isBossAttacking &&
+                                    !AssassinStatus.includes("dead") &&
                                     !isAttackAreaShown &&
                                     isPlayerTurn ?
                                     () => HandleSelection("assassin") :
@@ -1823,6 +1841,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                             <button onClick={
                                 !isBossAttacking &&
                                     !isAttackAreaShown &&
+                                    !RmageStatus.includes("dead") &&
                                     isPlayerTurn ?
                                     () => HandleSelection("rmage") :
                                     undefined
