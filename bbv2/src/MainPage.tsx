@@ -31,7 +31,10 @@ import {
     AssassinNameContext,
     RmageNameContext,
     BossAttackingContext,
-    PrecipTypeContext
+    PrecipTypeContext,
+    HpMapContext,
+    MpMapContext
+
 } from './Context';
 import { RNGResult } from './PlayerActions';
 
@@ -170,6 +173,81 @@ export const BossArea: React.FC<BossAreaProps> = ({
             [2, "assassin"],
             [3, "rmage"]
         ])
+    //make this a global state
+    const MatchToHpSetState: Map<string, (value: number) => void> = new Map
+        (
+            [
+                ["knight", setKnightHP],
+                ["dmage", setDmageHP],
+                ["assassin", setAssassinHP],
+                ["rmage", setRmageHP]
+
+            ]
+        );
+
+    const MatchToMpSetState: Map<string, (value: number) => void> = new Map
+        (
+            [
+                ["knight", setKnightMP],
+                ["dmage", setDmageMP],
+                ["assassin", setAssassinMP],
+                ["rmage", setRmageMP]
+            ]
+        );
+
+
+    const { MatchToMpMap } = useContext(MpMapContext)
+
+
+    //Then do the status effect stuff.
+    //Each have a small chance of auto-removal
+
+    //because I need a string to use the maps for these 
+    function ConvertToStr(char_num: number) {
+        return IndexToName.get(char_num)
+
+    }
+    function ReturnHpSetChar(char_str: string) {
+        return MatchToHpSetState.get(char_str)
+
+    }
+
+
+    const { MatchToHpMap } = useContext(HpMapContext)
+    //15% of max hp. Can kill. 
+    function PoisonDamage(char_id: number) {
+        console.log("CHRID", char_id)
+        const char_str = ConvertToStr(char_id)
+        //then use the str to subtract hp accordingly 
+        //with match2maxhpmap
+        const char_max_hp = MatchToMaxHpMap.get(char_str!)
+        //retieve the hp pf the character being targeted
+        const set_char = ReturnHpSetChar(char_str!);
+        //then set accordingly
+        console.log("mthm", MatchToHpMap)
+        set_char!(MatchToHpMap!.get(char_str!)! - parseInt((char_max_hp! * 0.05).toFixed(0)))!
+
+    };
+    //use a context for these 
+
+    const TargetToStatus: Map<string, string[]> = new Map
+        (
+            [
+                ["knight", KnightStatus],
+                ["dmage", DmageStatus],
+                ["assassin", AssassinStatus],
+                ["rmage", RmageStatus]
+            ]
+        )
+    const TargetToSetStatus: Map<string, React.Dispatch<SetStateAction<string[]>>> = new Map
+        (
+            [
+                ["knight", setKnightStatus],
+                ["dmage", setDmageStatus],
+                ["assassin", setAssassinStatus],
+                ["rmage", setRmageStatus]
+            ]
+        )
     //lock player menus while boss is attacking
     useEffect(() => {
         //if it's an even turn, the boss attacks
@@ -267,96 +345,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     break;
             }
         }
-        //make this a global state
-        const MatchToHpSetState: Map<string, (value: number) => void> = new Map
-            (
-                [
-                    ["knight", setKnightHP],
-                    ["dmage", setDmageHP],
-                    ["assassin", setAssassinHP],
-                    ["rmage", setRmageHP]
 
-                ]
-            );
-
-        const MatchToMpSetState: Map<string, (value: number) => void> = new Map
-            (
-                [
-                    ["knight", setKnightMP],
-                    ["dmage", setDmageMP],
-                    ["assassin", setAssassinMP],
-                    ["rmage", setRmageMP]
-                ]
-            );
-        //need to make context for these 
-        const MatchToHpMap: Map<string, number | undefined> = new Map
-            (
-                [
-                    ["knight", KnightHP],
-                    ["dmage", DmageHP],
-                    ["assassin", AssassinHP],
-                    ["rmage", RmageHP]
-                ]
-            );
-        const MatchToMpMap: Map<string, number | undefined> = new Map
-            (
-                [
-                    ["knight", KnightMP],
-                    ["dmage", DmageMP],
-                    ["assassin", AssassinMP],
-                    ["rmage", RmageMP]
-                ]
-            );
-
-
-        //Then do the status effect stuff.
-        //Each have a small chance of auto-removal
-
-        //because I need a string to use the maps for these 
-        function ConvertToStr(char_num: number) {
-            return IndexToName.get(char_num)
-
-        }
-        function ReturnHpSetChar(char_str: string) {
-            return MatchToHpSetState.get(char_str)
-
-        }
-
-
-
-        //15% of max hp. Can kill. 
-        function PoisonDamage(char_id: number) {
-            console.log("CHRID", char_id)
-            const char_str = ConvertToStr(char_id)
-            //then use the str to subtract hp accordingly 
-            //with match2maxhpmap
-            const char_max_hp = MatchToMaxHpMap.get(char_str!)
-            //retieve the hp pf the character being targeted
-            const set_char = ReturnHpSetChar(char_str!);
-            //then set accordingly
-            set_char!(MatchToHpMap.get(char_str!)! - parseInt((char_max_hp! * 0.05).toFixed(0)))!
-
-        };
-        //use a context for these 
-
-        const TargetToStatus: Map<string, string[]> = new Map
-            (
-                [
-                    ["knight", KnightStatus],
-                    ["dmage", DmageStatus],
-                    ["assassin", AssassinStatus],
-                    ["rmage", RmageStatus]
-                ]
-            )
-        const TargetToSetStatus: Map<string, React.Dispatch<SetStateAction<string[]>>> = new Map
-            (
-                [
-                    ["knight", setKnightStatus],
-                    ["dmage", setDmageStatus],
-                    ["assassin", setAssassinStatus],
-                    ["rmage", setRmageStatus]
-                ]
-            )
 
         /*
         20% chance of death.
@@ -765,25 +754,10 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
 
 
-    const MatchToHpMap: Map<string, number | undefined> = new Map
-        (
-            [
-                ["knight", KnightHP],
-                ["dmage", DmageHP],
-                ["assassin", AssassinHP],
-                ["rmage", RmageHP]
-            ]
-        );
-    const MatchToMpMap: Map<string, number | undefined> = new Map
-        (
-            [
-                ["knight", KnightMP],
-                ["dmage", DmageMP],
-                ["assassin", AssassinMP],
-                ["rmage", RmageMP]
-            ]
-        );
+    const { MatchToHpMap } = useContext(HpMapContext);
 
+
+    const { MatchToMpMap } = useContext(MpMapContext)
 
     function HandleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);

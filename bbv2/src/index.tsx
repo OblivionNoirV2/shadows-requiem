@@ -35,7 +35,10 @@ import {
   AssassinNameContextProvider,
   RmageNameContextProvider,
   BossAttackingContextProvider,
-  PrecipTypeContextProvider
+  PrecipTypeContextProvider,
+  HpMapContextProvider,
+  MpMapContextProvider
+
 
 }
   from './Context';
@@ -74,7 +77,11 @@ root.render(
                                                   <RmageNameContextProvider>
                                                     <BossAttackingContextProvider>
                                                       <PrecipTypeContextProvider>
-                                                        <App />
+                                                        <HpMapContextProvider>
+                                                          <MpMapContextProvider>
+                                                            <App />
+                                                          </MpMapContextProvider>
+                                                        </HpMapContextProvider>
                                                       </PrecipTypeContextProvider>
                                                     </BossAttackingContextProvider>
                                                   </RmageNameContextProvider>

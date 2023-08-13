@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from 'react';
+import { createContext, useState, useEffect, useContext } from 'react';
 import * as sm from './StatManagement';
 import { PlayerMenu, BossHpBar, BossArea, MainPage } from './MainPage';
 import React from 'react';
@@ -610,6 +610,54 @@ export function PrecipTypeContextProvider({ children }: { children: React.ReactE
         </PrecipTypeContext.Provider>
     )
 }
+export const HpMapContext = createContext<any | undefined>(undefined);
+
+export function HpMapContextProvider({ children }: { children: React.ReactElement }) {
+    const KnightHP = useContext(KnightHPContext);
+    const DmageHP = useContext(DmageHPContext);
+    const AssassinHP = useContext(AssassinHPContext);
+    const RmageHP = useContext(RmageHPContext);
+
+    const MatchToHpMap = new Map<string, any>(
+        [
+            ["knight", KnightHP],
+            ["dmage", DmageHP],
+            ["assassin", AssassinHP],
+            ["rmage", RmageHP],
+        ]
+    );
+
+    return (
+        <HpMapContext.Provider value={{ MatchToHpMap }}>
+            {children}
+        </HpMapContext.Provider>
+
+    )
+}
 
 
-//for stat deductions 
+export const MpMapContext = createContext<any | undefined>(undefined);
+
+export function MpMapContextProvider({ children }: { children: React.ReactElement }) {
+    const KnightMP = useContext(KnightMPContext);
+    const DmageMP = useContext(DmageMPContext);
+    const AssassinMP = useContext(AssassinMPContext);
+    const RmageMP = useContext(RmageMPContext);
+
+    const MatchToMpMap = new Map<string, any>(
+        [
+            ["knight", KnightMP],
+            ["dmage", DmageMP],
+            ["assassin", AssassinMP],
+            ["rmage", RmageMP]
+
+        ]
+    );
+
+    return (
+        <MpMapContext.Provider value={{ MatchToMpMap }}>
+            {children}
+        </MpMapContext.Provider>
+    )
+
+}
