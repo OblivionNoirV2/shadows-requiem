@@ -352,7 +352,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         counting the prev 20% chance to remove it that comes before, 
         this is actually a 16% chance
         */
-        function HandleCurse(char_id: number) {
+        function handleCurse(char_id: number) {
             if (Percentage() < 0.20) {
                 const char_str = ConvertToStr(char_id)!;
                 const setter = NameToStats.get(char_str)!
@@ -410,7 +410,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     set_status!,
                     0.20,
                     "curse",
-                    HandleCurse,
+                    handleCurse,
                     char_id
                 )
             }
@@ -440,7 +440,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
 
     //control dead and revive status
-    function HandleDeath(character: string, killed_or_revived: string) {
+    function handleDeath(character: string, killed_or_revived: string) {
         const char_index = NameToIndex.get(character)!
         const setStatus = player_set_statuses.get(char_index);
         const status = player_statuses.get(char_index);
@@ -466,7 +466,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         if (khp <= 0) {
             //prevent negatives
             setKnightHP(0)
-            HandleDeath("knight", "killed");
+            handleDeath("knight", "killed");
         } else {
             //these are the value before they died, which is wrong
             console.log("get hp, not dead", sm.knight_stats.get("hp"))
@@ -494,7 +494,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0));
         if (dhp <= 0) {
             setDmageHP(0);
-            HandleDeath("dmage", "killed");
+            handleDeath("dmage", "killed");
         } else {
             setDmageHP(dhp)
         }
@@ -516,7 +516,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let whp = parseInt(sm.assassin_stats.get("hp")!.toFixed(0));
         if (whp <= 0) {
             setAssassinHP(0);
-            HandleDeath("assassin", "killed");
+            handleDeath("assassin", "killed");
         } else {
             setAssassinHP(whp);
         }
@@ -537,7 +537,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0));
         if (rhp <= 0) {
             setRmageHP(0);
-            HandleDeath("rmage", "killed");
+            handleDeath("rmage", "killed");
         } else {
             setRmageHP(rhp);
         }
@@ -726,7 +726,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     //if it's active, hide the other options
     const [isAttacksActive, setIsAttacksActive] = useState(false);
     const [isItemsActive, setIsItemsActive] = useState(false);
-    const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
+    const handleItemsMenu = () => setIsItemsActive(!isItemsActive);
 
     //global, starts false
     const { isAttackAreaShown, setIsAttackAreaShown } = useContext(AttackShownContext);
@@ -755,20 +755,16 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
 
 
     const { MatchToHpMap } = useContext(HpMapContext);
-
-
     const { MatchToMpMap } = useContext(MpMapContext)
 
-    function HandleAttacksMenu() {
+    function handleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);
         console.log("AA: " + isAttacksActive);
     }
 
-
-
     //doubles defense (up to a max of whatever that character's max is), 
     //
-    function HandleDefend(player: string, current_turn: number) {
+    function handleDefend(player: string, current_turn: number) {
 
         console.log("og mdef", sm.player_mdef_map.get(player)!)
         //first check that it doesn't exceed maximums 
@@ -832,7 +828,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
     const [currentItem, setCurrentItem] = useState("")
 
 
-    function HandleItemChange(e: string) {
+    function handleItemChange(e: string) {
         console.log(iv.player_inventory.get(e))
         if (iv.player_inventory.get(e)!.stock <= 0) {
             setMessage("Not enough stock!");
@@ -1056,10 +1052,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 setAssassinMP(AssassinMP! - attack_encyclopedia_entry!);
                 break;
             case "rmage":
-                attack !== "Border Of Life" ?
+                attack !== "Border Of Life" ? //bol uses hp
                     setRmageMP(RmageMP! - attack_encyclopedia_entry!) :
                     setRmageHP(RmageHP! - attack_encyclopedia_entry!)
-
                 break;
         }
 
@@ -1087,7 +1082,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                 <ul className='-mt-24 battle-menu'>
                     {isItemsActive ? null :
                         <li>
-                            <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}
+                            <button onClick={() => { handleAttacksMenu(); sfx.playClickSfx(); }}
                             >
                                 {isAttacksActive ?
 
@@ -1098,7 +1093,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                     {!isAttacksActive ?
                         <>
                             <li>
-                                <button onClick={() => { sfx.playClickSfx(); HandleItemsMenu() }}>
+                                <button onClick={() => { sfx.playClickSfx(); handleItemsMenu() }}>
                                     {
                                         isSecondaryItemMenuShown ? null :
                                             isItemsActive ? "Back" : "Items"}
@@ -1116,7 +1111,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                     {isItemsActive &&
                                         <select
                                             onChange={//Will then show a "use on who? menu"
-                                                (e) => { HandleItemChange(e.target.value); sfx.playClickSfx(); }}
+                                                (e) => { handleItemChange(e.target.value); sfx.playClickSfx(); }}
                                             className='bg-black p-2 rounded-xl text-[1.2rem]'>
                                             <option>Select an item to use...</option>
                                             {[...iv.player_inventory.entries()].map(([item, details], index) => (
@@ -1179,7 +1174,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                             </div>
                             {isItemsActive ? null :
                                 <li>
-                                    <button onClick={() => { HandleDefend(player, TurnNumber); sfx.playClickSfx() }} >
+                                    <button onClick={() => { handleDefend(player, TurnNumber); sfx.playClickSfx() }} >
                                         Defend
                                     </button>
                                 </li>
@@ -1361,7 +1356,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
     console.log("MainPage rendered");
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
-    function HandleSelection(sel_character: string): void {
+    function handleSelection(sel_character: string): void {
 
         if (selectedCharacter === sel_character) {
             //If the selected character is clicked again, deselect it
@@ -1687,7 +1682,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     !isAttackAreaShown &&
 
                                     isPlayerTurn ?
-                                    () => HandleSelection("knight")
+                                    () => handleSelection("knight")
                                     : undefined
                             }
                                 className={
@@ -1730,7 +1725,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     !DmageStatus.includes("dead") &&
                                     !isAttackAreaShown &&
                                     isPlayerTurn ?
-                                    () => HandleSelection("dmage")
+                                    () => handleSelection("dmage")
                                     : undefined
                             }
                                 className={selectedCharacter === 'dmage' ?
@@ -1773,7 +1768,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     !AssassinStatus.includes("dead") &&
                                     !isAttackAreaShown &&
                                     isPlayerTurn ?
-                                    () => HandleSelection("assassin") :
+                                    () => handleSelection("assassin") :
                                     undefined
                             }
                                 className={selectedCharacter === 'assassin' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
@@ -1815,7 +1810,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     !isAttackAreaShown &&
                                     !RmageStatus.includes("dead") &&
                                     isPlayerTurn ?
-                                    () => HandleSelection("rmage") :
+                                    () => handleSelection("rmage") :
                                     undefined
                             }
                                 className={selectedCharacter === 'rmage' ?
