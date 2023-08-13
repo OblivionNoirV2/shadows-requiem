@@ -147,7 +147,8 @@ export function Percentage() {
 //Also have Unholy Synphony be the sum of the 
 //last 10 attacks(divided by 2 maybe). Use a tritone for that sfx!
 export let prev_dmg: number[] = [];
-let chosen_target: string;
+let chosen_target: string; //if all else fails just give it 
+//a randomized default to avoid undefined
 export function bossAttackAlgo(attackProps: BossAttackProps) {
     CheckForStatChange()
     let final_targets: number[] = []
@@ -459,12 +460,24 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     }
     //target is already chosen
     function LowerAllyStat(stat: string, amount: number) {
-        console.log("inside las, chosen target", chosen_target)
-        if (MatchToStat.get(chosen_target)![stat] !== undefined) {
-            //this needs to be set not get!!!!
-            //do something like the status effects use 
-            MatchToStat.get(chosen_target)![stat]! -= amount;
+
+        const character_stats = MatchToStat.get(chosen_target);
+        console.log("cs", character_stats)
+        console.log("css", character_stats![stat])
+        if (character_stats && character_stats[stat] !== undefined) {
+            const stat_with_deduction = character_stats[stat]! - amount;
+            console.log("swd", stat_with_deduction)
+            // Dynamically update the stat in the corresponding object
+            const stats_object = (sm as any)[chosen_target + "_stats"];
+            console.log("original stats obj", stats_object)
+            if (stats_object && typeof stats_object.set === "function") {
+                stats_object.set(stat, stat_with_deduction);
+                console.log("in second if")
+                console.log("get stat", stats_object.get(stat))
+            }
+            console.log("after stats obj", stats_object)
         }
+
 
 
     }
@@ -534,7 +547,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         //but it is sometimes...
                         if (MatchToStat.get(chosen_target)!.pdef >
                             min_max_vals_map.get("player")!.p_def.min) {
-                            LowerAllyStat("p_def", 0.20);
+                            LowerAllyStat("pdef", 0.20);
 
                         }
                     }
@@ -560,7 +573,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     if (Percentage() <= 0.40) {
                         if (MatchToStat.get(chosen_target)!.mdef >
                             min_max_vals_map.get("player")!.m_def.min) {
-                            LowerAllyStat("m_def", 0.20);
+                            LowerAllyStat("mdef", 0.20);
                             //use the maps for controlling stats
                             //Then restore them a little each boss turn
                             //until back to normal
