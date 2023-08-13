@@ -147,9 +147,16 @@ export function Percentage() {
 //Also have Unholy Synphony be the sum of the 
 //last 10 attacks(divided by 2 maybe). Use a tritone for that sfx!
 export let prev_dmg: number[] = [];
-let chosen_target: string; //if all else fails just give it 
-//a randomized default to avoid undefined
+
+const allies = ["knight", "dmage", "assassin", "rmage"];
+let chosen_target: string;
+//failsafe
+function CalculateStarterTarget() {
+    return allies[(Math.random() * allies.length)];
+
+}
 export function bossAttackAlgo(attackProps: BossAttackProps) {
+    chosen_target = CalculateStarterTarget();
     CheckForStatChange()
     let final_targets: number[] = []
     potential_targets = [];
@@ -170,7 +177,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         attackProps.assassin_hp,
         attackProps.rmage_hp
     ]
-    const allies = ["knight", "dmage", "assassin", "rmage"];
+
 
 
     current_statuses.forEach((condition, index) => {
@@ -282,9 +289,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             //Compare the value from above to the cumulative weight 
             //The higher the individual weight, the higher the chance
             //it has to hit
+            console.log("weight", weight)
             if (random_value <= weight.cumulative_weight) {
                 chosen_target = potential_targets[weight.index];
-                console.log("chosen_target", chosen_target);
+                console.log("chosen_target inside weights", chosen_target);
                 break;
             }
         }
@@ -406,7 +414,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         const atk_max = props.min! * props.variance!;
         //remember to accoount for pdef/mdef/ev
         last_boss_attacks.push(current_boss_attack);
-        console.log("chosen", chosen_target)
+
         //also sets the message to be displayed
         boss_atk_message = props.current_boss_attack;
 
@@ -759,11 +767,15 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
     console.log("potential targets", potential_targets)
     secondary_targets.push(chosen_target)
+    console.log("sec tar", secondary_targets)
     //convert to indexes 
     secondary_targets.forEach(element => {
-        final_targets.push(NameToIndex.get(element)!)
-
+        //filter out dead characters 
+        if (element !== undefined) {
+            final_targets.push(NameToIndex.get(element)!)
+        }
     });
+    console.log("final before return", final_targets)
 
     return {
         last_boss_attacks,
