@@ -7,6 +7,7 @@ import * as sfx from './sfxManagement';
 import * as e from './Encyclopedia';
 import YouDied from './YouDied';
 import { BossContext } from './Context';
+import Timer from './Timer';
 import {
     TurnNumberContext,
     MessageContext,
@@ -1676,7 +1677,28 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     }, []);
 
 
+
+
+
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
+    const [seconds, setSeconds] = useState(0);
+    const [minutes, setMinutes] = useState(0);
+
+    useEffect(() => {
+        const interval_id = setInterval(() => {
+            setSeconds((prev_seconds) => {
+                if (prev_seconds === 59) {
+                    setMinutes((prev_minutes) => prev_minutes + 1);
+                    return 0;
+                }
+                return prev_seconds + 1;
+            });
+        }, 1000);
+
+        return () => {
+            clearInterval(interval_id);
+        };
+    }, []);
 
     return (
         <>
@@ -1688,8 +1710,11 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
             {/*score tracker*/}
             <strong>
 
-                <section className='text-white text-4xl flex justify-end 
-                mr-24 mt-4 -mb-4'>
+                <section className='text-white text-4xl flex 
+                justify-end 
+                 mr-4 mt-4'>
+                    <Timer minutes={minutes} seconds={seconds} />
+                    <br></br>
                     Turn # {TurnNumber}
                 </section>
             </strong>
