@@ -52,7 +52,7 @@ export const knight_stats: StatMap = new Map
 export const dmage_stats: StatMap = new Map
     (
         [
-            ["hp", 470],
+            ["hp", 10],
             ["max_hp", 470],
             ["mp", 270],
             ["max_mp", 270],
@@ -68,7 +68,7 @@ export const dmage_stats: StatMap = new Map
 export const assassin_stats: StatMap = new Map
     (
         [
-            ["hp", 400],
+            ["hp", 10],
             ["max_hp", 400],
             ["mp", 250],
             ["max_mp", 250],
@@ -84,7 +84,7 @@ export const assassin_stats: StatMap = new Map
 export const rmage_stats: StatMap = new Map
     (
         [
-            ["hp", 375], //max is 375
+            ["hp", 15], //max is 375
             ["max_hp", 375],
             ["mp", 50],
             ["max_mp", 530],

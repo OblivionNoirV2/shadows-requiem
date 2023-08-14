@@ -290,8 +290,12 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             //The higher the individual weight, the higher the chance
             //it has to hit
             console.log("weight", weight)
-            if (random_value <= weight.cumulative_weight) {
-                chosen_target = potential_targets[weight.index];
+            if (random_value <= weight.cumulative_weight && weight !== undefined) {
+                if (potential_targets[weight.index] !== undefined) {
+                    chosen_target = potential_targets[weight.index];
+
+                }
+
                 console.log("chosen_target inside weights", chosen_target);
                 break;
             }
@@ -774,6 +778,9 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         }
     });
     console.log("final before return", final_targets)
+    if (final_targets.length === 0) {
+        final_targets.push(NameToIndex.get(potential_targets[(Math.random() * potential_targets.length)])!)
+    }
 
     return {
         last_boss_attacks,

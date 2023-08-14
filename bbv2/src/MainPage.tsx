@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect, createContext, useContext, Dispatch, SetStateAction } from 'react';
+import React, { useState, useRef, useEffect, createContext, useContext, Dispatch, SetStateAction, } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import * as sm from './StatManagement';
 import * as iv from './Inventory';
@@ -195,9 +196,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 ["rmage", setRmageMP]
             ]
         );
-
-
-    const { MatchToMpMap } = useContext(MpMapContext)
 
 
     //Then do the status effect stuff.
@@ -794,8 +792,25 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
 
 
 
-    const { MatchToHpMap } = useContext(HpMapContext);
-    const { MatchToMpMap } = useContext(MpMapContext)
+    //need to make context for these 
+    const MatchToHpMap: Map<string, number | undefined> = new Map
+        (
+            [
+                ["knight", KnightHP],
+                ["dmage", DmageHP],
+                ["assassin", AssassinHP],
+                ["rmage", RmageHP]
+            ]
+        );
+    const MatchToMpMap: Map<string, number | undefined> = new Map
+        (
+            [
+                ["knight", KnightMP],
+                ["dmage", DmageMP],
+                ["assassin", AssassinMP],
+                ["rmage", RmageMP]
+            ]
+        );
 
     function handleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);
@@ -891,15 +906,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             ]
         );
 
-    const MatchToMpSetState: Map<string, (value: number) => void> = new Map
-        (
-            [
-                ["knight", setKnightMP],
-                ["dmage", setDmageMP],
-                ["assassin", setAssassinMP],
-                ["rmage", setRmageMP]
-            ]
-        );
 
 
 
@@ -911,11 +917,22 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         set_hp(parseInt((amount).toFixed(0)));
         return parseInt((amount).toFixed(0))
     }
+    const MatchToMpSetState: Map<string, (value: number) => void> = new Map
+        (
+            [
+                ["knight", setKnightMP],
+                ["dmage", setDmageMP],
+                ["assassin", setAssassinMP],
+                ["rmage", setRmageMP]
+            ]
+        );
+
 
     function MpFunction(target: string, amount: number) {
         const set_mp = MatchToMpSetState.get(target)!;
         set_mp(parseInt((amount).toFixed(0)));
     };
+
 
     function ShowMessage() {
         setIsAttackMade(true)
@@ -975,7 +992,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             case "mp":
                 MatchToMpMap.set(target, MatchToMpMap.get(target)! +
                     (MatchToMaxMpMap.get(target)! * item_details!.amount!));
+
                 MpFunction(target, MatchToMpMap.get(target)!);
+                console.log("mmt", MatchToMpMap.get(target)!) //logs mmt [object Object]89.10000000000001
                 break;
             case "revive":
                 //remove dead status
@@ -1393,6 +1412,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     const { DmageMP } = useContext(DmageMPContext)
     const { AssassinMP } = useContext(AssassinMPContext)
     const { RmageMP } = useContext(RmageMPContext)
+    const nav = useNavigate()
 
 
     useEffect(() => {
@@ -1401,6 +1421,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
             AssassinStatus.includes("dead") &&
             RmageStatus.includes("dead")) {
             //navigate to YouDied page
+            nav('/YouDied')
         }
 
     }, [KnightStatus, DmageStatus, AssassinStatus, RmageStatus])
@@ -1419,7 +1440,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     //Manage the turn based system
     //Score will go up by 1 each player turn
 
-    console.log("MainPage rendered");
+
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
     function handleSelection(sel_character: string): void {
 
