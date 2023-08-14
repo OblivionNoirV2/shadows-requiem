@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import {
     KnightNameContext,
@@ -12,7 +12,7 @@ export let dmage_name = DmageNameContext;
 export let assassin_name = AssassinNameContext;
 export let rmage_name = RmageNameContext;
 export const NameCharacters = () => {
-    const characters: string[] = ['Knight', 'Dark Mage', 'White Mage', 'Red Mage'];
+    const characters: string[] = ['Knight', 'Dark Mage', 'Assassin', 'Red Mage'];
 
     const { setKnightName } = useContext(KnightNameContext);
     const { setDmageName } = useContext(DmageNameContext);
@@ -20,11 +20,11 @@ export const NameCharacters = () => {
     const { setRmageName } = useContext(RmageNameContext);
     //Set these on input change, THEN the save button (or enter) retrieves
     //this data and uses it to set the name states
-    const [names, setNames] = React.useState(
+    const [names, setNames] = useState(
         {
             "Knight": "",
             "Dark Mage": "",
-            "White Mage": "",
+            "Assassin": "",
             "Red Mage": ""
         }
     );
@@ -48,7 +48,7 @@ export const NameCharacters = () => {
         //set to default names if left empty, this prevents blank names
         setKnightName(names['Knight'] || 'Knight');
         setDmageName(names['Dark Mage'] || 'Dark Mage');
-        setAssassinName(names['White Mage'] || 'White Mage');
+        setAssassinName(names['Assassin'] || 'Assassin');
         setRmageName(names['Red Mage'] || 'Red Mage');
         console.log(names);
     };
