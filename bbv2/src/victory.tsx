@@ -7,8 +7,6 @@ import { PrecipTypeContext } from "./Context";
 export const ScoreDeductionsMap: Map<string, number> = new Map(
     [
         ["death", 1000],
-        ["item", 10],
-        ["heal", 20],
         ["turn", 15] //per turn
 
     ]
@@ -20,8 +18,6 @@ export const Occurences: Map<string, number> = new Map
     (
         [
             ["death", 0],
-            ["item", 0],
-            ["heal", 0],
             ["turn", 0]
         ]
     )
@@ -36,6 +32,7 @@ const DifficultyToScore: Map<string, number> = new Map(
 
     ]
 )
+//will also add a timer
 function CalculateScore() {
     const death_penalty = Occurences.get("death")! * ScoreDeductionsMap.get("death")!;
     const item_penalty = Occurences.get("item")! * ScoreDeductionsMap.get("item")!;

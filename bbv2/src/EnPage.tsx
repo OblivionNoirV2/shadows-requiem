@@ -68,7 +68,7 @@ const MatchToCharDesc: Map<String, string> = new Map
         [
             ["knight", "The main shield of the party. He is resistant to physical attacks and can take the most damage. Deals all physical damage."],
             ["dmage", "She is a spellcaster with a balanced spread of support, offense and stat debuffing."],
-            ["assassin", "The primary medic of the party. Somwhat fragile, but has great magic defense. Can also deal light damage."],
+            ["assassin", "High evasion and good at inflicting stat debuffs on the enemy."],
             ["rmage", "High risk, high reward glass cannon. She has potential to deal the most damage out of everyone, but is very fragile."]
         ]
     );
@@ -138,7 +138,7 @@ const CharacterStats = () => {
                     lookup_name="dmage"
                 />
                 <CharacterStatComponent
-                    name="White Mage"
+                    name="Assassin"
                     img_src={assassin_img}
                     lookup_name="assassin"
                 />
@@ -157,7 +157,7 @@ const Scoring = () => {
     return (
         <>
             <h1 className="text-4xl mb-4">
-                Scoring is based on several factors, which are:
+                Scoring is based on a few factors, which are:
             </h1>
             {/*for some reason the type does not work here, but it does 
             with css*/}
@@ -167,10 +167,6 @@ const Scoring = () => {
                 </li>
                 <li>
                     Deaths: More character deaths means a lower score.
-                </li>
-                <li>
-                    Item Usage: Lower item usage demonstrates more ability to survive on
-                    limited resources, so you want to keep your item consumption low.
                 </li>
                 <li>
                     Turn count: The more efficient you are, the better.
@@ -272,7 +268,7 @@ const EncylopediaPage = () => {
                     map_name="dmage_attacks"
                 />
                 <AttacksComponent
-                    player="White Mage"
+                    player="Assassin"
                     map_name="assassin_attacks"
                 />
                 <AttacksComponent
