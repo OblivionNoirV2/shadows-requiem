@@ -589,7 +589,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
     }, [sm.rmage_stats.get("mp")])
 
-    console.log("rendered bossarea")
+
     useEffect(() => {
         let boss_hp = sm.boss_stats.get("hp")!
         console.log("boss stage updated", selected_difficulty)

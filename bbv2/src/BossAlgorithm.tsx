@@ -777,10 +777,15 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             final_targets.push(NameToIndex.get(element)!)
         }
     });
+
+    //failsafes
+    final_targets = final_targets.filter(target => target !== undefined);
     console.log("final before return", final_targets)
+
     if (final_targets.length === 0) {
         final_targets.push(NameToIndex.get(potential_targets[(Math.random() * potential_targets.length)])!)
     }
+
 
     return {
         last_boss_attacks,
