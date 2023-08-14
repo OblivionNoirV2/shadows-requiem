@@ -447,7 +447,7 @@ export const RmageStatusContext = createContext<RmageStatusContextValue>({
 })
 
 export function RmageStatusContextProvider({ children }: { children: React.ReactElement }) {
-    const [RmageStatus, setRmageStatus] = useState<string[]>(["curse", "freeze", "poison"]);
+    const [RmageStatus, setRmageStatus] = useState<string[]>(["poison"]);
 
     useEffect(() => {
         console.log('RmageStatus updated:', RmageStatus);
@@ -643,6 +643,7 @@ export function MpMapContextProvider({ children }: { children: React.ReactElemen
     const DmageMP = useContext(DmageMPContext);
     const AssassinMP = useContext(AssassinMPContext);
     const RmageMP = useContext(RmageMPContext);
+
 
     const MatchToMpMap = new Map<string, any>(
         [

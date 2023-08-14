@@ -173,7 +173,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             [2, "assassin"],
             [3, "rmage"]
         ])
-    //make this a global state
+
     const MatchToHpSetState: Map<string, (value: number) => void> = new Map
         (
             [
@@ -214,6 +214,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
 
     const { MatchToHpMap } = useContext(HpMapContext)
+
+
     //15% of max hp. Can kill. 
     function PoisonDamage(char_id: number) {
         console.log("CHRID", char_id)
@@ -224,11 +226,38 @@ export const BossArea: React.FC<BossAreaProps> = ({
         //retieve the hp pf the character being targeted
         const set_char = ReturnHpSetChar(char_str!);
         //then set accordingly
-        console.log("mthm", MatchToHpMap)
-        set_char!(MatchToHpMap!.get(char_str!)! - parseInt((char_max_hp! * 0.05).toFixed(0)))!
+        //None of these are undefined or nan except y
+        console.log("set char", set_char)
 
+        console.log("mthm", MatchToHpMap)
+        console.log("char str", char_str)
+        console.log("mthp get", MatchToHpMap!.get(char_str!))
+        console.log("max hp", char_max_hp!)
+
+
+
+        const charHpObject = MatchToHpMap.get(char_str!);
+        const currentHp = charHpObject?.RmageHP; // Accessing the RmageHP property
+
+        const poison_damage = char_max_hp! * 0.05;
+        const new_hp = parseInt((currentHp - poison_damage).toFixed(0));
+
+        switch (char_str) {
+            case "knight":
+                setKnightHP(new_hp)
+                break;
+            case "dmage":
+                setDmageHP(new_hp)
+                break;
+            case "assassin":
+                setAssassinHP(new_hp)
+                break;
+            case "rmage":
+                setRmageHP(new_hp)
+                break;
+        }
     };
-    //use a context for these 
+
 
     const TargetToStatus: Map<string, string[]> = new Map
         (
@@ -564,6 +593,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
             setBossStage(2);
         } else {
             setBossStage(3); //25%
+            document.documentElement.style.filter = "brightness(50%)"
+
         }
     }, [sm.boss_stats.get("hp")]);
 
@@ -711,6 +742,7 @@ export const BossHpBar = () => {
 interface PlayerMenuProps {
     player: string;
     isPlayerTurn: boolean;
+    MpMap: Map<string, any>;
 
 }
 
@@ -719,7 +751,7 @@ interface PlayerMenuProps {
  it's a miss/critical message. Crits include the message and the damage
 all as one string*/
 
-export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) => {
+export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, MpMap }) => {
 
     console.log("player menu rendered")
     const current_attacks = player_attacks[player];
@@ -1195,7 +1227,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                             <button onClick={() => {
                                                 const attack_encyclopedia_entry = e.AttackEncyclopedia.get(attack)!.mp_cost;
                                                 //max mp for that character
-                                                const mp_map_value = MatchToMpMap.get(player);
+
                                                 //for BOL
                                                 const hp_map_value = MatchToHpMap.get(player)
 
@@ -1211,7 +1243,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn }) 
                                                     }
 
                                                 } else {
-                                                    if (attack_encyclopedia_entry! > mp_map_value!) {
+
+                                                    if (attack_encyclopedia_entry! > MpMap.get(player)) {
                                                         setMessage("Not enough MP!");
                                                         ShowMessage()
                                                     } else {
@@ -1348,8 +1381,21 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     const { AssassinStatus, setAssassinStatus } = useContext(AssassinStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
 
+    const { KnightMP } = useContext(KnightMPContext)
+    const { DmageMP } = useContext(DmageMPContext)
+    const { AssassinMP } = useContext(AssassinMPContext)
+    const { RmageMP } = useContext(RmageMPContext)
 
+    //ts won't cooperate, so we're YOLO-ing it with any
+    let MatchToMPState: Map<string, any> = new Map(
+        [
+            ["knight", KnightMP],
+            ["dmage", DmageMP],
+            ["assassin", AssassinMP],
+            ["rmage", RmageMP]
 
+        ]
+    )
 
     //Manage the turn based system
     //Score will go up by 1 each player turn
@@ -1521,6 +1567,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         character_name?: string;
     }
 
+
     const PlayerComponent: React.FC<PlayerComponentProps> = ({ player, stat_name, character_name }) => {
 
 
@@ -1541,16 +1588,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         const { RmageName, setRmageName } = useContext(RmageNameContext);
 
 
-        //ts won't cooperate, so we're YOLO-ing it with any
-        const MatchToMPState: Map<string, any> = new Map(
-            [
-                ["knight", KnightMP],
-                ["dmage", DmageMP],
-                ["assassin", AssassinMP],
-                ["rmage", RmageMP]
 
-            ]
-        )
         const MatchToHPState: Map<string, any> = new Map(
             [
                 ["knight", KnightHP],
@@ -1591,7 +1629,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                     <progress className='p-hp'
                         max={sm[stat_name].get('max_hp')}
                         value={
-                            MatchToHPState.get(player)
+                            MatchToHPState.get(player).toFixed(0)
                         }>
                     </progress>
                     <div className='ml-2 text-xl hp-text'>
@@ -1709,6 +1747,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     <PlayerMenu
                                         player='knight'
                                         isPlayerTurn={isPlayerTurn}
+                                        MpMap={MatchToMPState}
 
                                     />
                                 }
@@ -1751,6 +1790,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     <PlayerMenu
                                         player='dmage'
                                         isPlayerTurn={isPlayerTurn}
+                                        MpMap={MatchToMPState}
 
                                     />
 
@@ -1792,6 +1832,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     <PlayerMenu
                                         player='assassin'
                                         isPlayerTurn={isPlayerTurn}
+                                        MpMap={MatchToMPState}
 
                                     />
 
@@ -1835,6 +1876,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     <PlayerMenu
                                         player='rmage'
                                         isPlayerTurn={isPlayerTurn}
+                                        MpMap={MatchToMPState}
 
                                     />
 
@@ -1894,7 +1936,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                         </li>
                     </ul>
                 </section>
-                <section className=''>
+                <section>
                     {/*later on link this to the final version of 
                     when he attacks, which will be slightly randomized 
                     as opposed to a simple back and forth*/}

@@ -244,6 +244,18 @@ body {
   opacity: 0.9;
 }
 
+.ultima-bar::-webkit-progress-bar {
+  background-color: rgb(89, 3, 170);
+  opacity: 0.9;
+}
+
+.ultima-bar::-o-progress-bar {
+  background-color: rgb(89, 3, 170);
+  opacity: 0.9;
+}
+
+
+
 .is-selected {
   border: 0.5rem solid rgb(136, 8, 8);
 }
@@ -252,9 +264,7 @@ body {
   border: 0.5rem solid black;
 }
 
-html {
-  filter: brightness(80%);
-}
+
 
 .vol-icon {
   filter: brightness(0) invert(1);

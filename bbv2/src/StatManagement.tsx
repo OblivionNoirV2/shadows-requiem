@@ -100,7 +100,7 @@ export const rmage_stats: StatMap = new Map
 export const boss_stats: StatMap = new Map
     (
         [
-            ["hp", 780000],
+            ["hp", 10],
             ["max_hp", 780000],
             ["p_def", 1.00],
             ["d_p_def", 1.00],
@@ -243,19 +243,4 @@ export const min_max_vals_map: Map<string, Stats> = new Map([
 ]
 )
 
-//probably don't need this
-function UpdateStats(player_name: string, stats_to_update: string[], is_boss: boolean): void {
-    const updated_stats = new Map<string, player_stats>();
-
-
-}
-/*function UpdateStats(player_name: string, changing_stat: string, is_boss: boolean): ts.ESMap<string, number> {
-
-}*/
-
-
-//status effects: 
-//poison - 5% of max hp per turn
-//curse - insta death in 10 turns
-//frozen - can't move for 3 turns
-export default UpdateStats;
+export default {}

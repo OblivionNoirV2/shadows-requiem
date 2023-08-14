@@ -367,23 +367,21 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     }
     //Match the target to their respective stats and get the final output
     function CalculateFinal(props: CalculateFinalProps): number {
-        let attack_modifier = sm.boss_stat_changes.get(selected_difficulty)
+        const attack_modifier = sm.boss_stat_changes.get(selected_difficulty)
         console.log("atk modifier", attack_modifier!.atk)
-        let final_dmg: number;
-        let target_stats;
+        let final_dmg: number = 0;
         //First check for evasion. undefined means they're dead
         if (props.target !== undefined &&
             MatchToStat.get(props.target)!.ev <= Percentage()) {
             //then add defense
             if (props.atk_type === "phys") {
                 final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.pdef) * attack_modifier!.atk;
-                prev_dmg.push(final_dmg);
-                return final_dmg;
+
             } else if (props.atk_type === "mag") {
                 final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.mdef) * attack_modifier!.atk;
-                prev_dmg.push(final_dmg);
-                return final_dmg;
             }
+            prev_dmg.push(final_dmg);
+            return final_dmg;
         } else {
             if (props.target !== undefined) {
                 console.log("evaded")
