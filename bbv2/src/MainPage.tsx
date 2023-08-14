@@ -91,19 +91,41 @@ let hb = new Audio(heartbeat)
 
 
 let targets_list = []
-export let MatchToMaxHpMap: Map<string, number | undefined> = new Map([
-    ["knight", sm.knight_stats.get("max_hp")],
-    ["dmage", sm.dmage_stats.get("max_hp")],
-    ["assassin", sm.assassin_stats.get("max_hp")],
-    ["rmage", sm.rmage_stats.get("max_hp")]
-]);
+export const MatchToMaxHpMap: Map<string, number | undefined> = new Map
+    (
+        [
+            [
+                "knight", sm.knight_stats.get("max_hp")
+            ],
+            [
+                "dmage", sm.dmage_stats.get("max_hp")
+            ],
+            [
+                "assassin", sm.assassin_stats.get("max_hp")
+            ],
+            [
+                "rmage", sm.rmage_stats.get("max_hp")
+            ]
+        ]
+    );
 
-export let MatchToMaxMpMap: Map<string, number | undefined> = new Map([
-    ["knight", sm.knight_stats.get("max_mp")],
-    ["dmage", sm.dmage_stats.get("max_mp")],
-    ["assassin", sm.assassin_stats.get("max_mp")],
-    ["rmage", sm.rmage_stats.get("max_mp")]
-]);
+export const MatchToMaxMpMap: Map<string, number | undefined> = new Map
+    (
+        [
+            [
+                "knight", sm.knight_stats.get("max_mp")
+            ],
+            [
+                "dmage", sm.dmage_stats.get("max_mp")
+            ],
+            [
+                "assassin", sm.assassin_stats.get("max_mp")
+            ],
+            [
+                "rmage", sm.rmage_stats.get("max_mp")
+            ]
+        ]
+    );
 
 //string just for the sake of reusability 
 let NameToStats: Map<string, number | sm.StatMap> = new Map

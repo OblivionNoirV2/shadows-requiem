@@ -19,6 +19,7 @@ import {
 //adds a multiplier or divider, depending
 import { selected_difficulty } from './StartMenu';
 import anime from 'animejs/lib/anime.es.js'
+import { Z_FILTERED } from 'zlib';
 
 
 
@@ -771,31 +772,30 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     secondary_targets.push(chosen_target)
     console.log("sec tar", secondary_targets)
     //convert to indexes 
-    secondary_targets.forEach(element => {
-        //filter out dead characters 
-        if (element !== undefined) {
-            final_targets.push(NameToIndex.get(element)!)
-        }
-    });
+
+    const filtered_secondary_targets = secondary_targets.filter(target => target !== undefined)
+
+    filtered_secondary_targets.forEach(target => {
+        final_targets.push(NameToIndex.get(target)!)
+
+    })
 
     //failsafes
-    final_targets = final_targets.filter(target => target !== undefined);
-    console.log("final before return", final_targets)
 
+    console.log("final before return", final_targets)
+    //if, for some godforsaken reason, it's empty at this point, add in a random potential target
     if (final_targets.length === 0) {
         final_targets.push(NameToIndex.get(potential_targets[(Math.random() * potential_targets.length)])!)
     }
-
+    final_targets = final_targets.filter(target => target !== undefined);
 
     return {
         last_boss_attacks,
         final_targets
     }
-}//algo function ends here 
+};//algo function ends here 
 
-interface AttackNumsObject {
-    [key: number]: string | undefined
-}
+
 //Not so much weights as they are number labels
 const attack_nums: Map<number, string> = new Map(
     [
