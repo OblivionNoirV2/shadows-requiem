@@ -158,7 +158,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             ],
             [
                 'My Turn', {
-                    description: "Deals light physical damage and negates the King's next turn. Cannot be used sequentially.",
+                    description: "Deals light physical damage and prevents the King from attacking for one turn.",
                     mp_cost: 40
                 }
             ],

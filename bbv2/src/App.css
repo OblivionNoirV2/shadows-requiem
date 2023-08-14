@@ -269,7 +269,7 @@ body {
 .vol-icon {
   filter: brightness(0) invert(1);
   position: absolute;
-  top: 1rem;
+  top: 8rem;
   right: 1rem;
 }
 
@@ -387,7 +387,7 @@ the padding from .battle-menu causes issues with pushing things down*/
 
 .snow-switch-container {
   position: absolute;
-  top: 7rem;
+  top: 5rem;
   right: 1rem;
   width: 3.5rem;
   height: 2rem;

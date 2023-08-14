@@ -55,7 +55,7 @@ const App: React.FC = () => {
     return (
       <section className='snow-switch-container'>
 
-        <h4 className='text-slate-300 font-bold mb-8'>Precipitation</h4>
+        <h4 className='text-slate-300 font-bold mb-4'>Precipitation</h4>
 
 
         <label className="snow-switch">

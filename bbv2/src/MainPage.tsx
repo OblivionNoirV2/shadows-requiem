@@ -1394,6 +1394,17 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     const { AssassinMP } = useContext(AssassinMPContext)
     const { RmageMP } = useContext(RmageMPContext)
 
+
+    useEffect(() => {
+        if (KnightStatus.includes("dead") &&
+            DmageStatus.includes("dead") &&
+            AssassinStatus.includes("dead") &&
+            RmageStatus.includes("dead")) {
+            //navigate to YouDied page
+        }
+
+    }, [KnightStatus, DmageStatus, AssassinStatus, RmageStatus])
+
     //ts won't cooperate, so we're YOLO-ing it with any
     let MatchToMPState: Map<string, any> = new Map(
         [
