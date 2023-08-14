@@ -17,7 +17,9 @@ import { StringMappingType } from "typescript";
 const AttackingDesc = () => {
     return (
         <p className="text-2xl my-2 leading-relaxed">
-            This game is turn based, heavily inspired by classic JRPGs such as Chrono Trigger or Final Fantasy.
+            This game is turn based, heavily inspired by classic
+            JRPGs such as Chrono Trigger or Final Fantasy. Once you start,
+            the timer continues and you can change character names unless you refresh the start menu or win/lose.
             Most attacks consume MP,
             and the amount is indicated next to the attack name.
             Each character also has an Ultima,
@@ -25,10 +27,8 @@ const AttackingDesc = () => {
             progress bar is full. It charges a little every turn. You also have items.
             More on that to the right.
         </p>
-
-    )
-
-}
+    );
+};
 //default values so they are not affected by any ongoing battle
 const MatchToPdef: Map<string, number> = new Map
     (
@@ -157,10 +157,8 @@ const Scoring = () => {
     return (
         <>
             <h1 className="text-4xl mb-4">
-                Scoring is based on a few factors, which are:
+                Scoring is based on the following factors:
             </h1>
-            {/*for some reason the type does not work here, but it does 
-            with css*/}
             <ol className="text-2xl space-y-8 ml-4">
                 <li> Difficulty chosen: Higher difficulties grant more
                     points; easier choices have the opposite effect.
@@ -171,10 +169,13 @@ const Scoring = () => {
                 <li>
                     Turn count: The more efficient you are, the better.
                 </li>
+                <li>
+                    Total time: Faster means more points.
+                </li>
             </ol>
         </>
-    )
-}
+    );
+};
 interface AttacksComponentProps {
     player: string;
     map_name: string;

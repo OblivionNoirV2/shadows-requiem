@@ -1713,7 +1713,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                 <section className='text-white text-4xl flex 
                 justify-end 
                  mr-4 mt-4'>
-                    <Timer minutes={minutes} seconds={seconds} />
+                    <Timer />
                     <br></br>
                     Turn # {TurnNumber}
                 </section>

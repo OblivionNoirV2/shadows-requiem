@@ -2,6 +2,7 @@ import { selected_difficulty } from "./StartMenu";
 import { useContext, useEffect } from "react";
 import victorybg from './assets/images/bg-and-effects/victorybg.png'
 import { PrecipTypeContext } from "./Context";
+import { seconds } from "./Timer";
 
 //cause: string. penalty: number
 export const ScoreDeductionsMap: Map<string, number> = new Map(
@@ -35,16 +36,17 @@ const DifficultyToScore: Map<string, number> = new Map(
 //will also add a timer
 function CalculateScore() {
     const death_penalty = Occurences.get("death")! * ScoreDeductionsMap.get("death")!;
-    const item_penalty = Occurences.get("item")! * ScoreDeductionsMap.get("item")!;
-    const heal_penalty = Occurences.get("heal")! * ScoreDeductionsMap.get("heal")!;
-    const turn_penalty = Occurences.get("turn")! * ScoreDeductionsMap.get("turn")!;
 
-    const pre_final = (10000 - (death_penalty + item_penalty + heal_penalty + turn_penalty))
+    const turn_penalty = Occurences.get("turn")! * ScoreDeductionsMap.get("turn")!;
+    const time_penalty = seconds * 2;
+
+    const pre_final = (10000 - (death_penalty + turn_penalty + time_penalty))
 
     //take difficulty into account 
     return pre_final + DifficultyToScore.get(selected_difficulty)!
 
 }
+
 
 const DifficultyToText: Map<string, string> = new Map(
     [   //idk why I didn't just write it like this in the first place 
@@ -56,10 +58,19 @@ const DifficultyToText: Map<string, string> = new Map(
         ["nightmare", "Nightmare"]
     ]
 )
+const SecondsToMinutes = () => {
+    const seconds_remainder = seconds % 60;
+    const even_seconds = seconds - seconds_remainder;
+    const minutes = (even_seconds / 60);
 
-//also change the snow to confetti
-//fromsoft style text
-//add a gentle pulsing glow animation
+    return (
+        <div className="ml-3">
+            <span>{String(minutes).padStart(2, '0')}:</span>
+            <span>{String(seconds).padStart(2, '0')}</span>
+        </div>
+    )
+};
+
 const VictoryScreen = () => {
     const { setPrecipType } = useContext(PrecipTypeContext)
     useEffect(() => {
@@ -85,15 +96,15 @@ const VictoryScreen = () => {
                         <li>
                             Deaths: {Occurences.get("death")}
                         </li>
-                        <li>
-                            Items Used: {Occurences.get("item")}
-                        </li>
-                        <li>
-                            Healing spells used: {Occurences.get("heal")}
-                        </li>
+
                         <li>
                             Turns taken: {Occurences.get("turn")}
                         </li>
+
+                        <li className="flex">
+                            Total Time: <SecondsToMinutes />
+                        </li>
+
                         <li>
                             Difficulty Chosen: {DifficultyToText.get(selected_difficulty)}
                         </li>
