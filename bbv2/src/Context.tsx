@@ -447,7 +447,7 @@ export const RmageStatusContext = createContext<RmageStatusContextValue>({
 })
 
 export function RmageStatusContextProvider({ children }: { children: React.ReactElement }) {
-    const [RmageStatus, setRmageStatus] = useState<string[]>(["poison"]);
+    const [RmageStatus, setRmageStatus] = useState<string[]>([]);
 
     useEffect(() => {
         console.log('RmageStatus updated:', RmageStatus);

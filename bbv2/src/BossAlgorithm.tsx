@@ -862,14 +862,18 @@ export const BossAttackArea: React.FC = () => {
                             `${CharToName.get(current_char)} evaded` :
                             boss_atk_message}
                     </h1>
-                    <img className={
-                        isBossAttackShown ?
-                            'z-50 mt-72 mr-64 boss-attack rounded-xl' :
-                            'z-50 mt-72 mr-64 rounded-xl'
+                    {
+                        current_boss_attack !== undefined && //it ends up undefined if my turn negates it
+                        <img className={
+                            isBossAttackShown ?
+                                'z-50 mt-72 mr-64 boss-attack rounded-xl' :
+                                'z-50 mt-72 mr-64 rounded-xl'
+                        }
+                            src={
+                                require(`./assets/images/boss/attacks/${current_boss_attack}.png`)}>
+                        </img>
                     }
-                        src={
-                            require(`./assets/images/boss/attacks/${current_boss_attack}.png`)}>
-                    </img>
+
                 </>
             }
             <script src='anime.min.js'></script>

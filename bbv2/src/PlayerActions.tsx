@@ -15,6 +15,8 @@ import { AttackAnimation, Percentage } from './BossAlgorithm';
 import { Stats } from './StatManagement';
 type phys_or_mag = "phys" | "mag"
 
+export let is_my_turn_active: boolean = false;
+
 const player_ev_map: Map<string, number | undefined> = new Map
     (
         [
@@ -601,6 +603,22 @@ export const attacks_map: Map<string, Function> = new Map([
     //The first time the boss tries to attack but this is active, it deacivates.
     [
         'My Turn', function MyTurn() {
+            if (is_my_turn_active === false) {
+                is_my_turn_active = true;
+            }
+            return (
+                RNG(
+                    {
+                        min: 2560,
+                        crit_rate: 0.06,
+                        phys_or_mag: "phys",
+                        variance: 1.10,
+                        is_ult: false,
+                        miss_rate: 0.05,
+                        sfx_type: "swoosh"//wind sort of thing
+                    }
+                )
+            )
 
         }
     ],
@@ -682,6 +700,10 @@ export let is_attack_triggered: boolean = false;
 //cannot use state here, so we're doing it this way
 //maybe change to use the map
 export function PlayerAttack(attack: string) {
+    if (is_my_turn_active === true) {
+        is_my_turn_active = false;
+        console.log("boss can attack again")
+    }
     selected_attack = attack;
     console.log("inside playerattack,selected attack:" + attack);
     //function returns a damage value

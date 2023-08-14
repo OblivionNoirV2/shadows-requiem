@@ -100,7 +100,7 @@ export const rmage_stats: StatMap = new Map
 export const boss_stats: StatMap = new Map
     (
         [
-            ["hp", 50000],
+            ["hp", 780000],
             ["max_hp", 780000],
             ["p_def", 1.00],
             ["d_p_def", 1.00],
