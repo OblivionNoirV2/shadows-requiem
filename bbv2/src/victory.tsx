@@ -3,6 +3,7 @@ import { useContext, useEffect } from "react";
 import victorybg from './assets/images/bg-and-effects/victorybg.png'
 import { PrecipTypeContext } from "./Context";
 import { seconds } from "./Timer";
+import { Link } from "react-router-dom";
 
 //cause: string. penalty: number
 export const ScoreDeductionsMap: Map<string, number> = new Map(
@@ -70,7 +71,15 @@ const SecondsToMinutes = () => {
         </div>
     )
 };
-
+const ReturnToTitle = () => {
+    return (
+        <button>
+            <Link to="/StartMenu" >
+                Return to Title
+            </Link>
+        </button>
+    )
+}
 const VictoryScreen = () => {
     const { setPrecipType } = useContext(PrecipTypeContext)
     useEffect(() => {
@@ -115,6 +124,9 @@ const VictoryScreen = () => {
                         Final Score: {CalculateScore()}
                     </li>
                 </ul>
+            </section>
+            <section className="text-3xl hover:border-white hover:border-2 rounded-xl mt-4 p-4">
+                <ReturnToTitle />
             </section>
         </main>
     )
