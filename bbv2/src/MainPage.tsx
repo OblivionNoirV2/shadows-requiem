@@ -755,6 +755,14 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
 
 export const BossHpBar = () => {
+    const nav = useNavigate();
+    useEffect(() => {
+        if (sm.boss_stats.get("hp")! <= 0) {
+            nav('/Victory')
+
+        }
+
+    }, [sm.boss_stats.get("hp")])
     return (
         <progress className={
             'block h-8 glow-ani-border-black boss-prog w-full'

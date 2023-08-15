@@ -771,7 +771,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     console.log("potential targets", potential_targets)
     secondary_targets.push(chosen_target)
     console.log("sec tar", secondary_targets)
-    //convert to indexes 
+    //failsafes and convert to indexes 
 
     const filtered_secondary_targets = secondary_targets.filter(target => target !== undefined)
 
@@ -780,14 +780,15 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     })
 
-    //failsafes
 
-    console.log("final before return", final_targets)
-    //if, for some godforsaken reason, it's empty at this point, add in a random potential target
+
+
+    //if, for some GODFORSAKEN REASON, it's empty at this point, add in a random potential target
     if (final_targets.length === 0) {
         final_targets.push(NameToIndex.get(potential_targets[(Math.random() * potential_targets.length)])!)
     }
     final_targets = final_targets.filter(target => target !== undefined);
+    console.log("final before return", final_targets)
 
     return {
         last_boss_attacks,
@@ -796,7 +797,6 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 };//algo function ends here 
 
 
-//Not so much weights as they are number labels
 const attack_nums: Map<number, string> = new Map(
     [
         [1, "Shadow Blade"], //standard atk, med phys
