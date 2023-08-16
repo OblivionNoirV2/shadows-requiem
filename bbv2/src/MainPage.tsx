@@ -46,7 +46,7 @@ import dmagebg from './assets/images/bg-and-effects/dmageultimabg.png';
 import assassinbg from './assets/images/bg-and-effects/assassinultimabg.png';
 import rmagebg from './assets/images/bg-and-effects/rmageultimabg.png';
 import defaultbg from './assets/images/bg-and-effects/battlebgv3.png';
-import { bossAttackAlgo, BossAttackArea, last_boss_attacks } from './BossAlgorithm';
+import { bossAttackAlgo, BossAttackArea, last_boss_attacks, MatchToStat } from './BossAlgorithm';
 import knight_icon from './assets/images/player/sprites/knight.png';
 import dmage_icon from './assets/images/player/sprites/dmage.png';
 import assassin_icon from './assets/images/player/sprites/assassin.png';
@@ -1008,26 +1008,29 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         //if a useless item is attempted, a notice will pop up.
         //this needs to happen before inventory subtraction
         function HealSwitch(target: string) {
-            switch (target) {
-                case "knight":
-                    sm.knight_stats.set("hp", (MatchToHpMap.get(target)!) +
-                        (MatchToMaxHpMap.get(target)! * item_details!.amount!));
-                    break;
-                case "dmage":
-                    sm.dmage_stats.set("hp", (MatchToHpMap.get(target)!) +
-                        (MatchToMaxHpMap.get(target)! * item_details!.amount!));
-                    break;
-                case "assassin":
-                    sm.assassin_stats.set("hp", (MatchToHpMap.get(target)!) +
-                        (MatchToMaxHpMap.get(target)! * item_details!.amount!));
-                    break;
-                case "rmage":
-                    sm.rmage_stats.set("hp", (MatchToHpMap.get(target)!) +
-                        (MatchToMaxHpMap.get(target)! * item_details!.amount!));
-                    break;
+            //can probably actually use the one in boss algo for this
+            const MatchToSetHP: Map<string, sm.StatMap> = new Map(
+                [
+                    ["knight", sm.knight_stats],
+                    ["dmage", sm.dmage_stats],
+                    ["assassin", sm.assassin_stats],
+                    ["rmage", sm.rmage_stats]
+                ]
+            );
 
+            const statMap = MatchToSetHP.get(target);
+            if (statMap) {
+                const current_hp = MatchToHpMap.get(target)!;
+                console.log("current hp", current_hp)
+                console.log("id", item_details!.amount!)
+
+                statMap.set("hp", (MatchToHpMap.get(target)!) +
+                    (MatchToMaxHpMap.get(target)! * item_details!.amount!));
             }
         }
+
+
+
         switch (item_details!.type) {
             case "hp"://set to the current + the max * healing factor (such as .33)
                 MatchToHpMap.set(target, (MatchToHpMap.get(target)!) +

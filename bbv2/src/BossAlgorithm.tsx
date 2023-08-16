@@ -73,7 +73,7 @@ interface CharacterRespectiveStats {
     mdef: number;
     ev: number;
 }
-//use this for status effects
+
 export let MatchToStat: Map<string, CharacterRespectiveStats> = new Map(
     [
         [

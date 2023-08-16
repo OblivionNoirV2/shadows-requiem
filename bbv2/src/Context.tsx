@@ -620,10 +620,10 @@ export function HpMapContextProvider({ children }: { children: React.ReactElemen
 
     const MatchToHpMap = new Map<string, any>(
         [
-            ["knight", KnightHP],
-            ["dmage", DmageHP],
-            ["assassin", AssassinHP],
-            ["rmage", RmageHP],
+            ["knight", sm.knight_stats.get("hp")],
+            ["dmage", sm.dmage_stats.get("hp")],
+            ["assassin", sm.assassin_stats.get("hp")],
+            ["rmage", sm.rmage_stats.get("hp")],
         ]
     );
 
