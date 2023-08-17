@@ -786,7 +786,6 @@ all as one string*/
 
 export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, MpMap }) => {
 
-    console.log("player menu rendered")
     const current_attacks = player_attacks[player];
     //if it's active, hide the other options
     const [isAttacksActive, setIsAttacksActive] = useState(false);

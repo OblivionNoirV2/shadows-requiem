@@ -212,6 +212,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         assassin_weight,
         rmage_weight
     ];
+    let filtered_weights: number[] = [];
     //Breakpoint and the weight associated with it
     const CharacterWeightsMap: Map<number, number> = new Map(
         [
@@ -238,15 +239,16 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             dmage_status: string;
             assassin_status: string;
             rmage_status: string;
-            // ... other properties ...
+
         };
         current_statuses.forEach((condition, index) => {
 
             //if they are dead, remove them from the array
 
+            //resets to 0
             let character_weights: number[] = [knight_weight, dmage_weight, assassin_weight, rmage_weight];
             let characters = ['knight', 'dmage', 'assassin', 'rmage'];
-            let filtered_weights: number[] = [];
+            filtered_weights = [];
 
             for (let i = 0; i < characters.length; i++) {
                 if (!(attackProps as any)[characters[i] + '_status'].includes("dead")) {
@@ -257,21 +259,27 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             console.log("filtered", filtered_weights);//use this
 
             if (condition.includes("poison")) {
-                character_weights[index] += 2;
+                filtered_weights[index] += 2;
             }
             if (condition.includes("freeze")) {
-                character_weights[index] += 3;
+                filtered_weights[index] += 3;
             }
             if (condition.includes("curse")) {
-                character_weights[index] += 4;
+                filtered_weights[index] += 4;
             }
         })
         current_hp.forEach((hp, index) => {
             CharacterWeightsMap.forEach((weight, breakpoint) => {
                 if (hp <= breakpoint) {
-                    character_weights[index] += weight;
-                    console.log("character_weights", character_weights)
+                    console.log(typeof weight)
+                    console.log(typeof index)
+                    //ensures that only alive character's weights are taken into account
+                    if (typeof filtered_weights[index] + weight === 'number') {
+                        filtered_weights[index] += weight
 
+                    }
+
+                    console.log("character_weights", filtered_weights)
                 }
             }
             )
@@ -285,13 +293,13 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     /*GALAXY BRAIN TIME*/
     function Targeting() {
         //Get max range for the randomizer
-        const total_weights = character_weights.reduce((a, b) => a + b, 0);
+        const total_weights = filtered_weights.reduce((a, b) => a + b, 0);
         //Get a random value between 1 and the total weights
         const random_value = Randomizer(1, total_weights);
 
         //Sort the weights in descending order 
         //and calculate cumulative weights
-        const weights_with_cumulative = character_weights
+        const weights_with_cumulative = filtered_weights
             //Map to an original array of objects 
             .map((weight, index) => (
                 {
