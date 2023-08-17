@@ -224,9 +224,38 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             [50, 7]
         ]
     )
+
+    const IndexToStatus: Map<number, string[]> = new Map
+        (
+            [
+
+            ]
+        )
     //determines how likely each character is to be targeted
     function DetermineWeights() {
+        type BossAttackProps = {
+            knight_status: string;
+            dmage_status: string;
+            assassin_status: string;
+            rmage_status: string;
+            // ... other properties ...
+        };
         current_statuses.forEach((condition, index) => {
+
+            //if they are dead, remove them from the array
+
+            let character_weights: number[] = [knight_weight, dmage_weight, assassin_weight, rmage_weight];
+            let characters = ['knight', 'dmage', 'assassin', 'rmage'];
+            let filtered_weights: number[] = [];
+
+            for (let i = 0; i < characters.length; i++) {
+                if (!(attackProps as any)[characters[i] + '_status'].includes("dead")) {
+                    filtered_weights.push(character_weights[i]);
+                }
+            }
+
+            console.log("filtered", filtered_weights);//use this
+
             if (condition.includes("poison")) {
                 character_weights[index] += 2;
             }
@@ -294,10 +323,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             if (random_value <= weight.cumulative_weight && weight !== undefined) {
                 if (potential_targets[weight.index] !== undefined) {
                     chosen_target = potential_targets[weight.index];
+                    console.log("chosen_target inside weights", chosen_target);
 
                 }
 
-                console.log("chosen_target inside weights", chosen_target);
+
                 break;
             }
         }
@@ -580,7 +610,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [ //drops target's mag def
                 "Soul Crusher", function SoulCrusher() {
-                    console.log("inside atk chosen", chosen_target)
+                    console.log("inside atk chosen", chosen_target) //this is sometimes undefined - check prev step
                     if (Percentage() <= 0.40) {
                         if (MatchToStat.get(chosen_target)!.mdef >
                             min_max_vals_map.get("player")!.m_def.min) {
@@ -770,11 +800,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
     console.log("potential targets", potential_targets)
     secondary_targets.push(chosen_target)
-    console.log("sec tar", secondary_targets)
+
     //failsafes and convert to indexes 
 
     const filtered_secondary_targets = secondary_targets.filter(target => target !== undefined)
-
+    console.log("filtered sec tar", filtered_secondary_targets)
     filtered_secondary_targets.forEach(target => {
         final_targets.push(NameToIndex.get(target)!)
 
@@ -788,6 +818,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         final_targets.push(NameToIndex.get(potential_targets[(Math.random() * potential_targets.length)])!)
     }
     final_targets = final_targets.filter(target => target !== undefined);
+    for (let i of final_targets) {
+        console.log("i", i)
+
+    }
     console.log("final before return", final_targets)
 
     return {

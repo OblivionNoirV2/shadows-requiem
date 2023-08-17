@@ -522,13 +522,10 @@ export const BossArea: React.FC<BossAreaProps> = ({
         console.log("initial khp", khp)
         if (khp <= 0) {
             //prevent negatives
-            setKnightHP(0)
+            sm.knight_stats.set("hp", 0)
             handleDeath("knight", "killed");
         } else {
-            //these are the value before they died, which is wrong
-            console.log("get hp, not dead", sm.knight_stats.get("hp"))
-            console.log("knighthp, not dead", KnightHP)
-            setKnightHP(sm.knight_stats.get("hp")!)
+            sm.knight_stats.set("hp", khp)
         }
         //try setting the new value with THIS, not state
     }, [sm.knight_stats.get("hp")])
@@ -550,10 +547,10 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0));
         if (dhp <= 0) {
-            setDmageHP(0);
+            sm.dmage_stats.set("hp", 0)
             handleDeath("dmage", "killed");
         } else {
-            setDmageHP(dhp)
+            sm.dmage_stats.set("hp", dhp)
         }
     }, [sm.dmage_stats.get("hp")])
 
@@ -570,12 +567,12 @@ export const BossArea: React.FC<BossAreaProps> = ({
     }, [sm.dmage_stats.get("mp")])
 
     useEffect(() => {
-        let whp = parseInt(sm.assassin_stats.get("hp")!.toFixed(0));
-        if (whp <= 0) {
-            setAssassinHP(0);
+        let ahp = parseInt(sm.assassin_stats.get("hp")!.toFixed(0));
+        if (ahp <= 0) {
+            sm.assassin_stats.set("hp", 0);
             handleDeath("assassin", "killed");
         } else {
-            setAssassinHP(whp);
+            sm.assassin_stats.set("hp", ahp)
         }
 
     }, [sm.assassin_stats.get("hp")])
@@ -593,10 +590,10 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0));
         if (rhp <= 0) {
-            setRmageHP(0);
+            sm.rmage_stats.set("hp", 0)
             handleDeath("rmage", "killed");
         } else {
-            setRmageHP(rhp);
+            sm.rmage_stats.set("hp", rhp)//differnce is this version is tofixed, no decimals
         }
     }, [sm.rmage_stats.get("hp")])
 
@@ -804,11 +801,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
     const { AssassinMP, setAssassinMP } = useContext(AssassinMPContext);
     const { RmageMP, setRmageMP } = useContext(RmageMPContext);
 
-    const { KnightHP, setKnightHP } = useContext(KnightHPContext);
-    const { DmageHP, setDmageHP } = useContext(DmageHPContext);
-    const { AssassinHP, setAssassinHP } = useContext(AssassinHPContext);
-    const { RmageHP, setRmageHP } = useContext(RmageHPContext);
-
     const { KnightName } = useContext(KnightNameContext);
     const { DmageName } = useContext(DmageNameContext);
     const { AssassinName } = useContext(AssassinNameContext);
@@ -822,14 +814,14 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
 
 
 
-    //need to make context for these 
+    //put in seperate file
     const MatchToHpMap: Map<string, number | undefined> = new Map
         (
             [
-                ["knight", KnightHP],
-                ["dmage", DmageHP],
-                ["assassin", AssassinHP],
-                ["rmage", RmageHP]
+                ["knight", sm.knight_stats.get("hp")!],
+                ["dmage", sm.dmage_stats.get("hp")!],
+                ["assassin", sm.assassin_stats.get("hp")!],
+                ["rmage", sm.assassin_stats.get("hp")!]
             ]
         );
     const MatchToMpMap: Map<string, number | undefined> = new Map
@@ -925,23 +917,13 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         }
     }
 
-    const MatchToHpSetState: Map<string, (value: number) => void> = new Map
-        (
-            [
-                ["knight", setKnightHP],
-                ["dmage", setDmageHP],
-                ["assassin", setAssassinHP],
-                ["rmage", setRmageHP]
-
-            ]
-        );
 
 
 
 
 
 
-
+    //put in seperate file, like sm
     const MatchToMpSetState: Map<string, (value: number) => void> = new Map
         (
             [
@@ -966,6 +948,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         }, 1000)
     }
     //to filter out what no longer belongs + check for usage validity
+    //might warrant a global
     const TargetToStatus: Map<string, string[]> = new Map
         (
             [
@@ -1156,7 +1139,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             case "rmage":
                 attack !== "Border Of Life" ? //bol uses hp
                     setRmageMP(RmageMP! - attack_encyclopedia_entry!) :
-                    setRmageHP(RmageHP! - attack_encyclopedia_entry!)
+                    sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - attack_encyclopedia_entry)
                 break;
         }
 
@@ -1659,10 +1642,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         const { AssassinMP, setAssassinMP } = useContext(AssassinMPContext);
         const { RmageMP, setRmageMP } = useContext(RmageMPContext);
 
-        const { KnightHP, setKnightHP } = useContext(KnightHPContext);
-        const { DmageHP, setDmageHP } = useContext(DmageHPContext);
-        const { AssassinHP, setAssassinHP } = useContext(AssassinHPContext);
-        const { RmageHP, setRmageHP } = useContext(RmageHPContext);
 
 
         const { KnightName, setKnightName } = useContext(KnightNameContext);
@@ -1672,12 +1651,12 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
 
 
-        const MatchToHPState: Map<string, any> = new Map(
+        const MatchToHPSm: Map<string, number> = new Map(
             [
-                ["knight", KnightHP],
-                ["dmage", DmageHP],
-                ["assassin", AssassinHP],
-                ["rmage", RmageHP]
+                ["knight", sm.knight_stats.get("hp")!],
+                ["dmage", sm.dmage_stats.get("hp")!],
+                ["assassin", sm.assassin_stats.get("hp")!],
+                ["rmage", sm.rmage_stats.get("hp")!]
 
             ]
         )
@@ -1712,16 +1691,16 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                     <progress className='p-hp'
                         max={sm[stat_name].get('max_hp')}
                         value={
-                            MatchToHPState.get(player).toFixed(0)
+                            MatchToHPSm.get(player)!.toFixed(0)
                         }>
                     </progress>
                     <div className='ml-2 text-xl hp-text'>
 
                         <strong>
                             {
-                                MatchToHPState.get(player) > sm[stat_name].get('max_hp')!
+                                MatchToHPSm.get(player)! > sm[stat_name].get('max_hp')!
                                     ? `${sm[stat_name].get('max_hp')!} / ${sm[stat_name].get('max_hp')!}`
-                                    : `${MatchToHPState.get(player)} / ${sm[stat_name].get('max_hp')}`
+                                    : `${MatchToHPSm.get(player)} / ${sm[stat_name].get('max_hp')}`
                             }
 
                         </strong>
