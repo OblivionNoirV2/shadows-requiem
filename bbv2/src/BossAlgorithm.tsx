@@ -365,15 +365,18 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     Ie the range it falls into determines his attack  
     */
 
+
     function CheckForInversion() {
-        let mp_is_lower_than_hp = true;
-        current_hp.forEach((hp, index) => {
-            if (hp > current_hp[index] * 0.25) {
-                mp_is_lower_than_hp = false;
-            }
-        })
-        if (mp_is_lower_than_hp) {
+
+        //first 
+        //the attack itself already does checks for dead, so this is fine
+        if (attackProps.knight_hp < attackProps.knight_mp &&
+            attackProps.dmage_hp < attackProps.dmage_mp &&
+            attackProps.assassin_hp < attackProps.assassin_mp &&
+            attackProps.rmage_hp < attackProps.rmage_mp) {
             inversion_eligible = true;
+        } else {
+            inversion_eligible = false;
         }
 
     }
@@ -673,10 +676,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
                     for (let character of potential_targets) {
                         const stats = statsMap[character as keyof typeof statsMap];
-                        const hp = stats.get("hp")!;
+
                         const mp = stats.get("mp")!;
                         stats.set("hp", mp);
-                        stats.set("mp", hp);
+
                     }
 
                     return (
