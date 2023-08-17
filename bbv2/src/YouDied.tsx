@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { PrecipTypeContext } from "./Context";
 import youdiedsfx from './assets/sound/sfx/youdiedsfx.mp3'
 const BackToTitle = () => {
-    //put an arrow next to it
+
     return (
         <button onClick={playClickSfx}>
             <Link to="/StartMenu">

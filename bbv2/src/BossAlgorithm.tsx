@@ -157,6 +157,7 @@ function CalculateStarterTarget() {
 
 }
 export function bossAttackAlgo(attackProps: BossAttackProps) {
+
     chosen_target = CalculateStarterTarget();
     CheckForStatChange()
     let final_targets: number[] = []
@@ -229,6 +230,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     const IndexToStatus: Map<number, string[]> = new Map
         (
             [
+                [0, attackProps.knight_status],
+                [1, attackProps.dmage_status],
+                [2, attackProps.assassin_status],
+                [3, attackProps.rmage_status]
 
             ]
         )
@@ -273,7 +278,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 if (hp <= breakpoint) {
                     console.log(typeof weight)
                     console.log(typeof index)
-                    //ensures that only alive character's weights are taken into account
+                    //ensures that only alive character's weights are taken into account (dead ones produce a NaN)
                     if (typeof filtered_weights[index] + weight === 'number') {
                         filtered_weights[index] += weight
 
@@ -438,8 +443,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     interface BossRNGProps {
         current_boss_attack: string;
-        min?: number; //because of inversion
-        variance?: number;
+        min: number; //because of inversion
+        variance: number;
         atk_sfx: string;
         secondary_targets?: string[];
         //if an attack hits multiple targets, 
@@ -530,6 +535,16 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
 
     }
+
+    const IndexToString: Map<number, string> = new Map
+        (
+            [
+                [1, "knight"],
+                [2, "dmage"],
+                [3, "assassin"],
+                [4, "rmage"]
+            ]
+        )
     const boss_attack_functions: Map<string, Function> = new Map(
         [
             [
@@ -647,10 +662,29 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             [   //flips hp and mp of all characters
                 //Only triggers if mp is lower than hp for all 
                 "Inversion", function Inversion() {
+
+
+                    const statsMap: { [key: string]: typeof sm.knight_stats } = {
+                        knight: sm.knight_stats,
+                        dmage: sm.dmage_stats,
+                        assassin: sm.assassin_stats,
+                        rmage: sm.rmage_stats,
+                    };
+
+                    for (let character of potential_targets) {
+                        const stats = statsMap[character as keyof typeof statsMap];
+                        const hp = stats.get("hp")!;
+                        const mp = stats.get("mp")!;
+                        stats.set("hp", mp);
+                        stats.set("mp", hp);
+                    }
+
                     return (
                         BossRNG(
                             {
                                 current_boss_attack: "Inversion",
+                                min: 0,
+                                variance: 0,
                                 atk_sfx: "placeholder",
                                 secondary_targets: TargetMulti(3),
                                 attack_type: "mag"
@@ -804,8 +838,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     chosen_num = GetRandomNumber(attacks_grab_bag);
     console.log("chosen_num", chosen_num)
-    attack_nums.get(chosen_num);
-    boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
+    //attack_nums.get(chosen_num);
+    boss_attack_functions.get(attack_nums.get(6)!)!();
     console.log("potential targets", potential_targets)
     secondary_targets.push(chosen_target)
 

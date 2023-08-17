@@ -394,6 +394,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                             }
                         })
                         break;
+
                     default:
                         console.log("no special attacks used")
                         break;
