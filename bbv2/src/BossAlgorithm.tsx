@@ -430,9 +430,14 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
             } else if (props.atk_type === "mag") {
                 final_dmg = (props.pre_dmg / MatchToStat.get(props.target)!.mdef) * attack_modifier!.atk;
+            } else {
+                final_dmg = props.pre_dmg * attack_modifier!.atk; //for stuff like US
+
             }
-            prev_dmg.push(final_dmg);
+            prev_dmg.push(final_dmg)
+            console.log("PREV", prev_dmg)
             return final_dmg;
+
         } else {
             if (props.target !== undefined) {
                 console.log("evaded")
@@ -483,6 +488,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     }
                 )
                 DeductHP(target, x);
+
             }
             )
         } else {
@@ -492,6 +498,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 atk_type: props.attack_type
 
             }))
+
         }
 
     }
@@ -733,16 +740,22 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     //min given to the RNG is tht total 
                     //of the past 10 attacks 
                     //Targets all allies
+                    console.log("prev inside us", prev_dmg)
+                    const total = prev_dmg.reduce(
+                        (accumulator, currentValue) =>
+                            accumulator + currentValue);
+                    prev_dmg = []//reset
+                    console.log("total", total)
                     return (
                         BossRNG(
                             {
                                 current_boss_attack: "Unholy Symphony",
-                                min: prev_dmg.reduce(
-                                    (accumulator, currentValue) =>
-                                        accumulator + currentValue, 0),
+                                min: total,
                                 variance: 1.05,
                                 atk_sfx: "US",
-                                attack_type: "none"
+                                attack_type: "none",
+                                secondary_targets: TargetMulti(3)
+
                             }
 
                         )
@@ -785,7 +798,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ]
         ]
     );
-
+    function Attack() {
+        chosen_num = GetRandomNumber(attacks_grab_bag);
+        console.log("chosen_num", chosen_num)
+        boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
+    }
 
     function GetRandomNumber(arr: number[]) {
         return (arr[Math.floor(Math.random() * arr.length)])
@@ -799,23 +816,25 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     switch (attackProps.phase) {
         case 1:
             attacks_grab_bag = [1, 1, 1, 2, 2, 3, 4, 5];
-
+            chosen_num = GetRandomNumber(attacks_grab_bag);
+            Attack()
             break;
         case 2:
             CheckForInversion();
             if (inversion_eligible) {
                 //adjust the percentages accordingly
-                //has a high chance of occuring if eligible
                 attacks_grab_bag = [1, 1, 2, 3, 4, 5,
-                    6, 6, 6, 6, 6, 6, 7, 8]
+                    6, 6, 6, 6, 6, 7, 7, 8]
 
             } else {
                 //use the default moveset, 
                 //which has inversion at a 0% chance
                 attacks_grab_bag = [1, 1, 2, 2, 3, 4, 5, 6, 7, 8]
             }
+            Attack()
             break;
         case 3:
+
             CheckForInversion();
             if (last_boss_attacks.length >= 10) {
                 boss_attack_functions.get("Unholy Symphony")!();
@@ -834,15 +853,17 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     attacks_grab_bag = [1, 2, 2, 3, 3, 4, 5, 7,
                         8, 10, 11, 11]
                 }
+                Attack()
             }
             break;
     }
+    //check for UH
 
 
-    chosen_num = GetRandomNumber(attacks_grab_bag);
-    console.log("chosen_num", chosen_num)
-    //attack_nums.get(chosen_num);
-    boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
+
+
+
+
     console.log("potential targets", potential_targets)
     secondary_targets.push(chosen_target)
 
