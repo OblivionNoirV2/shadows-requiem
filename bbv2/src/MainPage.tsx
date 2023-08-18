@@ -165,6 +165,19 @@ export const BossArea: React.FC<BossAreaProps> = ({
     const { AssassinHP, setAssassinHP } = useContext(AssassinHPContext);
     const { RmageHP, setRmageHP } = useContext(RmageHPContext);
 
+    //warning for incoming US
+    useEffect(() => {
+        const b_image = document.getElementById("b-image"); //fixes race condition
+        if (b_image) {
+            if (last_boss_attacks.length > 7 && last_boss_attacks.length <= 10) {
+                b_image.classList.add("warning");
+                console.log("added warning")
+            } else {
+                b_image.classList.remove("warning");
+            }
+        }
+    }, [last_boss_attacks.length]);
+
 
 
 
@@ -201,7 +214,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     const MatchToHpSetState: Map<string, (value: number) => void> = new Map
         (
             [
-                ["knight", setKnightHP],
+                ["knight", setKnightHP],//get rid of this, no more hp states
                 ["dmage", setDmageHP],
                 ["assassin", setAssassinHP],
                 ["rmage", setRmageHP]
@@ -704,9 +717,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
         '>
             <section className='flex flex-col items-center w-[56rem]
              relative'>
-                <img
+                <img id='b-image'
                     src={boss_images[bossStage - 1]}
-                    className='boss-sprite opacity-95'
+                    className='boss-sprite opacity-95 rounded-xl'
                     alt={`boss phase ${bossStage}`}
                 />
                 <strong>

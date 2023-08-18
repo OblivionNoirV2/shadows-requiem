@@ -741,3 +741,18 @@ body:before {
   backdrop-filter: blur(1rem);
   -webkit-backdrop-filter: blur(1rem);
 }
+
+.warning {
+  animation: warning-glow 1s linear infinite alternate;
+}
+
+@keyframes warning-glow {
+  0% {
+    box-shadow: 0 0 0rem rgb(121, 1, 1);
+
+  }
+
+  100% {
+    box-shadow: 0 0 4rem rgb(121, 1, 1);
+  }
+}

@@ -737,9 +737,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [
                 "Unholy Symphony", function UnholySymphony() {
-                    //min given to the RNG is tht total 
+                    //min given to the RNG is the total 
                     //of the past 10 attacks 
-                    //Targets all allies
                     console.log("prev inside us", prev_dmg)
                     const total = prev_dmg.reduce(
                         (accumulator, currentValue) =>
@@ -755,11 +754,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 atk_sfx: "US",
                                 attack_type: "none",
                                 secondary_targets: TargetMulti(3)
-
                             }
-
                         )
-
                     )
                 }
             ],
@@ -857,12 +853,6 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             }
             break;
     }
-    //check for UH
-
-
-
-
-
 
     console.log("potential targets", potential_targets)
     secondary_targets.push(chosen_target)
@@ -960,6 +950,8 @@ export const BossAttackArea: React.FC = () => {
             AttackAnimation();
         }
     }, [isBossAttackShown]);
+
+
 
 
 
