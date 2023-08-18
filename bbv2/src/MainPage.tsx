@@ -236,68 +236,40 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
     const { MatchToHpMap } = useContext(HpMapContext)
 
+    const SetterMap: Map<string, sm.StatMap> = new Map
+        (
+            [
+                ["knight", sm.knight_stats],
+                ["dmage", sm.dmage_stats],
+                ["assassin", sm.assassin_stats],
+                ["rmage", sm.rmage_stats]
+            ]
+        )
 
-    //15% of max hp. Can kill. 
+
+    //5% of max hp. Can kill. 
     function PoisonDamage(char_id: number) {
         console.log("CHRID", char_id)
         const char_str = ConvertToStr(char_id)
         //then use the str to subtract hp accordingly 
-        //with match2maxhpmap
-        const char_max_hp = MatchToMaxHpMap.get(char_str!)
-        //retieve the hp pf the character being targeted
-        const set_char = ReturnHpSetChar(char_str!);
-        //then set accordingly
-        //None of these are undefined or nan except y
-        console.log("set char", set_char)
-
-        console.log("mthm", MatchToHpMap)
-        console.log("char str", char_str)
-        console.log("mthp get", MatchToHpMap!.get(char_str!))
-        console.log("max hp", char_max_hp!)
-
-
-
-        const charHpObject = MatchToHpMap.get(char_str!);
-        const currentHp = charHpObject?.RmageHP; // Accessing the RmageHP property
-
-        const poison_damage = char_max_hp! * 0.05;
-        const new_hp = parseInt((currentHp - poison_damage).toFixed(0));
 
         switch (char_str) {
             case "knight":
-                setKnightHP(new_hp)
+                sm.knight_stats.set("hp", (sm.knight_stats.get("hp")! - sm.knight_stats.get("max_hp")! * 0.05))
                 break;
             case "dmage":
-                setDmageHP(new_hp)
+                sm.dmage_stats.set("hp", (sm.dmage_stats.get("hp")! - sm.dmage_stats.get("max_hp")! * 0.05))
                 break;
             case "assassin":
-                setAssassinHP(new_hp)
+                sm.assassin_stats.set("hp", (sm.assassin_stats.get("hp")! - sm.assassin_stats.get("max_hp")! * 0.05))
                 break;
             case "rmage":
-                setRmageHP(new_hp)
-                break;
+                sm.rmage_stats.set("hp", (sm.rmage_stats.get("hp")! - sm.rmage_stats.get("max_hp")! * 0.05))
         }
     };
 
 
-    const TargetToStatus: Map<string, string[]> = new Map
-        (
-            [
-                ["knight", KnightStatus],
-                ["dmage", DmageStatus],
-                ["assassin", AssassinStatus],
-                ["rmage", RmageStatus]
-            ]
-        )
-    const TargetToSetStatus: Map<string, React.Dispatch<SetStateAction<string[]>>> = new Map
-        (
-            [
-                ["knight", setKnightStatus],
-                ["dmage", setDmageStatus],
-                ["assassin", setAssassinStatus],
-                ["rmage", setRmageStatus]
-            ]
-        )
+
     //lock player menus while boss is attacking
     useEffect(() => {
         //if it's an even turn, the boss attacks
@@ -321,10 +293,10 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     dmage_status: DmageStatus,
                     assassin_status: AssassinStatus,
                     rmage_status: RmageStatus,
-                    knight_hp: KnightHP!,
-                    dmage_hp: DmageHP!,
-                    assassin_hp: AssassinHP!,
-                    rmage_hp: RmageHP!,
+                    knight_hp: sm.knight_stats.get("hp")!,
+                    dmage_hp: sm.dmage_stats.get("hp")!,
+                    assassin_hp: sm.assassin_stats.get("hp")!,
+                    rmage_hp: sm.rmage_stats.get("hp")!,
                     knight_mp: KnightMP!,
                     dmage_mp: DmageMP!,
                     assassin_mp: AssassinMP!,

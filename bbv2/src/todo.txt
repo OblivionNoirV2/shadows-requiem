@@ -1,1 +1,4 @@
 Lock back button when boss is attacking
+
+Move all the hp/mp set maps to the stat management file
+

@@ -375,7 +375,7 @@ export const KnightStatusContext = createContext<KnightStatusContextValue>({
 })
 
 export function KnightStatusContextProvider({ children }: { children: React.ReactElement }) {
-    const [KnightStatus, setKnightStatus] = useState<string[]>([]);
+    const [KnightStatus, setKnightStatus] = useState<string[]>(["poison"]);
 
     useEffect(() => {
         console.log('KnightStatus updated:', KnightStatus);
@@ -423,7 +423,7 @@ export const AssassinStatusContext = createContext<AssassinStatusContextValue>({
 })
 
 export function AssassinStatusContextProvider({ children }: { children: React.ReactElement }) {
-    const [AssassinStatus, setAssassinStatus] = useState<string[]>([]);
+    const [AssassinStatus, setAssassinStatus] = useState<string[]>(["poison"]);
 
     useEffect(() => {
         console.log('AssassinStatus updated:', AssassinStatus);

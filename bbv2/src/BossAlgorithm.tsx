@@ -842,7 +842,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     chosen_num = GetRandomNumber(attacks_grab_bag);
     console.log("chosen_num", chosen_num)
     //attack_nums.get(chosen_num);
-    boss_attack_functions.get(attack_nums.get(6)!)!();
+    boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
     console.log("potential targets", potential_targets)
     secondary_targets.push(chosen_target)
 
