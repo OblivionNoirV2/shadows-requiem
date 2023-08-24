@@ -722,7 +722,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     //min given to the RNG is the total 
                     //of the past 10 attacks 
                     console.log("prev inside us", prev_dmg)
-                    const total = prev_dmg.reduce(
+                    const last_ten_vals = prev_dmg.slice(-10); //without this you'd be entering phase 3 with a massive list lol 
+                    const total = last_ten_vals.reduce(
                         (accumulator, currentValue) =>
                             accumulator + currentValue);
                     prev_dmg = []//reset
