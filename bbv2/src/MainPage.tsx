@@ -1750,6 +1750,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                 !isBossAttacking &&
                                     !KnightStatus.includes("dead") &&
                                     !isAttackAreaShown &&
+                                    !KnightStatus.includes("freeze") &&
 
                                     isPlayerTurn ?
                                     () => HandleSelection("knight")
@@ -1795,6 +1796,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                 !isBossAttacking &&
                                     !DmageStatus.includes("dead") &&
                                     !isAttackAreaShown &&
+                                    !DmageStatus.includes("freeze") &&
                                     isPlayerTurn ?
                                     () => HandleSelection("dmage")
                                     : undefined
@@ -1839,6 +1841,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                 !isBossAttacking &&
                                     !AssassinStatus.includes("dead") &&
                                     !isAttackAreaShown &&
+                                    !AssassinStatus.includes("freeze") &&
                                     isPlayerTurn ?
                                     () => HandleSelection("assassin") :
                                     undefined
@@ -1882,6 +1885,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                 !isBossAttacking &&
                                     !isAttackAreaShown &&
                                     !RmageStatus.includes("dead") &&
+                                    !RmageStatus.includes("freeze") &&
                                     isPlayerTurn ?
                                     () => HandleSelection("rmage") :
                                     undefined
