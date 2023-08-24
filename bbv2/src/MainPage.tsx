@@ -20,10 +20,6 @@ import {
     DmageMPContext,
     AssassinMPContext,
     RmageMPContext,
-    KnightHPContext,
-    DmageHPContext,
-    AssassinHPContext,
-    RmageHPContext,
     KnightStatusContext,
     DmageStatusContext,
     AssassinStatusContext,
@@ -160,10 +156,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
     const { AssassinMP, setAssassinMP } = useContext(AssassinMPContext);
     const { RmageMP, setRmageMP } = useContext(RmageMPContext);
 
-    const { KnightHP, setKnightHP } = useContext(KnightHPContext);
-    const { DmageHP, setDmageHP } = useContext(DmageHPContext);
-    const { AssassinHP, setAssassinHP } = useContext(AssassinHPContext);
-    const { RmageHP, setRmageHP } = useContext(RmageHPContext);
 
     //warning for incoming US
     useEffect(() => {
@@ -211,24 +203,14 @@ export const BossArea: React.FC<BossAreaProps> = ({
             [3, "rmage"]
         ])
 
-    const MatchToHpSetState: Map<string, (value: number) => void> = new Map
+    const MatchToHpSetState: Map<string, number> = new Map
         (
             [
-                ["knight", setKnightHP],//get rid of this, no more hp states
-                ["dmage", setDmageHP],
-                ["assassin", setAssassinHP],
-                ["rmage", setRmageHP]
+                ["knight", sm.knight_stats.get("hp")!],//get rid of this, no more hp states
+                ["dmage", sm.dmage_stats.get("hp")!],
+                ["assassin", sm.assassin_stats.get("hp")!],
+                ["rmage", sm.rmage_stats.get("hp")!]
 
-            ]
-        );
-
-    const MatchToMpSetState: Map<string, (value: number) => void> = new Map
-        (
-            [
-                ["knight", setKnightMP],
-                ["dmage", setDmageMP],
-                ["assassin", setAssassinMP],
-                ["rmage", setRmageMP]
             ]
         );
 
@@ -241,23 +223,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
         return IndexToName.get(char_num)
 
     }
-    function ReturnHpSetChar(char_str: string) {
-        return MatchToHpSetState.get(char_str)
-
-    }
-
-
-    const { MatchToHpMap } = useContext(HpMapContext)
-
-    const SetterMap: Map<string, sm.StatMap> = new Map
-        (
-            [
-                ["knight", sm.knight_stats],
-                ["dmage", sm.dmage_stats],
-                ["assassin", sm.assassin_stats],
-                ["rmage", sm.rmage_stats]
-            ]
-        )
 
 
     //5% of max hp. Can kill. 
@@ -306,10 +271,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     dmage_status: DmageStatus,
                     assassin_status: AssassinStatus,
                     rmage_status: RmageStatus,
-                    knight_hp: sm.knight_stats.get("hp")!,
-                    dmage_hp: sm.dmage_stats.get("hp")!,
-                    assassin_hp: sm.assassin_stats.get("hp")!,
-                    rmage_hp: sm.rmage_stats.get("hp")!,
                     knight_mp: KnightMP!,
                     dmage_mp: DmageMP!,
                     assassin_mp: AssassinMP!,
@@ -395,7 +356,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         counting the prev 20% chance to remove it that comes before, 
         this is actually a 16% chance
         */
-        function handleCurse(char_id: number) {
+        function HandleCurse(char_id: number) {
             if (Percentage() < 0.20) {
                 const char_str = ConvertToStr(char_id)!;
                 const setter = NameToStats.get(char_str)!
@@ -453,7 +414,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     set_status!,
                     0.20,
                     "curse",
-                    handleCurse,
+                    HandleCurse,
                     char_id
                 )
             }
@@ -483,7 +444,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
 
     //control dead and revive status
-    function handleDeath(character: string, killed_or_revived: string) {
+    function HandleDeath(character: string, killed_or_revived: string) {
         const char_index = NameToIndex.get(character)!
         const setStatus = player_set_statuses.get(char_index);
         const status = player_statuses.get(char_index);
@@ -509,7 +470,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         if (khp <= 0) {
             //prevent negatives
             sm.knight_stats.set("hp", 0)
-            handleDeath("knight", "killed");
+            HandleDeath("knight", "killed");
         } else {
             sm.knight_stats.set("hp", khp)
         }
@@ -534,7 +495,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let dhp = parseInt(sm.dmage_stats.get("hp")!.toFixed(0));
         if (dhp <= 0) {
             sm.dmage_stats.set("hp", 0)
-            handleDeath("dmage", "killed");
+            HandleDeath("dmage", "killed");
         } else {
             sm.dmage_stats.set("hp", dhp)
         }
@@ -556,7 +517,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let ahp = parseInt(sm.assassin_stats.get("hp")!.toFixed(0));
         if (ahp <= 0) {
             sm.assassin_stats.set("hp", 0);
-            handleDeath("assassin", "killed");
+            HandleDeath("assassin", "killed");
         } else {
             sm.assassin_stats.set("hp", ahp)
         }
@@ -577,7 +538,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         let rhp = parseInt(sm.rmage_stats.get("hp")!.toFixed(0));
         if (rhp <= 0) {
             sm.rmage_stats.set("hp", 0)
-            handleDeath("rmage", "killed");
+            HandleDeath("rmage", "killed");
         } else {
             sm.rmage_stats.set("hp", rhp)//differnce is this version is tofixed, no decimals
         }
@@ -776,7 +737,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
     //if it's active, hide the other options
     const [isAttacksActive, setIsAttacksActive] = useState(false);
     const [isItemsActive, setIsItemsActive] = useState(false);
-    const handleItemsMenu = () => setIsItemsActive(!isItemsActive);
+    const HandleItemsMenu = () => setIsItemsActive(!isItemsActive);
 
     //global, starts false
     const { isAttackAreaShown, setIsAttackAreaShown } = useContext(AttackShownContext);
@@ -819,14 +780,14 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             ]
         );
 
-    function handleAttacksMenu() {
+    function HandleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);
         console.log("AA: " + isAttacksActive);
     }
 
     //doubles defense (up to a max of whatever that character's max is), 
     //
-    function handleDefend(player: string, current_turn: number) {
+    function HandleDefend(player: string, current_turn: number) {
 
         console.log("og mdef", sm.player_mdef_map.get(player)!)
         //first check that it doesn't exceed maximums 
@@ -868,9 +829,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
     const { isAttackMade, setIsAttackMade } = useContext(AttackMadeContext);
     //global
     const { message, setMessage } = useContext(MessageContext);
-    function handleAtkClick(attack: string) {
+    function HandleAtkClick(attack: string) {
         let atk_result = pa.PlayerAttack(attack);
-        console.log("handleclick atkresult:", atk_result);
+        console.log("Handleclick atkresult:", atk_result);
         setMessage(atk_result);
 
         setIsAttackAreaShown(true);
@@ -890,7 +851,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
     const [currentItem, setCurrentItem] = useState("")
 
 
-    function handleItemChange(e: string) {
+    function HandleItemChange(e: string) {
         console.log(iv.player_inventory.get(e))
         if (iv.player_inventory.get(e)!.stock <= 0) {
             setMessage("Not enough stock!");
@@ -1110,7 +1071,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         }
     }, [itemTarget]);
 
-    function handleMP(attack: string, attack_encyclopedia_entry: number) {
+    function HandleMP(attack: string, attack_encyclopedia_entry: number) {
         switch (player) {
             case "knight":
                 setKnightMP(KnightMP! - attack_encyclopedia_entry!);
@@ -1128,7 +1089,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                 break;
         }
 
-        handleAtkClick(attack);
+        HandleAtkClick(attack);
         setIsAttackAreaShown(true);
 
 
@@ -1152,7 +1113,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                 <ul className='-mt-24 battle-menu'>
                     {isItemsActive ? null :
                         <li>
-                            <button onClick={() => { handleAttacksMenu(); sfx.playClickSfx(); }}
+                            <button onClick={() => { HandleAttacksMenu(); sfx.playClickSfx(); }}
                             >
                                 {isAttacksActive ?
 
@@ -1163,7 +1124,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                     {!isAttacksActive ?
                         <>
                             <li>
-                                <button onClick={() => { sfx.playClickSfx(); handleItemsMenu() }}>
+                                <button onClick={() => { sfx.playClickSfx(); HandleItemsMenu() }}>
                                     {
                                         isSecondaryItemMenuShown ? null :
                                             isItemsActive ? "Back" : "Items"}
@@ -1181,7 +1142,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                                     {isItemsActive &&
                                         <select
                                             onChange={//Will then show a "use on who? menu"
-                                                (e) => { handleItemChange(e.target.value); sfx.playClickSfx(); }}
+                                                (e) => { HandleItemChange(e.target.value); sfx.playClickSfx(); }}
                                             className='bg-black p-2 rounded-xl text-[1.2rem]'>
                                             <option>Select an item to use...</option>
                                             {[...iv.player_inventory.entries()].map(([item, details], index) => (
@@ -1244,7 +1205,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                             </div>
                             {isItemsActive ? null :
                                 <li>
-                                    <button onClick={() => { handleDefend(player, TurnNumber); sfx.playClickSfx() }} >
+                                    <button onClick={() => { HandleDefend(player, TurnNumber); sfx.playClickSfx() }} >
                                         Defend
                                     </button>
                                 </li>
@@ -1276,7 +1237,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                                                         setMessage("Not enough HP!");
                                                         ShowMessage()
                                                     } else {
-                                                        handleMP(attack, attack_encyclopedia_entry!)
+                                                        HandleMP(attack, attack_encyclopedia_entry!)
 
                                                     }
 
@@ -1286,7 +1247,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                                                         setMessage("Not enough MP!");
                                                         ShowMessage()
                                                     } else {
-                                                        handleMP(attack, attack_encyclopedia_entry!)
+                                                        HandleMP(attack, attack_encyclopedia_entry!)
 
                                                     }
 
@@ -1453,7 +1414,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
 
     const [isPlayerTurn, setIsPlayerTurn] = useState(true);
-    function handleSelection(sel_character: string): void {
+    function HandleSelection(sel_character: string): void {
 
         if (selectedCharacter === sel_character) {
             //If the selected character is clicked again, deselect it
@@ -1554,7 +1515,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     }, [TurnNumber])
 
     const [isUltMenuShown, setIsUltMenuShown] = useState(false);
-    function handleUltMenu() {
+    function HandleUltMenu() {
         setIsUltMenuShown(!isUltMenuShown);
     }
     //Match the ult buttons to their appropriate styling
@@ -1578,7 +1539,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         ]
     )
 
-    function handleUltimaClick(attack: string) {
+    function HandleUltimaClick(attack: string) {
         setIsScreenDark(true);
         console.log("inside ult click", attack)
         setIsUltima(true);
@@ -1791,7 +1752,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     !isAttackAreaShown &&
 
                                     isPlayerTurn ?
-                                    () => handleSelection("knight")
+                                    () => HandleSelection("knight")
                                     : undefined
                             }
                                 className={
@@ -1835,7 +1796,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     !DmageStatus.includes("dead") &&
                                     !isAttackAreaShown &&
                                     isPlayerTurn ?
-                                    () => handleSelection("dmage")
+                                    () => HandleSelection("dmage")
                                     : undefined
                             }
                                 className={selectedCharacter === 'dmage' ?
@@ -1879,7 +1840,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     !AssassinStatus.includes("dead") &&
                                     !isAttackAreaShown &&
                                     isPlayerTurn ?
-                                    () => handleSelection("assassin") :
+                                    () => HandleSelection("assassin") :
                                     undefined
                             }
                                 className={selectedCharacter === 'assassin' ? 'is-selected character-btn' : 'is-not-selected character-btn'}>
@@ -1922,7 +1883,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     !isAttackAreaShown &&
                                     !RmageStatus.includes("dead") &&
                                     isPlayerTurn ?
-                                    () => handleSelection("rmage") :
+                                    () => HandleSelection("rmage") :
                                     undefined
                             }
                                 className={selectedCharacter === 'rmage' ?
@@ -1969,7 +1930,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     <button className={
                                         !isUltMenuShown ? 'ult-btn text-2xl ' : 'ult-close-btn'
                                     }
-                                        onClick={handleUltMenu}>
+                                        onClick={HandleUltMenu}>
                                         <strong>
                                             {
                                                 isUltMenuShown ?
@@ -1994,7 +1955,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                                 <li >
                                                     <button key={index}
                                                         className={`ult-atk-btn ${ultBtnClassLookup.get(attack)}`}
-                                                        onClick={() => handleUltimaClick(attack)}
+                                                        onClick={() => HandleUltimaClick(attack)}
                                                         title={e.AttackEncyclopedia.get(attack)?.description}>
                                                         {attack}
                                                     </button>

@@ -19,7 +19,7 @@ import {
 //adds a multiplier or divider, depending
 import { selected_difficulty } from './StartMenu';
 import anime from 'animejs/lib/anime.es.js'
-import { Z_FILTERED } from 'zlib';
+
 
 
 
@@ -43,10 +43,7 @@ interface BossAttackProps {
     dmage_status: string[];
     assassin_status: string[];
     rmage_status: string[];
-    knight_hp: number;
-    dmage_hp: number;
-    assassin_hp: number;
-    rmage_hp: number;
+
     knight_mp: number;
     dmage_mp: number;
     assassin_mp: number;
@@ -174,10 +171,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     ];
 
     let current_hp = [
-        attackProps.knight_hp,
-        attackProps.dmage_hp,
-        attackProps.assassin_hp,
-        attackProps.rmage_hp
+        sm.knight_stats.get("hp")!,
+        sm.dmage_stats.get("hp")!,
+        sm.assassin_stats.get("hp")!,
+        sm.rmage_stats.get("hp")!
     ]
 
 
@@ -370,10 +367,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
         //first 
         //the attack itself already does checks for dead, so this is fine
-        if (attackProps.knight_hp < attackProps.knight_mp &&
-            attackProps.dmage_hp < attackProps.dmage_mp &&
-            attackProps.assassin_hp < attackProps.assassin_mp &&
-            attackProps.rmage_hp < attackProps.rmage_mp) {
+        if (sm.knight_stats.get("hp")! < attackProps.knight_mp &&
+            sm.dmage_stats.get("hp")! < attackProps.dmage_mp &&
+            sm.assassin_stats.get("hp")! < attackProps.assassin_mp &&
+            sm.rmage_stats.get("hp")! < attackProps.rmage_mp) {
             inversion_eligible = true;
         } else {
             inversion_eligible = false;
