@@ -168,198 +168,7 @@ export function UltimaContextProvider({ children }: { children: React.ReactEleme
     )
 }
 
-//states for MP, link them to the maps 
-interface KnightMPContextValue {
-    KnightMP: number | undefined;
-    setKnightMP: (value: number) => void;
-}
 
-export const KnightMPContext = createContext<KnightMPContextValue>({
-    KnightMP: sm.knight_stats.get('mp'),
-    setKnightMP: () => { },
-});
-
-export function KnightMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [KnightMP, setKnightMP] = useState(sm.knight_stats.get('mp'));
-
-    useEffect(() => {
-        console.log('KnightMP updated:', KnightMP);
-    }, [KnightMP]);
-
-    return (
-        <KnightMPContext.Provider value={{ KnightMP, setKnightMP }}>
-            {children}
-        </KnightMPContext.Provider>
-    )
-}
-
-interface DmageMPContextValue {
-    DmageMP: number | undefined;
-    setDmageMP: (value: number) => void;
-}
-
-export const DmageMPContext = createContext<DmageMPContextValue>({
-    DmageMP: sm.dmage_stats.get('mp'),
-    setDmageMP: () => { },
-})
-
-export function DmageMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [DmageMP, setDmageMP] = useState(sm.dmage_stats.get('mp'));
-
-    useEffect(() => {
-        console.log('DmageMP updated:', DmageMP);
-    }, [DmageMP]);
-
-    return (
-        <DmageMPContext.Provider value={{ DmageMP, setDmageMP }}>
-            {children}
-        </DmageMPContext.Provider>
-    )
-}
-
-export interface AssassinMPContextValue {
-    AssassinMP: number | undefined;
-    setAssassinMP: (value: number) => void;
-}
-
-export const AssassinMPContext = createContext<AssassinMPContextValue>({
-    AssassinMP: sm.assassin_stats.get('mp'),
-    setAssassinMP: () => { },
-})
-
-export function AssassinMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [AssassinMP, setAssassinMP] = useState(sm.assassin_stats.get('mp'));
-
-    useEffect(() => {
-        console.log('AssassinMP updated:', AssassinMP);
-    }, [AssassinMP]);
-
-    return (
-        <AssassinMPContext.Provider value={{ AssassinMP, setAssassinMP }}>
-            {children}
-        </AssassinMPContext.Provider>
-    )
-}
-
-export interface RmageMPContextValue {
-    RmageMP: number | undefined;
-    setRmageMP: (value: number) => void;
-}
-
-export const RmageMPContext = createContext<RmageMPContextValue>({
-    RmageMP: sm.rmage_stats.get('mp'),
-    setRmageMP: () => { },
-})
-
-export function RmageMPContextProvider({ children }: { children: React.ReactElement }) {
-    const [RmageMP, setRmageMP] = useState(sm.rmage_stats.get('mp'));
-
-    useEffect(() => {
-        console.log('RmageMP updated:', RmageMP);
-    }, [RmageMP]);
-
-    return (
-        <RmageMPContext.Provider value={{ RmageMP, setRmageMP }}>
-            {children}
-        </RmageMPContext.Provider>
-    )
-}
-
-//states for HP, link them to the maps 
-
-interface KnightHPContextValue {
-    KnightHP: number | undefined;
-    setKnightHP: (value: number) => void;
-}
-
-export const KnightHPContext = createContext<KnightHPContextValue>({
-    KnightHP: sm.knight_stats.get('hp'),
-    setKnightHP: () => { },
-})
-
-export function KnightHPContextProvider({ children }: { children: React.ReactElement }) {
-    const [KnightHP, setKnightHP] = useState(sm.knight_stats.get('hp'));
-
-    useEffect(() => {
-        console.log('KnightHP updated:', KnightHP);
-    }, [KnightHP]);
-
-    return (
-        <KnightHPContext.Provider value={{ KnightHP, setKnightHP }}>
-            {children}
-        </KnightHPContext.Provider>
-    )
-}
-
-interface DmageHPContextValue {
-    DmageHP: number | undefined;
-    setDmageHP: (value: number) => void;
-}
-
-export const DmageHPContext = createContext<DmageHPContextValue>({
-    DmageHP: sm.dmage_stats.get('hp'),
-    setDmageHP: () => { },
-})
-
-export function DmageHPContextProvider({ children }: { children: React.ReactElement }) {
-    const [DmageHP, setDmageHP] = useState(sm.dmage_stats.get('hp'));
-
-    useEffect(() => {
-        console.log('DmageHP updated:', DmageHP);
-    }, [DmageHP]);
-
-    return (
-        <DmageHPContext.Provider value={{ DmageHP, setDmageHP }}>
-            {children}
-        </DmageHPContext.Provider>
-    )
-}
-interface AssassinHPContextValue {
-    AssassinHP: number | undefined;
-    setAssassinHP: (value: number) => void;
-}
-export const AssassinHPContext = createContext<AssassinHPContextValue>({
-    AssassinHP: sm.assassin_stats.get('hp'),
-    setAssassinHP: () => { },
-})
-
-export function AssassinHPContextProvider({ children }: { children: React.ReactElement }) {
-    const [AssassinHP, setAssassinHP] = useState(sm.assassin_stats.get('hp'));
-
-    useEffect(() => {
-        console.log('AssassinHP updated:', AssassinHP);
-    }, [AssassinHP]);
-
-    return (
-        <AssassinHPContext.Provider value={{ AssassinHP, setAssassinHP }}>
-            {children}
-        </AssassinHPContext.Provider>
-    )
-}
-
-interface RmageHPContextValue {
-    RmageHP: number | undefined;
-    setRmageHP: (value: number) => void;
-}
-
-export const RmageHPContext = createContext<RmageHPContextValue>({
-    RmageHP: sm.rmage_stats.get('hp'),
-    setRmageHP: () => { },
-})
-
-export function RmageHPContextProvider({ children }: { children: React.ReactElement }) {
-    const [RmageHP, setRmageHP] = useState(sm.rmage_stats.get('hp'));
-
-    useEffect(() => {
-        console.log('RmageHP updated:', RmageHP);
-    }, [RmageHP]);
-
-    return (
-        <RmageHPContext.Provider value={{ RmageHP, setRmageHP }}>
-            {children}
-        </RmageHPContext.Provider>
-    )
-}
 //status effects, list of strings for each character
 //"dead" is treated as a status effect
 
@@ -375,7 +184,7 @@ export const KnightStatusContext = createContext<KnightStatusContextValue>({
 })
 
 export function KnightStatusContextProvider({ children }: { children: React.ReactElement }) {
-    const [KnightStatus, setKnightStatus] = useState<string[]>(["poison"]);
+    const [KnightStatus, setKnightStatus] = useState<string[]>([]);
 
     useEffect(() => {
         console.log('KnightStatus updated:', KnightStatus);
@@ -423,7 +232,7 @@ export const AssassinStatusContext = createContext<AssassinStatusContextValue>({
 })
 
 export function AssassinStatusContextProvider({ children }: { children: React.ReactElement }) {
-    const [AssassinStatus, setAssassinStatus] = useState<string[]>(["poison"]);
+    const [AssassinStatus, setAssassinStatus] = useState<string[]>([]);
 
     useEffect(() => {
         console.log('AssassinStatus updated:', AssassinStatus);
@@ -613,10 +422,6 @@ export function PrecipTypeContextProvider({ children }: { children: React.ReactE
 export const HpMapContext = createContext<any | undefined>(undefined);
 
 export function HpMapContextProvider({ children }: { children: React.ReactElement }) {
-    const KnightHP = useContext(KnightHPContext);
-    const DmageHP = useContext(DmageHPContext);
-    const AssassinHP = useContext(AssassinHPContext);
-    const RmageHP = useContext(RmageHPContext);
 
     const MatchToHpMap = new Map<string, any>(
         [
@@ -639,19 +444,14 @@ export function HpMapContextProvider({ children }: { children: React.ReactElemen
 export const MpMapContext = createContext<any | undefined>(undefined);
 
 export function MpMapContextProvider({ children }: { children: React.ReactElement }) {
-    const KnightMP = useContext(KnightMPContext);
-    const DmageMP = useContext(DmageMPContext);
-    const AssassinMP = useContext(AssassinMPContext);
-    const RmageMP = useContext(RmageMPContext);
 
 
-    const MatchToMpMap = new Map<string, any>(
+    const MatchToMpMap = new Map<string, number>(
         [
-            ["knight", KnightMP],
-            ["dmage", DmageMP],
-            ["assassin", AssassinMP],
-            ["rmage", RmageMP]
-
+            ["knight", sm.knight_stats.get("mp")!],
+            ["dmage", sm.dmage_stats.get("mp")!],
+            ["assassin", sm.assassin_stats.get("mp")!],
+            ["rmage", sm.assassin_stats.get("mp")!]
         ]
     );
 

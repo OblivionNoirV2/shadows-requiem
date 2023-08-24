@@ -13,19 +13,11 @@ import { BossArea } from './MainPage';
 import {
   BossContextProvider,
   TurnNumberContextProvider,
-  KnightMPContextProvider,
-  DmageMPContextProvider,
-  AssassinMPContextProvider,
-  RmageMPContextProvider,
   MessageContextProvider,
   AttackShownContextProvider,
   CurrentAttackContextProvider,
   AttackMadeContextProvider,
   UltimaContextProvider,
-  KnightHPContextProvider,
-  DmageHPContextProvider,
-  AssassinHPContextProvider,
-  RmageHPContextProvider,
   KnightStatusContextProvider,
   DmageStatusContextProvider,
   AssassinStatusContextProvider,
@@ -54,57 +46,41 @@ root.render(
     <BrowserRouter>
       <BossContextProvider>
         <TurnNumberContextProvider>
-          <KnightMPContextProvider>
-            <DmageMPContextProvider>
-              <AssassinMPContextProvider>
-                <RmageMPContextProvider>
-                  <MessageContextProvider>
-                    <AttackShownContextProvider>
-                      <CurrentAttackContextProvider>
-                        <AttackMadeContextProvider>
-                          <UltimaContextProvider>
-                            <KnightHPContextProvider>
-                              <DmageHPContextProvider>
-                                <AssassinHPContextProvider>
-                                  <RmageHPContextProvider>
-                                    <KnightStatusContextProvider>
-                                      <DmageStatusContextProvider>
-                                        <AssassinStatusContextProvider>
-                                          <RmageStatusContextProvider>
-                                            <KnightNameContextProvider>
-                                              <DmageNameContextProvider>
-                                                <AssassinNameContextProvider>
-                                                  <RmageNameContextProvider>
-                                                    <BossAttackingContextProvider>
-                                                      <PrecipTypeContextProvider>
-                                                        <HpMapContextProvider>
-                                                          <MpMapContextProvider>
-                                                            <App />
-                                                          </MpMapContextProvider>
-                                                        </HpMapContextProvider>
-                                                      </PrecipTypeContextProvider>
-                                                    </BossAttackingContextProvider>
-                                                  </RmageNameContextProvider>
-                                                </AssassinNameContextProvider>
-                                              </DmageNameContextProvider>
-                                            </KnightNameContextProvider>
-                                          </RmageStatusContextProvider>
-                                        </AssassinStatusContextProvider>
-                                      </DmageStatusContextProvider>
-                                    </KnightStatusContextProvider>
-                                  </RmageHPContextProvider>
-                                </AssassinHPContextProvider>
-                              </DmageHPContextProvider>
-                            </KnightHPContextProvider>
-                          </UltimaContextProvider>
-                        </AttackMadeContextProvider>
-                      </CurrentAttackContextProvider>
-                    </AttackShownContextProvider>
-                  </MessageContextProvider>
-                </RmageMPContextProvider>
-              </AssassinMPContextProvider>
-            </DmageMPContextProvider>
-          </KnightMPContextProvider>
+          <MessageContextProvider>
+            <AttackShownContextProvider>
+              <CurrentAttackContextProvider>
+                <AttackMadeContextProvider>
+                  <UltimaContextProvider>
+                    <KnightStatusContextProvider>
+                      <DmageStatusContextProvider>
+                        <AssassinStatusContextProvider>
+                          <RmageStatusContextProvider>
+                            <KnightNameContextProvider>
+                              <DmageNameContextProvider>
+                                <AssassinNameContextProvider>
+                                  <RmageNameContextProvider>
+                                    <BossAttackingContextProvider>
+                                      <PrecipTypeContextProvider>
+                                        <HpMapContextProvider>
+                                          <MpMapContextProvider>
+                                            <App />
+                                          </MpMapContextProvider>
+                                        </HpMapContextProvider>
+                                      </PrecipTypeContextProvider>
+                                    </BossAttackingContextProvider>
+                                  </RmageNameContextProvider>
+                                </AssassinNameContextProvider>
+                              </DmageNameContextProvider>
+                            </KnightNameContextProvider>
+                          </RmageStatusContextProvider>
+                        </AssassinStatusContextProvider>
+                      </DmageStatusContextProvider>
+                    </KnightStatusContextProvider>
+                  </UltimaContextProvider>
+                </AttackMadeContextProvider>
+              </CurrentAttackContextProvider>
+            </AttackShownContextProvider>
+          </MessageContextProvider>
         </TurnNumberContextProvider>
       </BossContextProvider>
     </BrowserRouter>

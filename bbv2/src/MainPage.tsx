@@ -1518,23 +1518,21 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     }
 
 
-    const PlayerComponent: React.FC<PlayerComponentProps> = ({ player, stat_name, character_name }) => {
+    const PlayerComponent: React.FC<PlayerComponentProps> = ({ player, stat_name }) => {
 
+        const { KnightName } = useContext(KnightNameContext);
+        const { DmageName } = useContext(DmageNameContext);
+        const { AssassinName } = useContext(AssassinNameContext);
+        const { RmageName } = useContext(RmageNameContext);
 
-
-        const { KnightName, setKnightName } = useContext(KnightNameContext);
-        const { DmageName, setDmageName } = useContext(DmageNameContext);
-        const { AssassinName, setAssassinName } = useContext(AssassinNameContext);
-        const { RmageName, setRmageName } = useContext(RmageNameContext);
-
-        const [knightVisualMp, setKnightVisualMp] = useState(sm.knight_stats.get("mp")!);
-        const [knightVisualHp, setKnightVisualHp] = useState(sm.knight_stats.get("hp")!);
-        const [dmageVisualMp, setDmageVisualMp] = useState(sm.dmage_stats.get("mp")!);
-        const [dmageVisualHp, setDmageVisualHp] = useState(sm.dmage_stats.get("hp")!);
-        const [assassinVisualMp, setAssassinVisualMp] = useState(sm.assassin_stats.get("mp")!);
-        const [assassinVisualHp, setAssassinVisualHp] = useState(sm.assassin_stats.get("hp")!);
-        const [rmageVisualMp, setRmageVisualMp] = useState(sm.rmage_stats.get("mp")!);
-        const [rmageVisualHp, setRmageVisualHp] = useState(sm.rmage_stats.get("hp")!);
+        const [knightVisualMp] = useState(sm.knight_stats.get("mp")!);
+        const [knightVisualHp] = useState(sm.knight_stats.get("hp")!);
+        const [dmageVisualMp] = useState(sm.dmage_stats.get("mp")!);
+        const [dmageVisualHp] = useState(sm.dmage_stats.get("hp")!);
+        const [assassinVisualMp] = useState(sm.assassin_stats.get("mp")!);
+        const [assassinVisualHp] = useState(sm.assassin_stats.get("hp")!);
+        const [rmageVisualMp] = useState(sm.rmage_stats.get("mp")!);
+        const [rmageVisualHp] = useState(sm.rmage_stats.get("hp")!);
 
         const MatchToVisualMP: Map<string, number> = new Map
             (
