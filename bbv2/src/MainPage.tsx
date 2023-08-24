@@ -26,10 +26,11 @@ import {
     RmageNameContext,
     BossAttackingContext,
     PrecipTypeContext,
-    HpMapContext,
-    MpMapContext
 
 } from './Context';
+
+import { MatchToMpMap, MatchToHpMap } from './hpmpmaps';
+
 import { RNGResult } from './PlayerActions';
 
 import { selected_difficulty } from './StartMenu';
@@ -195,17 +196,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
             [2, "assassin"],
             [3, "rmage"]
         ])
-
-    const MatchToHpSetState: Map<string, number> = new Map
-        (
-            [
-                ["knight", sm.knight_stats.get("hp")!],//get rid of this, no more hp states
-                ["dmage", sm.dmage_stats.get("hp")!],
-                ["assassin", sm.assassin_stats.get("hp")!],
-                ["rmage", sm.rmage_stats.get("hp")!]
-
-            ]
-        );
 
 
     //Then do the status effect stuff.
@@ -743,25 +733,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
 
 
 
-    //put in seperate file
-    const MatchToHpMap: Map<string, number | undefined> = new Map
-        (
-            [
-                ["knight", sm.knight_stats.get("hp")!],
-                ["dmage", sm.dmage_stats.get("hp")!],
-                ["assassin", sm.assassin_stats.get("hp")!],
-                ["rmage", sm.assassin_stats.get("hp")!]
-            ]
-        );
-    const MatchToMpMap: Map<string, number> = new Map
-        (
-            [
-                ["knight", sm.knight_stats.get("mp")!],
-                ["dmage", sm.dmage_stats.get("mp")!],
-                ["assassin", sm.assassin_stats.get("mp")!],
-                ["rmage", sm.rmage_stats.get("mp")!]
-            ]
-        );
+
+
 
     function HandleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);
@@ -1062,7 +1035,10 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             case "rmage":
                 attack !== "Border Of Life" ? //bol uses hp
                     sm.rmage_stats.set("mp", (sm.rmage_stats.get("mp")! - attack_encyclopedia_entry!)) :
-                    sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - attack_encyclopedia_entry)
+                    console.log("bol uses hp", attack_encyclopedia_entry)
+                console.log("rmage hp", sm.rmage_stats.get("hp"))
+                sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - attack_encyclopedia_entry)
+                console.log("rmage hp after bol", sm.rmage_stats.get("hp")!)
                 break;
         }
 
@@ -1372,17 +1348,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
     }, [KnightStatus, DmageStatus, AssassinStatus, RmageStatus])
 
-    //ts won't cooperate, so we're YOLO-ing it with any
-    let MatchToMPState: Map<string, number> = new Map(
-        [
-            ["knight", sm.knight_stats.get("mp")!],
-            ["dmage", sm.dmage_stats.get("mp")!],
-            ["assassin", sm.assassin_stats.get("mp")!],
-            ["rmage", sm.rmage_stats.get("mp")!]
-
-        ]
-    )
-
     //Manage the turn based system
     //Score will go up by 1 each player turn
 
@@ -1563,17 +1528,29 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         const { AssassinName, setAssassinName } = useContext(AssassinNameContext);
         const { RmageName, setRmageName } = useContext(RmageNameContext);
 
+        const [knightVisualMp, setKnightVisualMp] = useState(sm.knight_stats.get("mp")!);
+        const [knightVisualHp, setKnightVisualHp] = useState(sm.knight_stats.get("hp")!);
+        const [dmageVisualMp, setDmageVisualMp] = useState(sm.dmage_stats.get("mp")!);
+        const [dmageVisualHp, setDmageVisualHp] = useState(sm.dmage_stats.get("hp")!);
+        const [assassinVisualMp, setAssassinVisualMp] = useState(sm.assassin_stats.get("mp")!);
+        const [assassinVisualHp, setAssassinVisualHp] = useState(sm.assassin_stats.get("hp")!);
+        const [rmageVisualMp, setRmageVisualMp] = useState(sm.rmage_stats.get("mp")!);
+        const [rmageVisualHp, setRmageVisualHp] = useState(sm.rmage_stats.get("hp")!);
+
+        const MatchToVisualMP: Map<string, number> = new Map
+            (
+                [
+                    ["knight", knightVisualMp],
+                    ["dmage", dmageVisualMp],
+                    ["assassin", assassinVisualMp],
+                    ["rmage", rmageVisualMp]
+                ]
+            );
 
 
-        const MatchToHPSm: Map<string, number> = new Map(
-            [
-                ["knight", sm.knight_stats.get("hp")!],
-                ["dmage", sm.dmage_stats.get("hp")!],
-                ["assassin", sm.assassin_stats.get("hp")!],
-                ["rmage", sm.rmage_stats.get("hp")!]
 
-            ]
-        )
+
+
 
         const MatchToName: Map<string, any> = new Map(
             [
@@ -1605,16 +1582,16 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                     <progress className='p-hp'
                         max={sm[stat_name].get('max_hp')}
                         value={
-                            MatchToHPSm.get(player)!.toFixed(0)
+                            MatchToHpMap.get(player)!.toFixed(0)
                         }>
                     </progress>
                     <div className='ml-2 text-xl hp-text'>
 
                         <strong>
                             {
-                                MatchToHPSm.get(player)! > sm[stat_name].get('max_hp')!
+                                MatchToHpMap.get(player)! > sm[stat_name].get('max_hp')!
                                     ? `${sm[stat_name].get('max_hp')!} / ${sm[stat_name].get('max_hp')!}`
-                                    : `${MatchToHPSm.get(player)} / ${sm[stat_name].get('max_hp')}`
+                                    : `${MatchToHpMap.get(player)} / ${sm[stat_name].get('max_hp')}`
                             }
 
                         </strong>
@@ -1625,15 +1602,15 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                     <progress className='mb-4 p-mb p-mp'
                         max={sm[stat_name].get('max_mp')}
                         value={
-                            MatchToMPState.get(player)
+                            MatchToMpMap.get(player)
                         }>
                     </progress>
                     <div className='ml-2 text-xl mp-text'>
                         <strong>
                             {
-                                MatchToMPState.get(player)! > sm[stat_name].get('max_mp')!
+                                MatchToMpMap.get(player)! / sm[stat_name].get('max_mp')!
                                     ? `${sm[stat_name].get('max_mp')!} / ${sm[stat_name].get('max_mp')!}`
-                                    : `${MatchToMPState.get(player)} / ${sm[stat_name].get('max_mp')}`
+                                    : `${MatchToMpMap.get(player)} / ${sm[stat_name].get('max_mp')}`
                             }
                         </strong>
                     </div>
@@ -1748,7 +1725,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     <PlayerMenu
                                         player='knight'
                                         isPlayerTurn={isPlayerTurn}
-                                        MpMap={MatchToMPState}
+                                        MpMap={MatchToMpMap}
 
                                     />
                                 }
@@ -1792,7 +1769,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     <PlayerMenu
                                         player='dmage'
                                         isPlayerTurn={isPlayerTurn}
-                                        MpMap={MatchToMPState}
+                                        MpMap={MatchToMpMap}
 
                                     />
 
@@ -1835,7 +1812,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     <PlayerMenu
                                         player='assassin'
                                         isPlayerTurn={isPlayerTurn}
-                                        MpMap={MatchToMPState}
+                                        MpMap={MatchToMpMap}
 
                                     />
 
@@ -1880,7 +1857,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     <PlayerMenu
                                         player='rmage'
                                         isPlayerTurn={isPlayerTurn}
-                                        MpMap={MatchToMPState}
+                                        MpMap={MatchToMpMap}
 
                                     />
 
