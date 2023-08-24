@@ -881,10 +881,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         );
 
 
-    function MpFunction(target: string, amount: number) {
-        const set_mp = MatchToMpSetState.get(target)!;
-        set_mp(parseInt((amount).toFixed(0)));
-    };
 
 
     function ShowMessage() {
@@ -936,41 +932,45 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
 
         //if a useless item is attempted, a notice will pop up.
         //this needs to happen before inventory subtraction
-        function HealSwitch(target: string) {
-            //can probably actually use the one in boss algo for this
-            const MatchToSetHP: Map<string, sm.StatMap> = new Map(
-                [
-                    ["knight", sm.knight_stats],
-                    ["dmage", sm.dmage_stats],
-                    ["assassin", sm.assassin_stats],
-                    ["rmage", sm.rmage_stats]
-                ]
-            );
 
-            const statMap = MatchToSetHP.get(target);
-            if (statMap) {
-                const current_hp = MatchToHpMap.get(target)!;
-                console.log("current hp", current_hp)
-                console.log("id", item_details!.amount!)
+        const MatchToSetHP: Map<string, number> = new Map(
+            [
+                ["knight", sm.knight_stats.get("hp")!],
+                ["dmage", sm.dmage_stats.get("hp")!],
+                ["assassin", sm.assassin_stats.get("hp")!],
+                ["rmage", sm.rmage_stats.get("hp")!]
+            ]
+        );
 
-                statMap.set("hp", (MatchToHpMap.get(target)!) +
-                    (MatchToMaxHpMap.get(target)! * item_details!.amount!));
+        function HealSwitch(target: string, amount: number) {
+
+            switch (target) {
+                case "knight":
+                    sm.knight_stats.set("hp", amount);
+                    break;
+                case "dmage":
+                    sm.dmage_stats.set("hp", amount);
+                    break;
+                case "assassin":
+                    sm.assassin_stats.set("hp", amount)
+                    break;
+                case "rmage":
+                    sm.rmage_stats.set("hp", amount)
             }
+
         }
 
 
 
         switch (item_details!.type) {
             case "hp"://set to the current + the max * healing factor (such as .33)
-                MatchToHpMap.set(target, (MatchToHpMap.get(target)!) +
+                HealSwitch(target, (MatchToHpMap.get(target)!) +
                     (MatchToMaxHpMap.get(target)! * item_details!.amount!));
-                HealSwitch(target);
                 break;
             case "mp":
                 MatchToMpMap.set(target, MatchToMpMap.get(target)! +
                     (MatchToMaxMpMap.get(target)! * item_details!.amount!));
 
-                MpFunction(target, MatchToMpMap.get(target)!);
                 console.log("mmt", MatchToMpMap.get(target)!)
                 break;
             case "revive":
@@ -978,7 +978,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                 RemoveStatus(target, "dead");
                 console.log("knight status", KnightStatus)
                 //then heal depending on revive type(the given amount in details)
-                HealSwitch(target) //the states are already dependent on sm, so no need to set the states here too
+                //HealSwitch(target) //the states are already dependent on sm, so no need to set the states here too
 
                 break;
             case "de-toxin":
