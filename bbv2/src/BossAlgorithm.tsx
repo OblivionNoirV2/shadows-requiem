@@ -43,11 +43,6 @@ interface BossAttackProps {
     dmage_status: string[];
     assassin_status: string[];
     rmage_status: string[];
-
-    knight_mp: number;
-    dmage_mp: number;
-    assassin_mp: number;
-    rmage_mp: number;
     current_turn: number;
 }
 let potential_targets: string[] = [];
@@ -224,16 +219,6 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         ]
     )
 
-    const IndexToStatus: Map<number, string[]> = new Map
-        (
-            [
-                [0, attackProps.knight_status],
-                [1, attackProps.dmage_status],
-                [2, attackProps.assassin_status],
-                [3, attackProps.rmage_status]
-
-            ]
-        )
     //determines how likely each character is to be targeted
     function DetermineWeights() {
         type BossAttackProps = {
@@ -367,10 +352,10 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
         //first 
         //the attack itself already does checks for dead, so this is fine
-        if (sm.knight_stats.get("hp")! < attackProps.knight_mp &&
-            sm.dmage_stats.get("hp")! < attackProps.dmage_mp &&
-            sm.assassin_stats.get("hp")! < attackProps.assassin_mp &&
-            sm.rmage_stats.get("hp")! < attackProps.rmage_mp) {
+        if (sm.knight_stats.get("hp")! < sm.knight_stats.get("mp")! &&
+            sm.dmage_stats.get("hp")! < sm.dmage_stats.get("mp")! &&
+            sm.assassin_stats.get("hp")! < sm.assassin_stats.get("mp")! &&
+            sm.rmage_stats.get("hp")! < sm.rmage_stats.get("mp")!) {
             inversion_eligible = true;
         } else {
             inversion_eligible = false;

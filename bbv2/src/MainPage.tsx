@@ -16,10 +16,6 @@ import {
     CurrentAttackContext,
     AttackMadeContext,
     UltimaContext,
-    KnightMPContext,
-    DmageMPContext,
-    AssassinMPContext,
-    RmageMPContext,
     KnightStatusContext,
     DmageStatusContext,
     AssassinStatusContext,
@@ -151,10 +147,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     const { AssassinStatus, setAssassinStatus } = useContext(AssassinStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
 
-    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
-    const { DmageMP, setDmageMP } = useContext(DmageMPContext);
-    const { AssassinMP, setAssassinMP } = useContext(AssassinMPContext);
-    const { RmageMP, setRmageMP } = useContext(RmageMPContext);
+
 
 
     //warning for incoming US
@@ -271,10 +264,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     dmage_status: DmageStatus,
                     assassin_status: AssassinStatus,
                     rmage_status: RmageStatus,
-                    knight_mp: KnightMP!,
-                    dmage_mp: DmageMP!,
-                    assassin_mp: AssassinMP!,
-                    rmage_mp: RmageMP!,
                     current_turn: TurnNumber,
                 });
                 console.log("boss return", boss_return)
@@ -483,12 +472,10 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         let kmp = parseInt(sm.knight_stats.get("mp")!.toFixed(0));
         if (kmp <= 0) {
-            setKnightMP(0);
+            sm.knight_stats.set("mp", 0)
         } else {
-            setKnightMP(kmp)
+            sm.knight_stats.set("mp", kmp) //fixed version
         }
-
-        setKnightMP(kmp);
     }, [sm.knight_stats.get("mp")])
 
     useEffect(() => {
@@ -506,9 +493,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         let dmp = parseInt(sm.dmage_stats.get("mp")!.toFixed(0));
         if (dmp <= 0) {
-            setDmageMP(0);
+            sm.dmage_stats.set("mp", 0)
         } else {
-            setDmageMP(dmp);
+            sm.dmage_stats.set("mp", dmp)
 
         }
     }, [sm.dmage_stats.get("mp")])
@@ -528,9 +515,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         let wmp = parseInt(sm.assassin_stats.get("mp")!.toFixed(0));
         if (wmp <= 0) {
-            setAssassinMP(0);
+            sm.assassin_stats.set("mp", 0)
         } else {
-            setAssassinMP(wmp);
+            sm.assassin_stats.set("mp", wmp)
         }
     }, [sm.assassin_stats.get("mp")])
 
@@ -548,9 +535,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         let rmp = parseInt(sm.rmage_stats.get("mp")!.toFixed(0));
         if (rmp <= 0) {
-            setRmageMP(0);
+            sm.rmage_stats.set("mp", 0)
         } else {
-            setRmageMP(rmp);
+            sm.rmage_stats.set("mp", rmp)
         }
 
     }, [sm.rmage_stats.get("mp")])
@@ -742,10 +729,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
     //global, starts false
     const { isAttackAreaShown, setIsAttackAreaShown } = useContext(AttackShownContext);
 
-    const { KnightMP, setKnightMP } = useContext(KnightMPContext);
-    const { DmageMP, setDmageMP } = useContext(DmageMPContext);
-    const { AssassinMP, setAssassinMP } = useContext(AssassinMPContext);
-    const { RmageMP, setRmageMP } = useContext(RmageMPContext);
 
     const { KnightName } = useContext(KnightNameContext);
     const { DmageName } = useContext(DmageNameContext);
@@ -770,13 +753,13 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                 ["rmage", sm.assassin_stats.get("hp")!]
             ]
         );
-    const MatchToMpMap: Map<string, number | undefined> = new Map
+    const MatchToMpMap: Map<string, number> = new Map
         (
             [
-                ["knight", KnightMP],
-                ["dmage", DmageMP],
-                ["assassin", AssassinMP],
-                ["rmage", RmageMP]
+                ["knight", sm.knight_stats.get("mp")!],
+                ["dmage", sm.dmage_stats.get("mp")!],
+                ["assassin", sm.assassin_stats.get("mp")!],
+                ["rmage", sm.rmage_stats.get("mp")!]
             ]
         );
 
@@ -869,18 +852,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
 
 
 
-    //put in seperate file, like sm
-    const MatchToMpSetState: Map<string, (value: number) => void> = new Map
-        (
-            [
-                ["knight", setKnightMP],
-                ["dmage", setDmageMP],
-                ["assassin", setAssassinMP],
-                ["rmage", setRmageMP]
-            ]
-        );
-
-
 
 
     function ShowMessage() {
@@ -933,14 +904,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         //if a useless item is attempted, a notice will pop up.
         //this needs to happen before inventory subtraction
 
-        const MatchToSetHP: Map<string, number> = new Map(
-            [
-                ["knight", sm.knight_stats.get("hp")!],
-                ["dmage", sm.dmage_stats.get("hp")!],
-                ["assassin", sm.assassin_stats.get("hp")!],
-                ["rmage", sm.rmage_stats.get("hp")!]
-            ]
-        );
 
         function HealSwitch(target: string, amount: number) {
             //can probably actually use the one in boss algo for this
@@ -1088,17 +1051,17 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
     function HandleMP(attack: string, attack_encyclopedia_entry: number) {
         switch (player) {
             case "knight":
-                setKnightMP(KnightMP! - attack_encyclopedia_entry!);
+                sm.knight_stats.set("mp", (sm.knight_stats.get("mp")! - attack_encyclopedia_entry!));
                 break;
             case "dmage":
-                setDmageMP(DmageMP! - attack_encyclopedia_entry!);
+                sm.dmage_stats.set("mp", (sm.dmage_stats.get("mp")! - attack_encyclopedia_entry!));
                 break;
             case "assassin":
-                setAssassinMP(AssassinMP! - attack_encyclopedia_entry!);
+                sm.assassin_stats.set("mp", (sm.assassin_stats.get("mp")! - attack_encyclopedia_entry!));
                 break;
             case "rmage":
                 attack !== "Border Of Life" ? //bol uses hp
-                    setRmageMP(RmageMP! - attack_encyclopedia_entry!) :
+                    sm.rmage_stats.set("mp", (sm.rmage_stats.get("mp")! - attack_encyclopedia_entry!)) :
                     sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - attack_encyclopedia_entry)
                 break;
         }
@@ -1394,10 +1357,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     const { AssassinStatus, setAssassinStatus } = useContext(AssassinStatusContext);
     const { RmageStatus, setRmageStatus } = useContext(RmageStatusContext);
 
-    const { KnightMP } = useContext(KnightMPContext)
-    const { DmageMP } = useContext(DmageMPContext)
-    const { AssassinMP } = useContext(AssassinMPContext)
-    const { RmageMP } = useContext(RmageMPContext)
+
     const nav = useNavigate()
 
 
@@ -1413,12 +1373,12 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     }, [KnightStatus, DmageStatus, AssassinStatus, RmageStatus])
 
     //ts won't cooperate, so we're YOLO-ing it with any
-    let MatchToMPState: Map<string, any> = new Map(
+    let MatchToMPState: Map<string, number> = new Map(
         [
-            ["knight", KnightMP],
-            ["dmage", DmageMP],
-            ["assassin", AssassinMP],
-            ["rmage", RmageMP]
+            ["knight", sm.knight_stats.get("mp")!],
+            ["dmage", sm.dmage_stats.get("mp")!],
+            ["assassin", sm.assassin_stats.get("mp")!],
+            ["rmage", sm.rmage_stats.get("mp")!]
 
         ]
     )
@@ -1597,12 +1557,6 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     const PlayerComponent: React.FC<PlayerComponentProps> = ({ player, stat_name, character_name }) => {
 
 
-        const { KnightMP, setKnightMP } = useContext(KnightMPContext);
-        const { DmageMP, setDmageMP } = useContext(DmageMPContext);
-        const { AssassinMP, setAssassinMP } = useContext(AssassinMPContext);
-        const { RmageMP, setRmageMP } = useContext(RmageMPContext);
-
-
 
         const { KnightName, setKnightName } = useContext(KnightNameContext);
         const { DmageName, setDmageName } = useContext(DmageNameContext);
@@ -1677,7 +1631,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                     <div className='ml-2 text-xl mp-text'>
                         <strong>
                             {
-                                MatchToMPState.get(player) > sm[stat_name].get('max_hp')!
+                                MatchToMPState.get(player)! > sm[stat_name].get('max_mp')!
                                     ? `${sm[stat_name].get('max_mp')!} / ${sm[stat_name].get('max_mp')!}`
                                     : `${MatchToMPState.get(player)} / ${sm[stat_name].get('max_mp')}`
                             }
