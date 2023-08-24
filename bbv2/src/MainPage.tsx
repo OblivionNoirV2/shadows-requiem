@@ -943,7 +943,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         );
 
         function HealSwitch(target: string, amount: number) {
-
+            //can probably actually use the one in boss algo for this
             switch (target) {
                 case "knight":
                     sm.knight_stats.set("hp", amount);
@@ -957,7 +957,22 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                 case "rmage":
                     sm.rmage_stats.set("hp", amount)
             }
+        }
 
+        function MpSwitch(target: string, amount: number) {
+            switch (target) {
+                case "knight":
+                    sm.knight_stats.set("mp", amount);
+                    break;
+                case "dmage":
+                    sm.dmage_stats.set("mp", amount);
+                    break;
+                case "assassin":
+                    sm.assassin_stats.set("mp", amount)
+                    break;
+                case "rmage":
+                    sm.rmage_stats.set("mp", amount)
+            }
         }
 
 
@@ -968,9 +983,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                     (MatchToMaxHpMap.get(target)! * item_details!.amount!));
                 break;
             case "mp":
-                MatchToMpMap.set(target, MatchToMpMap.get(target)! +
+                MpSwitch(target, (MatchToMpMap.get(target)!) +
                     (MatchToMaxMpMap.get(target)! * item_details!.amount!));
-
                 console.log("mmt", MatchToMpMap.get(target)!)
                 break;
             case "revive":
@@ -978,8 +992,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                 RemoveStatus(target, "dead");
                 console.log("knight status", KnightStatus)
                 //then heal depending on revive type(the given amount in details)
-                //HealSwitch(target) //the states are already dependent on sm, so no need to set the states here too
-
+                HealSwitch(target, (MatchToHpMap.get(target)!) +
+                    (MatchToMaxHpMap.get(target)! * item_details!.amount!));
                 break;
             case "de-toxin":
                 //remove poison status
