@@ -682,7 +682,6 @@ export const BossHpBar = () => {
             nav('/Victory')
 
         }
-
     }, [sm.boss_stats.get("hp")])
     return (
         <progress className={
@@ -1547,10 +1546,15 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                 ]
             );
 
-
-
-
-
+        const MatchToVisualHP: Map<string, number> = new Map
+            (
+                [
+                    ["knight", knightVisualHp],
+                    ["dmage", dmageVisualHp],
+                    ["assassin", assassinVisualHp],
+                    ["rmage", rmageVisualHp]
+                ]
+            );
 
         const MatchToName: Map<string, any> = new Map(
             [
@@ -1582,7 +1586,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                     <progress className='p-hp'
                         max={sm[stat_name].get('max_hp')}
                         value={
-                            MatchToHpMap.get(player)!.toFixed(0)
+                            MatchToVisualHP.get(player)!.toFixed(0)
                         }>
                     </progress>
                     <div className='ml-2 text-xl hp-text'>
@@ -1591,7 +1595,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                             {
                                 MatchToHpMap.get(player)! > sm[stat_name].get('max_hp')!
                                     ? `${sm[stat_name].get('max_hp')!} / ${sm[stat_name].get('max_hp')!}`
-                                    : `${MatchToHpMap.get(player)} / ${sm[stat_name].get('max_hp')}`
+                                    : `${MatchToVisualHP.get(player)!.toFixed(0)} / ${sm[stat_name].get('max_hp')}`
                             }
 
                         </strong>
@@ -1602,15 +1606,15 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                     <progress className='mb-4 p-mb p-mp'
                         max={sm[stat_name].get('max_mp')}
                         value={
-                            MatchToMpMap.get(player)
+                            MatchToVisualMP.get(player)!.toFixed(0)
                         }>
                     </progress>
                     <div className='ml-2 text-xl mp-text'>
                         <strong>
                             {
-                                MatchToMpMap.get(player)! / sm[stat_name].get('max_mp')!
+                                MatchToMpMap.get(player)! > sm[stat_name].get('max_mp')!
                                     ? `${sm[stat_name].get('max_mp')!} / ${sm[stat_name].get('max_mp')!}`
-                                    : `${MatchToMpMap.get(player)} / ${sm[stat_name].get('max_mp')}`
+                                    : `${MatchToVisualMP.get(player)!.toFixed(0)} / ${sm[stat_name].get('max_mp')}`
                             }
                         </strong>
                     </div>
