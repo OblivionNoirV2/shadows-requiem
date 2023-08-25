@@ -170,24 +170,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
 
     const { isBossAttacking, setIsBossAttacking } = useContext(BossAttackingContext)
-    //match returned target to their statuses, for status effects
-    const IndexToStatus: Map<number, string[]> = new Map(
-        [
-            [0, KnightStatus],
-            [1, DmageStatus],
-            [2, AssassinStatus],
-            [3, RmageStatus]
-        ]
-    )
-    const IndexToSetStatus: Map<number, React.Dispatch<SetStateAction<string[]>>> = new Map
-        (
-            [
-                [0, setKnightStatus],
-                [1, setDmageStatus],
-                [2, setAssassinStatus],
-                [3, setRmageStatus]
-            ]
-        )
 
     const IndexToName: Map<number, string> = new Map(
         [
@@ -206,7 +188,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
         return IndexToName.get(char_num)
 
     }
-
 
     //5% of max hp. Can kill. 
     function PoisonDamage(char_id: number) {
@@ -325,10 +306,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                         break;
                 }
             }
-
         }
-
-
 
         /*
         20% chance of death.
@@ -339,7 +317,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             if (Percentage() < 0.20) {
                 const char_str = ConvertToStr(char_id)!;
                 const setter = NameToStats.get(char_str)!
-                //should always be a statmap, but I don't want to mess with it now
+                //should always be a statmap, but I don't want to mess with it now. This works fine
                 if (typeof setter !== 'number') {
                     setter.set("hp", 0)
                 };
@@ -680,17 +658,21 @@ export const BossHpBar = () => {
     useEffect(() => {
         if (sm.boss_stats.get("hp")! <= 0) {
             nav('/Victory')
-
         }
     }, [sm.boss_stats.get("hp")])
+
     return (
-        <progress className={
-            'block h-8 glow-ani-border-black boss-prog w-full'
-        }
-            value={sm.boss_stats.get("hp")} max={sm.boss_stats.get("max_hp")}>
-        </progress>
+        <div className="relative w-full h-8">
+            <progress className="block h-8 glow-ani-border-black boss-prog w-full"
+                value={sm.boss_stats.get("hp")} max={sm.boss_stats.get("max_hp")}>
+            </progress>
+            <h1 className="text-white absolute top-0 left-0 w-full h-full flex items-center justify-center z-[99999999]">
+                {sm.boss_stats.get("hp")!.toFixed(0)} / {sm.boss_stats.get("max_hp")}
+            </h1>
+        </div>
     )
 }
+
 
 
 
