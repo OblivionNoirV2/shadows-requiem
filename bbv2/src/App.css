@@ -14,17 +14,6 @@ body {
 
 }
 
-/*add this in phase 3*/
-
-.dark-overlay::before {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  background-color: black;
-
-}
 
 
 .glow-ani-border {
@@ -167,15 +156,28 @@ body {
   opacity: 0.9;
 }
 
-.boss-prog::-moz-progress-bar {
+
+.boss-prog {
+  border-radius: 10rem;
+  background-color: rgba(0, 0, 0, 0.15);
+  transform: blur(1rem);
+  overflow: hidden;
+  /*no overflow makes the middle round too */
+  border: 0.12rem solid black;
+}
+
+.boss-prog::-webkit-progress-bar {
   background-color: rgb(136, 8, 8);
-  border: 0.1rem solid black;
 
 }
 
-.boss-prog-3::-moz-progress-bar {
+.boss-prog::-webkit-progress-value {
   background-color: rgb(136, 8, 8);
-  border: 0.2rem solid rgb(136, 8, 8);
+  border: 0.1rem solid white;
+}
+
+.boss-prog::-moz-progress-bar {
+  background-color: rgb(136, 8, 8);
 }
 
 .p-hp::-moz-progress-bar {

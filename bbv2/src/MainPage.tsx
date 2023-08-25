@@ -594,6 +594,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             sm.boss_stats.set('m_def', 1.25);
             sm.boss_stats.set('p-def', 1.25);
             sm.boss_stats.set('atk', 1.10);
+
         } else if (bossStage === 3) {
             sm.boss_stats.set('m_def', 1.50);
             sm.boss_stats.set('p-def', 1.50);
@@ -629,13 +630,13 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
     return (
         <main className='boss-container flex flex-col mt-48
-        mr-[40rem]
+        mr-[15rem]
         '>
-            <section className='flex flex-col items-center w-[56rem]
+            <section className='flex flex-col items-center w-[80rem]
              relative'>
                 <img id='b-image'
                     src={boss_images[bossStage - 1]}
-                    className='boss-sprite opacity-95 rounded-xl'
+                    className='boss-sprite opacity-95 rounded-xl max-w-4xl'
                     alt={`boss phase ${bossStage}`}
                 />
                 <strong>
@@ -650,7 +651,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             </section>
         </main>
     );
-}
+};
 
 
 export const BossHpBar = () => {
@@ -662,13 +663,20 @@ export const BossHpBar = () => {
     }, [sm.boss_stats.get("hp")])
 
     return (
-        <div className="relative w-full h-8">
-            <progress className="block h-8 glow-ani-border-black boss-prog w-full"
+        <div className="relative w-full h-8 flex">
+            <span className='text-white text-3xl mr-1'>
+                &#167;
+            </span>
+
+            <progress className="block h-8 glow-ani-border-black boss-prog w-full" id='boss-hp-bar'
                 value={sm.boss_stats.get("hp")} max={sm.boss_stats.get("max_hp")}>
             </progress>
             <h1 className="text-white absolute top-0 left-0 w-full h-full flex items-center justify-center z-[99999999]">
                 {sm.boss_stats.get("hp")!.toFixed(0)} / {sm.boss_stats.get("max_hp")}
             </h1>
+            <span className='text-white text-3xl ml-1'>
+                &#167;
+            </span>
         </div>
     )
 }
@@ -1654,7 +1662,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                     Turn # {TurnNumber}
                 </section>
             </strong>
-            <main className='w-full flex dark-overlay'>
+            <main className='w-full flex '>
 
 
                 {/*party members*/}
