@@ -525,13 +525,6 @@ export const BossArea: React.FC<BossAreaProps> = ({
         }
     }, [sm.boss_stats.get("hp")]);
 
-    interface MaxStatsObject {
-        max_p_def: number,
-        max_m_def: number,
-        max_m_atk: number,
-        max_p_atk: number
-    }
-
 
     /*this will run every turn, checks for any stat abnormalities 
     and makes adjustments accordingly. stats go up/down .25 each turn 
@@ -647,14 +640,30 @@ export const BossArea: React.FC<BossAreaProps> = ({
                         {boss_labels[bossStage - 1]}
                     </div>
                 </strong>
-                <BossHpBar />
+                <BossHpBar
+                    stage={bossStage} //for fancy effects by stage
+                />
             </section>
         </main>
     );
 };
 
+const MatchStageToClass: Map<number, string> = new Map
+    (
+        [
+            [
+                1, "block h-8 glow-ani-border-black boss-prog w-full"
+            ],
+            [
+                2, "block h-8 glow-ani-border-black boss-prog-2 w-full"
+            ],
+            [
+                3, "block h-8 glow-ani-border-black boss-prog-3 w-full"
+            ]
+        ]
+    );
+export const BossHpBar: React.FC<{ stage: number }> = ({ stage }) => {
 
-export const BossHpBar = () => {
     const nav = useNavigate();
     useEffect(() => {
         if (sm.boss_stats.get("hp")! <= 0) {
@@ -668,7 +677,9 @@ export const BossHpBar = () => {
                 &#167;
             </span>
 
-            <progress className="block h-8 glow-ani-border-black boss-prog w-full" id='boss-hp-bar'
+            <progress className={
+                MatchStageToClass.get(stage)!
+            }
                 value={sm.boss_stats.get("hp")} max={sm.boss_stats.get("max_hp")}>
             </progress>
             <h1 className="text-white absolute top-0 left-0 w-full h-full flex items-center justify-center z-[99999999]">

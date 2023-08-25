@@ -156,8 +156,10 @@ body {
   opacity: 0.9;
 }
 
-
-.boss-prog {
+/*this is the depleted part*/
+.boss-prog,
+.boss-prog-2,
+.boss-prog-3 {
   border-radius: 10rem;
   background-color: rgba(0, 0, 0, 0.15);
   transform: blur(1rem);
@@ -166,18 +168,72 @@ body {
   border: 0.12rem solid black;
 }
 
-.boss-prog::-webkit-progress-bar {
-  background-color: rgb(136, 8, 8);
-
+:root {
+  --progress-bar-color-1: rgb(136, 8, 8);
+  --progress-bar-color-2: rgb(101, 1, 1);
+  --progress-bar-3: final-phase-bar-ani .5s linear infinite alternate;
 }
 
-.boss-prog::-webkit-progress-value {
-  background-color: rgb(136, 8, 8);
-  border: 0.1rem solid white;
+.boss-prog::-webkit-progress-bar {
+  background-color: var(--progress-bar-color-1);
 }
 
 .boss-prog::-moz-progress-bar {
-  background-color: rgb(136, 8, 8);
+  background-color: var(--progress-bar-color-1);
+}
+
+.boss-prog::-webkit-progress-value {
+  background-color: var(--progress-bar-color-1);
+}
+
+.boss-prog::-moz-progress-value {
+  background-color: var(--progress-bar-color-1);
+}
+
+
+.boss-prog-2::-webkit-progress-bar {
+  background-color: var(--progress-bar-color-2);
+}
+
+.boss-prog-2::-moz-progress-bar {
+  background-color: var(--progress-bar-color-2);
+}
+
+.boss-prog-2::-webkit-progress-value {
+  background-color: var(--progress-bar-color-2);
+}
+
+.boss-prog-2::-moz-progress-value {
+  background-color: var(--progress-bar-color-2);
+}
+
+
+.boss-prog-3::-webkit-progress-bar {
+  animation: var(--progress-bar-3);
+}
+
+.boss-prog-3::-moz-progress-bar {
+  animation: var(--progress-bar-3);
+}
+
+.boss-prog-3::-webkit-progress-value {
+  animation: var(--progress-bar-3);
+}
+
+.boss-prog-3::-moz-progress-value {
+  animation: var(--progress-bar-3);
+}
+
+
+
+@keyframes final-phase-bar-ani {
+  0% {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+
+  100% {
+    background-color: rgba(101, 1, 1, 1);
+  }
 }
 
 .p-hp::-moz-progress-bar {
