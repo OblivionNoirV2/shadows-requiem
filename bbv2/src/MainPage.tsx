@@ -155,7 +155,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         const b_image = document.getElementById("b-image"); //fixes race condition
         if (b_image) {
-            if (last_boss_attacks.length > 7 && last_boss_attacks.length <= 10) {
+            if (last_boss_attacks.length > 7 && last_boss_attacks.length <= 10 && bossStage === 3) {
                 b_image.classList.add("warning");
                 console.log("added warning")
             } else {
@@ -517,6 +517,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         if (boss_hp >= 468000) {
             setBossStage(1); //60%
         } else if (boss_hp >= 195000 && boss_hp < 467999) {
+            document.documentElement.style.filter = "brightness(75%)"
             setBossStage(2);
         } else {
             setBossStage(3); //25%
