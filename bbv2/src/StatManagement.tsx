@@ -1,4 +1,5 @@
 
+import { selected_difficulty } from "./StartMenu";
 export type player_stats = {
     hp: number,
     max_hp: number,
@@ -96,11 +97,23 @@ export const rmage_stats: StatMap = new Map
             ["d_ev", 0.12]
         ]
     );
-//is adjusted later based on difficulty
+
+const MatchToHpChange: Map<string, number> = new Map
+    (
+        [
+            ["very_easy", 0.25],
+            ["easy", 0.50],
+            ["normal", 1.00],
+            ["hard", 1.50],
+            ["nightmare", 2.00]
+        ]
+    )
+
+//atk/def adjusted later based on difficulty
 export const boss_stats: StatMap = new Map
     (
         [
-            ["hp", 220000],
+            ["hp", 2000],
             ["max_hp", 780000],
             ["p_def", 1.00],
             ["d_p_def", 1.00],

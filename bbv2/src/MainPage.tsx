@@ -664,13 +664,25 @@ const MatchStageToClass: Map<number, string> = new Map
         ]
     );
 export const BossHpBar: React.FC<{ stage: number }> = ({ stage }) => {
+    const MatchDiffToAdjustment: Map<string, number> = new Map
+        (
+            [
+                ["very_easy", 0.50],
+                ["easy", 0.75],
+                ["normal", 1],
+                ["hard", 1.25],
+                ["nightmare", 1.50]
+            ]
+        )
 
     const nav = useNavigate();
     useEffect(() => {
-        if (sm.boss_stats.get("hp")! <= 0) {
+        if (sm.boss_stats.get("hp")! * MatchDiffToAdjustment.get(selected_difficulty)! <= 0) {
+            //then play the victory theme
+            //fade into the page rather than just jumping to it?
             nav('/Victory')
         }
-    }, [sm.boss_stats.get("hp")])
+    }, [sm.boss_stats.get("hp")!])
 
     return (
         <div className="relative w-full h-8 flex">
@@ -681,10 +693,10 @@ export const BossHpBar: React.FC<{ stage: number }> = ({ stage }) => {
             <progress className={
                 MatchStageToClass.get(stage)!
             }
-                value={sm.boss_stats.get("hp")} max={sm.boss_stats.get("max_hp")}>
+                value={sm.boss_stats.get("hp")! * MatchDiffToAdjustment.get(selected_difficulty)!} max={sm.boss_stats.get("max_hp")! * MatchDiffToAdjustment.get(selected_difficulty)!}>
             </progress>
             <h1 className="text-white absolute top-0 left-0 w-full h-full flex items-center justify-center z-[99999999]">
-                {sm.boss_stats.get("hp")!.toFixed(0)} / {sm.boss_stats.get("max_hp")}
+                {(sm.boss_stats.get("hp")! * MatchDiffToAdjustment.get(selected_difficulty)!).toFixed(0)} / {sm.boss_stats.get("max_hp")! * MatchDiffToAdjustment.get(selected_difficulty)!}
             </h1>
             <span className='text-white text-3xl ml-1'>
                 &#167;
