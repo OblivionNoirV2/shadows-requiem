@@ -19,3 +19,14 @@ export const MatchToHpMap: Map<string, number> = new Map
             ["rmage", sm.assassin_stats.get("hp")!]
         ]
     );
+
+export const MatchDiffToAdjustment: Map<string, number> = new Map
+    (
+        [
+            ["very_easy", 0.33],
+            ["easy", 0.66],
+            ["normal", 1],
+            ["hard", 1.33],
+            ["nightmare", 1.66]
+        ]
+    )

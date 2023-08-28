@@ -8,6 +8,7 @@ import * as sfx from './sfxManagement';
 import * as e from './Encyclopedia';
 import YouDied from './YouDied';
 import { BossContext } from './Context';
+import { MatchDiffToAdjustment } from './hpmpmaps';
 import Timer from './Timer';
 import {
     TurnNumberContext,
@@ -513,11 +514,16 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
 
     useEffect(() => {
-        let boss_hp = sm.boss_stats.get("hp")!
+        const adjustment_multiplier = MatchDiffToAdjustment.get(selected_difficulty)!;
+        const max_hp = (sm.boss_stats.get("max_hp")! * adjustment_multiplier);
+        console.log("max hp", max_hp)
+        console.log("66%", parseInt((max_hp * .66).toFixed(0)))
+        const boss_hp = sm.boss_stats.get("hp")! * adjustment_multiplier;
+        console.log("boss hp", boss_hp)
         console.log("boss stage updated", selected_difficulty)
-        if (boss_hp >= 468000) {
+        if (boss_hp >= parseInt((max_hp * .66).toFixed(0))) {
             setBossStage(1); //60%
-        } else if (boss_hp >= 195000 && boss_hp < 467999) {
+        } else if (boss_hp >= parseInt((max_hp * .25).toFixed(0)) && boss_hp < parseInt(((max_hp * .66) - 1).toFixed(0))) {
             document.documentElement.style.filter = "brightness(75%)"
             setBossStage(2);
         } else {
@@ -664,17 +670,9 @@ const MatchStageToClass: Map<number, string> = new Map
             ]
         ]
     );
+
 export const BossHpBar: React.FC<{ stage: number }> = ({ stage }) => {
-    const MatchDiffToAdjustment: Map<string, number> = new Map
-        (
-            [
-                ["very_easy", 0.50],
-                ["easy", 0.75],
-                ["normal", 1],
-                ["hard", 1.25],
-                ["nightmare", 1.50]
-            ]
-        )
+    const adjustment_multiplier = MatchDiffToAdjustment.get(selected_difficulty)!;
 
     const nav = useNavigate();
     useEffect(() => {
@@ -694,10 +692,10 @@ export const BossHpBar: React.FC<{ stage: number }> = ({ stage }) => {
             <progress className={
                 MatchStageToClass.get(stage)!
             }
-                value={sm.boss_stats.get("hp")! * MatchDiffToAdjustment.get(selected_difficulty)!} max={sm.boss_stats.get("max_hp")! * MatchDiffToAdjustment.get(selected_difficulty)!}>
+                value={(sm.boss_stats.get("hp")! * adjustment_multiplier).toFixed(0)} max={(sm.boss_stats.get("max_hp")! * adjustment_multiplier).toFixed(0)}>
             </progress>
             <h1 className="text-white absolute top-0 left-0 w-full h-full flex items-center justify-center z-[99999999]">
-                {(sm.boss_stats.get("hp")! * MatchDiffToAdjustment.get(selected_difficulty)!).toFixed(0)} / {sm.boss_stats.get("max_hp")! * MatchDiffToAdjustment.get(selected_difficulty)!}
+                {(sm.boss_stats.get("hp")! * adjustment_multiplier).toFixed(0)} / {(sm.boss_stats.get("max_hp")! * adjustment_multiplier).toFixed(0)}
             </h1>
             <span className='text-white text-3xl ml-1'>
                 &#167;
