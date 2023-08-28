@@ -109,11 +109,11 @@ const MatchToHpChange: Map<string, number> = new Map
         ]
     )
 
-//atk/def adjusted later based on difficulty
+//all adjusted later based on difficulty
 export const boss_stats: StatMap = new Map
     (
         [
-            ["hp", 2000],
+            ["hp", 780000],
             ["max_hp", 780000],
             ["p_def", 1.00],
             ["d_p_def", 1.00],

@@ -262,11 +262,12 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 switch (boss_return.last_boss_attacks[last_boss_attacks.length - 1]) {
                     case "Devourment":
                         //heal boss by prev dmg * 2
-                        sm.boss_stats.set("hp", sm.boss_stats.get("hp")! +
-                            (prev_dmg[prev_dmg.length - 1] * 2))
-                        console.log("in devourment switch", typeof sm.boss_stats.get("hp"))
-                        console.log("prev dmg dev", prev_dmg[prev_dmg.length - 1])
-
+                        if (typeof (prev_dmg[prev_dmg.length - 1] * 2) === 'number') {
+                            sm.boss_stats.set("hp", sm.boss_stats.get("hp")! +
+                                (prev_dmg[prev_dmg.length - 1] * 2))
+                            console.log("in devourment switch", typeof sm.boss_stats.get("hp"))
+                            console.log("prev dmg dev", prev_dmg[prev_dmg.length - 1])
+                        }
                         break;
                     case "Frozen Soul":
                         SingleTargetSpecial(
