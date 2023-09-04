@@ -917,12 +917,17 @@ export const BossAttackArea: React.FC = () => {
     )
     //Change the image whenver the attack changes
     useEffect(() => {
-        setIsBossAttackShown(true);
+        setTimeout(() => { //should prevent issue with images not loading in time
+            setIsBossAttackShown(true);
+            setIsBossAttacking(true);
+
+        }, 1000)
+
         setTimeout(() => {
             setIsBossAttackShown(false);
             setIsBossAttacking(false);
 
-        }, 2000);
+        }, 3000);
         console.log("current_boss_attack", current_boss_attack)
     }, [current_boss_attack]);
 

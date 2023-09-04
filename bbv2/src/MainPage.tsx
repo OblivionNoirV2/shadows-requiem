@@ -225,6 +225,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 console.log("can't attack!")
 
             } else {
+
                 setIsBossAttacking(true)
                 setSelectedCharacter(null); //Prevents being able to use 
                 //the menu if the character that died was previously
