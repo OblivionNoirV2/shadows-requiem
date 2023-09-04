@@ -20,6 +20,7 @@ import {
 import { selected_difficulty } from './StartMenu';
 import anime from 'animejs/lib/anime.es.js'
 import { is_my_turn_active } from './PlayerActions';
+import { MatchToHpMap } from './hpmpmaps';
 
 
 
@@ -320,10 +321,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 if (potential_targets[weight.index] !== undefined) {
                     chosen_target = potential_targets[weight.index];
                     console.log("chosen_target inside weights", chosen_target);
-
                 }
-
-
                 break;
             }
         }
@@ -386,15 +384,19 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         switch (target) {
             case "knight":
                 sm.knight_stats.set("hp", sm.knight_stats.get("hp")! - final_dmg);
+                MatchToHpMap.set("knight", sm.knight_stats.get("hp")!);
                 break;
             case "dmage":
                 sm.dmage_stats.set("hp", sm.dmage_stats.get("hp")! - final_dmg);
+                MatchToHpMap.set("dmage", sm.dmage_stats.get("hp")!);
                 break;
             case "assassin":
                 sm.assassin_stats.set("hp", sm.assassin_stats.get("hp")! - final_dmg);
+                MatchToHpMap.set("assassin", sm.assassin_stats.get("hp")!);
                 break;
             case "rmage":
                 sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - final_dmg);
+                MatchToHpMap.set("rmage", sm.rmage_stats.get("hp")!);
                 break;
         }
 

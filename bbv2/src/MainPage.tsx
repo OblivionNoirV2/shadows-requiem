@@ -889,15 +889,19 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             switch (target) {
                 case "knight":
                     sm.knight_stats.set("hp", amount);
+                    MatchToHpMap.set("knight", sm.knight_stats.get("hp")!)
                     break;
                 case "dmage":
                     sm.dmage_stats.set("hp", amount);
+                    MatchToHpMap.set("dmage", sm.dmage_stats.get("hp")!)
                     break;
                 case "assassin":
                     sm.assassin_stats.set("hp", amount)
+                    MatchToHpMap.set("assassin", sm.assassin_stats.get("hp")!)
                     break;
                 case "rmage":
                     sm.rmage_stats.set("hp", amount)
+                    MatchToHpMap.set("rmage", sm.rmage_stats.get("hp")!)
             }
         }
 
@@ -1007,6 +1011,18 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         }
 
     }
+
+    function CheckHpItemValidity(target: string) {
+        console.log("target", target)
+        console.log("target hp map fetch:", MatchToHpMap.get(target)!)
+        console.log("target max hp map fetch:", MatchToMaxHpMap.get(target)!)
+        if (MatchToHpMap.get(target)! >= MatchToMaxHpMap.get(target)!) {
+            setMessage("This character is already at max HP!");
+            ShowMessage();
+        } else {
+            UseItem(currentItem, itemTarget!)
+        }
+    }
     //Forces it to wait till the target has been set, eliminating latency issues
     useEffect(() => {
         //Everything must be reset here or it gets all weird and buggy
@@ -1021,10 +1037,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                     ShowMessage();
                     break;
                 //hp items
-                case iv.player_inventory.get(currentItem)!.type === "hp"
-                    && MatchToHpMap.get(itemTarget)! >= MatchToMaxHpMap.get(itemTarget)!:
-                    setMessage("This character is already at max HP!");
-                    ShowMessage();
+                case iv.player_inventory.get(currentItem)!.type === "hp":
+                    CheckHpItemValidity(itemTarget)
                     break;
                 //mp items
                 case iv.player_inventory.get(currentItem)!.type === "mp":
