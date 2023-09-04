@@ -219,11 +219,12 @@ export const BossArea: React.FC<BossAreaProps> = ({
         //chance of him attacking will be higher each stage
         //something like 70% -> 80% -> 90%
         console.log("boss attack")
-        if (is_my_turn_active === true) {//wears off on next player attack
-            console.log("can't attack!")
 
-        } else {
-            if (TurnNumber % 2 === 0) {
+        if (TurnNumber % 2 === 0) {
+            if (is_my_turn_active === true) {//wears off on next player attack
+                console.log("can't attack!")
+
+            } else {
                 setIsBossAttacking(true)
                 setSelectedCharacter(null); //Prevents being able to use 
                 //the menu if the character that died was previously

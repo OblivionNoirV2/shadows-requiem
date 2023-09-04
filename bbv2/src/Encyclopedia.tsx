@@ -126,17 +126,6 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
                     mp_cost: 12
                 }
             ],
-            [
-                'Purification', {
-                    description: "Relieves one ally of all status effects.",
-                    mp_cost: 10
-                }
-            ],
-            [
-                'Supreme Altar', {
-                    description: "Fully restores entire party's HP and MP, and removes any status effects."
-                }
-            ],
             //rmage
             [   //Since this one CAN kill you, there's no need to check for sufficient hp
                 'Border Of Life', {
