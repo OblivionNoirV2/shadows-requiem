@@ -86,21 +86,26 @@ const App: React.FC = () => {
 
 
   }
+  const all_osts: HTMLAudioElement[] = [battleOst, titleOst, phase3ost];
   useEffect(() => {
 
     if (isMusicOn) {
-      if (currentTrack === "battle") {
-        TrackControls(battleOst, [titleOst]);
-      } else if (currentTrack === "title") {
-        TrackControls(titleOst, [battleOst]);
-      } else if (currentTrack === "phase3") {
-        TrackControls(phase3ost, [battleOst, titleOst]);
+      switch (currentTrack) {
+        case "battle":
+          TrackControls(battleOst, [titleOst]);
+          break;
+        case "title":
+          TrackControls(titleOst, [battleOst]);
+          break;
+        case "phase3":
+          TrackControls(phase3ost, [battleOst, titleOst]);
+          break;
       }
     } else {
-      battleOst.pause();
-      titleOst.pause();
+      all_osts.forEach((track => {
+        track.pause()
+      }))
     }
-
   }, [isMusicOn, currentTrack]);
   //mute for phase 3
   function HandleMusicOnOff(): void {
@@ -120,7 +125,9 @@ const App: React.FC = () => {
   }
   function HandleBackToTitle() {
     setIsGameStarted(!isGameStarted);
-    setCurrentTrack("title");
+    if (!isGameStarted) {
+      setCurrentTrack("title");
+    }
     navigate('/');
   }
   const [bossStage, setBossStage] = useState(1)
