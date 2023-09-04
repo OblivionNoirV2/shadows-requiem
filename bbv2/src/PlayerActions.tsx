@@ -603,9 +603,9 @@ export const attacks_map: Map<string, Function> = new Map([
     //The first time the boss tries to attack but this is active, it deacivates.
     [
         'My Turn', function MyTurn() {
-            if (is_my_turn_active === false) {
-                is_my_turn_active = true;
-            }
+
+            is_my_turn_active = true;
+
             return (
                 RNG(
                     {
@@ -702,8 +702,10 @@ export let is_attack_triggered: boolean = false;
 export function PlayerAttack(attack: string) {
     if (is_my_turn_active === true) {
         is_my_turn_active = false;
-        console.log("boss can attack again")
     }
+
+
+
     selected_attack = attack;
     console.log("inside playerattack,selected attack:" + attack);
     //function returns a damage value

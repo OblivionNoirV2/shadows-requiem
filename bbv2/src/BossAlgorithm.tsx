@@ -19,6 +19,7 @@ import {
 //adds a multiplier or divider, depending
 import { selected_difficulty } from './StartMenu';
 import anime from 'animejs/lib/anime.es.js'
+import { is_my_turn_active } from './PlayerActions';
 
 
 
@@ -862,7 +863,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     }
     console.log("final before return", final_targets)
-
+    console.log("is active", is_my_turn_active)
+    if (is_my_turn_active) {
+        last_boss_attacks = [];
+        final_targets = [];
+    }
     return {
         last_boss_attacks,
         final_targets
