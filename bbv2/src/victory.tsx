@@ -39,12 +39,12 @@ function CalculateScore() {
     const death_penalty = Occurences.get("death")! * ScoreDeductionsMap.get("death")!;
 
     const turn_penalty = Occurences.get("turn")! * ScoreDeductionsMap.get("turn")!;
-    const time_penalty = seconds * 2;
+    const time_penalty = seconds;
 
     const pre_final = (10000 - (death_penalty + turn_penalty + time_penalty))
 
     //take difficulty into account 
-    return pre_final + DifficultyToScore.get(selected_difficulty)!
+    return Math.floor(pre_final + DifficultyToScore.get(selected_difficulty)!)
 
 }
 
