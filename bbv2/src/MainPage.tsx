@@ -904,28 +904,31 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             switch (target) {
                 case "knight":
                     sm.knight_stats.set("mp", amount);
+                    MatchToMpMap.set("knight", sm.knight_stats.get("mp")!)
                     break;
                 case "dmage":
                     sm.dmage_stats.set("mp", amount);
+                    MatchToMpMap.set("dmage", sm.dmage_stats.get("mp")!)
                     break;
                 case "assassin":
                     sm.assassin_stats.set("mp", amount)
+                    MatchToMpMap.set("assassin", sm.assassin_stats.get("mp")!)
                     break;
                 case "rmage":
                     sm.rmage_stats.set("mp", amount)
+                    MatchToMpMap.set("rmage", sm.rmage_stats.get("mp")!)//needed this
             }
         }
 
 
-
         switch (item_details!.type) {
             case "hp"://set to the current + the max * healing factor (such as .33)
-                HealSwitch(target, (MatchToHpMap.get(target)!) +
-                    (MatchToMaxHpMap.get(target)! * item_details!.amount!));
+                HealSwitch(target, ((MatchToHpMap.get(target)!) +
+                    (MatchToMaxHpMap.get(target)!) * item_details!.amount!));
                 break;
             case "mp":
-                MpSwitch(target, (MatchToMpMap.get(target)!) +
-                    (MatchToMaxMpMap.get(target)! * item_details!.amount!));
+                MpSwitch(target, ((MatchToMpMap.get(target)!) +
+                    (MatchToMaxMpMap.get(target)!) * item_details!.amount!));
                 console.log("mmt", MatchToMpMap.get(target)!)
                 break;
             case "revive":
@@ -981,6 +984,20 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             return false;
         }
     }
+
+    function CheckMpItemValidity(target: string) {
+        console.log("target", target)
+        console.log("target mp map fetch:", MatchToMpMap.get(target)!)
+        console.log("target max mp map fetch:", MatchToMaxMpMap.get(target)!)
+        if (MatchToMpMap.get(target)! >= MatchToMaxMpMap.get(target)!) {
+            setMessage("This character is already at max MP!");
+            ShowMessage();
+
+        } else {
+            UseItem(currentItem, itemTarget!)
+        }
+
+    }
     //Forces it to wait till the target has been set, eliminating latency issues
     useEffect(() => {
         //Everything must be reset here or it gets all weird and buggy
@@ -1001,10 +1018,8 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                     ShowMessage();
                     break;
                 //mp items
-                case iv.player_inventory.get(currentItem)!.type === "mp"
-                    && MatchToMpMap.get(itemTarget)! >= MatchToMaxMpMap.get(itemTarget)!:
-                    setMessage("This character is already at max MP!");
-                    ShowMessage();
+                case iv.player_inventory.get(currentItem)!.type === "mp":
+                    CheckMpItemValidity(itemTarget)
                     break;
                 //curse
                 case CheckStatusEffectValidity("de-curse", itemTarget, "curse"):

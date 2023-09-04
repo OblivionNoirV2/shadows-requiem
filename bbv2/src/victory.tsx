@@ -26,11 +26,11 @@ export const Occurences: Map<string, number> = new Map
 //take chosen difficulty into account
 const DifficultyToScore: Map<string, number> = new Map(
     [
-        ["very_easy", -2000],
-        ["easy", -1000],
+        ["very_easy", -3000],
+        ["easy", -1500],
         ["normal", 0],
-        ["hard", 1000],
-        ["nightmare", 2000]
+        ["hard", 1500],
+        ["nightmare", 3000]
 
     ]
 )
