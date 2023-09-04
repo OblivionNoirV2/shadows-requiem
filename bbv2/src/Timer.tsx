@@ -23,9 +23,11 @@ const Timer = () => {
     const total_seconds = Math.floor(elapsedTime / 1000);
     const minutes = Math.floor(total_seconds / 60);
     seconds = total_seconds % 60;
+    const hours = Math.floor(minutes / 60); //lol
 
     return (
         <div className='text-sky-500 ml-16 mr-8'>
+            <span>{String(hours).padStart(2, '0')}:</span>
             <span>{String(minutes).padStart(2, '0')}:</span>
             <span>{String(seconds).padStart(2, '0')}</span>
         </div>

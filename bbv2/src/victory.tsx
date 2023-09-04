@@ -60,12 +60,15 @@ const DifficultyToText: Map<string, string> = new Map(
     ]
 )
 const SecondsToMinutes = () => {
+
     const seconds_remainder = seconds % 60;
     const even_seconds = seconds - seconds_remainder;
     const minutes = (even_seconds / 60);
+    const hours = (minutes / 60); //lol
 
     return (
         <div className="ml-3">
+            <span>{String(hours).padStart(2, '0')}:</span>
             <span>{String(minutes).padStart(2, '0')}:</span>
             <span>{String(seconds).padStart(2, '0')}</span>
         </div>
