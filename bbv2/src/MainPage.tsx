@@ -52,6 +52,7 @@ import heartbeat from './assets/sound/sfx/heartbeatlouder.wav';
 import { Percentage } from './BossAlgorithm';
 import { NameToIndex } from './BossAlgorithm';
 import { is_my_turn_active } from './PlayerActions';
+import { set } from 'animejs';
 
 
 interface MenuProps {
@@ -901,6 +902,12 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         }
 
         function MpSwitch(target: string, amount: number) {
+            setIsAttackMade(true) //forces it to reset the mp values so they are correct
+            setTimeout(() => {
+                setIsAttackMade(false);
+            }, 1000)
+
+
             switch (target) {
                 case "knight":
                     sm.knight_stats.set("mp", amount);
@@ -1078,6 +1085,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             }, 2000);
         }
     }
+
 
     return (
 
