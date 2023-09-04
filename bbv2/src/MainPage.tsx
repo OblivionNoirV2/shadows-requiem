@@ -902,7 +902,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         }
 
         function MpSwitch(target: string, amount: number) {
-            setIsAttackMade(true) //forces it to reset the mp values so they are correct
+            /*forces it to backtrack and recalibrate the mp values 
+            after item use so button doesn't break*/
+            setIsAttackMade(true)
             setTimeout(() => {
                 setIsAttackMade(false);
             }, 1000)
