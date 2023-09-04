@@ -4,6 +4,7 @@ import './App.css';
 import SnowAnimation from './SnowAnimation';
 //battle theme
 import ti from './assets/sound/ost/Twilight Imperium.wav';
+import ab from './assets/sound/ost/Abyssal Lunacy.wav';
 //title theme
 import tt from './assets/sound/ost/Forboding.wav';
 import wind from './assets/sound/sfx/Wind.mp3';
@@ -27,6 +28,7 @@ const App: React.FC = () => {
   const [isMusicOn, setIsMusicOn] = useState(false);
   const [battleOst, setBattleOst] = useState(new Audio(ti));
   const [titleOst, setTitleOst] = useState(new Audio(tt));
+  const [phase3ost, setPhase3Ost] = useState(new Audio(ab));
   const [currentTrack, setCurrentTrack] = useState("title");
   const [isSnowOn, setIsSnowOn] = useState(true);
 
@@ -70,27 +72,35 @@ const App: React.FC = () => {
     );
   };
 
-  function TrackControls(current_track: HTMLAudioElement, prev_track: HTMLAudioElement) {
-    prev_track.pause();
-    prev_track.currentTime = 0;
+  function TrackControls(current_track: HTMLAudioElement, prev_tracks: HTMLAudioElement[]) { //prev is the ones that need to be muted
+
+    prev_tracks.forEach((track => {
+      track.pause();
+      track.currentTime = 0;
+
+    }))
+
     current_track.play();
     current_track.loop = true;
+
+
+
   }
   useEffect(() => {
-    if (bossStage === 3) {
-      setIsMusicOn(false)
-    } else {
-      if (isMusicOn) {
-        if (currentTrack === "battle") {
-          TrackControls(battleOst, titleOst);
-        } else if (currentTrack === "title") {
-          TrackControls(titleOst, battleOst);
-        }
-      } else {
-        battleOst.pause();
-        titleOst.pause();
+
+    if (isMusicOn) {
+      if (currentTrack === "battle") {
+        TrackControls(battleOst, [titleOst]);
+      } else if (currentTrack === "title") {
+        TrackControls(titleOst, [battleOst]);
+      } else if (currentTrack === "phase3") {
+        TrackControls(phase3ost, [battleOst, titleOst]);
       }
+    } else {
+      battleOst.pause();
+      titleOst.pause();
     }
+
   }, [isMusicOn, currentTrack]);
   //mute for phase 3
   function HandleMusicOnOff(): void {
@@ -114,6 +124,12 @@ const App: React.FC = () => {
     navigate('/');
   }
   const [bossStage, setBossStage] = useState(1)
+
+  useEffect(() => {
+    if (bossStage === 3) {
+      setCurrentTrack("phase3")
+    }
+  }, [bossStage])
 
   /*At program start, the ternary returns false 
   and renders the start menu. Trigger the callback when clicked,
@@ -183,9 +199,8 @@ const App: React.FC = () => {
           }
         />
       </Routes>
-      {bossStage !== 3 &&
-        <VolButton />
-      }
+      <VolButton />
+
       {
         isSnowOn && <SnowAnimation precip_type={precipType} />
       }

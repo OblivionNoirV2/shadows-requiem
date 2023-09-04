@@ -603,15 +603,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             document.body.style.backgroundImage = "none"
             document.body.style.backgroundColor = "black"
             //prevent duplicate audios
-            if (!isSFXTriggered) {
-                hb.play();//heartbeat sfx
-                hb.loop = true;
-            } else {
-                setIsSFXTriggered(true)
-                hb.pause()
-                hb.currentTime = 0;
 
-            }
         }
         //Both, because if the boss stage hasn't changed during dev 
         //it won't update otherwise

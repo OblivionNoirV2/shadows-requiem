@@ -15,12 +15,7 @@ export type player_stats = {
 };
 
 
-interface boss_stats {
-    hp: number;
-    max_hp: number;
-    p_def: number;
-    m_def: number;
-};
+
 /*
 for defenses, divide the attack power by the def value(between 1 and 2) 
 and round it to the nearest whole number.
@@ -37,7 +32,7 @@ export interface StatMap extends Map<string, number> { }
 export const knight_stats: StatMap = new Map
     (
         [
-            ["hp", 500],
+            ["hp", 730],
             ["max_hp", 730],
             ["mp", 140],
             ["max_mp", 140],
@@ -69,7 +64,7 @@ export const dmage_stats: StatMap = new Map
 export const assassin_stats: StatMap = new Map
     (
         [
-            ["hp", 300],
+            ["hp", 400],
             ["max_hp", 400],
             ["mp", 250],
             ["max_mp", 250],
@@ -85,9 +80,9 @@ export const assassin_stats: StatMap = new Map
 export const rmage_stats: StatMap = new Map
     (
         [
-            ["hp", 75], //max is 375
+            ["hp", 375], //max is 375
             ["max_hp", 375],
-            ["mp", 50],
+            ["mp", 530],
             ["max_mp", 530],
             ["p_def", 1.00],
             ["d_p_def", 1.00],
@@ -113,7 +108,7 @@ const MatchToHpChange: Map<string, number> = new Map
 export const boss_stats: StatMap = new Map
     (
         [
-            ["hp", 400000],
+            ["hp", 220000],
             ["max_hp", 780000],
             ["p_def", 1.00],
             ["d_p_def", 1.00],
