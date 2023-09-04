@@ -885,6 +885,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
 
 
         function HealSwitch(target: string, amount: number) {
+            AsLongAsItWorks()
             //can probably actually use the one in boss algo for this
             switch (target) {
                 case "knight":
@@ -905,14 +906,19 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             }
         }
 
-        function MpSwitch(target: string, amount: number) {
+        function AsLongAsItWorks() {
             /*forces it to backtrack and recalibrate the mp values 
-            after item use so button doesn't break*/
+after item use so button doesn't break*/
             setIsAttackMade(true)
             setTimeout(() => {
                 setIsAttackMade(false);
             }, 1000)
 
+
+        }
+
+        function MpSwitch(target: string, amount: number) {
+            AsLongAsItWorks()
 
             switch (target) {
                 case "knight":
@@ -1077,10 +1083,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                 break;
             case "rmage":
                 attack !== "Border Of Life" ? //bol uses hp
-                    sm.rmage_stats.set("mp", (sm.rmage_stats.get("mp")! - attack_encyclopedia_entry!)) :
-                    console.log("bol uses hp", attack_encyclopedia_entry)
-                console.log("rmage hp", sm.rmage_stats.get("hp"))
-                sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - attack_encyclopedia_entry)
+                    sm.rmage_stats.set("mp", (sm.rmage_stats.get("mp")! - attack_encyclopedia_entry!)) : sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - attack_encyclopedia_entry)
                 console.log("rmage hp after bol", sm.rmage_stats.get("hp")!)
                 break;
         }
