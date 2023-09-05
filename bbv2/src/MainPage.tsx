@@ -1033,7 +1033,6 @@ after item use so button doesn't break*/
             ShowMessage();
         } else {
             UseItem(currentItem, itemTarget!)
-
         }
     }
     //Forces it to wait till the target has been set, eliminating latency issues
@@ -1090,7 +1089,9 @@ after item use so button doesn't break*/
                 break;
             case "rmage":
                 attack !== "Border Of Life" ? //bol uses hp
-                    sm.rmage_stats.set("mp", (sm.rmage_stats.get("mp")! - attack_encyclopedia_entry!)) : sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - attack_encyclopedia_entry)
+                    sm.rmage_stats.set("mp", (sm.rmage_stats.get("mp")! - attack_encyclopedia_entry!)) :
+                    sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - attack_encyclopedia_entry)
+                MatchToHpMap.set("rmage", sm.rmage_stats.get("hp")!)
                 console.log("rmage hp after bol", sm.rmage_stats.get("hp")!)
                 break;
         }
@@ -1239,7 +1240,7 @@ after item use so button doesn't break*/
 
                                                 sfx.playClickSfx();
                                                 console.log("attack:", attack)
-                                                if (attack == "Border Of Life") {
+                                                if (attack === "Border Of Life") {
                                                     if (attack_encyclopedia_entry! > hp_map_value!) {
                                                         setMessage("Not enough HP!");
                                                         ShowMessage()
