@@ -764,7 +764,8 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
                     attack !== null ?
                         UltPathLookup.get(attack) : undefined}
                 className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl player-attack'
-                style={{ position: 'absolute', top: 0, left: 0 }}>
+                style={{ position: 'absolute', top: 0, left: 0 }}
+                loading='eager'>
             </img>
 
         )
@@ -784,6 +785,7 @@ export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
                     //prevents text from showing for desperation
                     alt={attack === 'Desperation' ? undefined : attack}
                     style={{ position: 'absolute', top: 0, left: 0 }}
+                    loading='eager'
                 />
             );
         }

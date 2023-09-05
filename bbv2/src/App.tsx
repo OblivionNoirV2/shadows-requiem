@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom';
+
 import './App.css';
 import SnowAnimation from './SnowAnimation';
 //battle theme
@@ -8,6 +9,7 @@ import ab from './assets/sound/ost/Abyssal Lunacy.wav';
 //title theme
 import tt from './assets/sound/ost/Forboding.wav';
 import wind from './assets/sound/sfx/Wind.mp3';
+import victory_ost from './assets/sound/ost/victory.wav';
 import wind2 from './assets/sound/sfx/wind2.wav';
 import UpdateStats from './StatManagement';
 import StartMenu from './StartMenu';
@@ -20,6 +22,7 @@ import { NameCharacters } from './Naming';
 import YouDied from './YouDied';
 import VictoryScreen from './victory';
 import { PrecipTypeContext } from './Context';
+import { set } from 'animejs';
 
 
 
@@ -29,6 +32,7 @@ const App: React.FC = () => {
   const [battleOst, setBattleOst] = useState(new Audio(ti));
   const [titleOst, setTitleOst] = useState(new Audio(tt));
   const [phase3ost, setPhase3Ost] = useState(new Audio(ab));
+  const [victoryOst, setVictoryOst] = useState(new Audio(victory_ost));
   const [currentTrack, setCurrentTrack] = useState("title");
   const [isSnowOn, setIsSnowOn] = useState(true);
 
@@ -86,27 +90,42 @@ const App: React.FC = () => {
 
 
   }
-  const all_osts: HTMLAudioElement[] = [battleOst, titleOst, phase3ost];
+  const all_osts: HTMLAudioElement[] = [battleOst, titleOst, phase3ost, victoryOst];
+  const location = useLocation();
+  const [url, setUrl] = useState(location);
+
+  useEffect(() => {
+    setUrl(location); // Update the URL whenever the location changes
+  }, [location]);
+
   useEffect(() => {
 
+    console.log("url", url)
+
     if (isMusicOn) {
-      switch (currentTrack) {
-        case "battle":
-          TrackControls(battleOst, [titleOst]);
-          break;
-        case "title":
-          TrackControls(titleOst, [battleOst]);
-          break;
-        case "phase3":
-          TrackControls(phase3ost, [battleOst, titleOst]);
-          break;
+      if (url.pathname === "/Victory") {
+        TrackControls(victoryOst, [battleOst, titleOst, phase3ost]);
+      } else {
+        switch (currentTrack) {
+          case "battle":
+            TrackControls(battleOst, [titleOst]);
+            break;
+          case "title":
+            TrackControls(titleOst, [battleOst]);
+            break;
+          case "phase3":
+            TrackControls(phase3ost, [battleOst, titleOst]);
+            break;
+        }
+
       }
+
     } else {
       all_osts.forEach((track => {
         track.pause()
       }))
     }
-  }, [isMusicOn, currentTrack]);
+  }, [isMusicOn, currentTrack, url]);
   //mute for phase 3
   function HandleMusicOnOff(): void {
     setIsMusicOn(!isMusicOn);

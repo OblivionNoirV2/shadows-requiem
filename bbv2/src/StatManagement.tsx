@@ -48,7 +48,7 @@ export const knight_stats: StatMap = new Map
 export const dmage_stats: StatMap = new Map
     (
         [
-            ["hp", 40],
+            ["hp", 470],
             ["max_hp", 470],
             ["mp", 270],
             ["max_mp", 270],
@@ -66,7 +66,7 @@ export const assassin_stats: StatMap = new Map
         [
             ["hp", 400],
             ["max_hp", 400],
-            ["mp", 50],
+            ["mp", 250],
             ["max_mp", 250],
             ["p_def", .90],
             ["d_p_def", .90],
@@ -82,7 +82,7 @@ export const rmage_stats: StatMap = new Map
         [
             ["hp", 375], //max is 375
             ["max_hp", 375],
-            ["mp", 0],
+            ["mp", 375],
             ["max_mp", 530],
             ["p_def", 1.00],
             ["d_p_def", 1.00],
@@ -93,16 +93,6 @@ export const rmage_stats: StatMap = new Map
         ]
     );
 
-const MatchToHpChange: Map<string, number> = new Map
-    (
-        [
-            ["very_easy", 0.25],
-            ["easy", 0.50],
-            ["normal", 1.00],
-            ["hard", 1.50],
-            ["nightmare", 2.00]
-        ]
-    )
 
 //all adjusted later based on difficulty
 export const boss_stats: StatMap = new Map

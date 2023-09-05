@@ -969,7 +969,8 @@ export const BossAttackArea: React.FC = () => {
                                 'z-50 mt-72 mr-64 rounded-xl'
                         }
                             src={
-                                require(`./assets/images/boss/attacks/${current_boss_attack}.png`)}>
+                                require(`./assets/images/boss/attacks/${current_boss_attack}.png`)}
+                            loading='eager'>
                         </img>
                     }
 

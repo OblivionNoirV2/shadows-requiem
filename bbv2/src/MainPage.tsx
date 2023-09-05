@@ -633,6 +633,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     src={boss_images[bossStage - 1]}
                     className='boss-sprite opacity-95 rounded-xl max-w-4xl'
                     alt={`boss phase ${bossStage}`}
+                    loading='eager'
                 />
                 <strong>
                     <div className='flex justify-center relative mt-8
@@ -1484,6 +1485,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                             alt={status_effect}
                             className={getClassName(status_effect)!}
                             title={GetStatusEffectDesc(status_effect)}
+                            loading='eager'
                         />
                     </li>
                 </ul>
@@ -1774,6 +1776,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                             "knight icon" :
                                             "dead character"
                                     }
+                                    loading='eager'
                                 >
                                 </img>
                             </button>
@@ -1817,6 +1820,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                             "dark mage icon" :
                                             "dead character"
                                     }
+                                    loading='eager'
                                 >
                                 </img>
                             </button>
@@ -1860,6 +1864,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                             "white mage icon" :
                                             "dead character"
                                     }
+                                    loading='eager'
                                 >
 
                                 </img>
@@ -1906,6 +1911,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                             "red mage icon" :
                                             "dead character"
                                     }
+                                    loading='eager'
                                 >
                                 </img>
                             </button>
