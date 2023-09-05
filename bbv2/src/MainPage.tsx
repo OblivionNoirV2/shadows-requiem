@@ -509,7 +509,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
         if (boss_hp >= parseInt((max_hp * .66).toFixed(0))) {
             setBossStage(1); //60%
-        } else if (boss_hp >= parseInt((max_hp * .25).toFixed(0)) && boss_hp < parseInt(((max_hp * .66) - 1).toFixed(0))) {
+        } else if (boss_hp >= parseInt((max_hp * .33).toFixed(0)) && boss_hp < parseInt(((max_hp * .66) - 1).toFixed(0))) {
             document.documentElement.style.filter = "brightness(75%)"
             setBossStage(2);
         } else {
