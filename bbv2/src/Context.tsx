@@ -15,9 +15,6 @@ export const BossContext = createContext<BossContextValue>({
 export function BossContextProvider({ children }: { children: React.ReactElement }) {
     const [BossHP, setBossHP] = useState(999999);
 
-    useEffect(() => {
-        console.log('BossHP updated:', BossHP);
-    }, [BossHP]);
 
     return (
         <BossContext.Provider value={{ BossHP, setBossHP }}>
@@ -39,9 +36,7 @@ export const TurnNumberContext = createContext<TurnNumberContextValue>({
 export function TurnNumberContextProvider({ children }: { children: React.ReactElement }) {
     const [TurnNumber, setTurnNumber] = useState(1);
 
-    useEffect(() => {
-        console.log('TurnNumber updated:', TurnNumber);
-    }, [TurnNumber]);
+
 
     return (
         <TurnNumberContext.Provider value={{ TurnNumber, setTurnNumber }}>
@@ -63,9 +58,6 @@ export const MessageContext = createContext<MessageContextValue>({
 export function MessageContextProvider({ children }: { children: React.ReactElement }) {
     const [message, setMessage] = useState('');
 
-    useEffect(() => {
-        console.log('Message updated:', message);
-    }, [message]);
 
     return (
         <MessageContext.Provider value={{ message, setMessage }}>
@@ -87,9 +79,6 @@ export const AttackShownContext = createContext<AttackShownContextValue>({
 export function AttackShownContextProvider({ children }: { children: React.ReactElement }) {
     const [isAttackAreaShown, setIsAttackAreaShown] = useState(false);
 
-    useEffect(() => {
-        console.log('AttackShown updated:', isAttackAreaShown);
-    }, [isAttackAreaShown]);
 
     return (
         <AttackShownContext.Provider value={{ isAttackAreaShown, setIsAttackAreaShown }}>
@@ -109,10 +98,6 @@ export const CurrentAttackContext = createContext<CurrentAttackContextValue>({
 
 export function CurrentAttackContextProvider({ children }: { children: React.ReactElement }) {
     const [currentAttack, setCurrentAttack] = useState('');
-
-    useEffect(() => {
-        console.log('CurrentAttack updated:', currentAttack);
-    }, [currentAttack]);
 
     return (
         <CurrentAttackContext.Provider value={{ currentAttack, setCurrentAttack }}>
@@ -134,9 +119,6 @@ export const AttackMadeContext = createContext<AttackMadeContextValue>({
 export function AttackMadeContextProvider({ children }: { children: React.ReactElement }) {
     const [isAttackMade, setIsAttackMade] = useState(false);
 
-    useEffect(() => {
-        console.log('AttackMade updated:', isAttackMade);
-    }, [isAttackMade]);
 
     return (
         <AttackMadeContext.Provider value={{ isAttackMade, setIsAttackMade }}>
@@ -157,9 +139,6 @@ export const UltimaContext = createContext<UltimaContextValue>({
 export function UltimaContextProvider({ children }: { children: React.ReactElement }) {
     const [isUltima, setIsUltima] = useState(false);
 
-    useEffect(() => {
-        console.log('Ultima updated:', isUltima);
-    }, [isUltima]);
 
     return (
         <UltimaContext.Provider value={{ isUltima, setIsUltima }}>
@@ -186,9 +165,6 @@ export const KnightStatusContext = createContext<KnightStatusContextValue>({
 export function KnightStatusContextProvider({ children }: { children: React.ReactElement }) {
     const [KnightStatus, setKnightStatus] = useState<string[]>([]);
 
-    useEffect(() => {
-        console.log('KnightStatus updated:', KnightStatus);
-    }, [KnightStatus]);
 
     return (
         <KnightStatusContext.Provider value={{ KnightStatus, setKnightStatus }}>
@@ -210,10 +186,6 @@ export const DmageStatusContext = createContext<DmageStatusContextValue>({
 export function DmageStatusContextProvider({ children }: { children: React.ReactElement }) {
     const [DmageStatus, setDmageStatus] = useState<string[]>([]);
 
-    useEffect(() => {
-        console.log('DmageStatus updated:', DmageStatus);
-    }, [DmageStatus]);
-
     return (
         <DmageStatusContext.Provider value={{ DmageStatus, setDmageStatus }}>
             {children}
@@ -234,9 +206,6 @@ export const AssassinStatusContext = createContext<AssassinStatusContextValue>({
 export function AssassinStatusContextProvider({ children }: { children: React.ReactElement }) {
     const [AssassinStatus, setAssassinStatus] = useState<string[]>([]);
 
-    useEffect(() => {
-        console.log('AssassinStatus updated:', AssassinStatus);
-    }, [AssassinStatus]);
 
     return (
         <AssassinStatusContext.Provider value={{ AssassinStatus, setAssassinStatus }}>
@@ -258,9 +227,6 @@ export const RmageStatusContext = createContext<RmageStatusContextValue>({
 export function RmageStatusContextProvider({ children }: { children: React.ReactElement }) {
     const [RmageStatus, setRmageStatus] = useState<string[]>([]);
 
-    useEffect(() => {
-        console.log('RmageStatus updated:', RmageStatus);
-    }, [RmageStatus]);
 
     return (
         <RmageStatusContext.Provider value={{ RmageStatus, setRmageStatus }}>
@@ -284,9 +250,6 @@ export const KnightNameContext = createContext<KnightNameContextValue>({
 export function KnightNameContextProvider({ children }: { children: React.ReactElement }) {
     const [KnightName, setKnightName] = useState('Knight');
 
-    useEffect(() => {
-        console.log('KnightName updated:', KnightName);
-    }, [KnightName]);
 
     return (
         <KnightNameContext.Provider value={{ KnightName, setKnightName }}>
@@ -308,9 +271,6 @@ export const DmageNameContext = createContext<DmageNameContextValue>({
 export function DmageNameContextProvider({ children }: { children: React.ReactElement }) {
     const [DmageName, setDmageName] = useState('Dark Mage');
 
-    useEffect(() => {
-        console.log('DmageName updated:', DmageName);
-    }, [DmageName]);
 
     return (
         <DmageNameContext.Provider value={{ DmageName, setDmageName }}>
@@ -332,9 +292,6 @@ export const AssassinNameContext = createContext<AssassinNameContextValue>({
 export function AssassinNameContextProvider({ children }: { children: React.ReactElement }) {
     const [AssassinName, setAssassinName] = useState('Assassin');
 
-    useEffect(() => {
-        console.log('AssassinName updated:', AssassinName);
-    }, [AssassinName]);
 
     return (
         <AssassinNameContext.Provider value={{ AssassinName, setAssassinName }}>
@@ -355,10 +312,6 @@ export const RmageNameContext = createContext<RmageNameContextValue>({
 
 export function RmageNameContextProvider({ children }: { children: React.ReactElement }) {
     const [RmageName, setRmageName] = useState('Red Mage');
-
-    useEffect(() => {
-        console.log('RmageName updated:', RmageName);
-    }, [RmageName]);
 
     return (
         <RmageNameContext.Provider value={{ RmageName, setRmageName }}>
@@ -381,9 +334,6 @@ export const BossAttackingContext = createContext<BossAttackingContextValue>({
 export function BossAttackingContextProvider({ children }: { children: React.ReactElement }) {
     const [isBossAttacking, setIsBossAttacking] = useState(false);
 
-    useEffect(() => {
-        console.log("is boss attacking updated", isBossAttacking)
-    }, [isBossAttacking])
 
     return (
         <BossAttackingContext.Provider value={{ isBossAttacking, setIsBossAttacking }}>
@@ -407,11 +357,6 @@ export const PrecipTypeContext = createContext<PrecipTypeContextValue>({
 
 export function PrecipTypeContextProvider({ children }: { children: React.ReactElement }) {
     const [precipType, setPrecipType] = useState<valid_precip>("flake")
-
-    useEffect(() => {
-        console.log("precip type updated", precipType)
-
-    }, [precipType])
 
     return (
         <PrecipTypeContext.Provider value={{ precipType, setPrecipType }}>

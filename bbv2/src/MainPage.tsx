@@ -48,7 +48,7 @@ import rmage_icon from './assets/images/player/sprites/rmage.png';
 import dead_icon from './assets/images/icons/dead.png';
 import { prev_dmg } from './BossAlgorithm';
 import { Occurences } from './victory';
-import heartbeat from './assets/sound/sfx/heartbeatlouder.wav';
+
 import { Percentage } from './BossAlgorithm';
 import { NameToIndex } from './BossAlgorithm';
 import { is_my_turn_active } from './PlayerActions';
@@ -81,9 +81,6 @@ interface BossAreaProps {
     setBossStage: any;
 
 }
-let hb = new Audio(heartbeat)
-
-
 
 let targets_list = []
 export const MatchToMaxHpMap: Map<string, number | undefined> = new Map
@@ -159,7 +156,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
         if (b_image) {
             if (last_boss_attacks.length > 7 && last_boss_attacks.length <= 10 && bossStage === 3) {
                 b_image.classList.add("warning");
-                console.log("added warning")
+
             } else {
                 b_image.classList.remove("warning");
             }
@@ -193,7 +190,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
 
     //5% of max hp. Can kill. 
     function PoisonDamage(char_id: number) {
-        console.log("CHRID", char_id)
+
         const char_str = ConvertToStr(char_id)
         //then use the str to subtract hp accordingly 
 
@@ -219,13 +216,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
         //if it's an even turn, the boss attacks
         //chance of him attacking will be higher each stage
         //something like 70% -> 80% -> 90%
-        console.log("boss attack")
 
         if (TurnNumber % 2 === 0) {
-            if (is_my_turn_active === true) {//wears off on next player attack
-                console.log("can't attack!")
-
-            } else {
+            if (is_my_turn_active === false) {
                 setIsBossAttacking(true)
                 setSelectedCharacter(null); //Prevents being able to use 
                 //the menu if the character that died was previously
@@ -240,12 +233,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                     rmage_status: RmageStatus,
                     current_turn: TurnNumber,
                 });
-                console.log("boss return", boss_return)
-                //special cases. Any stat lowering is done in the attack algo
-                console.log("last attacks", boss_return.last_boss_attacks[last_boss_attacks.length - 1])
-                //this is by index
-                console.log("final targets", boss_return.final_targets)
-                //convert index to names
+
                 boss_return.final_targets.forEach((item: number) => {
                     targets_list.push(IndexToName.get(item))
                 });
@@ -268,8 +256,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                         if (typeof (prev_dmg[prev_dmg.length - 1] * 2) === 'number') {
                             sm.boss_stats.set("hp", sm.boss_stats.get("hp")! +
                                 (prev_dmg[prev_dmg.length - 1] * 2))
-                            console.log("in devourment switch", typeof sm.boss_stats.get("hp"))
-                            console.log("prev dmg dev", prev_dmg[prev_dmg.length - 1])
+
                         }
                         break;
                     case "Frozen Soul":
@@ -305,9 +292,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
                         })
                         break;
 
-                    default:
-                        console.log("no special attacks used")
-                        break;
+
                 }
             }
         }
@@ -427,7 +412,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
         //the get value is still set to 10 after the death,
         //which is why this breaks
         let khp = parseInt(sm.knight_stats.get("hp")!.toFixed(0));
-        console.log("initial khp", khp)
+
+
         if (khp <= 0) {
             //prevent negatives
             sm.knight_stats.set("hp", 0)
@@ -518,11 +504,9 @@ export const BossArea: React.FC<BossAreaProps> = ({
     useEffect(() => {
         const adjustment_multiplier = MatchDiffToAdjustment.get(selected_difficulty)!;
         const max_hp = (sm.boss_stats.get("max_hp")! * adjustment_multiplier);
-        console.log("max hp", max_hp)
-        console.log("66%", parseInt((max_hp * .66).toFixed(0)))
+
         const boss_hp = sm.boss_stats.get("hp")! * adjustment_multiplier;
-        console.log("boss hp", boss_hp)
-        console.log("boss stage updated", selected_difficulty)
+
         if (boss_hp >= parseInt((max_hp * .66).toFixed(0))) {
             setBossStage(1); //60%
         } else if (boss_hp >= parseInt((max_hp * .25).toFixed(0)) && boss_hp < parseInt(((max_hp * .66) - 1).toFixed(0))) {
@@ -541,7 +525,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
     accordingly if they're abnormal. Same goes for boss
     */
     function StatReversion() {
-        console.log("sr running")
+
+
         //list of character names
         const character_names = ['knight', 'dmage', 'assassin', 'rmage'];
         //list of stats to check for each character
@@ -577,7 +562,8 @@ export const BossArea: React.FC<BossAreaProps> = ({
     }
     //check for abnormalities each turn
     useEffect(() => {
-        console.log("original", sm.knight_stats.get("p_def"))
+
+
         StatReversion()
 
     }, [TurnNumber])
@@ -745,19 +731,23 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
 
     function HandleAttacksMenu() {
         setIsAttacksActive(!isAttacksActive);
-        console.log("AA: " + isAttacksActive);
+
+
     }
 
     //doubles defense (up to a max of whatever that character's max is), 
     //
-    function HandleDefend(player: string, current_turn: number) {
+    function HandleDefend(player: string
+    ) {
 
-        console.log("og mdef", sm.player_mdef_map.get(player)!)
+
+
         //first check that it doesn't exceed maximums 
         if (sm.player_mdef_map.get(player)! < sm.min_max_vals_map.get("player")!.m_def.max) {
             //if it's less than max, apply the buff
             sm.player_mdef_map.set(player, (sm.player_mdef_map.get(player)! + 0.50));
-            console.log("new mdef", sm.player_mdef_map.get(player)!)
+
+
             //if it exceeds after setting, revert back to the max
             if (sm.player_mdef_map.get(player)! > sm.min_max_vals_map.get("player")!.m_def.max) {
                 sm.player_mdef_map.set(player, sm.min_max_vals_map.get("player")!.m_def.max)
@@ -767,7 +757,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         if (sm.player_pdef_map.get(player)! < sm.min_max_vals_map.get("player")!.p_def.max) {
             //if it's less than max, apply the buff
             sm.player_pdef_map.set(player, (sm.player_pdef_map.get(player)! + 0.50));
-            console.log("new pdef", sm.player_pdef_map.get(player)!)
+
             //if it exceeds after setting, revert back to the max
             if (sm.player_pdef_map.get(player)! > sm.min_max_vals_map.get("player")!.p_def.max) {
                 sm.player_pdef_map.set(player, sm.min_max_vals_map.get("player")!.p_def.max)
@@ -794,7 +784,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
     const { message, setMessage } = useContext(MessageContext);
     function HandleAtkClick(attack: string) {
         let atk_result = pa.PlayerAttack(attack);
-        console.log("Handleclick atkresult:", atk_result);
+
         setMessage(atk_result);
 
         setIsAttackAreaShown(true);
@@ -815,7 +805,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
 
 
     function HandleItemChange(e: string) {
-        console.log(iv.player_inventory.get(e))
+
         if (iv.player_inventory.get(e)!.stock <= 0) {
             setMessage("Not enough stock!");
             setIsAttackMade(true)
@@ -874,8 +864,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         const item_details = iv.player_inventory.get(item);
         //for future score
         Occurences.set("item", (Occurences.get("item")! + 1))
-        console.log("item", item)
-        console.log("target", target)
+
         //use the return value to determine what happens
         //number means it heals hp or mp. string means 
         //it heals a status, string will specify which status
@@ -949,12 +938,12 @@ after item use so button doesn't break*/
             case "mp":
                 MpSwitch(target, ((MatchToMpMap.get(target)!) +
                     (MatchToMaxMpMap.get(target)!) * item_details!.amount!));
-                console.log("mmt", MatchToMpMap.get(target)!)
+
                 break;
             case "revive":
                 //remove dead status
                 RemoveStatus(target, "dead");
-                console.log("knight status", KnightStatus)
+
                 //then heal depending on revive type(the given amount in details)
                 HealSwitch(target, (MatchToHpMap.get(target)!) +
                     (MatchToMaxHpMap.get(target)! * item_details!.amount!));
@@ -977,11 +966,11 @@ after item use so button doesn't break*/
                 TargetToStatus.set(target, [])
                 break;
         };
-        console.log("item details", item_details)
+
         if (item_details) {
             item_details.stock -= 1;
             iv.player_inventory.set(item, item_details);
-            console.log("updated item", item_details)
+
         }
     };
     //change "freeze" to "frozen", etc for proper formatting
@@ -1006,9 +995,7 @@ after item use so button doesn't break*/
     }
 
     function CheckMpItemValidity(target: string) {
-        console.log("target", target)
-        console.log("target mp map fetch:", MatchToMpMap.get(target)!)
-        console.log("target max mp map fetch:", MatchToMaxMpMap.get(target)!)
+
         if (TargetToStatus.get(target)!.includes("dead")) {
             setMessage("This character is dead!");
             ShowMessage()
@@ -1023,9 +1010,7 @@ after item use so button doesn't break*/
     }
 
     function CheckHpItemValidity(target: string) {
-        console.log("target", target)
-        console.log("target hp map fetch:", MatchToHpMap.get(target)!)
-        console.log("target max hp map fetch:", MatchToMaxHpMap.get(target)!)
+
         if (TargetToStatus.get(target)!.includes("dead")) {
             setMessage("This character is dead!");
             ShowMessage();
@@ -1093,7 +1078,7 @@ after item use so button doesn't break*/
                     sm.rmage_stats.set("mp", (sm.rmage_stats.get("mp")! - attack_encyclopedia_entry!)) :
                     sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - attack_encyclopedia_entry)
                 MatchToHpMap.set("rmage", sm.rmage_stats.get("hp")!)
-                console.log("rmage hp after bol", sm.rmage_stats.get("hp")!)
+
                 break;
         }
 
@@ -1106,7 +1091,6 @@ after item use so button doesn't break*/
                 setTurnNumber(TurnNumber + 1)
                 //for future score
                 Occurences.set("turn", (Occurences.get("turn")! + 1))
-                console.log("Occurences", Occurences)
                 setIsAttackAreaShown(false);
                 setIsAttackMade(false);
 
@@ -1214,7 +1198,7 @@ after item use so button doesn't break*/
                             </div>
                             {isItemsActive ? null :
                                 <li>
-                                    <button onClick={() => { HandleDefend(player, TurnNumber); sfx.playClickSfx() }} >
+                                    <button onClick={() => { HandleDefend(player); sfx.playClickSfx() }} >
                                         Defend
                                     </button>
                                 </li>
@@ -1240,7 +1224,7 @@ after item use so button doesn't break*/
                                                 const hp_map_value = MatchToHpMap.get(player)
 
                                                 sfx.playClickSfx();
-                                                console.log("attack:", attack)
+
                                                 if (attack === "Border Of Life") {
                                                     if (attack_encyclopedia_entry! > hp_map_value!) {
                                                         setMessage("Not enough HP!");
@@ -1317,10 +1301,6 @@ interface MessageAreaProps {
 }
 const MessageArea: React.FC<MessageAreaProps> = ({ message }) => {
 
-    useEffect(() => {
-        console.log("inside msg area", message)
-    }, [message]);
-
     //convert to proper string if necessary
     const message_string = typeof message === "object"
         ? `${message.crit === true ?
@@ -1337,9 +1317,7 @@ const PlayerAttackArea: React.FC<PlayerAttackAreaProps> = ({ attack, player, isP
     const { isUltima, setIsUltima } = useContext(UltimaContext);
 
     let current_attack = pa.selected_attack;
-    //console.log("current_attack:" + current_attack);
 
-    console.log("isultima:" + isUltima)
     return (
         <div>
             <span className='w-1/4 ml-[41.5%] mt-[14%] z-[4] rounded-xl 
@@ -1537,7 +1515,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
     function HandleUltimaClick(attack: string) {
         setIsScreenDark(true);
-        console.log("inside ult click", attack)
+
         setIsUltima(true);
         //ultima is used, so reset the ultValue
         setUltValue(0);
@@ -1547,7 +1525,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         //Tried to put this in its own function, messes up image paths 
         //and I don't know why
         let atk_result = pa.PlayerAttack(attack);
-        console.log("ult atkresult:", atk_result);
+
         setMessage(atk_result);
         setIsAttackAreaShown(true);
         setCurrentAttack(attack);

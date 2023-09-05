@@ -157,7 +157,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     let final_targets: number[] = []
     potential_targets = [];
 
-    console.log("attackProps", attackProps)
+
+
 
     //first rule out any dead characters as potential targets
     let current_statuses = [
@@ -179,7 +180,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     current_statuses.forEach((condition, index) => {
         if (!condition.includes("dead")) {
             potential_targets.push(allies[index]);
-            console.log("potential targets", potential_targets)
+
         }
     })
 
@@ -245,7 +246,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 }
             }
 
-            console.log("filtered", filtered_weights);//use this
+
 
             if (condition.includes("poison")) {
                 filtered_weights[index] += 2;
@@ -260,15 +261,14 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         current_hp.forEach((hp, index) => {
             CharacterWeightsMap.forEach((weight, breakpoint) => {
                 if (hp <= breakpoint) {
-                    console.log(typeof weight)
-                    console.log(typeof index)
+
                     //ensures that only alive character's weights are taken into account (dead ones produce a NaN)
                     if (typeof filtered_weights[index] + weight === 'number') {
                         filtered_weights[index] += weight
 
                     }
 
-                    console.log("character_weights", filtered_weights)
+
                 }
             }
             )
@@ -316,11 +316,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             //Compare the value from above to the cumulative weight 
             //The higher the individual weight, the higher the chance
             //it has to hit
-            console.log("weight", weight)
+
             if (random_value <= weight.cumulative_weight && weight !== undefined) {
                 if (potential_targets[weight.index] !== undefined) {
                     chosen_target = potential_targets[weight.index];
-                    console.log("chosen_target inside weights", chosen_target);
+
                 }
                 break;
             }
@@ -404,7 +404,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     //Match the target to their respective stats and get the final output
     function CalculateFinal(props: CalculateFinalProps): number {
         const attack_modifier = sm.boss_stat_changes.get(selected_difficulty)
-        console.log("atk modifier", attack_modifier!.atk)
+
         let final_dmg: number = 0;
         //First check for evasion. undefined means they're dead
         if (props.target !== undefined &&
@@ -420,12 +420,12 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
             }
             prev_dmg.push(final_dmg)
-            console.log("PREV", prev_dmg)
+
             return final_dmg;
 
         } else {
             if (props.target !== undefined) {
-                console.log("evaded")
+
                 //used to determine the message
                 boss_atk_message = 'evaded'
                 current_char = props.target;
@@ -438,7 +438,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         current_boss_attack: string;
         min: number; //because of inversion
         variance: number;
-        atk_sfx: string;
+        atk_sfx?: string;
         secondary_targets?: string[];
         //if an attack hits multiple targets, 
         //the others are calculated in that function from the 
@@ -459,11 +459,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
         //Before def/ev is taken into account
         let pre_dmg = Randomizer(props.min!, atk_max);
-        console.log("pre_dmg", pre_dmg)
+
         if (props.secondary_targets) {
             props.secondary_targets.push(chosen_target)
             props.secondary_targets.forEach((target) => {
-                console.log("target", target)
+
                 //add def/ev/mdef to the equation
                 let x = CalculateFinal(
                     {
@@ -494,16 +494,16 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
         potential_secondary = potential_targets.filter(
             (target) => target !== chosen_target);
-        console.log("potential_secondary", potential_secondary)
+
         while (secondary_targets.length < additional_targets) {
-            console.log("potential_secondary in loop", potential_secondary)
+
             let rand = Randomizer(0, additional_targets + 1);
-            console.log("rand", rand)
+
             if (!secondary_targets.includes(potential_secondary[rand])) {
                 secondary_targets.push(potential_secondary[rand]);
             }
         }
-        console.log("secondary_targets", secondary_targets)
+
         return secondary_targets;
 
     }
@@ -511,40 +511,30 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     function LowerAllyStat(stat: string, amount: number) {
 
         const character_stats = MatchToStat.get(chosen_target);
-        console.log("cs", character_stats)
-        console.log("css", character_stats![stat])
+
         if (character_stats && character_stats[stat] !== undefined) {
             const stat_with_deduction = character_stats[stat]! - amount;
-            console.log("swd", stat_with_deduction)
+
             // Dynamically update the stat in the corresponding object
             const stats_object = (sm as any)[chosen_target + "_stats"];
-            console.log("original stats obj", stats_object)
+
             if (stats_object && typeof stats_object.set === "function") {
                 stats_object.set(stat, stat_with_deduction);
-                console.log("in second if")
-                console.log("get stat", stats_object.get(stat))
+
             }
-            console.log("after stats obj", stats_object)
+
         }
 
 
 
     }
 
-    const IndexToString: Map<number, string> = new Map
-        (
-            [
-                [1, "knight"],
-                [2, "dmage"],
-                [3, "assassin"],
-                [4, "rmage"]
-            ]
-        )
+
     const boss_attack_functions: Map<string, Function> = new Map(
         [
             [
                 "Shadow Blade", function ShadowBlade() {
-                    console.log("inside atk chosen", chosen_target)
+
                     return (
                         BossRNG
                             (
@@ -552,7 +542,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                     current_boss_attack: "Shadow Blade",
                                     min: 50,
                                     variance: 1.10,
-                                    atk_sfx: "placeholder",
+
                                     attack_type: "phys"
                                 }
                             )
@@ -563,7 +553,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [   //Targets 3, starting with the previously chosen
                 "Spheres of Madness", function SpheresOfMadness() {
-                    console.log("inside atk chosen", chosen_target)
+
                     return (
                         BossRNG(
                             {
@@ -571,7 +561,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 min: 35,
                                 variance: 1.10,
                                 secondary_targets: TargetMulti(2),
-                                atk_sfx: "placeholder",
+
                                 attack_type: "mag"
                             }
 
@@ -590,7 +580,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 current_boss_attack: "Devourment",
                                 min: 120,
                                 variance: 1.10,
-                                atk_sfx: "placeholder",
+
                                 attack_type: "phys"
                             }
                         )
@@ -616,7 +606,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 current_boss_attack: "Disintegration",
                                 min: 70,
                                 variance: 1.10,
-                                atk_sfx: "placeholder",
+
                                 attack_type: "phys"
                             }
                         )
@@ -628,7 +618,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [ //drops target's mag def
                 "Soul Crusher", function SoulCrusher() {
-                    console.log("inside atk chosen", chosen_target) //this is sometimes undefined - check prev step
+
                     if (Percentage() <= 0.40) {
                         if (MatchToStat.get(chosen_target)!.mdef >
                             min_max_vals_map.get("player")!.m_def.min) {
@@ -645,7 +635,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 current_boss_attack: "Soul Crusher",
                                 min: 70,
                                 variance: 1.10,
-                                atk_sfx: "placeholder",
+
                                 attack_type: "mag"
                             }
                         )
@@ -680,7 +670,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 current_boss_attack: "Inversion",
                                 min: 0,
                                 variance: 0,
-                                atk_sfx: "placeholder",
+
                                 secondary_targets: TargetMulti(3),
                                 attack_type: "mag"
                             }
@@ -697,7 +687,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 current_boss_attack: "Frozen Soul",
                                 min: 25,
                                 variance: 1.10,
-                                atk_sfx: "placeholder",
+
                                 attack_type: "mag"
                             }
                         )
@@ -712,7 +702,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 current_boss_attack: "Unending Grudge",
                                 min: 25,
                                 variance: 1.10,
-                                atk_sfx: "placeholder",
+
                                 attack_type: "mag"
                             }
                         )
@@ -724,13 +714,13 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                 "Unholy Symphony", function UnholySymphony() {
                     //min given to the RNG is the total 
                     //of the past 10 attacks 
-                    console.log("prev inside us", prev_dmg)
+
                     const last_ten_vals = prev_dmg.slice(-10); //without this you'd be entering phase 3 with a massive list lol 
                     const total = last_ten_vals.reduce(
                         (accumulator, currentValue) =>
                             accumulator + currentValue);
                     prev_dmg = []//reset
-                    console.log("total", total)
+
                     return (
                         BossRNG(
                             {
@@ -753,7 +743,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 current_boss_attack: "Death's Touch",
                                 min: 45, //but lower chance of inflicting status
                                 variance: 1.10,
-                                atk_sfx: "placeholder",
+
                                 attack_type: "phys"
 
                             }
@@ -770,7 +760,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                                 current_boss_attack: "Chaos Blade",
                                 min: 135,
                                 variance: 1.10,
-                                atk_sfx: "placeholder",
+
                                 attack_type: "phys"
                             }
                         )
@@ -782,7 +772,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     );
     function Attack() {
         chosen_num = GetRandomNumber(attacks_grab_bag);
-        console.log("chosen_num", chosen_num)
+
         boss_attack_functions.get(attack_nums.get(chosen_num)!)!();
     }
 
@@ -840,13 +830,13 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             break;
     }
 
-    console.log("potential targets", potential_targets)
+
     secondary_targets.push(chosen_target)
 
     //failsafes and convert to indexes 
 
     const filtered_secondary_targets = secondary_targets.filter(target => target !== undefined)
-    console.log("filtered sec tar", filtered_secondary_targets)
+
     filtered_secondary_targets.forEach(target => {
         final_targets.push(NameToIndex.get(target)!)
 
@@ -860,12 +850,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
         final_targets.push(NameToIndex.get(potential_targets[(Math.random() * potential_targets.length)])!)
     }
     final_targets = final_targets.filter(target => target !== undefined);
-    for (let i of final_targets) {
-        console.log("i", i)
 
-    }
-    console.log("final before return", final_targets)
-    console.log("is active", is_my_turn_active)
     if (is_my_turn_active) {
         last_boss_attacks = [];
         final_targets = [];
@@ -935,7 +920,6 @@ export const BossAttackArea: React.FC = () => {
             setIsBossAttacking(false);
 
         }, 3000);
-        console.log("current_boss_attack", current_boss_attack)
     }, [current_boss_attack]);
 
 

@@ -41,14 +41,6 @@ export const getConvertToStat = () => {
 
     let phys = sm.boss_stats.get('p_def');
     let mag = sm.boss_stats.get('m_def');
-    console.log("phys: ", phys);
-    console.log("mag: ", mag);
-
-    console.log("difficulty_stats: ", difficulty_stats);
-
-    console.log("selected_difficulty: ", selected_difficulty);
-
-    console.log("diff stats def", difficulty_stats!.def);
 
     return {
         "phys":
@@ -91,10 +83,10 @@ interface RNGProps {
     is_cl?: boolean;
 }
 function RNG(props: RNGProps) {
-    console.log("in rng", selected_difficulty)
+
     const sfx = new Audio(AttackSfxLookup[props.sfx_type]);
     props.is_ult ? sfx.volume = 0.8 : sfx.volume = 0.3;
-    console.log("sfx: ", sfx);
+
     let play_count = 0;
     function playNext() {
         if (props.sfx_count) {
@@ -144,12 +136,7 @@ function RNG(props: RNGProps) {
         calculated_damage *= 1.5;
         crit_sfx.play();
     }
-    console.log("is crit: " + crit);
 
-    console.log("calculated damage: " + calculated_damage);
-    //won't update properly if I don't do this first?
-    //this is correct
-    console.log("in rng", selected_difficulty)
     const converted = getConvertToStat();
 
     //account for defense
@@ -157,7 +144,6 @@ function RNG(props: RNGProps) {
         (calculated_damage / converted[props.phys_or_mag])
     ).toFixed(2);
 
-    //console.log("def value", converted[props.phys_or_mag])
     let crit_msg: boolean;
     //don't show the crit message if it's cl, it would be misleading
     //since it's multiple attacks
@@ -166,7 +152,7 @@ function RNG(props: RNGProps) {
     } else {
         crit_msg = false;
     }
-    console.log("attack result: ", parseInt(result));
+
     return {
         result: parseInt(result),
         crit: crit_msg,
@@ -184,7 +170,7 @@ function StatBuff(stat_map: Map<string, number | undefined>,
     stat_map.forEach((value, key, map) => {
         if (value !== undefined && value < max_val) {
             map.set(key, value + increment);
-            console.log(key, map.get(key));
+
 
         }
     }
@@ -534,11 +520,11 @@ export const attacks_map: Map<string, Function> = new Map([
     [
         'Smokescreen', function Smokescreen() {
             const as_ev = sm.assassin_stats.get("ev")!
-            console.log("prev iv", as_ev)
+
             const max_ev = min_max_vals_map.get("player")!.ev!.max
             if (as_ev < max_ev) {
                 sm.assassin_stats.set("ev", as_ev + 0.15)
-                console.log("new as ev", sm.assassin_stats.get("ev"))
+
             }
         }
     ],
@@ -707,13 +693,13 @@ export function PlayerAttack(attack: string) {
 
 
     selected_attack = attack;
-    console.log("inside playerattack,selected attack:" + attack);
+
     //function returns a damage value
     //temp, will use a global message to display the result
     let check = attacks_map.get(attack);
     if (check) {
         let result = check();
-        console.log("result type:", typeof result)
+
 
         if (typeof result === "object") {
             sm.boss_stats.set("hp", sm.boss_stats.get("hp")! - result.result)
@@ -751,8 +737,6 @@ const UltPathLookup: Map<string, string> = new Map(
 
 export const ShowAttack: React.FC<Attack> = ({ attack, player, is_ultima }) => {
     //seperate image lookup for the ults
-    console.log("inside show attack:" + player, attack)
-    console.log("is_ultima:", is_ultima)
 
     useEffect(() => {
         AttackAnimation()
