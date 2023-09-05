@@ -1008,25 +1008,32 @@ after item use so button doesn't break*/
         console.log("target", target)
         console.log("target mp map fetch:", MatchToMpMap.get(target)!)
         console.log("target max mp map fetch:", MatchToMaxMpMap.get(target)!)
-        if (MatchToMpMap.get(target)! >= MatchToMaxMpMap.get(target)!) {
+        if (TargetToStatus.get(target)!.includes("dead")) {
+            setMessage("This character is dead!");
+            ShowMessage()
+
+        } else if (MatchToMpMap.get(target)! >= MatchToMaxMpMap.get(target)!) {
             setMessage("This character is already at max MP!");
             ShowMessage();
 
         } else {
             UseItem(currentItem, itemTarget!)
         }
-
     }
 
     function CheckHpItemValidity(target: string) {
         console.log("target", target)
         console.log("target hp map fetch:", MatchToHpMap.get(target)!)
         console.log("target max hp map fetch:", MatchToMaxHpMap.get(target)!)
-        if (MatchToHpMap.get(target)! >= MatchToMaxHpMap.get(target)!) {
+        if (TargetToStatus.get(target)!.includes("dead")) {
+            setMessage("This character is dead!");
+            ShowMessage();
+        } else if (MatchToHpMap.get(target)! >= MatchToMaxHpMap.get(target)!) {
             setMessage("This character is already at max HP!");
             ShowMessage();
         } else {
             UseItem(currentItem, itemTarget!)
+
         }
     }
     //Forces it to wait till the target has been set, eliminating latency issues
@@ -1069,7 +1076,7 @@ after item use so button doesn't break*/
             }
         }
     }, [itemTarget]);
-
+    //this is the subtraction one
     function HandleMP(attack: string, attack_encyclopedia_entry: number) {
         switch (player) {
             case "knight":
