@@ -1015,33 +1015,33 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
         }
     }
 
-    function CheckMpItemValidity(target: string) {
+    function Recalibrate(message: string): void {
+        setMessage(message);
+        ShowMessage()
+        setTimeout(() => {
+            setSelectedCharacter(null)//forces a re-calibration
+
+        }, 1000);
+
+    }
+
+    function CheckHpMpItemValidity(target: string, type: string) {
 
         if (TargetToStatus.get(target)!.includes("dead")) {
-            setMessage("This character is dead!");
-            ShowMessage()
+            Recalibrate("This character is dead!")
+        } else if (type === "hp" && MatchToHpMap.get(target)! >= MatchToMaxHpMap.get(target)!) {
+            Recalibrate("This character is already at max HP!")
 
-        } else if (MatchToMpMap.get(target)! >= MatchToMaxMpMap.get(target)!) {
-            setMessage("This character is already at max MP!");
-            ShowMessage();
+        } else if (type === "mp" && MatchToMpMap.get(target)! >= MatchToMaxMpMap.get(target)!) {
+            Recalibrate("This character is already at max MP!")
 
         } else {
             UseItem(currentItem, itemTarget!)
         }
+
     }
 
-    function CheckHpItemValidity(target: string) {
 
-        if (TargetToStatus.get(target)!.includes("dead")) {
-            setMessage("This character is dead!");
-            ShowMessage();
-        } else if (MatchToHpMap.get(target)! >= MatchToMaxHpMap.get(target)!) {
-            setMessage("This character is already at max HP!");
-            ShowMessage();
-        } else {
-            UseItem(currentItem, itemTarget!)
-        }
-    }
     //Forces it to wait till the target has been set, eliminating latency issues
     useEffect(() => {
         //Everything must be reset here or it gets all weird and buggy
@@ -1057,11 +1057,11 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                     break;
                 //hp items
                 case iv.player_inventory.get(currentItem)!.type === "hp":
-                    CheckHpItemValidity(itemTarget)
+                    CheckHpMpItemValidity(itemTarget, "hp")
                     break;
                 //mp items
                 case iv.player_inventory.get(currentItem)!.type === "mp":
-                    CheckMpItemValidity(itemTarget)
+                    CheckHpMpItemValidity(itemTarget, "mp")
                     break;
                 //curse
                 case CheckStatusEffectValidity("de-curse", itemTarget, "curse"):
