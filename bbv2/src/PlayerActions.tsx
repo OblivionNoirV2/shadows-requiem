@@ -599,7 +599,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         variance: 1.10,
                         is_ult: false,
                         miss_rate: 0.05,
-                        sfx_type: "swoosh"//wind sort of thing
+                        sfx_type: "clock tick"//wind sort of thing
                     }
                 )
             )

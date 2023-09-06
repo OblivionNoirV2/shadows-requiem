@@ -215,12 +215,11 @@ export const BossArea: React.FC<BossAreaProps> = ({
     const StageToAttackChance: Map<number, number> = new Map
         (
             [
-                [1, 0.75],
+                [1, 0.70],
                 [2, 0.80],
-                [3, 0.85]
+                [3, 0.90]
             ]
         )
-
 
     //lock player menus while boss is attacking
     useEffect(() => {
