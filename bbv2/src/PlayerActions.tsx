@@ -63,7 +63,6 @@ export const getConvertToStat = () => {
 //for moves that don't use rng just look it up in the function itself
 let miss_sfx = new Audio(AttackSfxLookup['miss']);
 let crit_sfx = new Audio(AttackSfxLookup['crit']);
-let healsfx = new Audio(AttackSfxLookup["heal"]);
 let statup_sfx = new Audio(AttackSfxLookup["statup"]);
 let statdown_sfx = new Audio(AttackSfxLookup["statdown"]);
 let glass_shatter = new Audio(AttackSfxLookup["glass"]);

@@ -407,3 +407,25 @@ export function MpMapContextProvider({ children }: { children: React.ReactElemen
     )
 
 }
+
+interface SelectedCharacterContextValue {
+    selectedCharacter: string | null;
+    setSelectedCharacter: (value: string | null) => void;
+}
+
+export const SelectedCharacterContext = createContext<SelectedCharacterContextValue>(
+    {
+        selectedCharacter: null,
+        setSelectedCharacter: () => { }
+    }
+);
+
+export function SelectedCharacterContextProvider({ children }: { children: React.ReactElement }) {
+    const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
+
+    return (
+        <SelectedCharacterContext.Provider value={{ selectedCharacter, setSelectedCharacter }}>
+            {children}
+        </SelectedCharacterContext.Provider>
+    )
+}

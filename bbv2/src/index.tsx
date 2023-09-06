@@ -25,7 +25,8 @@ import {
   BossAttackingContextProvider,
   PrecipTypeContextProvider,
   HpMapContextProvider,
-  MpMapContextProvider
+  MpMapContextProvider,
+  SelectedCharacterContextProvider
 
 
 }
@@ -57,7 +58,9 @@ root.render(
                                       <PrecipTypeContextProvider>
                                         <HpMapContextProvider>
                                           <MpMapContextProvider>
-                                            <App />
+                                            <SelectedCharacterContextProvider>
+                                              <App />
+                                            </SelectedCharacterContextProvider>
                                           </MpMapContextProvider>
                                         </HpMapContextProvider>
                                       </PrecipTypeContextProvider>

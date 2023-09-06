@@ -27,6 +27,7 @@ import {
     RmageNameContext,
     BossAttackingContext,
     PrecipTypeContext,
+    SelectedCharacterContext
 
 } from './Context';
 
@@ -729,6 +730,8 @@ all as one string*/
 
 export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, MpMap }) => {
 
+    const { selectedCharacter, setSelectedCharacter } = useContext(SelectedCharacterContext);
+
     const current_attacks = player_attacks[player];
     //if it's active, hide the other options
     const [isAttacksActive, setIsAttacksActive] = useState(false);
@@ -789,6 +792,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
                 sm.player_pdef_map.set(player, sm.min_max_vals_map.get("player")!.p_def.max)
             }
         }
+        setSelectedCharacter(null);
         setTurnNumber(TurnNumber + 1)
     }
 
@@ -888,8 +892,6 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
     //type is hp, mp, status. Add it to the dictionairy
     function UseItem(item: string, target: string) {
         const item_details = iv.player_inventory.get(item);
-        //for future score
-        Occurences.set("item", (Occurences.get("item")! + 1))
 
         //use the return value to determine what happens
         //number means it heals hp or mp. string means 
@@ -901,7 +903,7 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
 
 
         function HealSwitch(target: string, amount: number) {
-            AsLongAsItWorks()
+
             //can probably actually use the one in boss algo for this
             switch (target) {
                 case "knight":
@@ -922,19 +924,9 @@ export const PlayerMenu: React.FC<PlayerMenuProps> = ({ player, isPlayerTurn, Mp
             }
         }
 
-        function AsLongAsItWorks() {
-            /*forces it to backtrack and recalibrate the mp values 
-after item use so button doesn't break*/
-            setIsAttackMade(true)
-            setTimeout(() => {
-                setIsAttackMade(false);
-            }, 1000)
 
-
-        }
 
         function MpSwitch(target: string, amount: number) {
-            AsLongAsItWorks()
 
             switch (target) {
                 case "knight":
@@ -998,6 +990,9 @@ after item use so button doesn't break*/
             iv.player_inventory.set(item, item_details);
 
         }
+        setTurnNumber(TurnNumber + 1)
+        setSelectedCharacter(null)
+
     };
     //change "freeze" to "frozen", etc for proper formatting
     const FixMessage: Map<string, string> = new Map(
@@ -1394,7 +1389,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     bossStage, setBossStage }) => {
     //state holds a string to hold the selected character, or null to reset it
     //default null because no outline should be shown on load
-    const [selectedCharacter, setSelectedCharacter] = useState<string | null>(null);
+    const { selectedCharacter, setSelectedCharacter } = useContext(SelectedCharacterContext);
+
     const { isAttackAreaShown, setIsAttackAreaShown } = useContext(AttackShownContext);
     const { message, setMessage } = useContext(MessageContext);
     const { currentAttack, setCurrentAttack } = useContext(CurrentAttackContext);
