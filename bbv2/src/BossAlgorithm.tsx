@@ -380,24 +380,28 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
 
     }
     function DeductHP(target: string, final_dmg: number) {
-        switch (target) {
-            case "knight":
-                sm.knight_stats.set("hp", sm.knight_stats.get("hp")! - final_dmg);
-                MatchToHpMap.set("knight", sm.knight_stats.get("hp")!);
-                break;
-            case "dmage":
-                sm.dmage_stats.set("hp", sm.dmage_stats.get("hp")! - final_dmg);
-                MatchToHpMap.set("dmage", sm.dmage_stats.get("hp")!);
-                break;
-            case "assassin":
-                sm.assassin_stats.set("hp", sm.assassin_stats.get("hp")! - final_dmg);
-                MatchToHpMap.set("assassin", sm.assassin_stats.get("hp")!);
-                break;
-            case "rmage":
-                sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - final_dmg);
-                MatchToHpMap.set("rmage", sm.rmage_stats.get("hp")!);
-                break;
-        }
+        setTimeout(() => {
+            switch (target) {
+                case "knight":
+                    sm.knight_stats.set("hp", sm.knight_stats.get("hp")! - final_dmg);
+                    MatchToHpMap.set("knight", sm.knight_stats.get("hp")!);
+                    break;
+                case "dmage":
+                    sm.dmage_stats.set("hp", sm.dmage_stats.get("hp")! - final_dmg);
+                    MatchToHpMap.set("dmage", sm.dmage_stats.get("hp")!);
+                    break;
+                case "assassin":
+                    sm.assassin_stats.set("hp", sm.assassin_stats.get("hp")! - final_dmg);
+                    MatchToHpMap.set("assassin", sm.assassin_stats.get("hp")!);
+                    break;
+                case "rmage":
+                    sm.rmage_stats.set("hp", sm.rmage_stats.get("hp")! - final_dmg);
+                    MatchToHpMap.set("rmage", sm.rmage_stats.get("hp")!);
+                    break;
+            }
+
+
+        }, 3000)
 
     }
     //Match the target to their respective stats and get the final output
