@@ -135,7 +135,8 @@ let NameToStats: Map<string, number | sm.StatMap> = new Map
 export const BossArea: React.FC<BossAreaProps> = ({
     selectedCharacter, setSelectedCharacter, bossStage, setBossStage }) => {
     //just in case
-    const { precipType, setPrecipType } = useContext(PrecipTypeContext)
+    const { precipType, setPrecipType } = useContext(PrecipTypeContext);
+    const { message, setMessage } = useContext(MessageContext);
     useEffect(() => {
         setPrecipType("flake")
 
@@ -208,7 +209,17 @@ export const BossArea: React.FC<BossAreaProps> = ({
                 sm.rmage_stats.set("hp", (sm.rmage_stats.get("hp")! - sm.rmage_stats.get("max_hp")! * 0.05))
         }
     };
+    const { isAttackMade, setIsAttackMade } = useContext(AttackMadeContext);
 
+
+    const StageToAttackChance: Map<number, number> = new Map
+        (
+            [
+                [1, 0.75],
+                [2, 0.80],
+                [3, 0.85]
+            ]
+        )
 
 
     //lock player menus while boss is attacking
@@ -218,82 +229,98 @@ export const BossArea: React.FC<BossAreaProps> = ({
         //something like 70% -> 80% -> 90%
 
         if (TurnNumber % 2 === 0) {
+            if (Percentage() > StageToAttackChance.get(bossStage)!) {
+                setMessage("The King is waiting...")
+                //shows message if boss decided to wait 
+                setIsAttackMade(true)
+                setTimeout(() => {
+                    setIsAttackMade(false);
+                }, 1000)
+                setTurnNumber(TurnNumber + 1)
 
-            setIsBossAttacking(true)
-            setSelectedCharacter(null); //Prevents being able to use 
-            //the menu if the character that died was previously
-            // selected
-            //If the chosen attack(returned) has a chance to inflict
-            //a status effect, do that here
-            const boss_return = bossAttackAlgo({
-                phase: bossStage,
-                knight_status: KnightStatus,
-                dmage_status: DmageStatus,
-                assassin_status: AssassinStatus,
-                rmage_status: RmageStatus,
-                current_turn: TurnNumber,
-            });
+            } else {
 
-            boss_return.final_targets.forEach((item: number) => {
-                targets_list.push(IndexToName.get(item))
-            });
-            //for single target attacks
-            const single_target = boss_return.final_targets[boss_return.final_targets.length - 1];
+                setIsBossAttacking(true)
+                setSelectedCharacter(null); //Prevents being able to use 
+                //the menu if the character that died was previously
+                // selected
+                //If the chosen attack(returned) has a chance to inflict
+                //a status effect, do that here
+                const boss_return = bossAttackAlgo({
+                    phase: bossStage,
+                    knight_status: KnightStatus,
+                    dmage_status: DmageStatus,
+                    assassin_status: AssassinStatus,
+                    rmage_status: RmageStatus,
+                    current_turn: TurnNumber,
+                });
 
-            function SingleTargetSpecial(percentage: number,
-                single_target: number, effect: string) {
-                if (Percentage() < percentage) {
-                    const setTarget = player_set_statuses.get(single_target);
-                    if (!player_statuses.get(single_target)!.includes(effect)) {
-                        setTarget!(prevStatus => [...prevStatus, effect])
-                    }
-                }
-            };
-            //from here on we're using indexes
-            switch (boss_return.last_boss_attacks[last_boss_attacks.length - 1]) {
-                case "Devourment":
-                    //heal boss by prev dmg * 2
-                    if (typeof (prev_dmg[prev_dmg.length - 1] * 2) === 'number') {
-                        sm.boss_stats.set("hp", sm.boss_stats.get("hp")! +
-                            (prev_dmg[prev_dmg.length - 1] * 2))
+                boss_return.final_targets.forEach((item: number) => {
+                    targets_list.push(IndexToName.get(item))
+                });
+                //for single target attacks
+                const single_target = boss_return.final_targets[boss_return.final_targets.length - 1];
 
-                    }
-                    break;
-                case "Frozen Soul":
-                    SingleTargetSpecial(
-                        .25,
-                        single_target,
-                        "freeze"
-                    )
-                    break;
-                case "Unending Grudge":
-                    SingleTargetSpecial(
-                        .25,
-                        single_target,
-                        "poison"
-                    )
-                    break;
-                case "Death's Touch":
-                    SingleTargetSpecial(
-                        .15,
-                        single_target,
-                        "curse"
-                    )
-                    break;
-                case "Unholy Symphony": //this uses foreach since it's multi-target
-                    boss_return.final_targets.forEach((target: number) => {
-                        if (Percentage() < 0.33) {
-                            //apply curse to the target
-                            const setTarget = player_set_statuses.get(target)
-                            if (!player_statuses.get(target)!.includes("curse")) {
-                                setTarget!(prevStatus => [...prevStatus, "curse"])
-                            }
+                function SingleTargetSpecial(percentage: number,
+                    single_target: number, effect: string) {
+                    if (Percentage() < percentage) {
+                        const setTarget = player_set_statuses.get(single_target);
+                        if (!player_statuses.get(single_target)!.includes(effect)) {
+                            setTarget!(prevStatus => [...prevStatus, effect])
                         }
-                    })
-                    break;
+                    }
+                };
+                //from here on we're using indexes
+                switch (boss_return.last_boss_attacks[last_boss_attacks.length - 1]) {
+                    case "Devourment":
+                        //heal boss by prev dmg * 2
+                        if (typeof (prev_dmg[prev_dmg.length - 1] * 2) === 'number') {
+                            sm.boss_stats.set("hp", sm.boss_stats.get("hp")! +
+                                (prev_dmg[prev_dmg.length - 1] * 2))
 
+                        }
+                        break;
+                    case "Frozen Soul":
+                        SingleTargetSpecial(
+                            .25,
+                            single_target,
+                            "freeze"
+                        )
+                        break;
+                    case "Unending Grudge":
+                        SingleTargetSpecial(
+                            .25,
+                            single_target,
+                            "poison"
+                        )
+                        break;
+                    case "Death's Touch":
+                        SingleTargetSpecial(
+                            .15,
+                            single_target,
+                            "curse"
+                        )
+                        break;
+                    case "Unholy Symphony": //this uses foreach since it's multi-target
+                        boss_return.final_targets.forEach((target: number) => {
+                            if (Percentage() < 0.33) {
+                                //apply curse to the target
+                                const setTarget = player_set_statuses.get(target)
+                                if (!player_statuses.get(target)!.includes("curse")) {
+                                    setTarget!(prevStatus => [...prevStatus, "curse"])
+                                }
+                            }
+                        })
+                        break;
+                }
 
             }
+
+
+
+
+
+
 
         }
 
