@@ -19,7 +19,6 @@ import {
 //adds a multiplier or divider, depending
 import { selected_difficulty } from './StartMenu';
 import anime from 'animejs/lib/anime.es.js'
-import { is_my_turn_active } from './PlayerActions';
 import { MatchToHpMap } from './hpmpmaps';
 
 
@@ -851,10 +850,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     }
     final_targets = final_targets.filter(target => target !== undefined);
 
-    if (is_my_turn_active) {
-        last_boss_attacks = [];
-        final_targets = [];
-    }
+
     return {
         last_boss_attacks,
         final_targets
@@ -870,13 +866,13 @@ const attack_nums: Map<number, string> = new Map(
         [4, "Disintegration"], //med phys dmg, Med chance to lower phys def
         [5, "Soul Crusher"], //med mag dmg, med chance to lower mag def
         //phase 2
-        [6, "Inversion"], //Strong chance of occuring whenever all allies have lower mp than 25% of their max hp
-        [7, "Frozen Soul"],
-        [8, "Unending Grudge"],
+        [6, "Inversion"], //occurs whenever all allies have lower mp than 25% of their max hp
+        [7, "Frozen Soul"], //med dmg, low freeze chance
+        [8, "Unending Grudge"], //med dmg, low poison chance
         //phase 3
-        [9, "Unholy Symphony"], //Runs every 10 turns
-        [10, "Death's Touch"],
-        [11, "Chaos Blade"]
+        [9, "Unholy Symphony"], //ultimate, Runs every 10 turns. 4 random targets (can double up), low chance to curse each
+        [10, "Death's Touch"], //med dmg, low curse chance
+        [11, "Chaos Blade"] //very heavy single target phys dmg
     ]
 );
 

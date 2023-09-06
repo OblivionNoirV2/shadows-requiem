@@ -51,7 +51,7 @@ import { Occurences } from './victory';
 
 import { Percentage } from './BossAlgorithm';
 import { NameToIndex } from './BossAlgorithm';
-import { is_my_turn_active } from './PlayerActions';
+
 import { set } from 'animejs';
 
 
@@ -218,83 +218,83 @@ export const BossArea: React.FC<BossAreaProps> = ({
         //something like 70% -> 80% -> 90%
 
         if (TurnNumber % 2 === 0) {
-            if (is_my_turn_active === false) {
-                setIsBossAttacking(true)
-                setSelectedCharacter(null); //Prevents being able to use 
-                //the menu if the character that died was previously
-                // selected
-                //If the chosen attack(returned) has a chance to inflict
-                //a status effect, do that here
-                const boss_return = bossAttackAlgo({
-                    phase: bossStage,
-                    knight_status: KnightStatus,
-                    dmage_status: DmageStatus,
-                    assassin_status: AssassinStatus,
-                    rmage_status: RmageStatus,
-                    current_turn: TurnNumber,
-                });
 
-                boss_return.final_targets.forEach((item: number) => {
-                    targets_list.push(IndexToName.get(item))
-                });
-                //for single target attacks
-                const single_target = boss_return.final_targets[boss_return.final_targets.length - 1];
+            setIsBossAttacking(true)
+            setSelectedCharacter(null); //Prevents being able to use 
+            //the menu if the character that died was previously
+            // selected
+            //If the chosen attack(returned) has a chance to inflict
+            //a status effect, do that here
+            const boss_return = bossAttackAlgo({
+                phase: bossStage,
+                knight_status: KnightStatus,
+                dmage_status: DmageStatus,
+                assassin_status: AssassinStatus,
+                rmage_status: RmageStatus,
+                current_turn: TurnNumber,
+            });
 
-                function SingleTargetSpecial(percentage: number,
-                    single_target: number, effect: string) {
-                    if (Percentage() < percentage) {
-                        const setTarget = player_set_statuses.get(single_target);
-                        if (!player_statuses.get(single_target)!.includes(effect)) {
-                            setTarget!(prevStatus => [...prevStatus, effect])
-                        }
+            boss_return.final_targets.forEach((item: number) => {
+                targets_list.push(IndexToName.get(item))
+            });
+            //for single target attacks
+            const single_target = boss_return.final_targets[boss_return.final_targets.length - 1];
+
+            function SingleTargetSpecial(percentage: number,
+                single_target: number, effect: string) {
+                if (Percentage() < percentage) {
+                    const setTarget = player_set_statuses.get(single_target);
+                    if (!player_statuses.get(single_target)!.includes(effect)) {
+                        setTarget!(prevStatus => [...prevStatus, effect])
                     }
-                };
-                //from here on we're using indexes
-                switch (boss_return.last_boss_attacks[last_boss_attacks.length - 1]) {
-                    case "Devourment":
-                        //heal boss by prev dmg * 2
-                        if (typeof (prev_dmg[prev_dmg.length - 1] * 2) === 'number') {
-                            sm.boss_stats.set("hp", sm.boss_stats.get("hp")! +
-                                (prev_dmg[prev_dmg.length - 1] * 2))
-
-                        }
-                        break;
-                    case "Frozen Soul":
-                        SingleTargetSpecial(
-                            .25,
-                            single_target,
-                            "freeze"
-                        )
-                        break;
-                    case "Unending Grudge":
-                        SingleTargetSpecial(
-                            .25,
-                            single_target,
-                            "poison"
-                        )
-                        break;
-                    case "Death's Touch":
-                        SingleTargetSpecial(
-                            .15,
-                            single_target,
-                            "curse"
-                        )
-                        break;
-                    case "Unholy Symphony": //this uses foreach since it's multi-target
-                        boss_return.final_targets.forEach((target: number) => {
-                            if (Percentage() < 0.33) {
-                                //apply curse to the target
-                                const setTarget = player_set_statuses.get(target)
-                                if (!player_statuses.get(target)!.includes("curse")) {
-                                    setTarget!(prevStatus => [...prevStatus, "curse"])
-                                }
-                            }
-                        })
-                        break;
-
-
                 }
+            };
+            //from here on we're using indexes
+            switch (boss_return.last_boss_attacks[last_boss_attacks.length - 1]) {
+                case "Devourment":
+                    //heal boss by prev dmg * 2
+                    if (typeof (prev_dmg[prev_dmg.length - 1] * 2) === 'number') {
+                        sm.boss_stats.set("hp", sm.boss_stats.get("hp")! +
+                            (prev_dmg[prev_dmg.length - 1] * 2))
+
+                    }
+                    break;
+                case "Frozen Soul":
+                    SingleTargetSpecial(
+                        .25,
+                        single_target,
+                        "freeze"
+                    )
+                    break;
+                case "Unending Grudge":
+                    SingleTargetSpecial(
+                        .25,
+                        single_target,
+                        "poison"
+                    )
+                    break;
+                case "Death's Touch":
+                    SingleTargetSpecial(
+                        .15,
+                        single_target,
+                        "curse"
+                    )
+                    break;
+                case "Unholy Symphony": //this uses foreach since it's multi-target
+                    boss_return.final_targets.forEach((target: number) => {
+                        if (Percentage() < 0.33) {
+                            //apply curse to the target
+                            const setTarget = player_set_statuses.get(target)
+                            if (!player_statuses.get(target)!.includes("curse")) {
+                                setTarget!(prevStatus => [...prevStatus, "curse"])
+                            }
+                        }
+                    })
+                    break;
+
+
             }
+
         }
 
         /*
@@ -513,7 +513,7 @@ export const BossArea: React.FC<BossAreaProps> = ({
             document.documentElement.style.filter = "brightness(75%)"
             setBossStage(2);
         } else {
-            setBossStage(3); //25%
+            setBossStage(3); //33%
             document.documentElement.style.filter = "brightness(50%)"
 
         }
@@ -1088,11 +1088,23 @@ after item use so button doesn't break*/
 
         {
             setTimeout(() => {
-                setTurnNumber(TurnNumber + 1)
-                //for future score
-                Occurences.set("turn", (Occurences.get("turn")! + 1))
-                setIsAttackAreaShown(false);
-                setIsAttackMade(false);
+                if (attack == "My Turn") {
+                    setTurnNumber(TurnNumber - 2)
+                    //for future score
+                    Occurences.set("turn", (Occurences.get("turn")! - 2))
+                    setIsAttackAreaShown(false);
+                    setIsAttackMade(false);
+
+                } else {
+                    setTurnNumber(TurnNumber + 1)
+                    //for future score
+                    //for future score
+                    Occurences.set("turn", (Occurences.get("turn")! + 1))
+                    setIsAttackAreaShown(false);
+                    setIsAttackMade(false);
+
+                }
+
 
             }, 2000);
         }

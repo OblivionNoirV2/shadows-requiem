@@ -15,7 +15,6 @@ import { AttackAnimation, Percentage } from './BossAlgorithm';
 import { Stats } from './StatManagement';
 type phys_or_mag = "phys" | "mag"
 
-export let is_my_turn_active: boolean = false;
 
 const player_ev_map: Map<string, number | undefined> = new Map
     (
@@ -590,7 +589,6 @@ export const attacks_map: Map<string, Function> = new Map([
     [
         'My Turn', function MyTurn() {
 
-            is_my_turn_active = true;
 
             return (
                 RNG(
@@ -686,10 +684,6 @@ export let is_attack_triggered: boolean = false;
 //cannot use state here, so we're doing it this way
 //maybe change to use the map
 export function PlayerAttack(attack: string) {
-    if (is_my_turn_active === true) {
-        is_my_turn_active = false;
-    }
-
 
 
     selected_attack = attack;

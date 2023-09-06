@@ -147,7 +147,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             ],
             [
                 'My Turn', {
-                    description: "Deals light physical damage and prevents the King from attacking for one turn.",
+                    description: "Deals light physical damage and forces the turn counter back by two. The King only attacks on even turns, so use this to your advantage",
                     mp_cost: 40
                 }
             ],
