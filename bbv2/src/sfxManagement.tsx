@@ -18,6 +18,7 @@ import army from './assets/sound/sfx/army.mp3';
 import sn from './assets/sound/sfx/SN.mp3';
 import us from './assets/sound/sfx/US.wav';
 import ct from './assets/sound/sfx/clocktick.wav';
+import crush from './assets/sound/sfx/crush.mp3';
 export function playClickSfx() {
     const click = new Audio(clicksfx);
     click.play();
@@ -43,5 +44,6 @@ export const AttackSfxLookup: { [name: string]: string } = {
     'army': army,
     'sn': sn,
     'US': us,//unholy symphony
-    'clock tick': ct
+    'clock tick': ct,
+    'crush': crush,
 }

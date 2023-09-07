@@ -545,7 +545,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                             (
                                 {
                                     current_boss_attack: "Shadow Blade",
-                                    min: 50,
+                                    min: 60,
                                     variance: 1.10,
 
                                     attack_type: "phys"
@@ -563,7 +563,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         BossRNG(
                             {
                                 current_boss_attack: "Spheres of Madness",
-                                min: 35,
+                                min: 45,
                                 variance: 1.10,
                                 secondary_targets: TargetMulti(2),
 
@@ -583,7 +583,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         BossRNG(
                             {
                                 current_boss_attack: "Devourment",
-                                min: 120,
+                                min: 140,
                                 variance: 1.10,
 
                                 attack_type: "phys"
@@ -609,7 +609,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         BossRNG(
                             {
                                 current_boss_attack: "Disintegration",
-                                min: 70,
+                                min: 90,
                                 variance: 1.10,
 
                                 attack_type: "phys"
@@ -638,7 +638,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         BossRNG(
                             {
                                 current_boss_attack: "Soul Crusher",
-                                min: 70,
+                                min: 90,
                                 variance: 1.10,
 
                                 attack_type: "mag"
@@ -690,7 +690,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         BossRNG(
                             {
                                 current_boss_attack: "Frozen Soul",
-                                min: 25,
+                                min: 45,
                                 variance: 1.10,
 
                                 attack_type: "mag"
@@ -705,7 +705,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         BossRNG(
                             {
                                 current_boss_attack: "Unending Grudge",
-                                min: 25,
+                                min: 45,
                                 variance: 1.10,
 
                                 attack_type: "mag"
@@ -750,7 +750,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         BossRNG(
                             {
                                 current_boss_attack: "Death's Touch",
-                                min: 45, //but lower chance of inflicting status
+                                min: 65, //but lower chance of inflicting status
                                 variance: 1.10,
 
                                 attack_type: "phys"
@@ -767,7 +767,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                         BossRNG(
                             {
                                 current_boss_attack: "Chaos Blade",
-                                min: 135,
+                                min: 165,
                                 variance: 1.10,
 
                                 attack_type: "phys"

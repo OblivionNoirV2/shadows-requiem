@@ -40,7 +40,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             [
                 'Skull Crusher', {
                     description: "A brutal sword slam with a chance to lower physical defense for a moderate time. Heavy physical damage.",
-                    mp_cost: 15
+                    mp_cost: 25
                 }
             ],
             [

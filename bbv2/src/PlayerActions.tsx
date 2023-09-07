@@ -252,13 +252,13 @@ export const attacks_map: Map<string, Function> = new Map([
             return (
                 RNG(
                     {
-                        min: 10900,
+                        min: 17900,
                         crit_rate: 0.06,
                         phys_or_mag: "phys",
                         variance: 1.10,
                         is_ult: false,
                         miss_rate: 0.05,
-                        sfx_type: "sword"
+                        sfx_type: "crush"
                     }
                 )
             );
