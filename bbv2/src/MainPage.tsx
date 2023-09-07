@@ -282,21 +282,21 @@ export const BossArea: React.FC<BossAreaProps> = ({
                         break;
                     case "Frozen Soul":
                         SingleTargetSpecial(
-                            .25,
+                            .45,
                             single_target,
                             "freeze"
                         )
                         break;
                     case "Unending Grudge":
                         SingleTargetSpecial(
-                            .25,
+                            .45,
                             single_target,
                             "poison"
                         )
                         break;
                     case "Death's Touch":
                         SingleTargetSpecial(
-                            .15,
+                            .35,
                             single_target,
                             "curse"
                         )
@@ -1641,10 +1641,13 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
 
         const [knightVisualMp] = useState(sm.knight_stats.get("mp")!);
         const [knightVisualHp] = useState(sm.knight_stats.get("hp")!);
+
         const [dmageVisualMp] = useState(sm.dmage_stats.get("mp")!);
         const [dmageVisualHp] = useState(sm.dmage_stats.get("hp")!);
+
         const [assassinVisualMp] = useState(sm.assassin_stats.get("mp")!);
         const [assassinVisualHp] = useState(sm.assassin_stats.get("hp")!);
+
         const [rmageVisualMp] = useState(sm.rmage_stats.get("mp")!);
         const [rmageVisualHp] = useState(sm.rmage_stats.get("hp")!);
 

@@ -109,7 +109,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Minor HP Potion", {
                 description: "Restores 33% of a character's max HP.",
-                stock: 8,
+                stock: 12,
                 type: "hp",
                 amount: .33
             }
@@ -117,7 +117,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Major HP Potion", {
                 description: "Restores 66% of a character's max HP.",
-                stock: 6,
+                stock: 10,
                 type: "hp",
                 amount: .66
             }
@@ -125,7 +125,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Ultimate HP Potion", {
                 description: "Restores a character to max HP.",
-                stock: 4,
+                stock: 8,
                 type: "hp",
                 amount: 1
             }
@@ -133,7 +133,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Minor MP Potion", {
                 description: "Restores 33% of a character's max MP.",
-                stock: 8,
+                stock: 16,
                 type: "mp",
                 amount: .33
             }
@@ -141,7 +141,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Major MP Potion", {
                 description: "Restores 66% of a character's max MP.",
-                stock: 6,
+                stock: 12,
                 type: "mp",
                 amount: .66
             }
@@ -149,7 +149,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Ultimate MP Potion", {
                 description: "Restores a character to max MP.",
-                stock: 4,
+                stock: 8,
                 type: "mp",
                 amount: 1
             }
@@ -158,7 +158,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Minor Revive", {
                 description: "Revives a dead character with 33% of their max HP.",
-                stock: 6,
+                stock: 10,
                 type: "revive",
                 amount: .33
             }
@@ -166,7 +166,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Major Revive", {
                 description: "Revives a dead character with 66% of their max HP.",
-                stock: 4,
+                stock: 6,
                 type: "revive",
                 amount: .66//revives with 66% of max hp
 
@@ -175,7 +175,7 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
         [
             "Ultimate Revive", {
                 description: "Revives a dead character with full HP.",
-                stock: 2,
+                stock: 4,
                 type: "revive",
                 amount: 1
             }
