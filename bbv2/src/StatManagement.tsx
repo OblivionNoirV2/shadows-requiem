@@ -52,8 +52,8 @@ export const dmage_stats: StatMap = new Map
             ["max_hp", 470],
             ["mp", 270],
             ["max_mp", 270],
-            ["p_def", 1.20],
-            ["d_p_def", 1.20],
+            ["p_def", 1.10],
+            ["d_p_def", 1.10],
             ["m_def", 1.20],
             ["d_m_def", 1.20],
             ["ev", 0.07],
@@ -80,16 +80,16 @@ export const assassin_stats: StatMap = new Map
 export const rmage_stats: StatMap = new Map
     (
         [
-            ["hp", 375], //max is 375
-            ["max_hp", 375],
-            ["mp", 375],
-            ["max_mp", 530],
-            ["p_def", 1.00],
-            ["d_p_def", 1.00],
+            ["hp", 350],
+            ["max_hp", 350],
+            ["mp", 620],
+            ["max_mp", 620],
+            ["p_def", .85],
+            ["d_p_def", .85],
             ["m_def", 1.10],
             ["d_m_def", 1.10],
-            ["ev", 0.12],
-            ["d_ev", 0.12]
+            ["ev", 0.07],
+            ["d_ev", 0.07]
         ]
     );
 
@@ -98,7 +98,7 @@ export const rmage_stats: StatMap = new Map
 export const boss_stats: StatMap = new Map
     (
         [
-            ["hp", 780000],
+            ["hp", 300000],
             ["max_hp", 780000],
             ["p_def", 1.00],
             ["d_p_def", 1.00],

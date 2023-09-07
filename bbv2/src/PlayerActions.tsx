@@ -414,23 +414,7 @@ export const attacks_map: Map<string, Function> = new Map([
             )
         }
     ],
-    [
-        'Backstab', function Backstab() {
-            return (
-                RNG(
-                    {
-                        min: 4000,
-                        crit_rate: 0.50,
-                        phys_or_mag: "phys",
-                        variance: 1.10,
-                        is_ult: false,
-                        miss_rate: 0.025,
-                        sfx_type: "sword"
-                    }
-                )
-            )
-        }
-    ],
+
     [
         "Night's Whisper", function NightsWhisper() {
             //low damage, high chance to lower boss atk

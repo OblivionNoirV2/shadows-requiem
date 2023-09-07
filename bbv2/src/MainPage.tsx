@@ -1564,6 +1564,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         setIsAttackAreaShown(true);
         setCurrentAttack(attack);
         setIsAttackMade(true);
+        document.body.style.backgroundColor = "";
+        document.body.style.backgroundImage = "";
         document.body.style.backgroundImage = `url(${UltimaBgLookup.get(attack)})`;
         setTimeout(() => {
             document.body.style.backgroundImage = `url(${defaultbg})`;

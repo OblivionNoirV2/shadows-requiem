@@ -310,7 +310,7 @@ const EncylopediaPage = () => {
                 <hr></hr>
                 <p className="text-2xl mt-2">
                     Items are in limited stock, but use no MP.
-                    They do not use a turn and can be used on any character.
+                    They do use a turn and can be used on any character.
                 </p>
                 <hr className="my-2"></hr>
                 <ItemComponent />

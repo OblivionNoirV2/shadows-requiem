@@ -108,51 +108,76 @@ export const player_inventory: Map<string, InventoryItem> = new Map(
     [
         [
             "Minor HP Potion", {
-                description: "Restores 1/3 of a character's max HP.",
-                stock: 5,
+                description: "Restores 33% of a character's max HP.",
+                stock: 8,
                 type: "hp",
                 amount: .33
             }
         ],
         [
             "Major HP Potion", {
-                description: "Restores 2/3 of a character's max HP.",
-                stock: 5,
+                description: "Restores 66% of a character's max HP.",
+                stock: 6,
                 type: "hp",
                 amount: .66
             }
         ],
         [
+            "Ultimate HP Potion", {
+                description: "Restores a character to max HP.",
+                stock: 4,
+                type: "hp",
+                amount: 1
+            }
+        ],
+        [
             "Minor MP Potion", {
-                description: "Restores 1/3 of a character's max MP.",
-                stock: 10,
+                description: "Restores 33% of a character's max MP.",
+                stock: 8,
                 type: "mp",
                 amount: .33
             }
         ],
         [
             "Major MP Potion", {
-                description: "Restores 2/3 of a character's max MP.",
-                stock: 5,
+                description: "Restores 66% of a character's max MP.",
+                stock: 6,
                 type: "mp",
                 amount: .66
             }
         ],
         [
-            "Minor Revive", {
-                description: "Revives a dead character with 1/3 of their max HP.",
+            "Ultimate MP Potion", {
+                description: "Restores a character to max MP.",
                 stock: 4,
+                type: "mp",
+                amount: 1
+            }
+
+        ],
+        [
+            "Minor Revive", {
+                description: "Revives a dead character with 33% of their max HP.",
+                stock: 6,
                 type: "revive",
-                amount: .33//revives with 33% of max hp
+                amount: .33
             }
         ],
         [
             "Major Revive", {
-                description: "Revives a dead character with 2/3 of their max HP.",
-                stock: 2,
+                description: "Revives a dead character with 66% of their max HP.",
+                stock: 4,
                 type: "revive",
                 amount: .66//revives with 66% of max hp
 
+            }
+        ],
+        [
+            "Ultimate Revive", {
+                description: "Revives a dead character with full HP.",
+                stock: 2,
+                type: "revive",
+                amount: 1
             }
         ],
         [

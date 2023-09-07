@@ -97,12 +97,6 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
                 }
             ],
             [
-                'Backstab', {
-                    description: "Low damage, but a high chance of a critical hit",
-                    mp_cost: 8
-                }
-            ],
-            [
                 "Night's Whisper", {
                     description: "Deal a quick jab and disarm your opponent. Low damagem, high chance to lower boss attack.",
                     mp_cost: 10
@@ -115,15 +109,15 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
                 }
             ],
             [
-                'Nightshade', {
-                    description: "Devour the enemy with creatures of another realm. Deals huge physical damage.",
-                    mp_cost: 52
-                }
-            ],
-            [
                 'Dual Slash', {
                     description: "Moderate physical damage, 50% chance of double damage",
                     mp_cost: 12
+                }
+            ],
+            [
+                'Nightshade', {
+                    description: "Devour the enemy with creatures of another realm. Deals huge physical damage.",
+                    mp_cost: 52
                 }
             ],
             //rmage

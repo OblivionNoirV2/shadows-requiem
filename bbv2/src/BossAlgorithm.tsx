@@ -407,6 +407,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
     //Match the target to their respective stats and get the final output
     function CalculateFinal(props: CalculateFinalProps): number {
         const attack_modifier = sm.boss_stat_changes.get(selected_difficulty)
+        console.log("modifier", attack_modifier)
 
         let final_dmg: number = 0;
         //First check for evasion. undefined means they're dead
@@ -719,9 +720,11 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     //of the past 10 attacks 
 
                     const last_ten_vals = prev_dmg.slice(-10); //without this you'd be entering phase 3 with a massive list lol 
-                    const total = last_ten_vals.reduce(
+                    console.log("last ten vals", last_ten_vals)
+                    const total = (last_ten_vals.reduce(
                         (accumulator, currentValue) =>
-                            accumulator + currentValue);
+                            accumulator + currentValue) / 1.5);
+                    console.log("total", total)
                     prev_dmg = []//reset
 
                     return (
