@@ -1509,7 +1509,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
     const { isAttackMade, setIsAttackMade } = useContext(AttackMadeContext);
 
     //Then reset to -1 after used(or 0?)
-    const [ultValue, setUltValue] = useState(-1);
+    const [ultValue, setUltValue] = useState(17);
     //ult management
     useEffect(() => {
         if (ultValue < 20) {
@@ -1547,47 +1547,82 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         ]
     )
 
+    const UltToCharacter: Map<string, string> = new Map
+        (
+            [
+                ["Thousand Men", "knight"],
+                ["Nightmare Supernova", "dmage"],
+                ["Deathwind", "assassin"],
+                ["Scarlet Subversion", "rmage"]
+
+            ]
+        );
+
+    const CheckForDead: Map<string, string[]> = new Map(
+        [
+            ["knight", KnightStatus],
+            ["dmage", DmageStatus],
+            ["assassin", AssassinStatus],
+            ["rmage", RmageStatus]
+        ]
+    );
+
     function HandleUltimaClick(attack: string) {
-        setIsScreenDark(true);
 
-        setIsUltima(true);
-        //ultima is used, so reset the ultValue
-        setUltValue(0);
-        setIsUltimaReady(false);
-        //Hide the ult menu
-        setIsUltMenuShown(false);
-        //Tried to put this in its own function, messes up image paths 
-        //and I don't know why
-        let atk_result = pa.PlayerAttack(attack);
+        const ult_character = UltToCharacter.get(attack);
 
-        setMessage(atk_result);
-        setIsAttackAreaShown(true);
-        setCurrentAttack(attack);
-        setIsAttackMade(true);
-        if (bossStage !== 3) {
-            document.body.style.backgroundImage = `url(${UltimaBgLookup.get(attack)})`;
-
-        } else {
-            document.body.style.backgroundColor = "white"
-        }
-
-        setTimeout(() => {
-            bossStage !== 3 ?
-                document.body.style.backgroundImage = `url(${defaultbg})` :
-                document.body.style.backgroundImage = ""
-            document.body.style.backgroundColor = "black";
-        }, 3000)
-
-        sfx.playClickSfx();
-        {
+        console.log("uc", ult_character)
+        if (CheckForDead.get(ult_character!)!.includes("dead")) {
+            console.log("dead")
+            setMessage("This character is dead!");
+            setIsAttackMade(true)
             setTimeout(() => {
-                setTurnNumber(TurnNumber + 1)
-                setIsAttackAreaShown(false);
                 setIsAttackMade(false);
-                setIsUltima(false);
-                setIsScreenDark(false);
-            }, 4000);
+            }, 1000)
+        } else {
+            setIsScreenDark(true);
+
+            setIsUltima(true);
+            //ultima is used, so reset the ultValue
+            setUltValue(0);
+            setIsUltimaReady(false);
+            //Hide the ult menu
+            setIsUltMenuShown(false);
+            //Tried to put this in its own function, messes up image paths 
+            //and I don't know why
+            let atk_result = pa.PlayerAttack(attack);
+
+            setMessage(atk_result);
+            setIsAttackAreaShown(true);
+            setCurrentAttack(attack);
+            setIsAttackMade(true);
+            if (bossStage !== 3) {
+                document.body.style.backgroundImage = `url(${UltimaBgLookup.get(attack)})`;
+
+            } else {
+                document.body.style.backgroundColor = "white"
+            }
+
+            setTimeout(() => {
+                bossStage !== 3 ?
+                    document.body.style.backgroundImage = `url(${defaultbg})` :
+                    document.body.style.backgroundImage = ""
+                document.body.style.backgroundColor = "black";
+            }, 3000)
+
+            sfx.playClickSfx();
+            {
+                setTimeout(() => {
+                    setTurnNumber(TurnNumber + 1)
+                    setIsAttackAreaShown(false);
+                    setIsAttackMade(false);
+                    setIsUltima(false);
+                    setIsScreenDark(false);
+                }, 4000);
+            }
+
         }
+
     }
     type validMapKeys = "knight_stats" | "dmage_stats" | "assassin_stats" | "rmage_stats";
     interface PlayerComponentProps {
@@ -1612,6 +1647,8 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         const [assassinVisualHp] = useState(sm.assassin_stats.get("hp")!);
         const [rmageVisualMp] = useState(sm.rmage_stats.get("mp")!);
         const [rmageVisualHp] = useState(sm.rmage_stats.get("hp")!);
+
+
 
         const MatchToVisualMP: Map<string, number> = new Map
             (
@@ -1986,14 +2023,19 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                                     {e.ultimas.map((attack, index) => {
                                         return (
                                             <ul>
-                                                <li >
-                                                    <button key={index}
-                                                        className={`ult-atk-btn ${ultBtnClassLookup.get(attack)}`}
-                                                        onClick={() => HandleUltimaClick(attack)}
-                                                        title={e.AttackEncyclopedia.get(attack)?.description}>
-                                                        {attack}
-                                                    </button>
-                                                </li>
+                                                {
+                                                    !CheckForDead.get(UltToCharacter.get(attack)!)!.includes("dead") &&
+                                                    <li >
+                                                        <button key={index}
+                                                            className={`ult-atk-btn ${ultBtnClassLookup.get(attack)}`}
+                                                            onClick={() => HandleUltimaClick(attack)}
+                                                            title={e.AttackEncyclopedia.get(attack)?.description}>
+                                                            {attack}
+                                                        </button>
+                                                    </li>
+
+                                                }
+
                                             </ul>
                                         )
                                     })}
