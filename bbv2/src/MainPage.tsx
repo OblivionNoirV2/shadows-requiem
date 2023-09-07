@@ -1564,11 +1564,18 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         setIsAttackAreaShown(true);
         setCurrentAttack(attack);
         setIsAttackMade(true);
-        document.body.style.backgroundColor = "";
-        document.body.style.backgroundImage = "";
-        document.body.style.backgroundImage = `url(${UltimaBgLookup.get(attack)})`;
+        if (bossStage !== 3) {
+            document.body.style.backgroundImage = `url(${UltimaBgLookup.get(attack)})`;
+
+        } else {
+            document.body.style.backgroundColor = "white"
+        }
+
         setTimeout(() => {
-            document.body.style.backgroundImage = `url(${defaultbg})`;
+            bossStage !== 3 ?
+                document.body.style.backgroundImage = `url(${defaultbg})` :
+                document.body.style.backgroundImage = ""
+            document.body.style.backgroundColor = "black";
         }, 3000)
 
         sfx.playClickSfx();

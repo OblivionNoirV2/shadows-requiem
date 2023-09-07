@@ -1,4 +1,5 @@
 import * as sm from './StatManagement';
+import us from './assets/sound/sfx/US.wav';
 
 import { Randomizer, selected_attack } from './PlayerActions';
 import {
@@ -716,6 +717,8 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
             ],
             [
                 "Unholy Symphony", function UnholySymphony() {
+                    const ussfx = new Audio(us);
+                    ussfx.play();
                     //min given to the RNG is the total 
                     //of the past 10 attacks 
 
@@ -723,7 +726,7 @@ export function bossAttackAlgo(attackProps: BossAttackProps) {
                     console.log("last ten vals", last_ten_vals)
                     const total = (last_ten_vals.reduce(
                         (accumulator, currentValue) =>
-                            accumulator + currentValue) / 1.5);
+                            accumulator + currentValue) / 1.75);
                     console.log("total", total)
                     prev_dmg = []//reset
 
