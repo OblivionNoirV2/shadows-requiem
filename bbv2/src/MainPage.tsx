@@ -1801,7 +1801,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
                     <ul className='w-full'>
                         <li>
                             <div>
-                                <Link to='/Startmenu' >
+                                <Link to='/' >
                                     <button className='4 text-lg
                                  text-white '
                                         onClick={() => { sfx.playClickSfx(); onBackToTitle() }}>

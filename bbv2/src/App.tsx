@@ -182,15 +182,6 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path='/StartMenu'
-          element={
-            <StartMenu
-              on_start={startGame}
-              bossStage={bossStage}
-            />
-          }
-        />
-        <Route
           path='/Story'
           element={
             <Story />
