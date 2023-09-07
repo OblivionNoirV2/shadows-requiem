@@ -64,7 +64,7 @@ export const dmage_stats: StatMap = new Map
 export const assassin_stats: StatMap = new Map
     (
         [
-            ["hp", 4],
+            ["hp", 400],
             ["max_hp", 400],
             ["mp", 250],
             ["max_mp", 250],

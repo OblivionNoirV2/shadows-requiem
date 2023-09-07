@@ -640,11 +640,11 @@ input:checked+.slider:before {
   animation: purple-border 1s linear infinite;
 }
 
-.wmage-ult-btn {
-  color: white
+.assassin-ult-btn {
+  color: rgb(3, 48, 133);
 }
 
-.wmage-ult-btn:hover {
+.assassin-ult-btn:hover {
   animation: whitescale-border 1s linear infinite;
 }
 

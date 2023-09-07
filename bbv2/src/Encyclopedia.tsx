@@ -123,7 +123,7 @@ export const AttackEncyclopedia: Map<string, AttackData> = new Map
             //rmage
             [   //Since this one CAN kill you, there's no need to check for sufficient hp
                 'Border Of Life', {
-                    description: "Sacrifice your own life force to restore MP. Restores 108 MP per use. Uses HP instead of MP.",
+                    description: "Sacrifice your own life force to restore MP. Uses HP instead of MP. Heavy magic damage.",
                     mp_cost: 125 //actually hp
                 }
             ],

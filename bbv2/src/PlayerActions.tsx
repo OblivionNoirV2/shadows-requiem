@@ -492,7 +492,7 @@ export const attacks_map: Map<string, Function> = new Map([
                         phys_or_mag: "phys",
                         variance: 1.05,
                         is_ult: true,
-                        sfx_type: "DW"
+                        sfx_type: "wind"
                     }
                 )
 

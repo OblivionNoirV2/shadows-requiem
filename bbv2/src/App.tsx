@@ -4,7 +4,7 @@ import { Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom'
 import './App.css';
 import SnowAnimation from './SnowAnimation';
 //battle theme
-import ti from './assets/sound/ost/Twilight Imperium.wav';
+import ti from './assets/sound/ost/Twilight Imperium_As.wav';
 import ab from './assets/sound/ost/Abyssal Lunacy.wav';
 //title theme
 import tt from './assets/sound/ost/Forboding.wav';

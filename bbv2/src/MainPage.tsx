@@ -1531,7 +1531,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         [
             ["Thousand Men", "knight-ult-btn"],
             ["Nightmare Supernova", "dmage-ult-btn"],
-            ["Supreme Altar", "assassin-ult-btn"],
+            ["Deathwind", "assassin-ult-btn"],
             ["Scarlet Subversion", "rmage-ult-btn"]
         ]
     );
@@ -1542,7 +1542,7 @@ export const MainPage: React.FC<GoBackProps> = ({ onBackToTitle,
         [
             ["Thousand Men", knightbg],
             ["Nightmare Supernova", dmagebg],
-            ["Supreme Altar", assassinbg],
+            ["Deathwind", assassinbg],
             ["Scarlet Subversion", rmagebg]
         ]
     )
